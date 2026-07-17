@@ -1,0 +1,6192 @@
+[
+  {
+    "materia": "Língua Portuguesa",
+    "code": "EM2-PORT",
+    "title": "Simulado — Língua Portuguesa (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Gramática": [
+        [
+          "O sujeito da oração 'Os alunos estudaram para a prova' é:",
+          [
+            "Simples",
+            "Composto",
+            "Oculto",
+            "Indeterminado"
+          ],
+          0,
+          "Há um único núcleo: alunos.",
+          "medio"
+        ],
+        [
+          "Em 'Choveu muito ontem', o sujeito é:",
+          [
+            "Simples",
+            "Composto",
+            "Desinencial",
+            "Indeterminado"
+          ],
+          3,
+          "Verbos impessoais como 'chover' têm sujeito indeterminado.",
+          "medio"
+        ],
+        [
+          "A palavra 'rapidamente' classifica-se como:",
+          [
+            "Substantivo",
+            "Adjetivo",
+            "Advérbio",
+            "Preposição"
+          ],
+          2,
+          "Modifica o verbo, indicando modo.",
+          "medio"
+        ],
+        [
+          "Qual alternativa apresenta apenas palavras prosódicas?",
+          [
+            "casa, mesa, livro",
+            "e, mas, porém",
+            "correr, pular, nadar",
+            "belo, feio, grande"
+          ],
+          1,
+          "Conjunções coordenativas são prosódicas.",
+          "medio"
+        ],
+        [
+          "O plural de 'cidadão' é:",
+          [
+            "cidadãos",
+            "cidadões",
+            "cidadães",
+            "cidadãoes"
+          ],
+          1,
+          "Formação irregular: cidadão → cidadões.",
+          "medio"
+        ],
+        [
+          "'Menos pior' é considerado:",
+          [
+            "Correto",
+            "Pleonasmo vicioso",
+            "Figura de linguagem",
+            "Neologismo"
+          ],
+          1,
+          "Comparativo de inferioridade com 'pior' é vício de linguagem.",
+          "medio"
+        ],
+        [
+          "Em 'Comprei um carro novo', 'novo' é:",
+          [
+            "Substantivo",
+            "Adjetivo",
+            "Advérbio",
+            "Artigo"
+          ],
+          1,
+          "Caracteriza o substantivo carro.",
+          "medio"
+        ],
+        [
+          "A oração 'Quando cheguei, todos já tinham saído' tem:",
+          [
+            "Oração subordinada adverbial temporal",
+            "Oração coordenada adversativa",
+            "Oração subordinada substantiva",
+            "Oração coordenada conclusiva"
+          ],
+          0,
+          "'Quando cheguei' indica tempo.",
+          "medio"
+        ],
+        [
+          "O pronome 'que' em 'O livro que li é bom' exerce função de:",
+          [
+            "Sujeito",
+            "Objeto direto",
+            "Predicativo",
+            "Adjunto adverbial"
+          ],
+          1,
+          "Retoma 'livro' como OD de 'li'.",
+          "medio"
+        ],
+        [
+          "Colocação pronominal correta:",
+          [
+            "Me disseram a verdade.",
+            "Disseram-me a verdade.",
+            "Disseram me a verdade.",
+            "Me disseram a verdade ontem."
+          ],
+          1,
+          "Ênclise após verbo no início é preferível; próclise com advérbio 'ontem' seria 'Me disseram ontem'.",
+          "medio"
+        ]
+      ],
+      "Interpretação de Texto": [
+        [
+          "O gênero textual 'notícia' caracteriza-se por:",
+          [
+            "Subjetividade do autor",
+            "Informar fatos de interesse público",
+            "Narrar ficção",
+            "Convencer o leitor"
+          ],
+          1,
+          "Notícia prioriza informação objetiva.",
+          "medio"
+        ],
+        [
+          "A inferência textual consiste em:",
+          [
+            "Copiar trechos do texto",
+            "Concluir informações não explícitas",
+            "Ignorar o contexto",
+            "Resumir o título"
+          ],
+          1,
+          "Inferir vai além do literal.",
+          "medio"
+        ],
+        [
+          "Ironia ocorre quando:",
+          [
+            "Autor repete ideias",
+            "Há contraste entre o dito e o pretendido",
+            "Texto é neutro",
+            "Não há interlocutor"
+          ],
+          1,
+          "Ironia usa sentido oposto ao literal.",
+          "medio"
+        ],
+        [
+          "Paráfrase significa:",
+          [
+            "Reescrever com outras palavras mantendo sentido",
+            "Criticar o autor",
+            "Ampliar o texto",
+            "Traduzir para outro idioma"
+          ],
+          0,
+          "Parafrasear é reformular.",
+          "medio"
+        ],
+        [
+          "Intertextualidade é:",
+          [
+            "Ausência de referências",
+            "Diálogo entre textos",
+            "Erro de ortografia",
+            "Tipo de pontuação"
+          ],
+          1,
+          "Textos dialogam com outros textos.",
+          "medio"
+        ],
+        [
+          "Tese de um artigo de opinião é:",
+          [
+            "A conclusão do leitor",
+            "Posição central defendida",
+            "A bibliografia",
+            "O título apenas"
+          ],
+          1,
+          "Tese é a ideia principal defendida.",
+          "medio"
+        ],
+        [
+          "Coesão textual garante:",
+          [
+            "Beleza estética",
+            "Encadeamento lógico entre partes",
+            "Originalidade",
+            "Tamanho do texto"
+          ],
+          1,
+          "Coesão liga elementos do texto.",
+          "medio"
+        ],
+        [
+          "Denotação refere-se a:",
+          [
+            "Sentido figurado",
+            "Sentido literal da palavra",
+            "Opinião do autor",
+            "Rima"
+          ],
+          1,
+          "Denotação = sentido dicionarizado.",
+          "medio"
+        ],
+        [
+          "Conotação refere-se a:",
+          [
+            "Sentido literal",
+            "Sentido figurado ou subjetivo",
+            "Ortografia",
+            "Sílaba tônica"
+          ],
+          1,
+          "Conotação carrega valor afetivo/cultural.",
+          "medio"
+        ],
+        [
+          "Em uma charge, o humor geralmente apoia-se em:",
+          [
+            "Descrição técnica",
+            "Crítica social por imagem e texto",
+            "Receita culinária",
+            "Lista de dados"
+          ],
+          1,
+          "Charge combina imagem e crítica.",
+          "medio"
+        ]
+      ],
+      "Literatura": [
+        [
+          "O Romantismo valorizou principalmente:",
+          [
+            "Razão e ciência",
+            "Emoção, subjetividade e natureza",
+            "Objetividade jornalística",
+            "Regras clássicas rígidas"
+          ],
+          1,
+          "Romantismo exalta sentimento e individualidade.",
+          "medio"
+        ],
+        [
+          "Machado de Assis é autor de:",
+          [
+            "Os Sertões",
+            "Dom Casmurro",
+            "O Cortiço",
+            "Iracema"
+          ],
+          1,
+          "Dom Casmurro é romance machadiano.",
+          "medio"
+        ],
+        [
+          "A rima ABAB indica:",
+          [
+            "Rimas alternadas",
+            "Rimas emparelhadas",
+            "Rima rica",
+            "Ausência de rima"
+          ],
+          0,
+          "Versos 1-3 e 2-4 rimam alternadamente.",
+          "medio"
+        ],
+        [
+          "O Modernismo brasileiro iniciou-se em:",
+          [
+            "1889",
+            "1922",
+            "1945",
+            "1964"
+          ],
+          1,
+          "Semana de Arte Moderna de 1922.",
+          "medio"
+        ],
+        [
+          "Soneto possui tradicionalmente:",
+          [
+            "8 versos",
+            "10 versos",
+            "14 versos",
+            "20 versos"
+          ],
+          2,
+          "Soneto clássico = 14 versos.",
+          "medio"
+        ],
+        [
+          "Realismo literário busca:",
+          [
+            "Idealização heroica",
+            "Análise crítica da sociedade",
+            "Fuga da realidade",
+            "Mito fundador"
+          ],
+          1,
+          "Realismo observa e critica a sociedade.",
+          "medio"
+        ],
+        [
+          "Narrador onisciente:",
+          [
+            "Sabe tudo sobre personagens",
+            "Participa da história",
+            "É criança",
+            "Não existe"
+          ],
+          0,
+          "Onisciente domina informações.",
+          "medio"
+        ],
+        [
+          "Metáfora consiste em:",
+          [
+            "Repetição de sons",
+            "Comparação implícita",
+            "Exagero",
+            "Inversão"
+          ],
+          1,
+          "Metáfora = comparação sem conectivo.",
+          "medio"
+        ],
+        [
+          "Clímax de uma narrativa é:",
+          [
+            "Apresentação do cenário",
+            "Momento de maior tensão",
+            "Descrição do autor",
+            "Nota de rodapé"
+          ],
+          1,
+          "Clímax = ponto alto da ação.",
+          "medio"
+        ],
+        [
+          "Quinhentismo relaciona-se à:",
+          [
+            "Produção literária da colonização",
+            "Poesia concretista",
+            "Literatura contemporânea",
+            "Teatro grego"
+          ],
+          0,
+          "Século XVI, cartas e crônicas coloniais.",
+          "medio"
+        ]
+      ],
+      "Ortografia e Semântica": [
+        [
+          "Emprego correto de 'mas':",
+          [
+            "Mais eu fui.",
+            "Queria ir, mas choveu.",
+            "Mas pessoas vieram.",
+            "Fui mas casa."
+          ],
+          1,
+          "'Mas' = conjunção adversativa.",
+          "medio"
+        ],
+        [
+          "'Há' em 'Há dois anos' indica:",
+          [
+            "Ação no futuro",
+            "Tempo passado / existência",
+            "Modo imperativo",
+            "Lugar"
+          ],
+          1,
+          "Verbo haver no sentido de tempo decorrido.",
+          "medio"
+        ],
+        [
+          "Palavra com hiato:",
+          [
+            "saída",
+            "chuva",
+            "porta",
+            "livro"
+          ],
+          0,
+          "Sa-í-da: vogais em sílabas separadas.",
+          "medio"
+        ],
+        [
+          "Sinônimo de 'rápido':",
+          [
+            "Lento",
+            "Veloz",
+            "Pesado",
+            "Frio"
+          ],
+          1,
+          "Veloz = rápido.",
+          "medio"
+        ],
+        [
+          "Antônimo de 'claro':",
+          [
+            "Luminoso",
+            "Escuro",
+            "Brilhante",
+            "Transparente"
+          ],
+          1,
+          "Escuro opõe-se a claro.",
+          "medio"
+        ],
+        [
+          "Acento diferencial: pôde/pode distingue:",
+          [
+            "Número",
+            "Tempo verbal",
+            "Gênero",
+            "Grau"
+          ],
+          1,
+          "Pôde (pretérito) x pode (presente).",
+          "medio"
+        ],
+        [
+          "'Porque' explicativo separa-se:",
+          [
+            "Sempre",
+            "Quando equivale a 'pois'",
+            "Nunca se escreve",
+            "Só no início"
+          ],
+          1,
+          "Explicativo pode ser 'porque' junto.",
+          "medio"
+        ],
+        [
+          "Parônimo de 'sessão':",
+          [
+            "Cessão",
+            "Seção",
+            "Ambas anteriores",
+            "Nenhuma"
+          ],
+          2,
+          "Sessão, cessão e seção são parônimos.",
+          "medio"
+        ],
+        [
+          "Polissemia ocorre quando:",
+          [
+            "Palavra tem um sentido",
+            "Palavra tem vários sentidos",
+            "Palavra não existe",
+            "Palavra é estrangeira"
+          ],
+          1,
+          "Ex.: 'manga' (fruta/roupa).",
+          "medio"
+        ],
+        [
+          "Homônimo perfeito:",
+          [
+            "manga/manga (sentidos diferentes)",
+            "caro/caro (mesmo som e sentido)",
+            "mais/mas",
+            "saída/saida"
+          ],
+          1,
+          "Homônimo perfeito: mesma forma e som.",
+          "medio"
+        ]
+      ],
+      "Variação Linguística": [
+        [
+          "Variação diatópica relaciona-se a:",
+          [
+            "Tempo",
+            "Região geográfica",
+            "Situação formal",
+            "Idade"
+          ],
+          1,
+          "Diatópica = regional.",
+          "medio"
+        ],
+        [
+          "Linguagem formal usa:",
+          [
+            "Gírias e abreviações",
+            "Norma culta e registro elevado",
+            "Apenas oralidade",
+            "Erros propositais"
+          ],
+          1,
+          "Formal = norma padrão.",
+          "medio"
+        ],
+        [
+          "Preconceito linguístico é:",
+          [
+            "Valorizar todas as variantes",
+            "Julgar inferior quem fala diferente",
+            "Estudar dialetos",
+            "Traduzir textos"
+          ],
+          1,
+          "Preconceito estigmatiza variantes.",
+          "medio"
+        ],
+        [
+          "Neologismo é:",
+          [
+            "Palavra arcaica",
+            "Palavra nova ou recente",
+            "Erro de digitação",
+            "Sigla antiga"
+          ],
+          1,
+          "Ex.: 'selfie', 'podcast'.",
+          "medio"
+        ],
+        [
+          "Linguagem coloquial caracteriza-se por:",
+          [
+            "Rigidez e distanciamento",
+            "Espontaneidade e proximidade",
+            "Apenas escrita",
+            "Termos técnicos"
+          ],
+          1,
+          "Coloquial = conversa cotidiana.",
+          "medio"
+        ],
+        [
+          "Variação diacrônica estuda:",
+          [
+            "Regiões",
+            "Mudanças ao longo do tempo",
+            "Níveis de formalidade",
+            "Gêneros textuais"
+          ],
+          1,
+          "Diacrônica = histórica.",
+          "medio"
+        ],
+        [
+          "Registro técnico usa:",
+          [
+            "Vocabulário especializado",
+            "Somente gírias",
+            "Apenas emojis",
+            "Linguagem infantil"
+          ],
+          0,
+          "Termos da área específica.",
+          "medio"
+        ],
+        [
+          "A norma-padrão:",
+          [
+            "Substitui todas as variantes",
+            "Convencionou-se para comunicação formal",
+            "Não existe no Brasil",
+            "É igual ao dialeto caipira"
+          ],
+          1,
+          "Norma-padrão para contextos oficiais.",
+          "medio"
+        ],
+        [
+          "Estrangeirismo é:",
+          [
+            "Palavra de origem estrangeira usada no idioma",
+            "Erro gramatical",
+            "Tipo de verso",
+            "Pontuação"
+          ],
+          0,
+          "Ex.: 'software', 'marketing'.",
+          "medio"
+        ],
+        [
+          "Variação diastrática relaciona-se a:",
+          [
+            "Grupo social",
+            "Região",
+            "Tempo histórico",
+            "Canal de comunicação"
+          ],
+          0,
+          "Diastrática = condição social.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "Matemática",
+    "code": "EM2-MAT",
+    "title": "Simulado — Matemática (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Funções": [
+        [
+          "O domínio da função f(x) = 1/(x - 2) é:",
+          [
+            "ℝ",
+            "ℝ \\ {2}",
+            "ℝ⁺",
+            "[2, +∞)"
+          ],
+          1,
+          "O denominador não pode ser zero; x ≠ 2.",
+          "medio"
+        ],
+        [
+          "A função f(x) = 2x + 3 é do tipo:",
+          [
+            "Quadrática",
+            "Afim",
+            "Exponencial",
+            "Logarítmica"
+          ],
+          1,
+          "Forma ax + b caracteriza função afim.",
+          "medio"
+        ],
+        [
+          "A raiz da função f(x) = 3x - 9 é:",
+          [
+            "x = 0",
+            "x = 3",
+            "x = -3",
+            "x = 9"
+          ],
+          1,
+          "3x - 9 = 0 → x = 3.",
+          "medio"
+        ],
+        [
+          "O gráfico de f(x) = x² é uma:",
+          [
+            "Reta",
+            "Parábola",
+            "Hipérbole",
+            "Circunferência"
+          ],
+          1,
+          "Função quadrática tem gráfico parabólico.",
+          "medio"
+        ],
+        [
+          "Se f(x) = x + 1 e g(x) = 2x, então (f ∘ g)(2) vale:",
+          [
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          2,
+          "g(2)=4; f(4)=5.",
+          "medio"
+        ],
+        [
+          "Uma função crescente satisfaz:",
+          [
+            "f(a) > f(b) se a > b",
+            "f(a) < f(b) se a > b",
+            "f(a) = f(b) sempre",
+            "Não tem imagem"
+          ],
+          0,
+          "Crescente: valores maiores de x geram maiores f(x).",
+          "medio"
+        ],
+        [
+          "O vértice da parábola y = (x - 1)² + 4 está em:",
+          [
+            "(1, 4)",
+            "(-1, 4)",
+            "(1, -4)",
+            "(4, 1)"
+          ],
+          0,
+          "Forma canônica y = a(x-h)² + k → vértice (h, k).",
+          "medio"
+        ],
+        [
+          "A função f(x) = |x| é:",
+          [
+            "Sempre negativa",
+            "Par",
+            "Ímpar",
+            "Injetora em ℝ"
+          ],
+          1,
+          "f(-x) = f(x), logo é par.",
+          "medio"
+        ],
+        [
+          "O conjunto imagem de f(x) = x² + 1 é:",
+          [
+            "[1, +∞)",
+            "(-∞, 1]",
+            "ℝ",
+            "[0, +∞)"
+          ],
+          0,
+          "x² ≥ 0, então x² + 1 ≥ 1.",
+          "medio"
+        ],
+        [
+          "A taxa de variação de f(x) = 5x - 2 é:",
+          [
+            "-2",
+            "2",
+            "5",
+            "7"
+          ],
+          2,
+          "Coeficiente angular da função afim é 5.",
+          "medio"
+        ]
+      ],
+      "Geometria": [
+        [
+          "A soma dos ângulos internos de um triângulo é:",
+          [
+            "90°",
+            "180°",
+            "270°",
+            "360°"
+          ],
+          1,
+          "Propriedade fundamental dos triângulos euclidianos.",
+          "medio"
+        ],
+        [
+          "A área de um retângulo de base 8 cm e altura 5 cm é:",
+          [
+            "13 cm²",
+            "26 cm²",
+            "40 cm²",
+            "80 cm²"
+          ],
+          2,
+          "A = b × h = 8 × 5 = 40 cm².",
+          "medio"
+        ],
+        [
+          "No teorema de Pitágoras, a² + b² = c², c representa:",
+          [
+            "Cateto menor",
+            "Cateto maior",
+            "Hipotenusa",
+            "Altura"
+          ],
+          2,
+          "c é o lado oposto ao ângulo reto.",
+          "medio"
+        ],
+        [
+          "Dois triângulos são semelhantes quando:",
+          [
+            "Têm a mesma área",
+            "Têm ângulos correspondentes iguais",
+            "Têm o mesmo perímetro",
+            "São congruentes"
+          ],
+          1,
+          "Semelhança exige ângulos iguais e lados proporcionais.",
+          "medio"
+        ],
+        [
+          "O volume de um cubo de aresta 3 cm é:",
+          [
+            "9 cm³",
+            "18 cm³",
+            "27 cm³",
+            "36 cm³"
+          ],
+          2,
+          "V = a³ = 3³ = 27 cm³.",
+          "medio"
+        ],
+        [
+          "Um polígono regular de 6 lados tem cada ângulo interno de:",
+          [
+            "60°",
+            "90°",
+            "120°",
+            "135°"
+          ],
+          2,
+          "Ângulo interno = (n-2)×180°/n = 120°.",
+          "medio"
+        ],
+        [
+          "A distância entre os pontos A(1, 2) e B(4, 6) é:",
+          [
+            "3",
+            "4",
+            "5",
+            "7"
+          ],
+          2,
+          "d = √[(4-1)² + (6-2)²] = √25 = 5.",
+          "medio"
+        ],
+        [
+          "A equação x² + y² = 25 representa uma:",
+          [
+            "Reta",
+            "Parábola",
+            "Circunferência",
+            "Elipse"
+          ],
+          2,
+          "Forma padrão de circunferência centrada na origem.",
+          "medio"
+        ],
+        [
+          "O seno de 30° vale:",
+          [
+            "1/2",
+            "√2/2",
+            "√3/2",
+            "1"
+          ],
+          0,
+          "Valores notáveis: sen 30° = 1/2.",
+          "medio"
+        ],
+        [
+          "Dois retas paralelas cortadas por uma transversal formam ângulos:",
+          [
+            "Sempre retos",
+            "Alternos internos congruentes",
+            "Sempre suplementares",
+            "Sempre iguais a 90°"
+          ],
+          1,
+          "Alternos internos entre paralelas são congruentes.",
+          "medio"
+        ]
+      ],
+      "Álgebra": [
+        [
+          "A solução de 2x + 5 = 13 é:",
+          [
+            "x = 3",
+            "x = 4",
+            "x = 5",
+            "x = 9"
+          ],
+          1,
+          "2x = 8 → x = 4.",
+          "medio"
+        ],
+        [
+          "O produto (x + 3)(x - 3) é igual a:",
+          [
+            "x² - 9",
+            "x² + 9",
+            "x² - 6",
+            "x² + 6x - 9"
+          ],
+          0,
+          "Produto da diferença de dois quadrados.",
+          "medio"
+        ],
+        [
+          "Fatorando x² - 5x + 6 obtemos:",
+          [
+            "(x - 2)(x - 3)",
+            "(x + 2)(x + 3)",
+            "(x - 1)(x - 6)",
+            "(x + 1)(x + 6)"
+          ],
+          0,
+          "Dois números que somam -5 e multiplicam 6: -2 e -3.",
+          "medio"
+        ],
+        [
+          "A equação x² = -4 no conjunto dos reais:",
+          [
+            "Tem duas soluções",
+            "Tem uma solução",
+            "Não tem solução real",
+            "Tem infinitas soluções"
+          ],
+          2,
+          "Quadrado de real nunca é negativo.",
+          "medio"
+        ],
+        [
+          "O discriminante Δ = b² - 4ac de x² - 4x + 4 = 0 vale:",
+          [
+            "0",
+            "4",
+            "8",
+            "16"
+          ],
+          0,
+          "Δ = 16 - 16 = 0 → raiz dupla.",
+          "medio"
+        ],
+        [
+          "Simplificando √72 obtemos:",
+          [
+            "6√2",
+            "8√2",
+            "3√8",
+            "12√6"
+          ],
+          0,
+          "√72 = √(36×2) = 6√2.",
+          "medio"
+        ],
+        [
+          "A expressão 3x - 2y = 12 representa:",
+          [
+            "Uma reta",
+            "Uma parábola",
+            "Um ponto",
+            "Um círculo"
+          ],
+          0,
+          "Equação do 1º grau em duas variáveis.",
+          "medio"
+        ],
+        [
+          "Resolvendo o sistema x + y = 5 e x - y = 1, temos x =",
+          [
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          1,
+          "Somando as equações: 2x = 6 → x = 3.",
+          "medio"
+        ],
+        [
+          "O inverso multiplicativo de 4 é:",
+          [
+            "-4",
+            "1/4",
+            "4",
+            "0,25 e 1/4 são ambos corretos, mas 1/4"
+          ],
+          1,
+          "a · a⁻¹ = 1 → a⁻¹ = 1/4.",
+          "medio"
+        ],
+        [
+          "A potência (-2)³ vale:",
+          [
+            "6",
+            "-6",
+            "8",
+            "-8"
+          ],
+          3,
+          "(-2)³ = -8; expoente ímpar mantém o sinal.",
+          "medio"
+        ]
+      ],
+      "Estatística": [
+        [
+          "A média aritmética de 4, 6 e 8 é:",
+          [
+            "5",
+            "6",
+            "7",
+            "18"
+          ],
+          1,
+          "(4+6+8)/3 = 18/3 = 6.",
+          "medio"
+        ],
+        [
+          "A mediana do conjunto {2, 5, 7, 9, 12} é:",
+          [
+            "5",
+            "7",
+            "9",
+            "6"
+          ],
+          1,
+          "Valor central quando ordenado.",
+          "medio"
+        ],
+        [
+          "A moda de {3, 5, 5, 7, 9, 5} é:",
+          [
+            "3",
+            "5",
+            "7",
+            "9"
+          ],
+          1,
+          "5 é o valor mais frequente.",
+          "medio"
+        ],
+        [
+          "Em um gráfico de barras, a altura de cada barra indica:",
+          [
+            "A cor da categoria",
+            "A frequência ou valor",
+            "O tempo",
+            "A temperatura"
+          ],
+          1,
+          "Barras representam quantidades por categoria.",
+          "medio"
+        ],
+        [
+          "A amplitude de {10, 15, 20, 25} é:",
+          [
+            "5",
+            "10",
+            "15",
+            "25"
+          ],
+          2,
+          "Amplitude = máximo - mínimo = 25 - 10 = 15.",
+          "medio"
+        ],
+        [
+          "Um gráfico de setores (pizza) é adequado para:",
+          [
+            "Mostrar evolução no tempo",
+            "Comparar partes de um todo",
+            "Medir temperatura",
+            "Representar funções"
+          ],
+          1,
+          "Setores mostram proporções percentuais.",
+          "medio"
+        ],
+        [
+          "Em uma pesquisa amostral, a população é:",
+          [
+            "O grupo sorteado",
+            "O conjunto total de interesse",
+            "Apenas os entrevistados",
+            "O questionário"
+          ],
+          1,
+          "População = universo que se deseja estudar.",
+          "medio"
+        ],
+        [
+          "A probabilidade de sair cara ao lançar uma moeda honesta é:",
+          [
+            "0",
+            "1/4",
+            "1/2",
+            "1"
+          ],
+          2,
+          "Dois resultados equiprováveis: cara ou coroa.",
+          "medio"
+        ],
+        [
+          "Um histograma difere de gráfico de barras porque:",
+          [
+            "Usa dados contínuos em intervalos",
+            "Não usa eixos",
+            "Só mostra percentuais",
+            "Não tem barras"
+          ],
+          0,
+          "Histograma agrupa dados contínuos em classes.",
+          "medio"
+        ],
+        [
+          "O desvio padrão mede:",
+          [
+            "A média",
+            "A dispersão dos dados",
+            "A moda",
+            "A mediana"
+          ],
+          1,
+          "Indica o quanto os dados se afastam da média.",
+          "medio"
+        ]
+      ],
+      "Razão e Proporção": [
+        [
+          "A razão entre 12 e 8 na forma simplificada é:",
+          [
+            "3:2",
+            "2:3",
+            "4:3",
+            "6:4"
+          ],
+          0,
+          "12/8 = 3/2 → razão 3:2.",
+          "medio"
+        ],
+        [
+          "Se 3 operários fazem um trabalho em 12 dias, 6 operários (mesmo ritmo) levam:",
+          [
+            "6 dias",
+            "12 dias",
+            "24 dias",
+            "4 dias"
+          ],
+          0,
+          "Grandeza inversamente proporcional: dobra operários, metade do tempo.",
+          "medio"
+        ],
+        [
+          "Em uma receita, farinha e açúcar estão na razão 5:2. Para 10 xícaras de farinha, o açúcar é:",
+          [
+            "2 xícaras",
+            "4 xícaras",
+            "5 xícaras",
+            "8 xícaras"
+          ],
+          1,
+          "5:2 = 10:4 → 4 xícaras de açúcar.",
+          "medio"
+        ],
+        [
+          "Porcentagem equivalente a 0,25 é:",
+          [
+            "2,5%",
+            "25%",
+            "250%",
+            "0,25%"
+          ],
+          1,
+          "0,25 = 25/100 = 25%.",
+          "medio"
+        ],
+        [
+          "Um produto de R$ 200 com 15% de desconto custa:",
+          [
+            "R$ 30",
+            "R$ 170",
+            "R$ 185",
+            "R$ 215"
+          ],
+          1,
+          "Desconto = 30; preço final = 200 - 30 = 170.",
+          "medio"
+        ],
+        [
+          "A escala 1:50000 significa que 1 cm no mapa representa:",
+          [
+            "500 cm na realidade",
+            "500 m na realidade",
+            "500 km na realidade",
+            "50 km na realidade"
+          ],
+          1,
+          "1 cm → 50000 cm = 500 m.",
+          "medio"
+        ],
+        [
+          "Se x/4 = 15/12, então x vale:",
+          [
+            "3",
+            "5",
+            "15",
+            "20"
+          ],
+          1,
+          "Proporção: x = 4×15/12 = 5.",
+          "medio"
+        ],
+        [
+          "Aumento de 20% sobre R$ 150 resulta em:",
+          [
+            "R$ 170",
+            "R$ 180",
+            "R$ 30",
+            "R$ 120"
+          ],
+          1,
+          "150 + 20% de 150 = 150 + 30 = 180.",
+          "medio"
+        ],
+        [
+          "Três números estão em proporção contínua se:",
+          [
+            "São iguais",
+            "a/b = b/c",
+            "Somam zero",
+            "São primos"
+          ],
+          1,
+          "Proporção contínua: meio termo é média proporcional.",
+          "medio"
+        ],
+        [
+          "Em uma mistura de suco, água e concentrado estão na razão 4:1. A fração de concentrado é:",
+          [
+            "1/4",
+            "1/5",
+            "4/5",
+            "1/3"
+          ],
+          1,
+          "Total 5 partes; concentrado = 1/5.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "História",
+    "code": "EM2-HIST",
+    "title": "Simulado — História (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Revolução Francesa": [
+        [
+          "A Revolução Francesa teve início em:",
+          [
+            "1776",
+            "1789",
+            "1804",
+            "1815"
+          ],
+          1,
+          "Queda da Bastilha em 14 de julho de 1789.",
+          "medio"
+        ],
+        [
+          "O lema 'Liberdade, Igualdade, Fraternidade' associou-se a:",
+          [
+            "Antigo Regime",
+            "Revolução Francesa",
+            "Restauração",
+            "Santa Aliança"
+          ],
+          1,
+          "Lema simbólico da Revolução.",
+          "medio"
+        ],
+        [
+          "A Bastilha simbolizava:",
+          [
+            "A Igreja",
+            "O absolutismo e o despotismo real",
+            "A burguesia",
+            "A aldeia camponesa"
+          ],
+          1,
+          "Prisão real, símbolo do poder absolutista.",
+          "medio"
+        ],
+        [
+          "Os principais integrantes do Terceiro Estado eram:",
+          [
+            "Nobres e clérigos",
+            "Burgueses, camponeses e trabalhadores urbanos",
+            "Apenas o rei",
+            "Generais napoleônicos"
+          ],
+          1,
+          "Terceiro Estado = maioria da população sem privilégios.",
+          "medio"
+        ],
+        [
+          "A fase conhecida como Terror (1793-1794) caracterizou-se por:",
+          [
+            "Monarquia constitucional",
+            "Repressão violenta liderada por Robespierre",
+            "Paz com a Inglaterra",
+            "Retorno dos nobres"
+          ],
+          1,
+          "Comité de Salut Pública e guilhotina.",
+          "medio"
+        ],
+        [
+          "O Antigo Regime baseava-se em:",
+          [
+            "Democracia direta",
+            "Sociedade estamental e absolutismo",
+            "Socialismo",
+            "República federativa"
+          ],
+          1,
+          "Privilégios de clero e nobreza; poder real absoluto.",
+          "medio"
+        ],
+        [
+          "A Declaração dos Direitos do Homem e do Cidadão (1789) proclamou:",
+          [
+            "Direitos divinos do rei",
+            "Direitos naturais e igualdade perante a lei",
+            "Escravidão legal",
+            "Veto absoluto real"
+          ],
+          1,
+          "Documento fundador de princípios liberais.",
+          "medio"
+        ],
+        [
+          "Napoleão Bonaparte assumiu o poder após:",
+          [
+            "A Restauração",
+            "O golpe de 18 Brumário (1799)",
+            "A Queda da Bastilha",
+            "A Revolução de 1848"
+          ],
+          1,
+          "18 Brumário encerrou o Diretório.",
+          "medio"
+        ],
+        [
+          "As guerras revolucionárias francesas opuseram a França a:",
+          [
+            "Apenas Portugal",
+            "Coalizões europeias monárquicas",
+            "Os EUA",
+            "O Império Otomano isoladamente"
+          ],
+          1,
+          "Monarquias europeias temiam a expansão revolucionária.",
+          "medio"
+        ],
+        [
+          "A abolição dos privilégios feudais ocorreu na:",
+          [
+            "Noite do 4 de agosto de 1789",
+            "Batalha de Waterloo",
+            "Coroação de Napoleão",
+            "Restauração de Luís XVIII"
+          ],
+          0,
+          "Assembleia Nacional aboliu privilégios feudais.",
+          "medio"
+        ]
+      ],
+      "Independência do Brasil": [
+        [
+          "A Independência do Brasil foi proclamada em:",
+          [
+            "7 de setembro de 1822",
+            "15 de novembro de 1889",
+            "13 de maio de 1888",
+            "21 de abril de 1792"
+          ],
+          0,
+          "Grito do Ipiranga, Dom Pedro I.",
+          "medio"
+        ],
+        [
+          "As 'Dores de Independência' referem-se a:",
+          [
+            "Guerras contra Portugal e facções internas",
+            "Abolição da escravidão",
+            "Proclamação da República",
+            "Revolta de Canudos"
+          ],
+          0,
+          "Conflitos militares pós-1822.",
+          "medio"
+        ],
+        [
+          "A transferência da corte portuguesa para o Rio (1808) deveu-se a:",
+          [
+            "Invasão napoleônica a Portugal",
+            "Revolta mineradora",
+            "Tratado de Tordesilhas",
+            "Guerra do Paraguai"
+          ],
+          0,
+          "Família real fugiu das tropas de Napoleão.",
+          "medio"
+        ],
+        [
+          "A Constituição de 1824 estabeleceu:",
+          [
+            "República presidencialista",
+            "Monarquia constitucional unitária",
+            "Confederação de províncias",
+            "Império absolutista"
+          ],
+          1,
+          "Poder moderador e três poderes.",
+          "medio"
+        ],
+        [
+          "O 'Dia do Fico' (9 de janeiro de 1822) simbolizou:",
+          [
+            "Abdicação de Dom Pedro",
+            "Decisão de Dom Pedro de ficar no Brasil",
+            "Fim da escravidão",
+            "Proclamação da República"
+          ],
+          1,
+          "Dom Pedro recusou ordem de retorno a Portugal.",
+          "medio"
+        ],
+        [
+          "A Confederação do Equador (1824) foi:",
+          [
+            "Movimento separatista no Nordeste",
+            "Aliança com a Argentina",
+            "Tratado com a Inglaterra",
+            "Reforma agrária"
+          ],
+          0,
+          "Revolta republicana e federalista no Norte/Nordeste.",
+          "medio"
+        ],
+        [
+          "O reconhecimento da independência por Portugal ocorreu em:",
+          [
+            "1822",
+            "1825",
+            "1831",
+            "1889"
+          ],
+          1,
+          "Tratado de 1825 reconheceu a independência.",
+          "medio"
+        ],
+        [
+          "José Bonifácio foi importante na Independência como:",
+          [
+            "Conspirador republicano",
+            "Conselheiro de Dom Pedro e modernizador",
+            "Líder farroupilha",
+            "Presidente da República"
+          ],
+          1,
+          "Patriarca da Independência.",
+          "medio"
+        ],
+        [
+          "A independência brasileira diferiu da Hispano-Americana por ser:",
+          [
+            "Violenta e anticolonial desde o início",
+            "Relativamente pacífica e liderada pela elite",
+            "Liderada por camponeses",
+            "Separada em várias repúblicas"
+          ],
+          1,
+          "Elite local manteve unidade territorial.",
+          "medio"
+        ],
+        [
+          "O Ato Adicional de 1834 ampliou:",
+          [
+            "Escravidão",
+            "Autonomia provincial e poder do Legislativo",
+            "Poder moderador",
+            "Voto universal"
+          ],
+          1,
+          "Reforma liberal após abdicação de Dom Pedro I.",
+          "medio"
+        ]
+      ],
+      "Era Napoleônica": [
+        [
+          "Napoleão foi coroado Imperador dos Franceses em:",
+          [
+            "1789",
+            "1799",
+            "1804",
+            "1815"
+          ],
+          2,
+          "Coroação em Notre-Dame, 1804.",
+          "medio"
+        ],
+        [
+          "O Bloqueio Continental visava:",
+          [
+            "Isolar economicamente a Grã-Bretanha",
+            "Unir a América Latina",
+            "Abolir a escravidão",
+            "Conquistar a Rússia apenas"
+          ],
+          0,
+          "Proibir comércio europeu com a Inglaterra.",
+          "medio"
+        ],
+        [
+          "A Batalha de Waterloo (1815) resultou em:",
+          [
+            "Vitória definitiva de Napoleão",
+            "Derrota final de Napoleão",
+            "Independência da Grécia",
+            "Queda da Bastilha"
+          ],
+          1,
+          "Napoleão exilado em Santa Helena.",
+          "medio"
+        ],
+        [
+          "O Código Napoleônico influenciou:",
+          [
+            "Apenas a França",
+            "Legislações civis de diversos países",
+            "Somente a Rússia",
+            "Direito canônico exclusivamente"
+          ],
+          1,
+          "Código civil modelo para Europa e América.",
+          "medio"
+        ],
+        [
+          "A Campanha da Rússia (1812) foi desastrosa porque:",
+          [
+            "Napoleão venceu facilmente",
+            "Exército francês foi destruído pelo inverno e retirada",
+            "Portugal invadiu a França",
+            "Houve revolta na Bastilha"
+          ],
+          1,
+          "Grande parte do exército pereceu na retirada.",
+          "medio"
+        ],
+        [
+          "As Guerras Peninsulares ocorreram na:",
+          [
+            "Península Ibérica",
+            "Península Itálica",
+            "Balcãs",
+            "Escandinávia"
+          ],
+          0,
+          "Espanha e Portugal contra ocupação francesa.",
+          "medio"
+        ],
+        [
+          "O Congresso de Viena (1815) buscou:",
+          [
+            "Restaurar equilíbrio europeu pós-Napoleão",
+            "Proclamar repúblicas",
+            "Expandir o Império Francês",
+            "Unificar a Alemanha"
+          ],
+          0,
+          "Restauração e nova ordem conservadora.",
+          "medio"
+        ],
+        [
+          "Napoleão vendeu a Louisiana aos EUA em:",
+          [
+            "1789",
+            "1803",
+            "1815",
+            "1822"
+          ],
+          1,
+          "Duplicou território americano; financiou guerras.",
+          "medio"
+        ],
+        [
+          "A invasão napoleônica ao Egito (1798) tinha objetivo de:",
+          [
+            "Cortar rotas britânicas e expandir influência",
+            "Colonizar o Brasil",
+            "Apoiar a Revolução Industrial",
+            "Restaurar monarquia"
+          ],
+          0,
+          "Estratégia contra a Grã-Bretanha no Oriente.",
+          "medio"
+        ],
+        [
+          "O exílio de Napoleão em Elba foi seguido por:",
+          [
+            "Abdicação definitiva",
+            "Retorno dos Cem Dias",
+            "Coroação na Rússia",
+            "Independência do Haiti"
+          ],
+          1,
+          "Napoleão retornou brevemente em 1815.",
+          "medio"
+        ]
+      ],
+      "Industrialização": [
+        [
+          "A Revolução Industrial iniciou-se principalmente na:",
+          [
+            "França",
+            "Inglaterra",
+            "Alemanha",
+            "Itália"
+          ],
+          1,
+          "Século XVIII, setor têxtil inglês.",
+          "medio"
+        ],
+        [
+          "A máquina a vapor foi crucialmente aprimorada por:",
+          [
+            "Adam Smith",
+            "James Watt",
+            "Karl Marx",
+            "Louis Pasteur"
+          ],
+          1,
+          "Watt melhorou eficiência da máquina a vapor.",
+          "medio"
+        ],
+        [
+          "O sistema fabril substituiu gradualmente:",
+          [
+            "A produção doméstica (putting-out system)",
+            "A agricultura",
+            "O comércio marítimo",
+            "A escrita"
+          ],
+          0,
+          "Concentração de trabalho e máquinas nas fábricas.",
+          "medio"
+        ],
+        [
+          "A classe operária (proletariado) surgiu com:",
+          [
+            "Feudalismo",
+            "Industrialização urbana",
+            "Antigo Regime",
+            "Revolução Francesa apenas"
+          ],
+          1,
+          "Trabalhadores assalariados nas indústrias.",
+          "medio"
+        ],
+        [
+          "O ludismo foi um movimento de:",
+          [
+            "Operários que destruíam máquinas",
+            "Nobres contra revolução",
+            "Camponeses pela terra",
+            "Comerciantes pelo livre-comércio"
+          ],
+          0,
+          "Protesto contra desemprego tecnológico na Inglaterra.",
+          "medio"
+        ],
+        [
+          "A divisão internacional do trabalho implica:",
+          [
+            "Autossuficiência de cada país",
+            "Especialização produtiva entre nações",
+            "Fim do comércio",
+            "Igualdade salarial global"
+          ],
+          1,
+          "Países centrais e periféricos com papéis distintos.",
+          "medio"
+        ],
+        [
+          "O capitalismo industrial caracteriza-se por:",
+          [
+            "Produção artesanal doméstica",
+            "Investimento em máquinas e lucro privado",
+            "Propriedade coletiva dos meios de produção",
+            "Escambo"
+          ],
+          1,
+          "Acumulação de capital e mercado de trabalho.",
+          "medio"
+        ],
+        [
+          "As condições iniciais nas fábricas incluíam:",
+          [
+            "Jornada curta e salários altos",
+            "Jornadas longas e ambientes insalubres",
+            "Trabalho voluntário apenas",
+            "Propriedade dos operários"
+          ],
+          1,
+          "Exploração e urbanização acelerada.",
+          "medio"
+        ],
+        [
+          "A ferrovia expandiu a industrialização porque:",
+          [
+            "Facilitou transporte de matérias-primas e produtos",
+            "Substituiu todas as fábricas",
+            "Acabou com o comércio",
+            "Eliminou cidades"
+          ],
+          0,
+          "Integração de mercados regionais e nacionais.",
+          "medio"
+        ],
+        [
+          "No Brasil, a industrialização significativa intensificou-se especialmente a partir de:",
+          [
+            "1500",
+            "1930",
+            "1889 apenas",
+            "2000"
+          ],
+          1,
+          "Estratégia de substituição de importações (Vargas).",
+          "medio"
+        ]
+      ],
+      "América Portuguesa": [
+        [
+          "O Tratado de Tordesilhas (1494) dividiu terras entre:",
+          [
+            "Inglaterra e França",
+            "Portugal e Castela/Espanha",
+            "Holanda e Portugal",
+            "Portugal e Brasil"
+          ],
+          1,
+          "Linha de demarcação no Atlântico.",
+          "medio"
+        ],
+        [
+          "A economia colonial brasileira baseou-se inicialmente em:",
+          [
+            "Indústria pesada",
+            "Pau-brasil e plantation açucareira",
+            "Petróleo",
+            "Tecnologia"
+          ],
+          1,
+          "Extrativismo e monocultura exportadora.",
+          "medio"
+        ],
+        [
+          "As bandeiras paulistas buscavam principalmente:",
+          [
+            "Ouro, escravos indígenas e expansão territorial",
+            "Independência imediata",
+            "Industrialização",
+            "Comércio com a Ásia"
+          ],
+          0,
+          "Entradas e bandeirantes no sertão.",
+          "medio"
+        ],
+        [
+          "A Inconfidência Mineira (1789) foi inspirada por:",
+          [
+            "Ideias iluministas e insatisfação com derrama",
+            "Revolução Industrial",
+            "Guerra do Paraguai",
+            "Revolta Farroupilha"
+          ],
+          0,
+          "Tiradentes e conspiração em Minas Gerais.",
+          "medio"
+        ],
+        [
+          "A escravidão africana intensificou-se no Brasil devido a:",
+          [
+            "Demanda de mão de obra nas lavouras exportadoras",
+            "Falta de indígenas apenas",
+            "Proibição do tráfico desde 1500",
+            "Lei Áurea antecipada"
+          ],
+          0,
+          "Plantation e tráfico atlântico.",
+          "medio"
+        ],
+        [
+          "A mineração de ouro (séc. XVIII) concentrou-se em:",
+          [
+            "Amazônia",
+            "Minas Gerais",
+            "Pampa gaúcho",
+            "Nordeste litorâneo"
+          ],
+          1,
+          "Ciclo do ouro em MG e região central.",
+          "medio"
+        ],
+        [
+          "As capitanias hereditárias foram:",
+          [
+            "Províncias republicanas",
+            "Sistema inicial de administração colonial",
+            "Estados federados",
+            "Missões jesuíticas"
+          ],
+          1,
+          "Divisão territorial da colonização portuguesa.",
+          "medio"
+        ],
+        [
+          "O ciclo do café predominou no Brasil a partir do:",
+          [
+            "Século XVI",
+            "Século XIX",
+            "Século XXI",
+            "Período pré-cabral"
+          ],
+          1,
+          "Vale do Paraíba e Oeste Paulista.",
+          "medio"
+        ],
+        [
+          "As missões jesuíticas nos Sete Povos das Missões visavam:",
+          [
+            "Catequese e organização de indígenas",
+            "Mineração de ouro",
+            "Proclamação da República",
+            "Comércio de especiarias"
+          ],
+          0,
+          "Reduções jesuíticas no Sul.",
+          "medio"
+        ],
+        [
+          "A abertura dos portos às nações amigas (1808) significou:",
+          [
+            "Fim do monopólio comercial português",
+            "Isolamento do Brasil",
+            "Proclamação da República",
+            "Abolição imediata"
+          ],
+          0,
+          "Liberalização comercial durante a corte no Rio.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "Geografia",
+    "code": "EM2-GEO",
+    "title": "Simulado — Geografia (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Climatologia": [
+        [
+          "O clima tropical úmido (equatorial) caracteriza-se por:",
+          [
+            "Baixas temperaturas o ano todo",
+            "Altas temperaturas e chuvas abundantes",
+            "Estação seca prolongada",
+            "Neve frequente"
+          ],
+          1,
+          "Próximo à linha do Equador, calor e umidade.",
+          "medio"
+        ],
+        [
+          "A chuva orográfica ocorre quando:",
+          [
+            "Massas de ar sobem encostas de montanhas",
+            "O mar esquenta",
+            "Há poluição urbana",
+            "O vento para totalmente"
+          ],
+          0,
+          "Ar úmido ascende, resfria e condensa.",
+          "medio"
+        ],
+        [
+          "El Niño provoca no Brasil, em geral:",
+          [
+            "Seca no Norte e chuvas no Sul",
+            "Seca em todo o país",
+            "Neve na Amazônia",
+            "Fim das estações"
+          ],
+          0,
+          "Altera padrões de precipitação e temperatura.",
+          "medio"
+        ],
+        [
+          "O efeito estufa natural é responsável por:",
+          [
+            "Resfriar a Terra",
+            "Manter temperatura adequada à vida",
+            "Eliminar a atmosfera",
+            "Criar ozônio"
+          ],
+          1,
+          "Gases retêm calor; sem ele a Terra seria gelada.",
+          "medio"
+        ],
+        [
+          "Clima mediterrâneo apresenta verões:",
+          [
+            "Muito chuvosos",
+            "Quentes e secos",
+            "Gelados",
+            "Sem variação"
+          ],
+          1,
+          "Típico do Mediterrâneo: verão seco, inverno chuvoso.",
+          "medio"
+        ],
+        [
+          "A amplitude térmica anual é maior em:",
+          [
+            "Regiões litorâneas equatoriais",
+            "Interiores continentais temperados",
+            "Ilhas oceânicas tropicais",
+            "Florestas tropicais"
+          ],
+          1,
+          "Continentalidade amplia diferença entre verão e inverno.",
+          "medio"
+        ],
+        [
+          "Massa de ar polar atlântica (mPa) traz ao Brasil:",
+          [
+            "Calor seco",
+            "Frentes frias e instabilidade no Sul/Sudeste",
+            "Desertos",
+            "Ciclones tropicais constantes"
+          ],
+          1,
+          "Origem polar; avança sobre regiões do Sul/Sudeste.",
+          "medio"
+        ],
+        [
+          "A camada de ozônio concentra-se na:",
+          [
+            "Troposfera",
+            "Estratosfera",
+            "Hidrosfera",
+            "Litosfera"
+          ],
+          1,
+          "Protege contra radiação UV nociva.",
+          "medio"
+        ],
+        [
+          "Bioma com maior biodiversidade e clima quente-úmido:",
+          [
+            "Caatinga",
+            "Amazônia",
+            "Pampa",
+            "Campos de altitude"
+          ],
+          1,
+          "Floresta tropical úmida amazônica.",
+          "medio"
+        ],
+        [
+          "Mudanças climáticas antropogênicas relacionam-se principalmente à:",
+          [
+            "Emissão de gases de efeito estufa",
+            "Rotação da Terra",
+            "Marés oceânicas",
+            "Atividade vulcânica natural apenas"
+          ],
+          0,
+          "CO₂ e outros gases intensificam aquecimento global.",
+          "medio"
+        ]
+      ],
+      "Urbanização": [
+        [
+          "Urbanização é o processo de:",
+          [
+            "Aumento da população rural",
+            "Crescimento das cidades e população urbana",
+            "Desmatamento",
+            "Industrialização agrícola apenas"
+          ],
+          1,
+          "Êxodo rural e expansão urbana.",
+          "medio"
+        ],
+        [
+          "Metropolização refere-se à formação de:",
+          [
+            "Aldeias isoladas",
+            "Grandes aglomerados urbanos integrados",
+            "Desertos",
+            "Reservas indígenas"
+          ],
+          1,
+          "Conurbação entre cidades e regiões metropolitanas.",
+          "medio"
+        ],
+        [
+          "Gentrificação ocorre quando:",
+          [
+            "Bairros populares são valorizados e expulsam moradores originais",
+            "Cidades perdem população",
+            "Indústrias fecham",
+            "Há total igualdade habitacional"
+          ],
+          0,
+          "Valorização imobiliária desloca população de baixa renda.",
+          "medio"
+        ],
+        [
+          "Favelização está associada a:",
+          [
+            "Habitação irregular e infraestrutura precária",
+            "Planejamento urbano perfeito",
+            "Baixa densidade demográfica",
+            "Zonas rurais"
+          ],
+          0,
+          "Ocupação não planejada em áreas urbanas.",
+          "medio"
+        ],
+        [
+          "O SUS e saneamento básico são desafios urbanos porque:",
+          [
+            "Cidades concentram demanda por serviços",
+            "Não existem doenças urbanas",
+            "Só afetam o campo",
+            "Eliminam desigualdade"
+          ],
+          0,
+          "Metrópoles exigem infraestrutura complexa.",
+          "medio"
+        ],
+        [
+          "Zona de transição (Chicago School) situa-se:",
+          [
+            "No centro financeiro",
+            "Entre centro e periferia",
+            "Apenas na periferia rural",
+            "No subsolo"
+          ],
+          1,
+          "Área de deterioração e reconversão.",
+          "medio"
+        ],
+        [
+          "Megacidade é aquela com população superior a:",
+          [
+            "100 mil",
+            "500 mil",
+            "10 milhões",
+            "1 milhão apenas"
+          ],
+          2,
+          "Critério comum: mais de 10 milhões de habitantes.",
+          "medio"
+        ],
+        [
+          "Mobilidade urbana sustentável inclui:",
+          [
+            "Priorizar transporte individual a combustão",
+            "Transporte público e não motorizado",
+            "Eliminar calçadas",
+            "Apenas estacionamentos"
+          ],
+          1,
+          "Ônibus, metrô, ciclovias reduzem congestionamento.",
+          "medio"
+        ],
+        [
+          "No Brasil, a urbanização acelerou-se especialmente a partir de:",
+          [
+            "1500",
+            "Década de 1950",
+            "1990 apenas",
+            "2020"
+          ],
+          1,
+          "Industrialização e êxodo rural pós-guerra.",
+          "medio"
+        ],
+        [
+          "Periferia urbana frequentemente apresenta:",
+          [
+            "Melhor acesso a empregos formais que o centro",
+            "Distância de serviços e empregos centrais",
+            "Baixa densidade sempre",
+            "Ausência de população"
+          ],
+          1,
+          "Exclusão socioespacial nas grandes cidades.",
+          "medio"
+        ]
+      ],
+      "Globalização": [
+        [
+          "Globalização caracteriza-se por:",
+          [
+            "Isolamento de nações",
+            "Integração econômica, cultural e tecnológica",
+            "Fim do comércio",
+            "Autarcia"
+          ],
+          1,
+          "Fluxos globais de bens, capitais e informações.",
+          "medio"
+        ],
+        [
+          "Multinacionais são empresas que:",
+          [
+            "Operam apenas em um país",
+            "Atuam em vários países",
+            "São sempre estatais",
+            "Não exportam"
+          ],
+          1,
+          "Produção e mercados em escala global.",
+          "medio"
+        ],
+        [
+          "A divisão internacional do trabalho implica:",
+          [
+            "Todos os países produzem tudo",
+            "Especialização produtiva entre países",
+            "Fim das exportações",
+            "Igualdade total de renda"
+          ],
+          1,
+          "Centros e periferias com funções distintas.",
+          "medio"
+        ],
+        [
+          "Blocos econômicos como Mercosul visam:",
+          [
+            "Guerra comercial",
+            "Integração regional e livre-comércio",
+            "Isolamento",
+            "Proibição de investimentos"
+          ],
+          1,
+          "Facilitar comércio entre membros.",
+          "medio"
+        ],
+        [
+          "Cadeias produtivas globais significam:",
+          [
+            "Produção inteira em um só país",
+            "Etapas da produção distribuídas mundialmente",
+            "Fim da logística",
+            "Produção artesanal"
+          ],
+          0,
+          "Ex.: iPhone com componentes de vários países.",
+          "medio"
+        ],
+        [
+          "Homogeneização cultural na globalização manifesta-se em:",
+          [
+            "Difusão de marcas, mídia e hábitos globais",
+            "Desaparecimento total de culturas locais sempre",
+            "Fim da internet",
+            "Proibição de turismo"
+          ],
+          0,
+          "Cultura de massa e consumo global.",
+          "medio"
+        ],
+        [
+          "Deslocalização industrial ocorre quando:",
+          [
+            "Fábricas migram para reduzir custos",
+            "Indústria desaparece",
+            "Tudo é produzido localmente",
+            "Não há comércio"
+          ],
+          0,
+          "Busca mão de obra barata e incentivos fiscais.",
+          "medio"
+        ],
+        [
+          "Organização Mundial do Comércio (OMC) regula:",
+          [
+            "Clima",
+            "Comércio internacional",
+            "Educação",
+            "Espaço sideral"
+          ],
+          1,
+          "Regras e negociações comerciais globais.",
+          "medio"
+        ],
+        [
+          "Globalização financeira implica:",
+          [
+            "Capitais circulam rapidamente pelo mundo",
+            "Moedas não existem",
+            "Bancos são locais apenas",
+            "Fim dos investimentos"
+          ],
+          0,
+          "Mercados financeiros interconectados 24h.",
+          "medio"
+        ],
+        [
+          "Críticas à globalização incluem:",
+          [
+            "Aumento de desigualdades e precarização",
+            "Eliminação de toda pobreza",
+            "Fim do neocolonialismo",
+            "Autossuficiência universal"
+          ],
+          0,
+          "Benefícios nem sempre distribuídos equitativamente.",
+          "medio"
+        ]
+      ],
+      "População": [
+        [
+          "Densidade demográfica calcula-se por:",
+          [
+            "População ÷ área",
+            "Nascimentos ÷ óbitos",
+            "Área ÷ população",
+            "PIB ÷ população"
+          ],
+          0,
+          "Habitantes por km².",
+          "medio"
+        ],
+        [
+          "Transição demográfica: queda da mortalidade inicialmente provoca:",
+          [
+            "Queda imediata da natalidade",
+            "Crescimento acelerado da população",
+            "Envelhecimento instantâneo",
+            "Estagnação zero"
+          ],
+          1,
+          "Natalidade alta + mortalidade baixa = boom populacional.",
+          "medio"
+        ],
+        [
+          "Envelhecimento populacional ocorre quando:",
+          [
+            "Há muitos jovens",
+            "A proporção de idosos aumenta",
+            "A natalidade explode",
+            "Emigração é zero"
+          ],
+          1,
+          "Queda de natalidade e maior expectativa de vida.",
+          "medio"
+        ],
+        [
+          "Êxodo rural é a migração do campo para:",
+          [
+            "Outro campo",
+            "A cidade",
+            "Outro planeta",
+            "Zonas desérticas"
+          ],
+          1,
+          "Busca de emprego e serviços urbanos.",
+          "medio"
+        ],
+        [
+          "Taxa de fecundidade mede:",
+          [
+            "Número médio de filhos por mulher",
+            "Mortes por mil",
+            "Migrantes por ano",
+            "Idade média"
+          ],
+          0,
+          "Indicador de reprodução populacional.",
+          "medio"
+        ],
+        [
+          "População economicamente ativa (PEA) inclui:",
+          [
+            "Apenas aposentados",
+            "Empregados e desempregados em idade de trabalhar",
+            "Somente crianças",
+            "Turistas"
+          ],
+          1,
+          "Força de trabalho disponível ou ocupada.",
+          "medio"
+        ],
+        [
+          "No Brasil, a região com maior concentração populacional é:",
+          [
+            "Norte",
+            "Sudeste",
+            "Centro-Oeste",
+            "Amapá isolado"
+          ],
+          1,
+          "SP, RJ, MG concentram milhões.",
+          "medio"
+        ],
+        [
+          "Migração internacional de refugiados decorre frequentemente de:",
+          [
+            "Guerras, perseguições e crises humanitárias",
+            "Turismo",
+            "Férias",
+            "Estudos de curta duração"
+          ],
+          0,
+          "Busca de proteção internacional.",
+          "medio"
+        ],
+        [
+          "Pirâmide etária com base estreita indica:",
+          [
+            "Alta natalidade",
+            "Baixa natalidade e envelhecimento",
+            "Guerra",
+            "Alta imigração de jovens"
+          ],
+          1,
+          "Topo largo = muitos idosos.",
+          "medio"
+        ],
+        [
+          "Crescimento zero populacional ocorre quando:",
+          [
+            "Natalidade equilibra mortalidade e migração",
+            "Não há nascimentos",
+            "Todos emigram",
+            "A população dobra"
+          ],
+          0,
+          "Taxa de crescimento próxima de zero.",
+          "medio"
+        ]
+      ],
+      "Geopolítica": [
+        [
+          "Geopolítica estuda:",
+          [
+            "Relação entre poder político e espaço geográfico",
+            "Apenas clima",
+            "Somente rochas",
+            "Receitas culinárias"
+          ],
+          0,
+          "Território, recursos e estratégias estatais.",
+          "medio"
+        ],
+        [
+          "O conceito de Estado-nação envolve:",
+          [
+            "Território, população, governo e soberania",
+            "Apenas fronteiras naturais",
+            "Somente bandeira",
+            "Empresa privada"
+          ],
+          0,
+          "Elementos clássicos do Estado moderno.",
+          "medio"
+        ],
+        [
+          "Guerra Fria foi um conflito entre:",
+          [
+            "EUA e URSS por influência global",
+            "Brasil e Argentina",
+            "França e Inglaterra medieval",
+            "China e Japão feudal"
+          ],
+          0,
+          "Bipolaridade capitalista vs. socialista.",
+          "medio"
+        ],
+        [
+          "Organização das Nações Unidas (ONU) foi criada em:",
+          [
+            "1914",
+            "1945",
+            "1989",
+            "2001"
+          ],
+          1,
+          "Pós-Segunda Guerra Mundial.",
+          "medio"
+        ],
+        [
+          "Unipolaridade pós-1991 referia-se à hegemonia de:",
+          [
+            "URSS",
+            "EUA",
+            "Alemanha",
+            "Brasil"
+          ],
+          1,
+          "Fim da URSS deixou EUA como superpotência.",
+          "medio"
+        ],
+        [
+          "Soft power (Nye) baseia-se em:",
+          [
+            "Força militar exclusiva",
+            "Influência cultural, diplomática e econômica",
+            "Apenas sanções",
+            "Guerra nuclear"
+          ],
+          1,
+          "Persuasão sem coerção militar direta.",
+          "medio"
+        ],
+        [
+          "Recursos estratégicos como petróleo geram:",
+          [
+            "Indiferença geopolítica",
+            "Disputas e alianças internacionais",
+            "Fim do comércio",
+            "Paz automática"
+          ],
+          1,
+          "Energia e minerais movem interesses globais.",
+          "medio"
+        ],
+        [
+          "Fronteiras artificiais impostas por colonizadores podem:",
+          [
+            "Ignorar etnias e gerar conflitos",
+            "Sempre unir povos",
+            "Eliminar guerras",
+            "Ser sempre naturais"
+          ],
+          0,
+          "África e Oriente Médio: exemplos de divisões coloniais.",
+          "medio"
+        ],
+        [
+          "O BRICS agrupa países com objetivo de:",
+          [
+            "Cooperação econômica e maior influência global",
+            "Guerra contra a ONU",
+            "Isolamento total",
+            "União política como um só país"
+          ],
+          0,
+          "Brasil, Rússia, Índia, China, África do Sul.",
+          "medio"
+        ],
+        [
+          "Terrorismo transnacional desafia Estados porque:",
+          [
+            "Atua além de fronteiras com redes globais",
+            "Respeita sempre tratados",
+            "Não usa tecnologia",
+            "Só ocorre em um bairro"
+          ],
+          0,
+          "Segurança exige cooperação internacional.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "Física",
+    "code": "EM2-FIS",
+    "title": "Simulado — Física (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Cinemática": [
+        [
+          "A velocidade média é calculada por:",
+          [
+            "Δs/Δt",
+            "m·a",
+            "F·d",
+            "P/V"
+          ],
+          0,
+          "v = variação de espaço / variação de tempo.",
+          "medio"
+        ],
+        [
+          "A aceleração mede a variação de:",
+          [
+            "Massa",
+            "Velocidade no tempo",
+            "Temperatura",
+            "Volume"
+          ],
+          1,
+          "a = Δv/Δt.",
+          "medio"
+        ],
+        [
+          "Movimento uniforme (MU) tem aceleração:",
+          [
+            "Zero",
+            "Constante e diferente de zero",
+            "Variável",
+            "Infinita"
+          ],
+          0,
+          "Velocidade constante → aceleração nula.",
+          "medio"
+        ],
+        [
+          "Um carro percorre 120 km em 2 h. Sua velocidade média é:",
+          [
+            "60 km/h",
+            "120 km/h",
+            "240 km/h",
+            "30 km/h"
+          ],
+          0,
+          "120/2 = 60 km/h.",
+          "medio"
+        ],
+        [
+          "Queda livre próxima à Terra tem aceleração aproximada de:",
+          [
+            "1 m/s²",
+            "9,8 m/s²",
+            "98 m/s²",
+            "0 m/s²"
+          ],
+          1,
+          "Aceleração da gravidade g ≈ 9,8 m/s².",
+          "medio"
+        ],
+        [
+          "No gráfico s × t de MU, a inclinação representa:",
+          [
+            "Aceleração",
+            "Velocidade",
+            "Força",
+            "Energia"
+          ],
+          1,
+          "Inclinação = Δs/Δt = v.",
+          "medio"
+        ],
+        [
+          "MRUV significa movimento retilíneo com:",
+          [
+            "Velocidade uniforme",
+            "Veloceração uniforme",
+            "Trajetória circular",
+            "Repouso"
+          ],
+          1,
+          "Aceleração constante em linha reta.",
+          "medio"
+        ],
+        [
+          "A equação horária do espaço no MRUV é:",
+          [
+            "s = s₀ + vt",
+            "s = s₀ + v₀t + at²/2",
+            "F = ma",
+            "E = mc²"
+          ],
+          1,
+          "Inclui termo acelerado.",
+          "medio"
+        ],
+        [
+          "Lançamento vertical: no ponto mais alto, a velocidade vertical é:",
+          [
+            "Máxima",
+            "Zero",
+            "Igual à inicial",
+            "Negativa infinita"
+          ],
+          1,
+          "Instantaneamente v = 0 antes de descer.",
+          "medio"
+        ],
+        [
+          "Referencial inercial é aquele em que:",
+          [
+            "Vale a 1ª lei de Newton",
+            "Há aceleração fictícia sempre",
+            "Não se mede tempo",
+            "A gravidade é zero"
+          ],
+          0,
+          "Corpo livre de força resultante mantém v constante.",
+          "medio"
+        ]
+      ],
+      "Dinâmica": [
+        [
+          "A 2ª lei de Newton estabelece:",
+          [
+            "F = m·a",
+            "E = mc²",
+            "V = R·i",
+            "P = m·g"
+          ],
+          0,
+          "Força resultante = massa × aceleração.",
+          "medio"
+        ],
+        [
+          "A unidade de força no SI é:",
+          [
+            "Joule",
+            "Newton",
+            "Watt",
+            "Pascal"
+          ],
+          1,
+          "1 N = 1 kg·m/s².",
+          "medio"
+        ],
+        [
+          "Peso de um corpo de 10 kg (g = 10 m/s²) é:",
+          [
+            "1 N",
+            "10 N",
+            "100 N",
+            "1000 N"
+          ],
+          2,
+          "P = m·g = 10 × 10 = 100 N.",
+          "medio"
+        ],
+        [
+          "A 3ª lei de Newton diz que:",
+          [
+            "Ação e reação têm mesma intensidade e sentidos opostos",
+            "F = ma",
+            "Energia se conserva sempre",
+            "Velocidade é constante"
+          ],
+          0,
+          "Forças em pares atuam em corpos diferentes.",
+          "medio"
+        ],
+        [
+          "Atrito cinético tende a:",
+          [
+            "Aumentar movimento",
+            "Opor-se ao deslizamento",
+            "Anular gravidade",
+            "Criar energia"
+          ],
+          1,
+          "Força contrária ao movimento relativo.",
+          "medio"
+        ],
+        [
+          "Plano inclinado: componente da força peso paralela ao plano é:",
+          [
+            "m·g·senθ",
+            "m·g·cosθ",
+            "m·a",
+            "Zero sempre"
+          ],
+          0,
+          "Decomposição do peso na direção da rampa.",
+          "medio"
+        ],
+        [
+          "Força centrípeta é responsável por:",
+          [
+            "Manter movimento circular",
+            "Aumentar massa",
+            "Gerar calor apenas",
+            "Anular inércia totalmente"
+          ],
+          0,
+          "Muda direção da velocidade.",
+          "medio"
+        ],
+        [
+          "A 1ª lei de Newton também é chamada lei da:",
+          [
+            "Gravitação",
+            "Inércia",
+            "Termodinâmica",
+            "Conservação de carga"
+          ],
+          1,
+          "Corpo tende a manter estado de movimento.",
+          "medio"
+        ],
+        [
+          "Empuxo de Arquimedes atua:",
+          [
+            "Para cima, igual ao peso do fluido deslocado",
+            "Para baixo",
+            "Horizontalmente",
+            "Só em vácuo"
+          ],
+          0,
+          "Corpo imerso recebe empuxo vertical para cima.",
+          "medio"
+        ],
+        [
+          "Diagrama de corpo livre serve para:",
+          [
+            "Representar forças que atuam no corpo",
+            "Medir temperatura",
+            "Calcular volume",
+            "Desenhar circuitos"
+          ],
+          0,
+          "Isola o corpo e indica vetores de força.",
+          "medio"
+        ]
+      ],
+      "Energia": [
+        [
+          "A energia cinética é dada por:",
+          [
+            "Ec = mv²/2",
+            "Ep = mgh",
+            "P = Fv",
+            "Q = mcΔT"
+          ],
+          0,
+          "Depende da massa e do quadrado da velocidade.",
+          "medio"
+        ],
+        [
+          "Energia potencial gravitacional próxima à Terra:",
+          [
+            "Ep = mgh",
+            "Ec = mv²/2",
+            "F = ma",
+            "V = Ri"
+          ],
+          0,
+          "Depende de altura h.",
+          "medio"
+        ],
+        [
+          "Princípio da conservação de energia mecânica (sem atrito):",
+          [
+            "Em = Ec + Ep = constante",
+            "Energia desaparece",
+            "Só Ep se conserva",
+            "Ec sempre zero"
+          ],
+          0,
+          "Transformação entre cinética e potencial.",
+          "medio"
+        ],
+        [
+          "Trabalho de uma força constante paralela ao deslocamento:",
+          [
+            "τ = F·d",
+            "P = E/t",
+            "F = ma",
+            "E = Q"
+          ],
+          0,
+          "τ = força × deslocamento (cos θ se não paralelo).",
+          "medio"
+        ],
+        [
+          "Potência mede:",
+          [
+            "Rapidez de transferência de energia",
+            "Massa",
+            "Força",
+            "Volume"
+          ],
+          0,
+          "P = trabalho/tempo ou P = F·v.",
+          "medio"
+        ],
+        [
+          "1 joule equivale a:",
+          [
+            "1 N·m",
+            "1 kg/m²",
+            "1 W/s",
+            "1 V/A"
+          ],
+          0,
+          "Unidade de energia e trabalho no SI.",
+          "medio"
+        ],
+        [
+          "Rendimento de uma máquina é:",
+          [
+            "Energia útil / energia total × 100%",
+            "Sempre 100%",
+            "Massa/volume",
+            "Força × tempo"
+          ],
+          0,
+          "Parte da energia sempre se dissipa em calor.",
+          "medio"
+        ],
+        [
+          "Atrito transforma energia mecânica em:",
+          [
+            "Energia nuclear",
+            "Calor",
+            "Luz apenas",
+            "Massa"
+          ],
+          1,
+          "Dissipação térmica.",
+          "medio"
+        ],
+        [
+          "Um corpo de 2 kg a 3 m/s tem Ec de:",
+          [
+            "3 J",
+            "6 J",
+            "9 J",
+            "18 J"
+          ],
+          2,
+          "Ec = 2×9/2 = 9 J.",
+          "medio"
+        ],
+        [
+          "Máquinas simples como alavanca podem:",
+          [
+            "Multiplicar força (com trade-off de deslocamento)",
+            "Criar energia do nada",
+            "Violar conservação",
+            "Eliminar atrito totalmente"
+          ],
+          0,
+          "Facilitam trabalho, não criam energia.",
+          "medio"
+        ]
+      ],
+      "Ondas": [
+        [
+          "Em ondas mecânicas, a propagação requer:",
+          [
+            "Meio material",
+            "Apenas vácuo",
+            "Campo magnético",
+            "Fótons"
+          ],
+          0,
+          "Som e ondas na água precisam de meio.",
+          "medio"
+        ],
+        [
+          "A frequência mede:",
+          [
+            "Número de oscilações por segundo (Hz)",
+            "Comprimento da onda",
+            "Velocidade do som",
+            "Amplitude"
+          ],
+          0,
+          "f em hertz (1/s).",
+          "medio"
+        ],
+        [
+          "Relação entre velocidade, frequência e comprimento de onda:",
+          [
+            "v = λ·f",
+            "v = f/λ",
+            "v = λ + f",
+            "v = λ²"
+          ],
+          0,
+          "Equação fundamental das ondas.",
+          "medio"
+        ],
+        [
+          "Som mais agudo corresponde a:",
+          [
+            "Maior frequência",
+            "Menor frequência",
+            "Maior amplitude",
+            "Menor velocidade no ar"
+          ],
+          0,
+          "Agudo = alta frequência.",
+          "medio"
+        ],
+        [
+          "Reflexão de ondas ocorre quando:",
+          [
+            "Onda encontra obstáculo e retorna",
+            "Onda desaparece",
+            "Onda muda de meio sem retorno",
+            "Onda não se propaga"
+          ],
+          0,
+          "Eco é reflexão do som.",
+          "medio"
+        ],
+        [
+          "Difracao é a:",
+          [
+            "Curvatura de ondas ao contornar obstáculos",
+            "Reflexão total",
+            "Absorção completa",
+            "Polarização"
+          ],
+          0,
+          "Ondas 'contornam' aberturas e bordas.",
+          "medio"
+        ],
+        [
+          "Ondas eletromagnéticas no vácuo propagam-se a:",
+          [
+            "3×10⁸ m/s",
+            "340 m/s",
+            "9,8 m/s",
+            "Dependem da massa"
+          ],
+          0,
+          "Velocidade da luz c.",
+          "medio"
+        ],
+        [
+          "Interferência construtiva ocorre quando:",
+          [
+            "Ondas somam amplitudes",
+            "Ondas se cancelam",
+            "Ondas param",
+            "Ondas mudam de meio"
+          ],
+          0,
+          "Cristas coincidem, amplitude aumenta.",
+          "medio"
+        ],
+        [
+          "Efeito Doppler: sirene aproximando-se parece:",
+          [
+            "Mais grave",
+            "Mais aguda",
+            "Silenciosa",
+            "Sem alteração"
+          ],
+          1,
+          "Frequência aparente aumenta na aproximação.",
+          "medio"
+        ],
+        [
+          "Ultrassom usa frequências:",
+          [
+            "Abaixo de 20 Hz",
+            "Acima do audível humano (>20 kHz)",
+            "Iguais à voz",
+            "Zero"
+          ],
+          1,
+          "Aplicações médicas e de detecção.",
+          "medio"
+        ]
+      ],
+      "Eletricidade": [
+        [
+          "A lei de Ohm estabelece:",
+          [
+            "U = R·i",
+            "P = Fv",
+            "F = ma",
+            "E = mc²"
+          ],
+          0,
+          "Tensão = resistência × corrente.",
+          "medio"
+        ],
+        [
+          "Corrente elétrica é fluxo de:",
+          [
+            "Cargas elétricas",
+            "Massa",
+            "Calor",
+            "Luz apenas"
+          ],
+          0,
+          "Elétrons em condutores.",
+          "medio"
+        ],
+        [
+          "Unidade de resistência elétrica:",
+          [
+            "Ohm (Ω)",
+            "Volt",
+            "Ampère",
+            "Watt"
+          ],
+          0,
+          "R mede oposição à corrente.",
+          "medio"
+        ],
+        [
+          "Potência elétrica calcula-se por:",
+          [
+            "P = U·i",
+            "P = m·g",
+            "P = λ·f",
+            "P = F·d"
+          ],
+          0,
+          "Tensão × corrente.",
+          "medio"
+        ],
+        [
+          "Circuito em série tem corrente:",
+          [
+            "Igual em todos os elementos",
+            "Diferente em cada ramo",
+            "Zero sempre",
+            "Infinita"
+          ],
+          0,
+          "Mesmo caminho → mesma corrente.",
+          "medio"
+        ],
+        [
+          "Circuito em paralelo: a tensão entre ramos é:",
+          [
+            "A mesma",
+            "Sempre zero",
+            "Diferente em cada ramo",
+            "Infinita"
+          ],
+          0,
+          "Mesmo potencial entre pontos comuns.",
+          "medio"
+        ],
+        [
+          "Resistores em série: resistência equivalente:",
+          [
+            "Soma das resistências",
+            "Média",
+            "Menor que a menor",
+            "Sempre 1 Ω"
+          ],
+          0,
+          "Req = R1 + R2 + ...",
+          "medio"
+        ],
+        [
+          "Choque elétrico perigoso ocorre principalmente quando:",
+          [
+            "Corrente atravessa o corpo",
+            "Há apenas tensão sem corrente",
+            "Há isolante perfeito",
+            "Não há contato"
+          ],
+          0,
+          "Corrente > ~10 mA pode ser fatal.",
+          "medio"
+        ],
+        [
+          "Gerador converte energia:",
+          [
+            "Mecânica em elétrica",
+            "Elétrica em mecânica",
+            "Nuclear em química",
+            "Térmica em gravitacional"
+          ],
+          0,
+          "Indução eletromagnética.",
+          "medio"
+        ],
+        [
+          "Fusível protege circuito porque:",
+          [
+            "Interrompe corrente excessiva",
+            "Aumenta tensão",
+            "Armazena carga",
+            "Gera energia"
+          ],
+          0,
+          "Derrete quando corrente ultrapassa limite.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "Química",
+    "code": "EM2-QUI",
+    "title": "Simulado — Química (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Tabela Periódica": [
+        [
+          "Os elementos de um mesmo grupo (coluna) possuem:",
+          [
+            "Mesmo número de camadas",
+            "Mesmo número de elétrons de valência",
+            "Mesma massa atômica",
+            "Mesmo número de nêutrons"
+          ],
+          1,
+          "Grupos têm propriedades químicas semelhantes.",
+          "medio"
+        ],
+        [
+          "O número atômico (Z) indica:",
+          [
+            "Prótons no núcleo",
+            "Massa do átomo",
+            "Número de moléculas",
+            "Carga do íon"
+          ],
+          0,
+          "Z = prótons = elétrons no átomo neutro.",
+          "medio"
+        ],
+        [
+          "Metais alcalinos (grupo 1) são:",
+          [
+            "Muito reativos e formam bases fortes",
+            "Gases nobres",
+            "Halogenios",
+            "Metais de transição inertes"
+          ],
+          0,
+          "Li, Na, K — reatividade elevada com água.",
+          "medio"
+        ],
+        [
+          "Gases nobres (grupo 18) caracterizam-se por:",
+          [
+            "Alta reatividade química",
+            "Baixa reatividade (octeto estável)",
+            "Serem metais",
+            "Formarem sais facilmente"
+          ],
+          1,
+          "Camada de valência completa.",
+          "medio"
+        ],
+        [
+          "Períodos (linhas) da tabela correspondem a:",
+          [
+            "Número de camadas eletrônicas",
+            "Número de prótons apenas",
+            "Massa atómica",
+            "Tipo de ligação"
+          ],
+          0,
+          "Cada período = uma camada adicional.",
+          "medio"
+        ],
+        [
+          "O elemento com Z = 6 é:",
+          [
+            "Oxigênio",
+            "Carbono",
+            "Nitrogênio",
+            "Boro"
+          ],
+          1,
+          "Carbono: 6 prótons.",
+          "medio"
+        ],
+        [
+          "Eletronegatividade aumenta na tabela:",
+          [
+            "Do canto inferior esquerdo ao superior direito",
+            "Do superior direito ao inferior esquerdo",
+            "Apenas para metais",
+            "Não varia"
+          ],
+          0,
+          "Tendência periódica: F é o mais eletronegativo.",
+          "medio"
+        ],
+        [
+          "Isótopos são átomos do mesmo elemento com:",
+          [
+            "Mesmo Z, diferente número de nêutrons",
+            "Diferente Z",
+            "Mesma massa sempre",
+            "Diferente número de elétrons no átomo neutro"
+          ],
+          0,
+          "Ex.: carbono-12 e carbono-14.",
+          "medio"
+        ],
+        [
+          "Metais de transição localizam-se no:",
+          [
+            "Centro da tabela (bloco d)",
+            "Grupo 18",
+            "Grupo 1 apenas",
+            "Topo da tabela"
+          ],
+          0,
+          "Fe, Cu, Zn são metais de transição.",
+          "medio"
+        ],
+        [
+          "Halogênios (grupo 17) formam frequentemente:",
+          [
+            "Íons -1 (anions)",
+            "Íons +2",
+            "Gases nobres",
+            "Ligações metálicas"
+          ],
+          0,
+          "F, Cl, Br, I — ganham 1 elétron.",
+          "medio"
+        ]
+      ],
+      "Ligações Químicas": [
+        [
+          "Ligação iônica ocorre entre:",
+          [
+            "Átomos com grande diferença de eletronegatividade (metal + ametal)",
+            "Somente não metais iguais",
+            "Gases nobres",
+            "Metais iguais"
+          ],
+          0,
+          "Transferência de elétrons: NaCl.",
+          "medio"
+        ],
+        [
+          "Ligação covalente envolve:",
+          [
+            "Compartilhamento de elétrons",
+            "Mar de elétrons",
+            "Transferência total",
+            "Atração iônica"
+          ],
+          0,
+          "Comum entre não metais: H₂O, O₂.",
+          "medio"
+        ],
+        [
+          "Ligação metálica caracteriza-se por:",
+          [
+            "Mar de elétrons deslocalizados",
+            "Compartilhamento em pares",
+            "Íons fixos apenas",
+            "Moléculas isoladas"
+          ],
+          0,
+          "Condutividade e maleabilidade dos metais.",
+          "medio"
+        ],
+        [
+          "Fórmula do cloreto de sódio:",
+          [
+            "NaCl",
+            "NaCl₂",
+            "Na₂Cl",
+            "NaO"
+          ],
+          0,
+          "Na⁺ e Cl⁻ → NaCl.",
+          "medio"
+        ],
+        [
+          "Ligação covalente polar ocorre quando:",
+          [
+            "Há diferença de eletronegatividade entre átomos ligados",
+            "Átomos idênticos se ligam",
+            "Não há elétrons compartilhados",
+            "Só metais participam"
+          ],
+          0,
+          "Ex.: HCl, H₂O.",
+          "medio"
+        ],
+        [
+          "Dupla ligação aparece em moléculas como:",
+          [
+            "O₂ e CO₂",
+            "NaCl",
+            "Fe",
+            "Ne"
+          ],
+          0,
+          "Compartilhamento de 4 elétrons.",
+          "medio"
+        ],
+        [
+          "Geometria da molécula de água (VSEPR):",
+          [
+            "Angular",
+            "Linear",
+            "Tetraédrica",
+            "Trigonal plana"
+          ],
+          0,
+          "Dois pares ligantes + dois livres → angular.",
+          "medio"
+        ],
+        [
+          "Forças intermoleculares de hidrogênio são:",
+          [
+            "Fortes entre H ligado a F, O ou N",
+            "Ligações covalentes",
+            "Ligações iônicas",
+            "Inexistentes na água"
+          ],
+          0,
+          "Explicam alto ponto de ebulição da água.",
+          "medio"
+        ],
+        [
+          "Hibridização sp³ ocorre em:",
+          [
+            "Metano (CH₄)",
+            "Etileno",
+            "Acetileno",
+            "Berílio"
+          ],
+          0,
+          "Geometria tetraédrica.",
+          "medio"
+        ],
+        [
+          "Ligações pi envolvem:",
+          [
+            "Sobreposição lateral de orbitais p",
+            "Sobreposição frontal (sigma) apenas",
+            "Transferência iônica",
+            "Mar de elétrons metálico"
+          ],
+          0,
+          "Presentes em duplas e triplas ligações.",
+          "medio"
+        ]
+      ],
+      "Reações": [
+        [
+          "Reação de combustão completa do metano produz:",
+          [
+            "CO₂ e H₂O",
+            "CO e C",
+            "Apenas H₂",
+            "NaCl"
+          ],
+          0,
+          "CH₄ + 2O₂ → CO₂ + 2H₂O.",
+          "medio"
+        ],
+        [
+          "Balancear equação significa:",
+          [
+            "Igualar número de átomos de cada elemento",
+            "Igualar coeficientes aleatoriamente",
+            "Mudar fórmulas",
+            "Ignorar oxigênio"
+          ],
+          0,
+          "Conservação da massa (Lavoisier).",
+          "medio"
+        ],
+        [
+          "Reação endotérmica:",
+          [
+            "Absorve calor do ambiente",
+            "Libera calor",
+            "Não envolve energia",
+            "Só ocorre com metais"
+          ],
+          0,
+          "Produtos têm mais energia que reagentes.",
+          "medio"
+        ],
+        [
+          "Catalisador:",
+          [
+            "Acelera reação sem ser consumido",
+            "É consumido totalmente",
+            "Para a reação",
+            "Aumenta energia de ativação"
+          ],
+          0,
+          "Oferece caminho alternativo de menor Ea.",
+          "medio"
+        ],
+        [
+          "Reação de neutralização ácido-base produz:",
+          [
+            "Sal e água",
+            "Apenas gás",
+            "Metal puro",
+            "Álcool"
+          ],
+          0,
+          "HCl + NaOH → NaCl + H₂O.",
+          "medio"
+        ],
+        [
+          "Oxidação envolve:",
+          [
+            "Perda de elétrons",
+            "Ganho de elétrons",
+            "Ganho de prótons",
+            "Perda de nêutrons"
+          ],
+          0,
+          "Agente oxidante ganha elétrons.",
+          "medio"
+        ],
+        [
+          "Redução envolve:",
+          [
+            "Ganho de elétrons",
+            "Perda de elétrons",
+            "Perda de massa",
+            "Evaporação"
+          ],
+          0,
+          "Agente redutor perde elétrons.",
+          "medio"
+        ],
+        [
+          "Velocidade de reação aumenta com:",
+          [
+            "Maior temperatura e concentração",
+            "Menor superfície de contato",
+            "Ausência de colisões",
+            "Temperatura zero absoluto"
+          ],
+          0,
+          "Mais colisões efetivas por unidade de tempo.",
+          "medio"
+        ],
+        [
+          "Reação reversível:",
+          [
+            "Pode ocorrer nos dois sentidos",
+            "Só vai para frente",
+            "Não atinge equilíbrio",
+            "Destrói massa"
+          ],
+          0,
+          "Equilíbrio químico: taxas iguais.",
+          "medio"
+        ],
+        [
+          "Lei da conservação das massas (Lavoisier):",
+          [
+            "Massa total dos reagentes = massa dos produtos",
+            "Massa desaparece",
+            "Massa dobra",
+            "Só vale para gases"
+          ],
+          0,
+          "Átomos são rearranjados, não criados/destruídos.",
+          "medio"
+        ]
+      ],
+      "Substâncias": [
+        [
+          "Substância pura:",
+          [
+            "Composição definida e constante",
+            "Mistura de vários componentes",
+            "Sempre impureza",
+            "Só existe no estado gasoso"
+          ],
+          0,
+          "Elementos e compostos são substâncias puras.",
+          "medio"
+        ],
+        [
+          "Mistura homogênea exemplo:",
+          [
+            "Água com sal dissolvido",
+            "Água com óleo",
+            "Areia e ferro",
+            "Salada"
+          ],
+          0,
+          "Fase única visível: solução salina.",
+          "medio"
+        ],
+        [
+          "Mistura heterogênea exemplo:",
+          [
+            "Água e areia",
+            "Ar",
+            "Álcool e água",
+            "Liga de ouro"
+          ],
+          0,
+          "Fases distintas visíveis.",
+          "medio"
+        ],
+        [
+          "Ponto de fusão de substância pura é:",
+          [
+            "Constante e característico",
+            "Variável sempre",
+            "Inexistente",
+            "Igual para todas"
+          ],
+          0,
+          "Propriedade intensiva de identificação.",
+          "medio"
+        ],
+        [
+          "Solubilidade depende de:",
+          [
+            "Temperatura, natureza do soluto e solvente",
+            "Cor do recipiente",
+            "Formato do copo",
+            "Pressão atmosférica apenas"
+          ],
+          0,
+          "Ex.: mais sal dissolve em água quente.",
+          "medio"
+        ],
+        [
+          "Filtração separa:",
+          [
+            "Sólido insolúvel de líquido",
+            "Líquidos imiscíveis",
+            "Gases",
+            "Íons dissolvidos"
+          ],
+          0,
+          "Retém partículas sólidas no filtro.",
+          "medio"
+        ],
+        [
+          "Destilação separa líquidos por:",
+          [
+            "Diferença de pontos de ebulição",
+            "Densidade apenas",
+            "Cor",
+            "Magnetismo"
+          ],
+          0,
+          "Evapora e condensa componentes.",
+          "medio"
+        ],
+        [
+          "Densidade d = m/V. Um corpo com d > da água:",
+          [
+            "Afunda na água",
+            "Flutua",
+            "Evapora",
+            "Dissolve"
+          ],
+          0,
+          "Corpos mais densos que o fluido afundam.",
+          "medio"
+        ],
+        [
+          "Ácido clorídrico (HCl) em solução aquosa é:",
+          [
+            "Ácido forte",
+            "Base forte",
+            "Sal neutro",
+            "Gás nobre"
+          ],
+          0,
+          "Ioniza completamente: H⁺ + Cl⁻.",
+          "medio"
+        ],
+        [
+          "pH = 7 indica solução:",
+          [
+            "Neutra",
+            "Ácida",
+            "Básica",
+            "Concentrada em ácido"
+          ],
+          0,
+          "pH 7 à 25°C: [H⁺] = [OH⁻].",
+          "medio"
+        ]
+      ],
+      "Química Orgânica": [
+        [
+          "Carbono forma cadeias longas porque:",
+          [
+            "Pode fazer 4 ligações covalentes",
+            "É metal",
+            "Tem 1 elétron de valência",
+            "Não reage"
+          ],
+          0,
+          "Tetravalência do carbono.",
+          "medio"
+        ],
+        [
+          "Hidrocarboneto saturado exemplo:",
+          [
+            "Metano (CH₄)",
+            "Etileno",
+            "Etanol",
+            "Ácido acético"
+          ],
+          0,
+          "Apenas C e H, ligações simples.",
+          "medio"
+        ],
+        [
+          "Grupo funcional álcool contém:",
+          [
+            "Grupo -OH",
+            "Grupo -COOH",
+            "Grupo -NH₂",
+            "Grupo -CHO"
+          ],
+          0,
+          "Hidroxila caracteriza álcoois.",
+          "medio"
+        ],
+        [
+          "Isomeria plana: mesma fórmula molecular, diferente:",
+          [
+            "Fórmula",
+            "Estrutura ou arranjo espacial",
+            "Número de átomos",
+            "Massa atômica"
+          ],
+          1,
+          "Ex.: butano e isobutano.",
+          "medio"
+        ],
+        [
+          "Polímero é formado por:",
+          [
+            "Monômeros unidos em cadeia",
+            "Um único átomo",
+            "Íons apenas",
+            "Metais"
+          ],
+          0,
+          "Plásticos, borracha, DNA.",
+          "medio"
+        ],
+        [
+          "Combustão de hidrocarbonetos produz principalmente:",
+          [
+            "CO₂ e H₂O",
+            "O₂ puro",
+            "Metais",
+            "Aminoácidos"
+          ],
+          0,
+          "Reação com oxigênio.",
+          "medio"
+        ],
+        [
+          "Grupo carboxila (-COOH) caracteriza:",
+          [
+            "Ácidos carboxílicos",
+            "Éteres",
+            "Cetonas",
+            "Aminas primárias"
+          ],
+          0,
+          "Ex.: ácido acético.",
+          "medio"
+        ],
+        [
+          "Nome IUPAC do eteno é:",
+          [
+            "Eteno (etileno)",
+            "Etano",
+            "Etanol",
+            "Eter"
+          ],
+          0,
+          "Alceno de 2 carbonos: dupla ligação.",
+          "medio"
+        ],
+        [
+          "Plástico PET pertence à classe de:",
+          [
+            "Poliésteres",
+            "Hidrocarbonetos gasosos",
+            "Metais",
+            "Sais iônicos"
+          ],
+          0,
+          "Polímero sintético reciclável.",
+          "medio"
+        ],
+        [
+          "Química orgânica estuda principalmente compostos de:",
+          [
+            "Carbono",
+            "Ferro",
+            "Hélio",
+            "Sódio apenas"
+          ],
+          0,
+          "Compostos carbono-carbono e carbono-hidrogênio.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "Biologia",
+    "code": "EM2-BIO",
+    "title": "Simulado — Biologia (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Citologia": [
+        [
+          "A célula eucarionte possui:",
+          [
+            "Núcleo delimitado por membrana",
+            "Material genético livre no citoplasma",
+            "Ausência de organelas",
+            "Parede de peptidoglicano"
+          ],
+          0,
+          "Núcleo verdadeiro distingue eucariontes.",
+          "medio"
+        ],
+        [
+          "A mitocôndria é responsável por:",
+          [
+            "Fotossíntese",
+            "Respiração celular aeróbica (ATP)",
+            "Digestão intracelular",
+            "Síntese de proteínas"
+          ],
+          1,
+          "Centro de produção de ATP.",
+          "medio"
+        ],
+        [
+          "O retículo endoplasmático rugoso possui:",
+          [
+            "Ribossomos aderidos",
+            "Cloroplastos",
+            "Centríolos",
+            "Vacúolo central grande"
+          ],
+          0,
+          "RER: síntese e processamento de proteínas.",
+          "medio"
+        ],
+        [
+          "A membrana plasmática é formada principalmente por:",
+          [
+            "Fosfolipídios e proteínas",
+            "Celulose",
+            "Quitina",
+            "Peptidoglicano"
+          ],
+          0,
+          "Mosaico fluido de fosfolipídios.",
+          "medio"
+        ],
+        [
+          "Ribossomos são locais de:",
+          [
+            "Síntese proteica (tradução)",
+            "Replicação de DNA",
+            "Fotossíntese",
+            "Divisão celular"
+          ],
+          0,
+          "Traduzem mRNA em proteínas.",
+          "medio"
+        ],
+        [
+          "Na mitose, o resultado é:",
+          [
+            "Duas células filhas geneticamente idênticas",
+            "Quatro gametas",
+            "Crossing-over",
+            "Redução cromossômica"
+          ],
+          0,
+          "Divisão somática conserva 2n.",
+          "medio"
+        ],
+        [
+          "Cloroplastos encontram-se em:",
+          [
+            "Células vegetais e algas",
+            "Células animais",
+            "Bactérias sem fotossíntese",
+            "Vírus"
+          ],
+          0,
+          "Organela da fotossíntese.",
+          "medio"
+        ],
+        [
+          "O complexo de Golgi atua na:",
+          [
+            "Modificação e empacotamento de proteínas",
+            "Respiração",
+            "Divisão nuclear",
+            "Síntese de DNA"
+          ],
+          0,
+          "Formação de vesículas de secreção.",
+          "medio"
+        ],
+        [
+          "Lisossomos contêm:",
+          [
+            "Enzimas hidrolíticas",
+            "Clorofila",
+            "DNA circular",
+            "Flagelos"
+          ],
+          0,
+          "Digestão intracelular.",
+          "medio"
+        ],
+        [
+          "Células procariontes diferem por:",
+          [
+            "Ausência de núcleo delimitado",
+            "Presença de mitocôndrias",
+            "Núcleo duplo",
+            "Organização em tecidos"
+          ],
+          0,
+          "Bactérias: DNA no nucleoide.",
+          "medio"
+        ]
+      ],
+      "Genética": [
+        [
+          "A unidade hereditária básica é o:",
+          [
+            "Gene",
+            "Cromossomo inteiro",
+            "Ribossomo",
+            "ATP"
+          ],
+          0,
+          "Gene = segmento de DNA com informação.",
+          "medio"
+        ],
+        [
+          "Em humanos, o número cromossômico diploide (2n) é:",
+          [
+            "23",
+            "46",
+            "92",
+            "12"
+          ],
+          1,
+          "23 pares = 46 cromossomos.",
+          "medio"
+        ],
+        [
+          "Lei da segregação (Mendel) refere-se à:",
+          [
+            "Separação dos alelos na meiose",
+            "Dominância incompleta sempre",
+            "Ligação gênica",
+            "Mutação"
+          ],
+          0,
+          "Cada gameta recebe um alelo.",
+          "medio"
+        ],
+        [
+          "Genótipo AA representa:",
+          [
+            "Homozigoto dominante",
+            "Heterozigoto",
+            "Homozigoto recessivo",
+            "Aneuploidia"
+          ],
+          0,
+          "Dois alelos iguais dominantes.",
+          "medio"
+        ],
+        [
+          "Cromossomo sexo XX determina:",
+          [
+            "Sexo feminino em humanos",
+            "Sexo masculino",
+            "Intersexo sempre",
+            "Ausência de cromossomos"
+          ],
+          0,
+          "XX feminino; XY masculino.",
+          "medio"
+        ],
+        [
+          "DNA replica-se por mecanismo:",
+          [
+            "Semiconservativo",
+            "Conservativo total",
+            "Dispersivo aleatório",
+            "Não se replica"
+          ],
+          0,
+          "Cada fita serve de molde.",
+          "medio"
+        ],
+        [
+          "Código genético é:",
+          [
+            "Universal (com poucas exceções)",
+            "Diferente em cada célula",
+            "Baseado em RNA apenas",
+            "Sem códon de início"
+          ],
+          0,
+          "Tripletes codificam aminoácidos.",
+          "medio"
+        ],
+        [
+          "Alelo dominante manifesta-se:",
+          [
+            "Na presença de um ou dois alelos dominantes",
+            "Só se homozigoto",
+            "Nunca",
+            "Apenas na meiose"
+          ],
+          0,
+          "Mascara recessivo em heterozigoto.",
+          "medio"
+        ],
+        [
+          "Síndrome de Down (trissomia 21) é exemplo de:",
+          [
+            "Aberração cromossômica",
+            "Mutação pontual",
+            "Dominância incompleta",
+            "Codominância"
+          ],
+          0,
+          "Três cópias do cromossomo 21.",
+          "medio"
+        ],
+        [
+          "Engenharia genética pode usar:",
+          [
+            "Plasmídeos e enzimas de restrição",
+            "Apenas seleção natural",
+            "Fotossíntese",
+            "Mitose exclusivamente"
+          ],
+          0,
+          "Técnicas de recombinante.",
+          "medio"
+        ]
+      ],
+      "Evolução": [
+        [
+          "Teoria da seleção natural foi proposta por:",
+          [
+            "Darwin e Wallace",
+            "Lamarck apenas",
+            "Mendel",
+            "Pasteur"
+          ],
+          0,
+          "Darwin (1859) e Wallace.",
+          "medio"
+        ],
+        [
+          "Seleção natural favorece:",
+          [
+            "Indivíduos com vantagem adaptativa no ambiente",
+            "Todos igualmente",
+            "Só os maiores",
+            "Organismos estáticos"
+          ],
+          0,
+          "Maior sobrevivência e reprodução.",
+          "medio"
+        ],
+        [
+          "Especiação pode ocorrer por:",
+          [
+            "Isolamento reprodutivo entre populações",
+            "Fotossíntese",
+            "Mitose",
+            "Digestão"
+          ],
+          0,
+          "Barreiras geográficas ou ecológicas.",
+          "medio"
+        ],
+        [
+          "Fósseis são importantes porque:",
+          [
+            "Documentam formas de vida passadas",
+            "Produzem oxigênio",
+            "São sempre artificiais",
+            "Não têm idade"
+          ],
+          0,
+          "Evidência paleontológica da evolução.",
+          "medio"
+        ],
+        [
+          "Homologia de estruturas indica:",
+          [
+            "Origem comum evolutiva",
+            "Convergência sem parentesco",
+            "Criação independente",
+            "Ausência de DNA"
+          ],
+          0,
+          "Ex.: ossos homólogos em membros.",
+          "medio"
+        ],
+        [
+          "Mutações são fonte de:",
+          [
+            "Variação genética",
+            "Estabilidade absoluta",
+            "Fim da evolução",
+            "Clonagem natural"
+          ],
+          0,
+          "Materia-prima para seleção.",
+          "medio"
+        ],
+        [
+          "Lamarck postulou que:",
+          [
+            "Características adquiridas seriam herdadas",
+            "Seleção natural explica tudo",
+            "Não há mudança nas espécies",
+            "DNA não existe"
+          ],
+          0,
+          "Teoria da herança dos caracteres adquiridos.",
+          "medio"
+        ],
+        [
+          "Evidência molecular da evolução inclui:",
+          [
+            "Similaridade de sequências de DNA entre espécies",
+            "Identidade total de genomas",
+            "Ausência de genes",
+            "DNA apenas em plantas"
+          ],
+          0,
+          "Filogenia molecular.",
+          "medio"
+        ],
+        [
+          "Adaptação é:",
+          [
+            "Característica que aumenta fitness no ambiente",
+            "Sempre prejudicial",
+            "Imutável",
+            "Exclusiva de humanos"
+          ],
+          0,
+          "Resultado de seleção natural.",
+          "medio"
+        ],
+        [
+          "Evolução biológica define-se como:",
+          [
+            "Mudança nas frequências alélicas ao longo do tempo",
+            "Mudança individual na vida",
+            "Crescimento corporal",
+            "Aprendizado cultural"
+          ],
+          0,
+          "Populacional, não individual.",
+          "medio"
+        ]
+      ],
+      "Ecologia": [
+        [
+          "Ecossistema inclui:",
+          [
+            "Componentes bióticos e abióticos interagindo",
+            "Apenas animais",
+            "Somente clima",
+            "Laboratório"
+          ],
+          0,
+          "Seres vivos + ambiente físico.",
+          "medio"
+        ],
+        [
+          "Produtor primário em ecossistema terrestre típico:",
+          [
+            "Planta fotossintética",
+            "Fungo decompositor",
+            "Carnívoro",
+            "Detritívoro"
+          ],
+          0,
+          "Base da cadeia alimentar.",
+          "medio"
+        ],
+        [
+          "Pirâmide ecológica de energia:",
+          [
+            "Diminui a cada nível trófico",
+            "Aumenta infinitamente",
+            "É constante",
+            "Não existe perda"
+          ],
+          0,
+          "~10% de transferência entre níveis.",
+          "medio"
+        ],
+        [
+          "Cadeia alimentar: capim → gafanhoto → pássaro representa:",
+          [
+            "Produtor → consumidor primário → secundário",
+            "Decomposição",
+            "Ciclo do carbono",
+            "Fixação de nitrogênio"
+          ],
+          0,
+          "Fluxo linear de energia.",
+          "medio"
+        ],
+        [
+          "Sucessão ecológica é:",
+          [
+            "Substituição gradual de comunidades",
+            "Extinção imediata",
+            "Poluição",
+            "Clonagem"
+          ],
+          0,
+          "Ex.: capoeira → floresta madura.",
+          "medio"
+        ],
+        [
+          "Bioma Cerrado caracteriza-se por:",
+          [
+            "Vegetação arbustiva, clima tropical sazonal",
+            "Floresta equatorial úmida",
+            "Deserto polar",
+            "Recife de coral"
+          ],
+          0,
+          "Savana brasileira.",
+          "medio"
+        ],
+        [
+          "Efeito estufa aumentado intensifica:",
+          [
+            "Retenção de calor na atmosfera",
+            "Resfriamento global",
+            "Camada de ozônio estratosférica",
+            "Fotossíntese oceânica apenas"
+          ],
+          0,
+          "Gases antropogênicos retêm IR.",
+          "medio"
+        ],
+        [
+          "Biodiversidade refere-se à:",
+          [
+            "Variedade de espécies e genes",
+            "Número de indivíduos de uma espécie",
+            "Tamanho dos animais",
+            "Velocidade de crescimento"
+          ],
+          0,
+          "Diversidade biológica em múltiplos níveis.",
+          "medio"
+        ],
+        [
+          "Relação mutualística (+/+) exemplo:",
+          [
+            "Polinização abelha-flor",
+            "Predação",
+            "Parasitismo",
+            "Competição"
+          ],
+          0,
+          "Ambos se beneficiam.",
+          "medio"
+        ],
+        [
+          "Ciclo do carbono envolve:",
+          [
+            "Fotossíntese, respiração e combustão",
+            "Apenas evaporação",
+            "Somente mineração",
+            "Digestão estomacal"
+          ],
+          0,
+          "CO₂ ↔ matéria orgânica.",
+          "medio"
+        ]
+      ],
+      "Fisiologia Humana": [
+        [
+          "O sangue transporta principalmente:",
+          [
+            "O₂, nutrientes e resíduos",
+            "Apenas água pura",
+            "Somente hormônios",
+            "Linfócitos apenas"
+          ],
+          0,
+          "Função de transporte e homeostase.",
+          "medio"
+        ],
+        [
+          "A unidade funcional do rim é:",
+          [
+            "Néfron",
+            "Alvéolo",
+            "Neurônio",
+            "Osteócito"
+          ],
+          0,
+          "Filtração e formação da urina.",
+          "medio"
+        ],
+        [
+          "Insulina produzida no pâncreas:",
+          [
+            "Reduz glicemia",
+            "Aumenta glicemia",
+            "Para o coração",
+            "Digestão de proteínas"
+          ],
+          0,
+          "Facilita entrada de glicose nas células.",
+          "medio"
+        ],
+        [
+          "Sistema nervoso central compreende:",
+          [
+            "Encéfalo e medula espinhal",
+            "Apenas nervos periféricos",
+            "Somente músculos",
+            "Pele"
+          ],
+          0,
+          "CNS vs. SNP.",
+          "medio"
+        ],
+        [
+          "Hemoglobina localiza-se nos:",
+          [
+            "Glóbulos vermelhos",
+            "Plaquetas",
+            "Leucócitos",
+            "Plasma apenas"
+          ],
+          0,
+          "Transporte de O₂.",
+          "medio"
+        ],
+        [
+          "Digestão da amido inicia-se na:",
+          [
+            "Boca (saliva amilase)",
+            "Estômago",
+            "Intestino grosso",
+            "Traqueia"
+          ],
+          0,
+          "Enzima salivar quebra amido.",
+          "medio"
+        ],
+        [
+          "A troca gasosa pulmonar ocorre nos:",
+          [
+            "Alvéolos",
+            "Brônquios principais",
+            "Traqueia",
+            "Laringe"
+          ],
+          0,
+          "Superfície fina e vascularizada.",
+          "medio"
+        ],
+        [
+          "Anticorpos são produzidos por:",
+          [
+            "Linfócitos B (plasmócitos)",
+            "Glóbulos vermelhos",
+            "Osteoblastos",
+            "Neurônios"
+          ],
+          0,
+          "Resposta imune adaptativa.",
+          "medio"
+        ],
+        [
+          "Homeostase significa:",
+          [
+            "Manutenção do equilíbrio interno",
+            "Crescimento descontrolado",
+            "Febre permanente",
+            "Parada cardíaca"
+          ],
+          0,
+          "Temperatura, pH, glicose regulados.",
+          "medio"
+        ],
+        [
+          "Contração muscular esquelética envolve:",
+          [
+            "Actina e miosina deslizando",
+            "Fotossíntese",
+            "Mitose",
+            "Digestão de lipídios"
+          ],
+          0,
+          "Teoria do filamento deslizante.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "Inglês",
+    "code": "EM2-ING",
+    "title": "Simulado — Inglês (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Grammar": [
+        [
+          "Choose the correct sentence:",
+          [
+            "She don't like coffee.",
+            "She doesn't like coffee.",
+            "She not like coffee.",
+            "She doesn't likes coffee."
+          ],
+          1,
+          "3rd person singular: doesn't + base verb.",
+          "medio"
+        ],
+        [
+          "The plural of 'child' is:",
+          [
+            "childs",
+            "children",
+            "childes",
+            "childrens"
+          ],
+          1,
+          "Irregular plural: child → children.",
+          "medio"
+        ],
+        [
+          "'There ___ many books on the shelf.'",
+          [
+            "is",
+            "are",
+            "be",
+            "was"
+          ],
+          1,
+          "'Many books' is plural → are.",
+          "medio"
+        ],
+        [
+          "Which is a correct question?",
+          [
+            "Where you live?",
+            "Where do you live?",
+            "Where does you live?",
+            "Where live you?"
+          ],
+          1,
+          "Do/Does inversion for questions.",
+          "medio"
+        ],
+        [
+          "Comparative form of 'good' is:",
+          [
+            "gooder",
+            "more good",
+            "better",
+            "best"
+          ],
+          2,
+          "Irregular comparative: good → better.",
+          "medio"
+        ],
+        [
+          "'I have ___ finished my homework.' (already/yet)",
+          [
+            "already",
+            "yet",
+            "since",
+            "for"
+          ],
+          0,
+          "'Already' with present perfect affirmative.",
+          "medio"
+        ],
+        [
+          "Possessive of 'John' is:",
+          [
+            "Johns",
+            "John's",
+            "Johns'",
+            "Johnes"
+          ],
+          1,
+          "Singular possessive: 's.",
+          "medio"
+        ],
+        [
+          "Correct article: '___ apple a day keeps the doctor away.'",
+          [
+            "A",
+            "An",
+            "The",
+            "No article"
+          ],
+          1,
+          "'Apple' starts with vowel sound → an.",
+          "medio"
+        ],
+        [
+          "'If it rains, we ___ at home.'",
+          [
+            "stay",
+            "will stay",
+            "stayed",
+            "staying"
+          ],
+          1,
+          "First conditional: if + present, will + base.",
+          "medio"
+        ],
+        [
+          "Tag question: 'You are a student, ___?'",
+          [
+            "aren't you",
+            "are you",
+            "don't you",
+            "isn't it"
+          ],
+          0,
+          "Positive statement → negative tag.",
+          "medio"
+        ]
+      ],
+      "Vocabulary": [
+        [
+          "Synonym of 'happy':",
+          [
+            "sad",
+            "joyful",
+            "angry",
+            "tired"
+          ],
+          1,
+          "Joyful means happy.",
+          "medio"
+        ],
+        [
+          "Antonym of 'expensive':",
+          [
+            "costly",
+            "cheap",
+            "rich",
+            "pricey"
+          ],
+          1,
+          "Cheap is the opposite of expensive.",
+          "medio"
+        ],
+        [
+          "'To postpone' means:",
+          [
+            "to cancel forever",
+            "to delay to a later time",
+            "to start immediately",
+            "to forget"
+          ],
+          1,
+          "Postpone = adiar.",
+          "medio"
+        ],
+        [
+          "A person who treats sick people is a:",
+          [
+            "engineer",
+            "doctor",
+            "lawyer",
+            "chef"
+          ],
+          1,
+          "Doctor treats patients.",
+          "medio"
+        ],
+        [
+          "'Environment' refers to:",
+          [
+            "only buildings",
+            "natural surroundings and conditions",
+            "computer software",
+            "school subjects"
+          ],
+          1,
+          "Meio ambiente / surroundings.",
+          "medio"
+        ],
+        [
+          "'Reliable' means:",
+          [
+            "trustworthy",
+            "dangerous",
+            "noisy",
+            "temporary"
+          ],
+          0,
+          "Confiável = reliable.",
+          "medio"
+        ],
+        [
+          "The word 'deadline' means:",
+          [
+            "a line that is dead",
+            "the final date to complete something",
+            "a type of sport",
+            "a holiday"
+          ],
+          1,
+          "Prazo final.",
+          "medio"
+        ],
+        [
+          "'Borrow' means:",
+          [
+            "to lend something to someone",
+            "to take something temporarily with permission",
+            "to steal",
+            "to buy"
+          ],
+          1,
+          "Pegar emprestado.",
+          "medio"
+        ],
+        [
+          "'Lend' is the opposite action of 'borrow' from the owner's view:",
+          [
+            "True — lend means give temporarily",
+            "False — they mean the same",
+            "False — lend means take",
+            "False — neither relates to loans"
+          ],
+          0,
+          "Emprestar (to lend) vs. pegar emprestado (to borrow).",
+          "medio"
+        ],
+        [
+          "'Achieve' is closest in meaning to:",
+          [
+            "fail",
+            "accomplish",
+            "ignore",
+            "destroy"
+          ],
+          1,
+          "Achieve = alcançar, realizar.",
+          "medio"
+        ]
+      ],
+      "Reading": [
+        [
+          "Read: 'Tom wakes up at 6 a.m. every day to go to school.' When does Tom wake up?",
+          [
+            "At night",
+            "At 6 a.m.",
+            "At noon",
+            "Never"
+          ],
+          1,
+          "Explicit information in the text.",
+          "medio"
+        ],
+        [
+          "Read: 'Although it was raining, Maria went for a walk.' Why is this surprising?",
+          [
+            "Maria hates rain",
+            "People usually avoid walking in rain",
+            "It was sunny",
+            "Maria stayed home"
+          ],
+          1,
+          "'Although' shows contrast — she walked despite rain.",
+          "medio"
+        ],
+        [
+          "The main idea of a paragraph is usually found in:",
+          [
+            "The title only",
+            "The topic sentence",
+            "Page numbers",
+            "Footnotes"
+          ],
+          1,
+          "Topic sentence introduces main idea.",
+          "medio"
+        ],
+        [
+          "Read: 'Recycling helps reduce pollution.' What helps reduce pollution?",
+          [
+            "Burning trash",
+            "Recycling",
+            "Throwing plastic in rivers",
+            "Using more paper"
+          ],
+          1,
+          "Direct comprehension.",
+          "medio"
+        ],
+        [
+          "Inference: 'John's hands were shaking and his face was pale before the exam.' John was probably:",
+          [
+            "confident",
+            "nervous",
+            "sleepy",
+            "hungry"
+          ],
+          1,
+          "Physical signs suggest anxiety.",
+          "medio"
+        ],
+        [
+          "'According to the text' means you should:",
+          [
+            "use outside knowledge only",
+            "base answer on the passage",
+            "guess randomly",
+            "ignore the passage"
+          ],
+          1,
+          "Evidence-based reading.",
+          "medio"
+        ],
+        [
+          "Read: 'The library closes at 8 p.m. on weekdays.' When does it close on Monday?",
+          [
+            "8 a.m.",
+            "8 p.m.",
+            "Midnight",
+            "It doesn't close"
+          ],
+          1,
+          "Weekdays include Monday.",
+          "medio"
+        ],
+        [
+          "A 'headline' in a news article tells:",
+          [
+            "The main topic briefly",
+            "The author's biography",
+            "Every detail",
+            "Only the date"
+          ],
+          0,
+          "Manchete resume o assunto.",
+          "medio"
+        ],
+        [
+          "Read: 'She not only sings but also plays the guitar.' She:",
+          [
+            "only sings",
+            "sings and plays guitar",
+            "only plays guitar",
+            "neither sings nor plays"
+          ],
+          1,
+          "'Not only... but also' = both.",
+          "medio"
+        ],
+        [
+          "Skimming a text means:",
+          [
+            "reading every word slowly",
+            "reading quickly for general idea",
+            "translating word by word",
+            "memorizing"
+          ],
+          1,
+          "Leitura rápida para ideia geral.",
+          "medio"
+        ]
+      ],
+      "Verbs": [
+        [
+          "Past tense of 'go' is:",
+          [
+            "goed",
+            "went",
+            "gone",
+            "going"
+          ],
+          1,
+          "Irregular: go → went.",
+          "medio"
+        ],
+        [
+          "'She ___ to the mall yesterday.' (go)",
+          [
+            "go",
+            "goes",
+            "went",
+            "gone"
+          ],
+          2,
+          "Past simple for completed past action.",
+          "medio"
+        ],
+        [
+          "Present continuous: 'They ___ football now.'",
+          [
+            "play",
+            "are playing",
+            "played",
+            "plays"
+          ],
+          1,
+          "Now → am/is/are + -ing.",
+          "medio"
+        ],
+        [
+          "Past participle of 'write' is:",
+          [
+            "wrote",
+            "written",
+            "writed",
+            "writing"
+          ],
+          1,
+          "write – wrote – written.",
+          "medio"
+        ],
+        [
+          "'I ___ here since 2020.' (live)",
+          [
+            "live",
+            "lived",
+            "have lived",
+            "am living"
+          ],
+          2,
+          "Since + point → present perfect.",
+          "medio"
+        ],
+        [
+          "Modal for ability: 'I ___ swim when I was five.'",
+          [
+            "can",
+            "could",
+            "must",
+            "should"
+          ],
+          1,
+          "Past ability → could.",
+          "medio"
+        ],
+        [
+          "'He ___ his keys. He can't find them.' (lose)",
+          [
+            "loses",
+            "has lost",
+            "lose",
+            "losing"
+          ],
+          1,
+          "Present perfect: past action with present result.",
+          "medio"
+        ],
+        [
+          "Infinitive form of 'ran' is:",
+          [
+            "run",
+            "running",
+            "runs",
+            "runned"
+          ],
+          0,
+          "Base form: run.",
+          "medio"
+        ],
+        [
+          "'We ___ dinner when the phone rang.' (have)",
+          [
+            "had",
+            "were having",
+            "have",
+            "has"
+          ],
+          1,
+          "Past continuous interrupted by past simple.",
+          "medio"
+        ],
+        [
+          "Passive voice: 'The cake ___ by Mary.'",
+          [
+            "baked",
+            "was baked",
+            "is baking",
+            "bakes"
+          ],
+          1,
+          "Past passive: was/were + past participle.",
+          "medio"
+        ]
+      ],
+      "Phrasal Verbs": [
+        [
+          "'Give up' means:",
+          [
+            "to start",
+            "to quit / stop trying",
+            "to give a gift",
+            "to stand up"
+          ],
+          1,
+          "Desistir.",
+          "medio"
+        ],
+        [
+          "'Look after' means:",
+          [
+            "to search for",
+            "to take care of",
+            "to look behind",
+            "to ignore"
+          ],
+          1,
+          "Cuidar de alguém/algo.",
+          "medio"
+        ],
+        [
+          "'Turn on' the light means:",
+          [
+            "to switch it off",
+            "to switch it on",
+            "to rotate it",
+            "to break it"
+          ],
+          1,
+          "Ligar / acender.",
+          "medio"
+        ],
+        [
+          "'Find out' means:",
+          [
+            "to discover information",
+            "to lose something",
+            "to go outside",
+            "to finish"
+          ],
+          0,
+          "Descobrir, averiguar.",
+          "medio"
+        ],
+        [
+          "'Take off' (plane) means:",
+          [
+            "to land",
+            "to leave the ground",
+            "to remove clothes only",
+            "to slow down"
+          ],
+          1,
+          "Decolar.",
+          "medio"
+        ],
+        [
+          "'Run out of' means:",
+          [
+            "to have plenty",
+            "to use all of something",
+            "to escape",
+            "to exercise"
+          ],
+          1,
+          "Ficar sem (acabar o estoque).",
+          "medio"
+        ],
+        [
+          "'Put off' a meeting means:",
+          [
+            "to schedule earlier",
+            "to postpone",
+            "to cancel the building",
+            "to attend"
+          ],
+          1,
+          "Adiar.",
+          "medio"
+        ],
+        [
+          "'Get along with' means:",
+          [
+            "to fight",
+            "to have a good relationship",
+            "to walk together only",
+            "to separate"
+          ],
+          1,
+          "Dar-se bem com.",
+          "medio"
+        ],
+        [
+          "'Break down' (car) means:",
+          [
+            "to start working",
+            "to stop functioning",
+            "to break into pieces deliberately",
+            "to accelerate"
+          ],
+          1,
+          "Quebrar, avariar.",
+          "medio"
+        ],
+        [
+          "'Look forward to' means:",
+          [
+            "to fear",
+            "to anticipate with pleasure",
+            "to look backward",
+            "to forget"
+          ],
+          1,
+          "Ansiar por, esperar com prazer.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "Filosofia",
+    "code": "EM2-FIL",
+    "title": "Simulado — Filosofia (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Iluminismo": [
+        [
+          "O Iluminismo valorizou principalmente:",
+          [
+            "Autoridade religiosa absoluta",
+            "Razão, ciência e crítica ao dogmatismo",
+            "Misticismo medieval",
+            "Tradição feudal"
+          ],
+          1,
+          "Século XVIII: luz da razão.",
+          "medio"
+        ],
+        [
+          "Voltaire defendia:",
+          [
+            "Tolerância e liberdade de pensamento",
+            "Absolutismo sem crítica",
+            "Escravidão",
+            "Censura total"
+          ],
+          0,
+          "Crítica à intolerância e fanatismo.",
+          "medio"
+        ],
+        [
+          "Montesquieu propôs a separação dos poderes em:",
+          [
+            "Executivo, legislativo e judiciário",
+            "Clero, nobreza e povo",
+            "Rei, exército e igreja",
+            "Economia, cultura e esporte"
+          ],
+          0,
+          "O Espírito das Leis.",
+          "medio"
+        ],
+        [
+          "Rousseau, no contrato social, enfatizou:",
+          [
+            "Vontade geral e soberania popular",
+            "Direito divino dos reis",
+            "Anarquia total",
+            "Isolamento individual"
+          ],
+          0,
+          "Legitimidade pelo acordo coletivo.",
+          "medio"
+        ],
+        [
+          "Kant sintetizou o Iluminismo com:",
+          [
+            "'Ousa saber' (Sapere aude)",
+            "Fé cega",
+            "Guerra permanente",
+            "Tradição oral"
+          ],
+          0,
+          "Coragem de usar a própria razão.",
+          "medio"
+        ],
+        [
+          "Enciclopedistas como Diderot buscavam:",
+          [
+            "Compilar e difundir conhecimento racional",
+            "Proibir ciência",
+            "Restaurar feudalismo",
+            "Eliminar artes"
+          ],
+          0,
+          "Encyclopédie como obra emblemática.",
+          "medio"
+        ],
+        [
+          "Despotismo esclarecido pretendia:",
+          [
+            "Reformas racionais conduzidas pelo monarca",
+            "República imediata",
+            "Teocracia",
+            "Retorno ao feudalismo"
+          ],
+          0,
+          "Monarca aplica ideias iluministas.",
+          "medio"
+        ],
+        [
+          "Locke influenciou o Iluminismo com ideias sobre:",
+          [
+            "Direitos naturais e governo limitado",
+            "Determinismo biológico",
+            "Escolástica",
+            "Alquimia"
+          ],
+          0,
+          "Vida, liberdade e propriedade.",
+          "medio"
+        ],
+        [
+          "Crítica iluminista ao Antigo Regime focava:",
+          [
+            "Privilégios estamentais e absolutismo",
+            "Excesso de democracia",
+            "Ciência moderna",
+            "Comércio internacional"
+          ],
+          0,
+          "Questionamento do poder absoluto.",
+          "medio"
+        ],
+        [
+          "A frase 'homem nasce livre e everywhere está em cadeias' é de:",
+          [
+            "Rousseau",
+            "Platão",
+            "Nietzsche",
+            "Marx"
+          ],
+          0,
+          "Do Contrato Social.",
+          "medio"
+        ]
+      ],
+      "Contratualismo": [
+        [
+          "Contratualismo explica a sociedade política por:",
+          [
+            "Contrato entre indivíduos",
+            "Decreto divino apenas",
+            "Instinto animal",
+            "Sorte"
+          ],
+          0,
+          "Acordo racional funda o Estado.",
+          "medio"
+        ],
+        [
+          "Para Hobbes, no estado de natureza a vida é:",
+          [
+            "Solitária, pobre, nasty, brutish and short",
+            "Pacífica e cooperativa",
+            "Igualitária utópica",
+            "Sem conflitos"
+          ],
+          0,
+          "Guerra de todos contra todos.",
+          "medio"
+        ],
+        [
+          "Hobbes defende um soberano:",
+          [
+            "Absoluto para garantir paz",
+            "Eleito a cada mês",
+            "Inexistente",
+            "Apenas simbólico"
+          ],
+          0,
+          "Leviatã com poder coercitivo.",
+          "medio"
+        ],
+        [
+          "Locke distingue-se de Hobbes ao enfatizar:",
+          [
+            "Direitos inalienáveis e governo limitado",
+            "Tiranía necessária",
+            "Anulação da propriedade",
+            "Guerra permanente"
+          ],
+          0,
+          "Direito de resistir ao tirano.",
+          "medio"
+        ],
+        [
+          "Rousseau critica a desigualdade originada na:",
+          [
+            "Propriedade privada e civilização",
+            "Razão pura",
+            "Democracia direta",
+            "Educação pública"
+          ],
+          0,
+          "Discurso sobre a Origem da Desigualdade.",
+          "medio"
+        ],
+        [
+          "Contrato social para Rousseau preserva:",
+          [
+            "Liberdade mediante vontade geral",
+            "Escravidão voluntária",
+            "Monarquia absoluta",
+            "Isolamento"
+          ],
+          0,
+          "Obediência à lei que se dá a si mesmo.",
+          "medio"
+        ],
+        [
+          "Estado de natureza no contratualismo é:",
+          [
+            "Situação hipotética pré-política",
+            "Período histórico documentado",
+            "Era industrial",
+            "Idade média"
+          ],
+          0,
+          "Construção teórica, não história empírica.",
+          "medio"
+        ],
+        [
+          "Legitimidade do poder no contrato vem de:",
+          [
+            "Consentimento dos governados",
+            "Força bruta apenas",
+            "Herança divina",
+            "Acaso"
+          ],
+          0,
+          "Autoridade derivada do acordo.",
+          "medio"
+        ],
+        [
+          "Rawls (contrato moderno) usa o véu da ignorância para:",
+          [
+            "Garantir imparcialidade na escolha de princíios de justiça",
+            "Ocultar crimes",
+            "Negar direitos",
+            "Defender utilitarismo extremo"
+          ],
+          0,
+          "Teoria da justiça como equidade.",
+          "medio"
+        ],
+        [
+          "Crítica comum ao contratualismo:",
+          [
+            "Individualismo e abstração do sujeito",
+            "Excesso de coletivismo",
+            "Negar razão",
+            "Defender teocracia"
+          ],
+          0,
+          "Ignora desigualdades históricas reais.",
+          "medio"
+        ]
+      ],
+      "Ética": [
+        [
+          "Ética de Aristóteles centra-se em:",
+          [
+            "Virtude e eudaimonia (felicidade)",
+            "Utilidade máxima",
+            "Dever categórico",
+            "Vontade de poder"
+          ],
+          0,
+          "Ética das virtudes.",
+          "medio"
+        ],
+        [
+          "Utilitarismo (Bentham/Mill) julga ações pelo:",
+          [
+            "Maior felicidade para o maior número",
+            "Dever absoluto",
+            "Tradição",
+            "Beleza estética"
+          ],
+          0,
+          "Consequencialismo hedonista.",
+          "medio"
+        ],
+        [
+          "Dever categórico é conceito de:",
+          [
+            "Kant",
+            "Nietzsche",
+            "Epicuro",
+            "Maquiavel"
+          ],
+          0,
+          "Agir conforme máxima universalizável.",
+          "medio"
+        ],
+        [
+          "Ética do cuidado enfatiza:",
+          [
+            "Relações, empatia e responsabilidade",
+            "Cálculo frio apenas",
+            "Egoísmo",
+            "Guerra"
+          ],
+          0,
+          "Gilligan e críticas ao universalismo masculino.",
+          "medio"
+        ],
+        [
+          "Dilema do bonde (trolley problem) explora:",
+          [
+            "Conflitos entre consequências e deveres",
+            "Física newtoniana",
+            "Estética",
+            "Lógica matemática"
+          ],
+          0,
+          "Ética aplicada e escolhas morais.",
+          "medio"
+        ],
+        [
+          "Relativismo moral sustenta que:",
+          [
+            "Valores morais variam conforme cultura/contexto",
+            "Existe uma única moral absoluta universal",
+            "Ética não existe",
+            "Só importa a lei"
+          ],
+          0,
+          "Críticas: pode tolerar injustiças.",
+          "medio"
+        ],
+        [
+          "Ética profissional inclui:",
+          [
+            "Códigos de conduta e responsabilidade",
+            "Lucro a qualquer custo",
+            "Ocultação de erros",
+            "Corrupção"
+          ],
+          0,
+          "Medicina, direito, jornalismo têm códigos.",
+          "medio"
+        ],
+        [
+          "Autonomia moral (Kant) significa:",
+          [
+            "Agir pela razão e lei moral autoimposta",
+            "Seguir ordens sem pensar",
+            "Obediência cega",
+            "Hedonismo"
+          ],
+          0,
+          "Dignidade da pessoa racional.",
+          "medio"
+        ],
+        [
+          "Ética ambiental questiona:",
+          [
+            "Antropocentrismo e destruição da natureza",
+            "Apenas moda",
+            "Esportes",
+            "Matemática"
+          ],
+          0,
+          "Responsabilidade intergeracional.",
+          "medio"
+        ],
+        [
+          "Solidariedade, em ética política, implica:",
+          [
+            "Reconhecimento mútuo e cooperação",
+            "Competição extrema",
+            "Isolamento",
+            "Violência"
+          ],
+          0,
+          "Valor democrático e social.",
+          "medio"
+        ]
+      ],
+      "Marx": [
+        [
+          "Materialismo histórico de Marx analisa:",
+          [
+            "Modos de produção e lutas de classes",
+            "Ideias desconectadas da economia",
+            "Destino divino",
+            "Psicanálise"
+          ],
+          0,
+          "Infraestrutura econômica condiciona superestrutura.",
+          "medio"
+        ],
+        [
+          "Mais-valia é:",
+          [
+            "Lucro do capitalista sobre trabalho não pago",
+            "Salário justo",
+            "Imposto estatal",
+            "Doação"
+          ],
+          0,
+          "Exploração da força de trabalho.",
+          "medio"
+        ],
+        [
+          "Luta de classes opõe, no capitalismo:",
+          [
+            "Proletariado e burguesia",
+            "Rei e nobreza feudal",
+            "Deuses e homens",
+            "Professores e alunos"
+          ],
+          0,
+          "Classes sociais capitalistas.",
+          "medio"
+        ],
+        [
+          "Alienação do trabalhador significa:",
+          [
+            "Separação do produto, processo e potencial humano",
+            "Felicidade plena",
+            "Propriedade dos meios de produção",
+            "Lazer"
+          ],
+          0,
+          "Trabalho estranhado ao trabalhador.",
+          "medio"
+        ],
+        [
+          "Comunismo, para Marx, seria:",
+          [
+            "Sociedade sem classes e propriedade privada dos meios de produção",
+            "Estado absolutista",
+            "Feudalismo",
+            "Anarquia mercantil"
+          ],
+          0,
+          "Estágio pós-capitalista teórico.",
+          "medio"
+        ],
+        [
+          "Ideologia, no marxismo, é:",
+          [
+            "Conjunto de ideias que legitima dominação",
+            "Verdade pura",
+            "Ciência exata",
+            "Arte neutra"
+          ],
+          0,
+          "Falsa consciência que naturaliza ordem.",
+          "medio"
+        ],
+        [
+          "Manifesto Comunista foi escrito por:",
+          [
+            "Marx e Engels",
+            "Lenin solo",
+            "Rousseau",
+            "Hobbes"
+          ],
+          0,
+          "1848: 'Proletários de todos os países...'",
+          "medio"
+        ],
+        [
+          "Crítica marxista ao capitalismo inclui:",
+          [
+            "Concentração de riqueza e crises cíclicas",
+            "Igualdade plena",
+            "Fim do trabalho",
+            "Ausência de tecnologia"
+          ],
+          0,
+          "Contradições internas do modo capitalista.",
+          "medio"
+        ],
+        [
+          "Superestrutura compreende:",
+          [
+            "Cultura, política, ideologia",
+            "Apenas fábricas",
+            "Solo agrícola",
+            "Clima"
+          ],
+          0,
+          "Instituições e ideias sobre base econômica.",
+          "medio"
+        ],
+        [
+          "Socialismo científico opõe-se ao utópico por:",
+          [
+            "Análise histórica das condições materiais",
+            "Sonhos sem método",
+            "Teologia",
+            "Misticismo"
+          ],
+          0,
+          "Marx critica socialistas utópicos.",
+          "medio"
+        ]
+      ],
+      "Existencialismo": [
+        [
+          "Existencialismo enfatiza:",
+          [
+            "Existência precede essência",
+            "Essência divina fixa",
+            "Determinismo biológico total",
+            "Utilidade"
+          ],
+          0,
+          "Sartre: o homem se faz por escolhas.",
+          "medio"
+        ],
+        [
+          "Sartre afirmou que o homem é:",
+          [
+            "Condemnado to be free",
+            "Totalmente determinado",
+            "Sem responsabilidade",
+            "Apenas corpo"
+          ],
+          0,
+          "Liberdade implica responsabilidade.",
+          "medio"
+        ],
+        [
+          "Angústia existencial relaciona-se a:",
+          [
+            "Consciência da liberdade e escolha",
+            "Falta de comida",
+            "Soma matemática",
+            "Clima"
+          ],
+          0,
+          "Peso das decisões.",
+          "medio"
+        ],
+        [
+          "Camus tratou do absurdo em:",
+          [
+            "O Mito de Sísifo",
+            "A República",
+            "Leviatã",
+            "Utopia"
+          ],
+          0,
+          "Conflito entre busca de sentido e mundo silencioso.",
+          "medio"
+        ],
+        [
+          "Bad faith (má-fé) para Sartre é:",
+          [
+            "Autoengano para negar liberdade",
+            "Honestidade radical",
+            "Fé religiosa autêntica",
+            "Altruísmo"
+          ],
+          0,
+          "Pretender ser coisa, não sujeito.",
+          "medio"
+        ],
+        [
+          "Kierkegaard é precursor existencialista por focar:",
+          [
+            "Individualidade, escolha e angústia",
+            "Sistema hegeliano fechado",
+            "Utilitarismo",
+            "Materialismo"
+          ],
+          0,
+          "Existência concreta vs. abstração.",
+          "medio"
+        ],
+        [
+          "Nietzsche declarou 'Deus está morto' para criticar:",
+          [
+            "Valores nihilistas e moral tradicional sem fundamento",
+            "Ateísmo militante",
+            "Ciência",
+            "Arte"
+          ],
+          0,
+          "Crise de sentido na modernidade.",
+          "medio"
+        ],
+        [
+          "Autenticidade existencial exige:",
+          [
+            "Assumir escolhas próprias",
+            "Viver conforme os outros sempre",
+            "Negar liberdade",
+            "Isolamento total"
+          ],
+          0,
+          "Viver de acordo com decisões reconhecidas.",
+          "medio"
+        ],
+        [
+          "Heidegger analisou o ser pelo conceito de:",
+          [
+            "Dasein (ser-aí)",
+            "Átomo",
+            "Utilidade",
+            "Tabula rasa"
+          ],
+          0,
+          "Existência humana como questão do ser.",
+          "medio"
+        ],
+        [
+          "Existencialismo pós-guerra reflete:",
+          [
+            "Trauma, crise de sentido e responsabilidade individual",
+            "Otimismo ilimitado",
+            "Feudalismo",
+            "Colonialismo antigo"
+          ],
+          0,
+          "Contexto de guerras e totalitarismos.",
+          "medio"
+        ]
+      ]
+    }
+  },
+  {
+    "materia": "Sociologia",
+    "code": "EM2-SOC",
+    "title": "Simulado — Sociologia (2º EM)",
+    "description": "50 questões de múltipla escolha organizadas por sub-matéria.",
+    "timeMinutes": 75,
+    "submaterias": {
+      "Cultura": [
+        [
+          "Cultura, em sentido sociológico, compreende:",
+          [
+            "Apenas obras de arte eruditas",
+            "Conjunto de valores, símbolos e práticas compartilhadas",
+            "Herança genética",
+            "Clima e relevo"
+          ],
+          1,
+          "Cultura = modo de vida e significados sociais.",
+          "medio"
+        ],
+        [
+          "Etnocentrismo consiste em:",
+          [
+            "Valorizar a própria cultura como superior",
+            "Estudar todas as culturas igualmente",
+            "Negar qualquer identidade",
+            "Isolar-se totalmente"
+          ],
+          0,
+          "Julgar outras culturas pelo padrão próprio.",
+          "medio"
+        ],
+        [
+          "Relativismo cultural defende:",
+          [
+            "Compreender práticas no contexto de cada cultura",
+            "Impor uma cultura universal",
+            "Eliminar tradições",
+            "Proibir diferenças"
+          ],
+          0,
+          "Evita julgamentos absolutos sem contexto.",
+          "medio"
+        ],
+        [
+          "Cultura material inclui:",
+          [
+            "Objetos, tecnologias e bens produzidos",
+            "Apenas crenças",
+            "Valores invisíveis",
+            "Emoções individuais"
+          ],
+          0,
+          "Ex.: ferramentas, roupas, arquitetura.",
+          "medio"
+        ],
+        [
+          "Cultura imaterial inclui:",
+          [
+            "Normas, língua e religião",
+            "Carros e prédios",
+            "Minérios",
+            "Animais domésticos"
+          ],
+          0,
+          "Símbolos e significados não físicos.",
+          "medio"
+        ],
+        [
+          "Indústria cultural (Adorno/Horkheimer) critica:",
+          [
+            "Produção massificada de bens culturais",
+            "Arte popular autêntica",
+            "Tradições orais",
+            "Rituais indígenas"
+          ],
+          0,
+          "Cultura como mercadoria padronizada.",
+          "medio"
+        ],
+        [
+          "Globalização cultural pode gerar:",
+          [
+            "Hibridismo e circulação de símbolos",
+            "Isolamento total",
+            "Fim de todas as línguas",
+            "Ausência de mídia"
+          ],
+          0,
+          "Mistura e troca entre culturas.",
+          "medio"
+        ],
+        [
+          "Patrimônio cultural imaterial protege:",
+          [
+            "Práticas e saberes transmitidos",
+            "Apenas edifícios antigos",
+            "Só obras em museus",
+            "Recursos minerais"
+          ],
+          0,
+          "Ex.: capoeira, culinária, festas.",
+          "medio"
+        ],
+        [
+          "Identidade cultural relaciona-se a:",
+          [
+            "Sentimento de pertencimento e reconhecimento",
+            "Apenas documentos legais",
+            "Clima tropical",
+            "Idade biológica"
+          ],
+          0,
+          "Quem somos enquanto grupo.",
+          "medio"
+        ],
+        [
+          "Contracultura caracteriza-se por:",
+          [
+            "Oposição ou desafio a valores dominantes",
+            "Reproduzir normas sem questionar",
+            "Isolamento biológico",
+            "Ausência de conflito"
+          ],
+          0,
+          "Ex.: movimentos hippie, punk.",
+          "medio"
+        ]
+      ],
+      "Trabalho": [
+        [
+          "Divisão social do trabalho significa:",
+          [
+            "Especialização de funções na sociedade",
+            "Todos fazem a mesma tarefa",
+            "Ausência de profissões",
+            "Trabalho apenas infantil"
+          ],
+          0,
+          "Durkheim: interdependência por especialização.",
+          "medio"
+        ],
+        [
+          "Proletariado, para Marx, é:",
+          [
+            "Classe que vende força de trabalho",
+            "Grupo de grandes proprietários",
+            "Clero feudal",
+            "Servidores públicos apenas"
+          ],
+          0,
+          "Trabalhadores assalariados sem meios de produção.",
+          "medio"
+        ],
+        [
+          "Burguesia industrial detém:",
+          [
+            "Meios de produção e capital",
+            "Apenas ferramentas manuais",
+            "Terras comunais",
+            "Nenhum recurso"
+          ],
+          0,
+          "Classe dominante capitalista.",
+          "medio"
+        ],
+        [
+          "Alienação do trabalho, segundo Marx, implica:",
+          [
+            "Perda de controle sobre produto e processo",
+            "Maior criatividade",
+            "Propriedade plena",
+            "Autogestão"
+          ],
+          0,
+          "Trabalhador separado do fruto e sentido do trabalho.",
+          "medio"
+        ],
+        [
+          "Taylorismo enfatiza:",
+          [
+            "Organização científica e padronização do trabalho",
+            "Autonomia total do operário",
+            "Trabalho artesanal",
+            "Greves gerais"
+          ],
+          0,
+          "Eficiência e controle do tempo.",
+          "medio"
+        ],
+        [
+          "Fordismo associa-se a:",
+          [
+            "Produção em massa e linha de montagem",
+            "Economia feudal",
+            "Trocas de subsistência",
+            "Trabalho doméstico isolado"
+          ],
+          0,
+          "Modelo industrial do século XX.",
+          "medio"
+        ],
+        [
+          "Trabalho informal caracteriza-se por:",
+          [
+            "Ausência de registro e direitos formais",
+            "Carteira assinada e benefícios plenos",
+            "Apenas setor público",
+            "Salários sempre altos"
+          ],
+          0,
+          "Precariedade e invisibilidade estatística.",
+          "medio"
+        ],
+        [
+          "Desemprego estrutural decorre de:",
+          [
+            "Mudanças profundas na economia e tecnologia",
+            "Férias coletivas",
+            "Aposentadoria voluntária",
+            "Excesso de vagas"
+          ],
+          0,
+          "Desajuste entre oferta de emprego e qualificação.",
+          "medio"
+        ],
+        [
+          "Teletrabalho intensificado na pandemia alterou:",
+          [
+            "Fronteiras entre casa e trabalho",
+            "Apenas o transporte público",
+            "O clima",
+            "A língua oficial"
+          ],
+          0,
+          "Novas formas de organização e controle.",
+          "medio"
+        ],
+        [
+          "Sindicatos buscam principalmente:",
+          [
+            "Defesa de direitos e condições de trabalho",
+            "Eliminar salários",
+            "Proibir negociação",
+            "Fechar empresas"
+          ],
+          0,
+          "Organização coletiva dos trabalhadores.",
+          "medio"
+        ]
+      ],
+      "Movimentos Sociais": [
+        [
+          "Movimento social é:",
+          [
+            "Ação coletiva organizada por mudanças sociais",
+            "Ato individual isolado",
+            "Evento esportivo",
+            "Campanha publicitária"
+          ],
+          0,
+          "Grupos mobilizados por causas comuns.",
+          "medio"
+        ],
+        [
+          "Movimentos feministas lutam por:",
+          [
+            "Igualdade de gênero e direitos das mulheres",
+            "Manutenção do patriarcado",
+            "Exclusão política",
+            "Proibição de voto"
+          ],
+          0,
+          "Reivindicações históricas por equidade.",
+          "medio"
+        ],
+        [
+          "Movimento negro no Brasil combate:",
+          [
+            "Racismo estrutural e desigualdades",
+            "Direitos civis",
+            "Educação",
+            "Cultura afro"
+          ],
+          0,
+          "Luta contra discriminação e violência.",
+          "medio"
+        ],
+        [
+          "Movimentos ambientalistas defendem:",
+          [
+            "Sustentabilidade e preservação",
+            "Poluição irrestrita",
+            "Desmatamento total",
+            "Uso ilimitado de combustíveis fósseis"
+          ],
+          0,
+          "Meio ambiente e futuro das gerações.",
+          "medio"
+        ],
+        [
+          "Reforma agrária como pauta relaciona-se a:",
+          [
+            "Redistribuição de terras e justiça no campo",
+            "Expulsão de camponeses",
+            "Latifúndio eterno",
+            "Urbanização forçada"
+          ],
+          0,
+          "MST e movimentos camponeses.",
+          "medio"
+        ],
+        [
+          "Redes sociais nos movimentos atuais:",
+          [
+            "Amplificam mobilização e visibilidade",
+            "Impedem qualquer protesto",
+            "Substituem totalmente organização",
+            "Eliminam reivindicações"
+          ],
+          0,
+          "Hashtags e organização digital.",
+          "medio"
+        ],
+        [
+          "Movimento estudantil histórico (1968) exigiu:",
+          [
+            "Democracia, reformas e participação",
+            "Restauração autoritária",
+            "Fim da educação",
+            "Monarquia"
+          ],
+          0,
+          "Contexto de contestação global.",
+          "medio"
+        ],
+        [
+          "Identidade coletiva em movimentos fortalece:",
+          [
+            "Senso de pertencimento e ação conjunta",
+            "Isolamento individual",
+            "Apatia",
+            "Conflito interno permanente"
+          ],
+          0,
+          "Unidade simbólica e política.",
+          "medio"
+        ],
+        [
+          "Repressão estatal a movimentos pode incluir:",
+          [
+            "Violência policial e criminalização",
+            "Diálogo institucional sempre",
+            "Financiamento automático",
+            "Voto obrigatório"
+          ],
+          0,
+          "Depende do contexto político.",
+          "medio"
+        ],
+        [
+          "Conquistas de movimentos sociais podem resultar em:",
+          [
+            "Novas leis e políticas públicas",
+            "Ausência de mudanças",
+            "Retrocessos permanentes",
+            "Fim da sociedade"
+          ],
+          0,
+          "Ex.: direitos civis, ambientais.",
+          "medio"
+        ]
+      ],
+      "Desigualdade": [
+        [
+          "Desigualdade social refere-se a:",
+          [
+            "Diferenças de acesso a recursos e oportunidades",
+            "Igualdade biológica",
+            "Uniformidade de renda",
+            "Ausência de classes"
+          ],
+          0,
+          "Distribuição desigual de riqueza, educação, saúde.",
+          "medio"
+        ],
+        [
+          "O Índice de Gini mede:",
+          [
+            "Desigualdade de renda",
+            "Temperatura média",
+            "PIB absoluto",
+            "População total"
+          ],
+          0,
+          "0 = igualdade perfeita; 1 = concentração máxima.",
+          "medio"
+        ],
+        [
+          "Estratificação social organiza sociedade em:",
+          [
+            "Camadas ou classes hierárquicas",
+            "Grupos idênticos",
+            "Apenas indivíduos isolados",
+            "Categorias biológicas fixas"
+          ],
+          0,
+          "Classes, status e prestígio.",
+          "medio"
+        ],
+        [
+          "Mobilidade social vertical ascendente ocorre quando:",
+          [
+            "Indivíduo melhora posição socioeconômica",
+            "Há queda de status",
+            "Nada muda",
+            "Todos ocupam mesmo lugar"
+          ],
+          0,
+          "Ex.: filho de operário vira médico.",
+          "medio"
+        ],
+        [
+          "Pobreza extrema implica:",
+          [
+            "Dificuldade de suprir necessidades básicas",
+            "Renda alta",
+            "Acesso pleno a serviços",
+            "Excesso de consumo"
+          ],
+          0,
+          "Fome, moradia precária, exclusão.",
+          "medio"
+        ],
+        [
+          "Racismo estrutural manifesta-se em:",
+          [
+            "Práticas institucionais que reproduzem desigualdade racial",
+            "Apenas insultos individuais",
+            "Ausência de preconceito",
+            "Igualdade plena"
+          ],
+          0,
+          "Discriminação incorporada em estruturas.",
+          "medio"
+        ],
+        [
+          "Gênero e desigualdade: mulheres historicamente:",
+          [
+            "Receberam menos oportunidades e salários",
+            "Sempre tiveram paridade total",
+            "Não participaram do mercado",
+            "Ocuparam todos os cargos de poder"
+          ],
+          0,
+          "Patriarcado e divisão sexual do trabalho.",
+          "medio"
+        ],
+        [
+          "Elite econômica concentra:",
+          [
+            "Riqueza e influência política",
+            "Pobreza extrema",
+            "Trabalho manual apenas",
+            "Nenhum recurso"
+          ],
+          0,
+          "Pequeno grupo detém grande parte do patrimônio.",
+          "medio"
+        ],
+        [
+          "Políticas de ação afirmativa visam:",
+          [
+            "Reduzir desigualdades históricas",
+            "Aumentar exclusão",
+            "Eliminar cotas sempre",
+            "Ignorar discriminação"
+          ],
+          0,
+          "Cotas, bolsas, prioridades.",
+          "medio"
+        ],
+        [
+          "Interseccionalidade (Crenshaw) analisa:",
+          [
+            "Cruzamento de opressões (raça, gênero, classe)",
+            "Apenas classe social",
+            "Somente renda",
+            "Clima e geografia"
+          ],
+          0,
+          "Experiências múltiplas de discriminação.",
+          "medio"
+        ]
+      ],
+      "Cidadania": [
+        [
+          "Cidadania inclui direitos:",
+          [
+            "Civis, políticos e sociais",
+            "Apenas militares",
+            "Somente econômicos privados",
+            "Nenhum"
+          ],
+          0,
+          "Marshall: tripla dimensão da cidadania.",
+          "medio"
+        ],
+        [
+          "Direitos civis garantem:",
+          [
+            "Liberdades individuais e igualdade perante a lei",
+            "Voto apenas",
+            "Salário mínimo",
+            "Férias pagas"
+          ],
+          0,
+          "Ex.: liberdade de expressão, habeas corpus.",
+          "medio"
+        ],
+        [
+          "Direitos políticos incluem:",
+          [
+            "Votar, ser votado e participar do governo",
+            "Apenas consumir",
+            "Trabalhar sem descanso",
+            "Propriedade privada exclusiva"
+          ],
+          0,
+          "Participação na vida pública.",
+          "medio"
+        ],
+        [
+          "Direitos sociais referem-se a:",
+          [
+            "Educação, saúde e previdência",
+            "Apenas liberdade de imprensa",
+            "Serviço militar",
+            "Propriedade de terras"
+          ],
+          0,
+          "Bem-estar e dignidade material.",
+          "medio"
+        ],
+        [
+          "Participação cidadã pode ocorrer via:",
+          [
+            "Voto, associações, conselhos e protestos",
+            "Apenas isolamento",
+            "Desinteresse total",
+            "Violência exclusiva"
+          ],
+          0,
+          "Democracia exige engajamento.",
+          "medio"
+        ],
+        [
+          "Constituição de 1988 ampliou:",
+          [
+            "Direitos sociais e democracia no Brasil",
+            "Censura",
+            "Tortura institucional",
+            "Exclusão de minorias"
+          ],
+          0,
+          "Cidadania democrática pós-ditadura.",
+          "medio"
+        ],
+        [
+          "Apatia política caracteriza-se por:",
+          [
+            "Desinteresse e afastamento da vida pública",
+            "Mobilização intensa",
+            "Participação constante",
+            "Voluntariado massivo"
+          ],
+          0,
+          "Abstenção e descrença.",
+          "medio"
+        ],
+        [
+          "Tolerância democrática implica:",
+          [
+            "Respeitar diferenças dentro da lei",
+            "Impor uma única opinião",
+            "Proibir dissidência",
+            "Violência contra opositores"
+          ],
+          0,
+          "Pluralismo e convivência.",
+          "medio"
+        ],
+        [
+          "Cidadania digital envolve:",
+          [
+            "Uso responsável e crítico da internet",
+            "Apenas consumo passivo",
+            "Fake news sem verificação",
+            "Anonimato para ataques"
+          ],
+          0,
+          "Ética, privacidade, informação.",
+          "medio"
+        ],
+        [
+          "Controle social cidadão inclui:",
+          [
+            "Fiscalizar poder público e políticas",
+            "Aceitar tudo sem questionar",
+            "Eliminar transparência",
+            "Corruptela tolerada"
+          ],
+          0,
+          "Accountability e participação.",
+          "medio"
+        ]
+      ]
+    }
+  }
+]
