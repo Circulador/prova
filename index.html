@@ -905,6 +905,19 @@ body.player-paused #p-pause.active{background:var(--warn-soft);border-color:var(
 .fc-stat strong{display:block;font-size:17px;font-weight:650;color:var(--text-0)}
 .fc-stat span{font-size:10px;color:var(--text-2)}
 .fc-info{font-size:12.5px;color:var(--text-2);line-height:1.55;margin-bottom:14px}
+.fc-filter-panel{margin-bottom:14px;padding:14px;border-radius:var(--radius-lg);background:var(--bg-glass);border:1px solid var(--border)}
+.fc-filter-panel h3{font-size:13px;font-weight:650;margin:0 0 10px;color:var(--text-0)}
+.fc-filter-scope{display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:12px}
+.fc-filter-scope label{font-size:12.5px;color:var(--text-1);display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.fc-filter-scope input{accent-color:var(--accent)}
+.fc-filter-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:640px){.fc-filter-grid{grid-template-columns:1fr}}
+.fc-filter-group{border:1px solid var(--border-soft);border-radius:var(--radius-md);background:var(--bg-1);padding:8px 10px;max-height:140px;overflow:auto}
+.fc-filter-group-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2);margin:0 0 6px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.fc-filter-group-title .fc-filter-all{font-size:10px;padding:2px 6px;min-height:auto;text-transform:none;letter-spacing:0}
+.fc-filter-group .checkbox-row{font-size:12px;margin:4px 0;display:flex}
+.fc-filter-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 8px}
+.fc-filter-preview{font-size:12px;color:var(--text-2);margin-top:6px}
 @media(max-width:640px){.fc-stats{grid-template-columns:repeat(2,1fr)}}
 .progress-mini{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px}
 .progress-mini .xp-bar{flex:1;height:6px}
@@ -1324,7 +1337,11 @@ const I18n = {
       'forge.command':'Comando','forge.commandPh':'Ex.: Gere 20 flashcards sobre História do Brasil…',
       'forge.generate':'Gerar prévia','forge.save':'Salvar no banco','forge.voice':'Falar','forge.config':'Configurações da IA',
       'forge.apiKey':'Chave API (OpenAI-compatible)','forge.apiUrl':'URL da API','forge.model':'Modelo','forge.mockHint':'Sem chave: modo demo (JSON válido de exemplo).',
-      'forge.history':'Histórico de gerações','forge.examples':'Exemplos','forge.regenerate':'Regenerar','forge.duplicate':'Duplicar','forge.export':'Exportar','forge.template':'Salvar modelo','forge.uploadDoc':'Enviar documento (texto)'
+      'forge.history':'Histórico de gerações','forge.examples':'Exemplos','forge.regenerate':'Regenerar','forge.duplicate':'Duplicar','forge.export':'Exportar','forge.template':'Salvar modelo','forge.uploadDoc':'Enviar documento (texto)',
+      'fc.filterTitle':'Montar sessão','fc.filterHint':'Combine filtros (opcional). Vazio = baralho inteiro.',
+      'fc.scopeDue':'Revisão FSRS (vencidos + novos)','fc.scopeAll':'Todos os cards','fc.scopeNew':'Só novos','fc.scopeMarked':'Só marcados ★',
+      'fc.filterTrilha':'Trilha','fc.filterMateria':'Matéria / assunto','fc.filterCategory':'Categoria','fc.filterTheme':'Tema / tags',
+      'fc.filterQty':'Quantidade','fc.filterPreview':'{n} card(s) na sessão','fc.filterClear':'Limpar filtros','fc.filterSelectAll':'Marcar grupo'
     },
     'en-US': {
       'nav.home':'Home','nav.library':'Library','nav.progress':'Progress','nav.settings':'Settings','nav.help':'Help',
@@ -1377,7 +1394,11 @@ const I18n = {
       'forge.command':'Command','forge.commandPh':'E.g. Generate 20 flashcards about World History…',
       'forge.generate':'Generate preview','forge.save':'Save to database','forge.voice':'Speak','forge.config':'AI settings',
       'forge.apiKey':'API key (OpenAI-compatible)','forge.apiUrl':'API URL','forge.model':'Model','forge.mockHint':'No key: demo mode (valid sample JSON).',
-      'forge.history':'Generation history','forge.examples':'Examples','forge.regenerate':'Regenerate','forge.duplicate':'Duplicate','forge.export':'Export','forge.template':'Save template','forge.uploadDoc':'Upload document (text)'
+      'forge.history':'Generation history','forge.examples':'Examples','forge.regenerate':'Regenerate','forge.duplicate':'Duplicate','forge.export':'Export','forge.template':'Save template','forge.uploadDoc':'Upload document (text)',
+      'fc.filterTitle':'Build session','fc.filterHint':'Combine filters (optional). Empty = full deck.',
+      'fc.scopeDue':'FSRS review (due + new)','fc.scopeAll':'All cards','fc.scopeNew':'New only','fc.scopeMarked':'Marked ★ only',
+      'fc.filterTrilha':'Track','fc.filterMateria':'Subject','fc.filterCategory':'Category','fc.filterTheme':'Theme / tags',
+      'fc.filterQty':'Quantity','fc.filterPreview':'{n} card(s) in session','fc.filterClear':'Clear filters','fc.filterSelectAll':'Select group'
     }
   },
   locale(){ return this._locale; },
@@ -6582,6 +6603,7 @@ class FlashcardController {
   static _close = null;
   static _MARKED_KEY = 'ef_fc_marked_v1';
   static _REVEAL_ALL_KEY = 'ef_fc_reveal_all_v1';
+  static _FILTERS_KEY = 'ef_fc_filters_v1';
 
   static _loadMarked(){
     try{ return new Set(JSON.parse(localStorage.getItem(this._MARKED_KEY)||'[]')); }catch(e){ return new Set(); }
@@ -6589,41 +6611,94 @@ class FlashcardController {
   static _saveMarked(set){
     try{ localStorage.setItem(this._MARKED_KEY, JSON.stringify([...set])); }catch(e){}
   }
+  static _loadSavedFilters(){
+    try{ return JSON.parse(localStorage.getItem(this._FILTERS_KEY)||'null') || {}; }catch(e){ return {}; }
+  }
+  static _saveFilters(f){
+    try{ localStorage.setItem(this._FILTERS_KEY, JSON.stringify(f)); }catch(e){}
+  }
   static _showBack(){ return this._revealAll || this._revealed; }
 
-  static _dueDeck(limit=20){
+  static filterMeta(){
+    const qs = FSRS.questions();
+    const exams = StorageManager.getExams();
+    const trilhas = FSRS.uniq(exams.map(e=>e.trilha || e.serie || e.category || 'Outros'));
+    return {
+      trilhas,
+      materias: FSRS.uniq(qs.map(q=>q.materia)),
+      categories: FSRS.uniq(qs.map(q=>q.category || (I18n.isEn() ? 'Uncategorized' : 'Sem categoria'))),
+      tags: FSRS.uniq(qs.flatMap(q=>FSRS.temas(q))),
+      total: qs.length
+    };
+  }
+  static _idsForTrilhas(trilhas){
+    const ids = new Set();
+    StorageManager.getExams().forEach(e=>{
+      const key = e.trilha || e.serie || e.category || 'Outros';
+      if(!trilhas.includes(key)) return;
+      (e.questionIds||[]).forEach(id=>ids.add(id));
+    });
+    return ids;
+  }
+  static _basePool(opts={}){
+    let qs = FSRS.questions();
+    if(opts.examId){
+      const ids = new Set(StorageManager.getExam(opts.examId)?.questionIds || []);
+      qs = qs.filter(q=>ids.has(q.id));
+      return qs;
+    }
+    if(opts.trilhas?.length){
+      const ids = this._idsForTrilhas(opts.trilhas);
+      qs = qs.filter(q=>ids.has(q.id));
+    }
+    if(opts.materias?.length) qs = qs.filter(q=>opts.materias.includes(q.materia || ''));
+    if(opts.categories?.length){
+      qs = qs.filter(q=>opts.categories.includes(q.category || (I18n.isEn() ? 'Uncategorized' : 'Sem categoria')));
+    }
+    if(opts.tags?.length){
+      qs = qs.filter(q=>opts.tags.some(t=>FSRS.temas(q).includes(t)));
+    }
+    return qs;
+  }
+  static _applyScope(pool, scope='due'){
     const now = Date.now();
-    return FSRS.questions()
+    const marked = this._loadMarked();
+    if(scope === 'marked') return pool.filter(q=>marked.has(q.id));
+    if(scope === 'new') return pool.filter(q=>{ const c = FSRS.card(q); return !c.reps || c.state === 'new'; });
+    if(scope === 'all') return pool.slice();
+    const due = pool.filter(q=>{ const c = FSRS.card(q); return !c.reps || c.due <= now || c.state === 'new'; });
+    return due.length ? due : pool.slice();
+  }
+  static countMatching(opts={}){
+    const scope = opts.scope || 'due';
+    return this._applyScope(this._basePool(opts), scope).length;
+  }
+  static _buildQueue(limit=20, opts={}){
+    const scope = opts.scope || 'due';
+    let pool = this._applyScope(this._basePool(opts), scope);
+    pool = pool
       .map(q=>({ q, p: FSRS.priority(q), c: FSRS.card(q) }))
-      .filter(x=>!x.c.reps || x.c.due<=now || x.c.state==='new')
       .sort((a,b)=>b.p-a.p)
-      .slice(0, limit)
       .map(x=>x.q);
+    if(!pool.length) pool = this._basePool(opts).slice(0, Math.min(limit, 999));
+    return pool.slice(0, Math.min(limit, pool.length));
+  }
+
+  static _dueDeck(limit=20){
+    return this._buildQueue(limit, { scope:'due' });
   }
   static _dueDeckForExam(examId, limit=20){
-    const exam = StorageManager.getExam(examId);
-    const ids = new Set(exam?.questionIds || []);
-    if(!ids.size) return [];
-    const now = Date.now();
-    const pool = FSRS.questions().filter(q=>ids.has(q.id));
-    let queue = pool
-      .map(q=>({ q, p: FSRS.priority(q), c: FSRS.card(q) }))
-      .filter(x=>!x.c.reps || x.c.due<=now || x.c.state==='new')
-      .sort((a,b)=>b.p-a.p)
-      .slice(0, limit)
-      .map(x=>x.q);
-    if(!queue.length) queue = pool.slice(0, Math.min(limit, pool.length));
-    return queue;
+    return this._buildQueue(limit, { examId, scope:'due' });
   }
   static start(limit=20, opts={}){
-    const examId = opts.examId || null;
-    this._queue = examId ? this._dueDeckForExam(examId, limit) : this._dueDeck(limit);
+    const filters = { ...opts };
+    if(!filters.examId && !filters.scope) filters.scope = 'due';
+    this._queue = this._buildQueue(limit, filters);
     if(!this._queue.length){
-      this._queue = examId
-        ? FSRS.questions().filter(q=>(StorageManager.getExam(examId)?.questionIds||[]).includes(q.id)).slice(0, Math.min(limit, 999))
-        : FSRS.questions().slice(0, Math.min(limit, FSRS.questions().length));
+      Toast.show(I18n.isEn() ? 'No flashcards match these filters.' : 'Nenhum flashcard com esses filtros.', 'warn');
+      return;
     }
-    if(!this._queue.length){ Toast.show(I18n.isEn() ? 'No flashcards for this track.' : 'Nenhum flashcard nesta trilha.', 'warn'); return; }
+    if(!filters.examId) this._saveFilters({ scope:filters.scope||'due', trilhas:filters.trilhas||[], materias:filters.materias||[], categories:filters.categories||[], tags:filters.tags||[], limit });
     this._idx = 0;
     this._revealed = false;
     try{ this._revealAll = localStorage.getItem(this._REVEAL_ALL_KEY) === '1'; }catch(e){ this._revealAll = false; }
@@ -6710,39 +6785,113 @@ class FlashcardController {
 }
 
 class FlashcardsHubView {
+  static _filterChecks(el, cls){
+    return [...el.querySelectorAll('.'+cls+':checked')].map(c=>c.value).filter(Boolean);
+  }
+  static _collectFilters(el){
+    return {
+      scope: el.querySelector('[name=fc-scope]:checked')?.value || 'due',
+      trilhas: FlashcardsHubView._filterChecks(el, 'fc-f-trilha'),
+      materias: FlashcardsHubView._filterChecks(el, 'fc-f-materia'),
+      categories: FlashcardsHubView._filterChecks(el, 'fc-f-cat'),
+      tags: FlashcardsHubView._filterChecks(el, 'fc-f-tag'),
+      limit: Math.max(1, Math.min(100, parseInt(el.querySelector('#fc-qty')?.value, 10) || 20))
+    };
+  }
+  static _checkboxGroup(cls, items, selected, labelKey){
+    const title = labelKey ? `<button type="button" class="btn btn-ghost btn-sm fc-filter-all" data-cls="${cls}">${I18n.t('fc.filterSelectAll')}</button>` : '';
+    const head = labelKey ? `<div class="fc-filter-group-title">${I18n.t(labelKey)}${title}</div>` : '';
+    if(!items.length) return head + `<p style="font-size:11px;color:var(--text-2);margin:0">${I18n.isEn() ? 'None' : 'Nenhum'}</p>`;
+    const sel = new Set(selected || []);
+    return head + items.map(v=>`<label class="checkbox-row"><input type="checkbox" class="${cls}" value="${Util.escapeHtml(v)}" ${sel.has(v)?'checked':''}> ${Util.escapeHtml(v)}</label>`).join('');
+  }
+  static _updatePreview(el){
+    const f = FlashcardsHubView._collectFilters(el);
+    const n = FlashcardController.countMatching(f);
+    const preview = el.querySelector('#fc-preview');
+    if(preview) preview.textContent = I18n.t('fc.filterPreview', { n });
+    const btn = el.querySelector('#fc-study');
+    if(btn) btn.disabled = n === 0;
+  }
   render(el){
     const st = FSRS.stats();
     const qs = FSRS.questions();
+    const meta = FlashcardController.filterMeta();
+    const saved = FlashcardController._loadSavedFilters();
+    const scope = saved.scope || 'due';
+    const qty = saved.limit || 20;
     el.innerHTML = `
-      <p class="fc-info">Cada <strong>questão</strong> do banco gera automaticamente um flashcard (frente = enunciado, verso = resposta + explicação). Crie ou edite conteúdo na aba <strong>Questões</strong>.</p>
+      <p class="fc-info">${I18n.isEn() ? 'Each <strong>question</strong> becomes a flashcard (front = stem, back = answer + explanation). Create or edit in <strong>Questions</strong>.' : 'Cada <strong>questão</strong> do banco gera automaticamente um flashcard (frente = enunciado, verso = resposta + explicação). Crie ou edite conteúdo na aba <strong>Questões</strong>.'}</p>
       <div class="fc-stats">
         <div class="fc-stat"><strong>${st.total}</strong><span>Cards</span></div>
-        <div class="fc-stat"><strong>${st.due}</strong><span>Para revisar</span></div>
-        <div class="fc-stat"><strong>${st.newc}</strong><span>Novos</span></div>
-        <div class="fc-stat"><strong>${st.retention}%</strong><span>Retenção</span></div>
+        <div class="fc-stat"><strong>${st.due}</strong><span>${I18n.isEn() ? 'Due' : 'Para revisar'}</span></div>
+        <div class="fc-stat"><strong>${st.newc}</strong><span>${I18n.isEn() ? 'New' : 'Novos'}</span></div>
+        <div class="fc-stat"><strong>${st.retention}%</strong><span>${I18n.isEn() ? 'Retention' : 'Retenção'}</span></div>
+      </div>
+      <div class="fc-filter-panel">
+        <h3>${I18n.t('fc.filterTitle')}</h3>
+        <p class="hint" style="margin:0 0 10px;font-size:12px">${I18n.t('fc.filterHint')}</p>
+        <div class="fc-filter-scope">
+          <label><input type="radio" name="fc-scope" value="due" ${scope==='due'?'checked':''}> ${I18n.t('fc.scopeDue')}</label>
+          <label><input type="radio" name="fc-scope" value="all" ${scope==='all'?'checked':''}> ${I18n.t('fc.scopeAll')}</label>
+          <label><input type="radio" name="fc-scope" value="new" ${scope==='new'?'checked':''}> ${I18n.t('fc.scopeNew')}</label>
+          <label><input type="radio" name="fc-scope" value="marked" ${scope==='marked'?'checked':''}> ${I18n.t('fc.scopeMarked')}</label>
+        </div>
+        <div class="fc-filter-grid">
+          <div class="fc-filter-group">${FlashcardsHubView._checkboxGroup('fc-f-trilha', meta.trilhas, saved.trilhas, 'fc.filterTrilha')}</div>
+          <div class="fc-filter-group">${FlashcardsHubView._checkboxGroup('fc-f-materia', meta.materias, saved.materias, 'fc.filterMateria')}</div>
+          <div class="fc-filter-group">${FlashcardsHubView._checkboxGroup('fc-f-cat', meta.categories, saved.categories, 'fc.filterCategory')}</div>
+          <div class="fc-filter-group">${FlashcardsHubView._checkboxGroup('fc-f-tag', meta.tags.slice(0, 40), saved.tags, 'fc.filterTheme')}</div>
+        </div>
+        <div class="fc-filter-tools">
+          <div class="field" style="margin:0;min-width:100px"><label>${I18n.t('fc.filterQty')}</label><select class="select" id="fc-qty"><option ${qty===10?'selected':''}>10</option><option ${qty===20?'selected':''}>20</option><option ${qty===30?'selected':''}>30</option><option ${qty===50?'selected':''}>50</option></select></div>
+          <button class="btn btn-sm btn-ghost" type="button" id="fc-clear">${I18n.t('fc.filterClear')}</button>
+        </div>
+        <div class="fc-filter-preview" id="fc-preview"></div>
       </div>
       <div class="hub-actions-bar">
-        <button class="btn btn-sm btn-primary" type="button" id="fc-study">${Icons.play} Estudar flashcards</button>
-        <button class="btn btn-sm" type="button" id="fc-new">${Icons.plus} Criar flashcard</button>
-        <button class="btn btn-sm btn-ghost" type="button" id="fc-questions">Ver questões</button>
+        <button class="btn btn-sm btn-primary" type="button" id="fc-study">${Icons.play} ${I18n.isEn() ? 'Study flashcards' : 'Estudar flashcards'}</button>
+        <button class="btn btn-sm" type="button" id="fc-new">${Icons.plus} ${I18n.isEn() ? 'Create flashcard' : 'Criar flashcard'}</button>
+        <button class="btn btn-sm btn-ghost" type="button" id="fc-questions">${I18n.isEn() ? 'View questions' : 'Ver questões'}</button>
       </div>
       <div class="card card-compact" style="margin-top:14px">
-        <div style="font-size:13px;font-weight:650;margin-bottom:8px">Como funciona</div>
+        <div style="font-size:13px;font-weight:650;margin-bottom:8px">${I18n.isEn() ? 'How it works' : 'Como funciona'}</div>
         <ul style="font-size:12.5px;color:var(--text-2);line-height:1.6;margin:0;padding-left:18px">
-          <li>Flashcards usam repetição espaçada (FSRS) — avalie com <em>De novo · Difícil · Bom · Fácil</em></li>
-          <li>Progresso aparece em <strong>Progresso</strong> e alimenta lacunas por domínio</li>
-          <li>Importar JSON/CSV na aba Trilhas também alimenta o baralho</li>
+          <li>${I18n.isEn() ? 'Spaced repetition (FSRS) — rate with <em>Again · Hard · Good · Easy</em>' : 'Flashcards usam repetição espaçada (FSRS) — avalie com <em>De novo · Difícil · Bom · Fácil</em>'}</li>
+          <li>${I18n.isEn() ? 'Progress appears in <strong>Progress</strong> and feeds domain gaps' : 'Progresso aparece em <strong>Progresso</strong> e alimenta lacunas por domínio'}</li>
+          <li>${I18n.isEn() ? 'Import JSON/CSV in Tracks also feeds the deck' : 'Importar JSON/CSV na aba Trilhas também alimenta o baralho'}</li>
         </ul>
       </div>
-      ${!qs.length ? DashboardView._empty('Nenhum flashcard', 'Crie uma questão para gerar seu primeiro card.') : ''}`;
-    el.querySelector('#fc-study')?.addEventListener('click', ()=> FlashcardController.start(20));
+      ${!qs.length ? DashboardView._empty(I18n.isEn() ? 'No flashcards' : 'Nenhum flashcard', I18n.isEn() ? 'Create a question to generate your first card.' : 'Crie uma questão para gerar seu primeiro card.') : ''}`;
+    const update = ()=> FlashcardsHubView._updatePreview(el);
+    el.querySelectorAll('[name=fc-scope], #fc-qty, .fc-f-trilha, .fc-f-materia, .fc-f-cat, .fc-f-tag').forEach(inp=>{
+      inp.addEventListener('change', update);
+    });
+    el.querySelectorAll('.fc-filter-all').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const cls = btn.dataset.cls;
+        el.querySelectorAll('.'+cls).forEach(c=>{ c.checked = true; });
+        update();
+      });
+    });
+    el.querySelector('#fc-clear')?.addEventListener('click', ()=>{
+      el.querySelectorAll('.fc-f-trilha, .fc-f-materia, .fc-f-cat, .fc-f-tag').forEach(c=>{ c.checked = false; });
+      const due = el.querySelector('[name=fc-scope][value=due]');
+      if(due) due.checked = true;
+      update();
+    });
+    el.querySelector('#fc-study')?.addEventListener('click', ()=>{
+      const f = FlashcardsHubView._collectFilters(el);
+      FlashcardController.start(f.limit, f);
+    });
     el.querySelector('#fc-new')?.addEventListener('click', ()=>{
       QuestionEditorController.openModal(null, ()=>{
-        Toast.show('Questão salva — flashcard disponível no baralho.', 'success');
+        Toast.show(I18n.isEn() ? 'Question saved — card added to deck.' : 'Questão salva — flashcard disponível no baralho.', 'success');
         this.render(el);
       });
     });
     el.querySelector('#fc-questions')?.addEventListener('click', ()=> App.instance.router.go('content', {tab:'questoes'}));
+    update();
   }
 }
 
