@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" role="img" aria-label="Velora">
+  <defs>
+    <linearGradient id="velora-grad" x1="14" y1="10" x2="86" y2="86" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9333EA"/><stop offset="0.42" stop-color="#2563EB"/><stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="velora-grad-deep" x1="14" y1="10" x2="86" y2="86" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7E22CE"/><stop offset="0.42" stop-color="#1D4ED8"/><stop offset="1" stop-color="#0891B2"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(50 8) scale(1)">
+    <path d="M24 20C24 20 34 58 50 84C42 72 28 36 24 20Z" fill="url(#velora-grad-deep)" opacity="0.88"/>
+    <path d="M76 20C76 20 66 58 50 84C58 72 72 36 76 20Z" fill="url(#velora-grad)"/>
+    <path d="M24 20L50 84L36 76L20 26Z" fill="url(#velora-grad)"/>
+    <path d="M72 14.5L74.2 20.8L80.8 20.8L75.3 24.8L77.5 31.2L72 27.2L66.5 31.2L68.7 24.8L63.2 20.8L69.8 20.8L72 14.5Z" fill="#FBBF24"/>
+  </g>
+  <text x="100" y="118" text-anchor="middle" font-family="Inter,Segoe UI,system-ui,sans-serif" font-size="28" font-weight="650" fill="#F8FAFC" letter-spacing="-0.02em">Velora</text>
+  <text x="100" y="140" text-anchor="middle" font-family="Inter,Segoe UI,system-ui,sans-serif" font-size="8.5" font-weight="600" letter-spacing="0.14em">
+    <tspan fill="#A855F7">ESTUDE.</tspan><tspan fill="#3B82F6"> EVOLUA.</tspan><tspan fill="#06B6D4"> CONQUISTE.</tspan>
+  </text>
+</svg>

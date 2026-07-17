@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Velora">
+  <defs>
+    <linearGradient id="g" x1="4" y1="3" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9333EA"/><stop offset=".5" stop-color="#2563EB"/><stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#0B0E14"/>
+  <g transform="translate(1 1) scale(0.3)">
+    <path d="M24 20C24 20 34 58 50 84C42 72 28 36 24 20Z" fill="url(#g)" opacity=".85"/>
+    <path d="M76 20C76 20 66 58 50 84C58 72 72 36 76 20Z" fill="url(#g)"/>
+    <path d="M24 20L50 84L36 76L20 26Z" fill="url(#g)"/>
+    <path d="M72 14.5L74.2 20.8L80.8 20.8L75.3 24.8L77.5 31.2L72 27.2L66.5 31.2L68.7 24.8L63.2 20.8L69.8 20.8L72 14.5Z" fill="#FBBF24"/>
+  </g>
+</svg>

@@ -1,0 +1,3813 @@
+{
+  "trilha": "Trilha DPO — EXIN",
+  "trilhaId": "EXIN-DPO",
+  "certifications": [
+    {
+      "code": "EXIN-ISFS",
+      "materia": "ISFS",
+      "title": "Information Security Foundation (ISFS)",
+      "description": "Fundamentos de segurança da informação com base na ISO/IEC 27001.",
+      "timeMinutes": 60,
+      "submaterias": {
+        "Conceitos de SI": [
+          {
+            "type": "single",
+            "text": "O que significa a sigla CIA na segurança da informação?",
+            "options": [
+              {
+                "text": "Confidencialidade, Integridade e Disponibilidade",
+                "correct": true
+              },
+              {
+                "text": "Controle, Identificação e Auditoria",
+                "correct": false
+              },
+              {
+                "text": "Criptografia, Internet e Acesso",
+                "correct": false
+              },
+              {
+                "text": "Compliance, Investigação e Análise",
+                "correct": false
+              }
+            ],
+            "explanation": "CIA é o triângulo clássico da segurança da informação.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Qual é o objetivo principal da disponibilidade?",
+            "options": [
+              {
+                "text": "Garantir acesso autorizado quando necessário",
+                "correct": true
+              },
+              {
+                "text": "Impedir qualquer cópia de dados",
+                "correct": false
+              },
+              {
+                "text": "Eliminar todos os riscos",
+                "correct": false
+              },
+              {
+                "text": "Criptografar todos os sistemas",
+                "correct": false
+              }
+            ],
+            "explanation": "Disponibilidade assegura que ativos estejam acessíveis quando requeridos.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Integridade da informação garante que:",
+            "options": [
+              {
+                "text": "Dados não sejam alterados indevidamente",
+                "correct": true
+              },
+              {
+                "text": "Dados sejam sempre públicos",
+                "correct": false
+              },
+              {
+                "text": "Backups nunca falhem",
+                "correct": false
+              },
+              {
+                "text": "Senhas sejam compartilhadas",
+                "correct": false
+              }
+            ],
+            "explanation": "Integridade protege contra alteração não autorizada.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Confidencialidade relaciona-se a:",
+            "options": [
+              {
+                "text": "Restringir acesso a quem está autorizado",
+                "correct": true
+              },
+              {
+                "text": "Publicar dados abertamente",
+                "correct": false
+              },
+              {
+                "text": "Aumentar velocidade de rede",
+                "correct": false
+              },
+              {
+                "text": "Desligar servidores",
+                "correct": false
+              }
+            ],
+            "explanation": "Somente pessoas autorizadas devem acessar informações sensíveis.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Um ativo de informação pode ser:",
+            "options": [
+              {
+                "text": "Dado, sistema, pessoa ou processo",
+                "correct": true
+              },
+              {
+                "text": "Apenas hardware",
+                "correct": false
+              },
+              {
+                "text": "Somente papel",
+                "correct": false
+              },
+              {
+                "text": "Exclusivamente software livre",
+                "correct": false
+              }
+            ],
+            "explanation": "Ativos incluem tangíveis e intangíveis relevantes para a organização.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Avaliação de risco envolve:",
+            "options": [
+              {
+                "text": "Identificar ameaças, vulnerabilidades e impacto",
+                "correct": true
+              },
+              {
+                "text": "Ignorar controles existentes",
+                "correct": false
+              },
+              {
+                "text": "Copiar políticas de outra empresa",
+                "correct": false
+              },
+              {
+                "text": "Eliminar auditorias",
+                "correct": false
+              }
+            ],
+            "explanation": "Risco combina probabilidade e impacto de eventos.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Controle de segurança é:",
+            "options": [
+              {
+                "text": "Medida para tratar riscos",
+                "correct": true
+              },
+              {
+                "text": "Sinônimo de ameaça",
+                "correct": false
+              },
+              {
+                "text": "Tipo de vírus",
+                "correct": false
+              },
+              {
+                "text": "Backup automático apenas",
+                "correct": false
+              }
+            ],
+            "explanation": "Controles reduzem, transferem ou aceitam riscos.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Autenticação verifica:",
+            "options": [
+              {
+                "text": "Identidade de quem acessa",
+                "correct": true
+              },
+              {
+                "text": "Horário de expediente",
+                "correct": false
+              },
+              {
+                "text": "Tamanho do arquivo",
+                "correct": false
+              },
+              {
+                "text": "Velocidade da rede",
+                "correct": false
+              }
+            ],
+            "explanation": "Autenticação responde 'quem é você?'.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Autorização define:",
+            "options": [
+              {
+                "text": "O que o usuário autenticado pode fazer",
+                "correct": true
+              },
+              {
+                "text": "A senha mínima",
+                "correct": false
+              },
+              {
+                "text": "O fabricante do firewall",
+                "correct": false
+              },
+              {
+                "text": "A cor do datacenter",
+                "correct": false
+              }
+            ],
+            "explanation": "Autorização responde 'o que pode acessar?'.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Segurança da informação é responsabilidade:",
+            "options": [
+              {
+                "text": "De toda a organização",
+                "correct": true
+              },
+              {
+                "text": "Somente da TI",
+                "correct": false
+              },
+              {
+                "text": "Apenas do CEO",
+                "correct": false
+              },
+              {
+                "text": "Exclusiva de auditores externos",
+                "correct": false
+              }
+            ],
+            "explanation": "Cultura de segurança envolve todos os níveis.",
+            "submateria": "Conceitos de SI",
+            "level": "medio"
+          }
+        ],
+        "ISO/IEC 27001": [
+          {
+            "type": "single",
+            "text": "A ISO/IEC 27001 especifica requisitos para:",
+            "options": [
+              {
+                "text": "Sistema de Gestão de Segurança da Informação (SGSI)",
+                "correct": true
+              },
+              {
+                "text": "Contabilidade financeira",
+                "correct": false
+              },
+              {
+                "text": "Marketing digital",
+                "correct": false
+              },
+              {
+                "text": "Gestão ambiental",
+                "correct": false
+              }
+            ],
+            "explanation": "27001 é a norma certificável de SGSI.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "O ciclo PDCA aplicado ao SGSI significa:",
+            "options": [
+              {
+                "text": "Plan-Do-Check-Act",
+                "correct": true
+              },
+              {
+                "text": "Protect-Detect-Correct-Audit",
+                "correct": false
+              },
+              {
+                "text": "Policy-Data-Control-Access",
+                "correct": false
+              },
+              {
+                "text": "Plan-Deploy-Copy-Archive",
+                "correct": false
+              }
+            ],
+            "explanation": "PDCA promove melhoria contínua.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "A Declaração de Aplicabilidade (SoA) documenta:",
+            "options": [
+              {
+                "text": "Controles selecionados e justificativas",
+                "correct": true
+              },
+              {
+                "text": "Salários da equipe",
+                "correct": false
+              },
+              {
+                "text": "Lista de clientes",
+                "correct": false
+              },
+              {
+                "text": "Contratos de marketing",
+                "correct": false
+              }
+            ],
+            "explanation": "SoA mostra quais controles do Anexo A se aplicam.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "O Anexo A da ISO 27001 contém:",
+            "options": [
+              {
+                "text": "Controles de segurança recomendados",
+                "correct": true
+              },
+              {
+                "text": "Requisitos legais da LGPD",
+                "correct": false
+              },
+              {
+                "text": "Tabelas de preços",
+                "correct": false
+              },
+              {
+                "text": "Normas contábeis",
+                "correct": false
+              }
+            ],
+            "explanation": "Anexo A lista controles organizacionais e técnicos.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Auditoria interna do SGSI tem objetivo de:",
+            "options": [
+              {
+                "text": "Verificar conformidade e eficácia",
+                "correct": true
+              },
+              {
+                "text": "Substituir certificação externa",
+                "correct": false
+              },
+              {
+                "text": "Eliminar documentação",
+                "correct": false
+              },
+              {
+                "text": "Publicar dados pessoais",
+                "correct": false
+              }
+            ],
+            "explanation": "Auditorias internas precedem e complementam certificação.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Escopo do SGSI deve considerar:",
+            "options": [
+              {
+                "text": "Limites organizacionais e requisitos",
+                "correct": true
+              },
+              {
+                "text": "Apenas um servidor",
+                "correct": false
+              },
+              {
+                "text": "Somente e-mail",
+                "correct": false
+              },
+              {
+                "text": "Exclusivamente nuvem pública",
+                "correct": false
+              }
+            ],
+            "explanation": "Escopo define onde o SGSI se aplica.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Melhoria contínua no SGSI é apoiada por:",
+            "options": [
+              {
+                "text": "Análise crítica pela direção e ações corretivas",
+                "correct": true
+              },
+              {
+                "text": "Ignorar não conformidades",
+                "correct": false
+              },
+              {
+                "text": "Eliminar registros",
+                "correct": false
+              },
+              {
+                "text": "Desativar logs",
+                "correct": false
+              }
+            ],
+            "explanation": "Top management review e CAPA são essenciais.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Controle de acesso lógico inclui:",
+            "options": [
+              {
+                "text": "Gestão de identidades e privilégios",
+                "correct": true
+              },
+              {
+                "text": "Cor das paredes",
+                "correct": false
+              },
+              {
+                "text": "Tipo de café",
+                "correct": false
+              },
+              {
+                "text": "Marca de notebooks",
+                "correct": false
+              }
+            ],
+            "explanation": "IAM e least privilege são práticas centrais.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Gestão de incidentes de segurança exige:",
+            "options": [
+              {
+                "text": "Procedimentos de detecção, resposta e lições aprendidas",
+                "correct": true
+              },
+              {
+                "text": "Ocultar todos os incidentes",
+                "correct": false
+              },
+              {
+                "text": "Desligar logs permanentemente",
+                "correct": false
+              },
+              {
+                "text": "Compartilhar senhas",
+                "correct": false
+              }
+            ],
+            "explanation": "Resposta estruturada reduz impacto.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Fornecedores devem ser avaliados quanto a:",
+            "options": [
+              {
+                "text": "Riscos de segurança da informação",
+                "correct": true
+              },
+              {
+                "text": "Cor da logomarca",
+                "correct": false
+              },
+              {
+                "text": "Número de funcionários apenas",
+                "correct": false
+              },
+              {
+                "text": "Localização geográfica exclusiva",
+                "correct": false
+              }
+            ],
+            "explanation": "Cadeia de suprimentos é vetor comum de risco.",
+            "submateria": "ISO/IEC 27001",
+            "level": "medio"
+          }
+        ],
+        "Ameaças e vulnerabilidades": [
+          {
+            "type": "single",
+            "text": "Phishing é um tipo de:",
+            "options": [
+              {
+                "text": "Engenharia social",
+                "correct": true
+              },
+              {
+                "text": "Backup",
+                "correct": false
+              },
+              {
+                "text": "Criptografia assimétrica",
+                "correct": false
+              },
+              {
+                "text": "Política de senhas",
+                "correct": false
+              }
+            ],
+            "explanation": "Phishing engana usuários para revelar credenciais.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Malware inclui:",
+            "options": [
+              {
+                "text": "Vírus, worms, ransomware e trojans",
+                "correct": true
+              },
+              {
+                "text": "Apenas antivírus",
+                "correct": false
+              },
+              {
+                "text": "Firewalls",
+                "correct": false
+              },
+              {
+                "text": "Certificados SSL",
+                "correct": false
+              }
+            ],
+            "explanation": "Software malicioso compromete confidencialidade e integridade.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Vulnerabilidade zero-day é:",
+            "options": [
+              {
+                "text": "Falha desconhecida sem patch disponível",
+                "correct": true
+              },
+              {
+                "text": "Senha fraca conhecida",
+                "correct": false
+              },
+              {
+                "text": "Backup diário",
+                "correct": false
+              },
+              {
+                "text": "Política de mesa limpa",
+                "correct": false
+              }
+            ],
+            "explanation": "Zero-day não tem correção pública imediata.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Ataque de negação de serviço (DoS) visa:",
+            "options": [
+              {
+                "text": "Indisponibilizar serviço ou recurso",
+                "correct": true
+              },
+              {
+                "text": "Criptografar dados",
+                "correct": false
+              },
+              {
+                "text": "Aumentar integridade",
+                "correct": false
+              },
+              {
+                "text": "Melhorar performance",
+                "correct": false
+              }
+            ],
+            "explanation": "DoS afeta disponibilidade.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Engenharia social explora:",
+            "options": [
+              {
+                "text": "Comportamento humano",
+                "correct": true
+              },
+              {
+                "text": "Apenas falhas de hardware",
+                "correct": false
+              },
+              {
+                "text": "Leis tributárias",
+                "correct": false
+              },
+              {
+                "text": "Normas ISO de qualidade",
+                "correct": false
+              }
+            ],
+            "explanation": "Manipulação psicológica contorna controles técnicos.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Senha forte deve incluir:",
+            "options": [
+              {
+                "text": "Complexidade, comprimento e unicidade",
+                "correct": true
+              },
+              {
+                "text": "Nome da empresa repetido",
+                "correct": false
+              },
+              {
+                "text": "Data de nascimento",
+                "correct": false
+              },
+              {
+                "text": "Mesma senha em todos os sistemas",
+                "correct": false
+              }
+            ],
+            "explanation": "Boas práticas reduzem risco de comprometimento.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "MFA (autenticação multifator) adiciona:",
+            "options": [
+              {
+                "text": "Camadas extras além da senha",
+                "correct": true
+              },
+              {
+                "text": "Apenas biometria obrigatória",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de logs",
+                "correct": false
+              },
+              {
+                "text": "Acesso root universal",
+                "correct": false
+              }
+            ],
+            "explanation": "MFA combina fatores como senha + token.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Patch management trata de:",
+            "options": [
+              {
+                "text": "Aplicar atualizações de segurança",
+                "correct": true
+              },
+              {
+                "text": "Criar vírus",
+                "correct": false
+              },
+              {
+                "text": "Desativar antivírus",
+                "correct": false
+              },
+              {
+                "text": "Publicar dados",
+                "correct": false
+              }
+            ],
+            "explanation": "Correções fecham vulnerabilidades conhecidas.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Insider threat refere-se a:",
+            "options": [
+              {
+                "text": "Risco originado por pessoas internas",
+                "correct": true
+              },
+              {
+                "text": "Ataques apenas externos",
+                "correct": false
+              },
+              {
+                "text": "Falhas de energia",
+                "correct": false
+              },
+              {
+                "text": "Enchentes",
+                "correct": false
+              }
+            ],
+            "explanation": "Colaboradores mal-intencionados ou descuidados são ameaça.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Segmentação de rede ajuda a:",
+            "options": [
+              {
+                "text": "Limitar propagação de ataques",
+                "correct": true
+              },
+              {
+                "text": "Aumentar superfície de ataque",
+                "correct": false
+              },
+              {
+                "text": "Eliminar firewalls",
+                "correct": false
+              },
+              {
+                "text": "Compartilhar credenciais",
+                "correct": false
+              }
+            ],
+            "explanation": "Zonas isoladas contêm incidentes.",
+            "submateria": "Ameaças e vulnerabilidades",
+            "level": "medio"
+          }
+        ],
+        "Controles organizacionais": [
+          {
+            "type": "single",
+            "text": "Política de segurança da informação deve ser:",
+            "options": [
+              {
+                "text": "Aprovada pela alta direção e comunicada",
+                "correct": true
+              },
+              {
+                "text": "Secreta e oral apenas",
+                "correct": false
+              },
+              {
+                "text": "Opcional para TI",
+                "correct": false
+              },
+              {
+                "text": "Substituída por e-mails informais",
+                "correct": false
+              }
+            ],
+            "explanation": "Comprometimento da liderança é requisito do SGSI.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Classificação da informação permite:",
+            "options": [
+              {
+                "text": "Tratar dados conforme sensibilidade",
+                "correct": true
+              },
+              {
+                "text": "Publicar tudo igualmente",
+                "correct": false
+              },
+              {
+                "text": "Eliminar backups",
+                "correct": false
+              },
+              {
+                "text": "Ignorar rótulos",
+                "correct": false
+              }
+            ],
+            "explanation": "Níveis como público, interno, confidencial.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Treinamento de conscientização em SI visa:",
+            "options": [
+              {
+                "text": "Reduzir erros humanos e phishing",
+                "correct": true
+              },
+              {
+                "text": "Substituir controles técnicos",
+                "correct": false
+              },
+              {
+                "text": "Eliminar políticas",
+                "correct": false
+              },
+              {
+                "text": "Desativar MFA",
+                "correct": false
+              }
+            ],
+            "explanation": "Usuários são linha de defesa.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Controle de acesso físico protege:",
+            "options": [
+              {
+                "text": "Instalações e equipamentos",
+                "correct": true
+              },
+              {
+                "text": "Apenas dados na nuvem",
+                "correct": false
+              },
+              {
+                "text": "Redes sociais",
+                "correct": false
+              },
+              {
+                "text": "E-mails marketing",
+                "correct": false
+              }
+            ],
+            "explanation": "Badges, catracas e CCTV são exemplos.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Gestão de mudanças em TI reduz:",
+            "options": [
+              {
+                "text": "Riscos de alterações não autorizadas",
+                "correct": true
+              },
+              {
+                "text": "Necessidade de testes",
+                "correct": false
+              },
+              {
+                "text": "Documentação",
+                "correct": false
+              },
+              {
+                "text": "Aprovações",
+                "correct": false
+              }
+            ],
+            "explanation": "Mudanças controladas evitam indisponibilidade.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Backup e restore garantem:",
+            "options": [
+              {
+                "text": "Recuperação após perda ou ransomware",
+                "correct": true
+              },
+              {
+                "text": "Eliminação de logs",
+                "correct": false
+              },
+              {
+                "text": "Acesso público",
+                "correct": false
+              },
+              {
+                "text": "Cópia única sem teste",
+                "correct": false
+              }
+            ],
+            "explanation": "Testes de restauração validam backups.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Criptografia em repouso protege:",
+            "options": [
+              {
+                "text": "Dados armazenados em discos ou mídia",
+                "correct": true
+              },
+              {
+                "text": "Apenas tráfego HTTP",
+                "correct": false
+              },
+              {
+                "text": "Senhas em texto claro",
+                "correct": false
+              },
+              {
+                "text": "Políticas impressas",
+                "correct": false
+              }
+            ],
+            "explanation": "Dados cifrados resistem a acesso físico indevido.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Logs e monitoramento servem para:",
+            "options": [
+              {
+                "text": "Detectar atividades anômalas",
+                "correct": true
+              },
+              {
+                "text": "Aumentar anonimato de atacantes",
+                "correct": false
+              },
+              {
+                "text": "Eliminar auditoria",
+                "correct": false
+              },
+              {
+                "text": "Ocultar incidentes",
+                "correct": false
+              }
+            ],
+            "explanation": "SIEM correlaciona eventos.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Acordo de confidencialidade (NDA) protege:",
+            "options": [
+              {
+                "text": "Informações trocadas com terceiros",
+                "correct": true
+              },
+              {
+                "text": "Dados já públicos",
+                "correct": false
+              },
+              {
+                "text": "Opiniões pessoais",
+                "correct": false
+              },
+              {
+                "text": "Notícias abertas",
+                "correct": false
+              }
+            ],
+            "explanation": "NDA reforça confidencialidade contratual.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Continuidade de negócios (BC) foca em:",
+            "options": [
+              {
+                "text": "Manter operações críticas após incidentes",
+                "correct": true
+              },
+              {
+                "text": "Aumentar riscos",
+                "correct": false
+              },
+              {
+                "text": "Eliminar planos de crise",
+                "correct": false
+              },
+              {
+                "text": "Ignorar RTO/RPO",
+                "correct": false
+              }
+            ],
+            "explanation": "BC e DR complementam disponibilidade.",
+            "submateria": "Controles organizacionais",
+            "level": "medio"
+          }
+        ],
+        "Governança e conformidade": [
+          {
+            "type": "single",
+            "text": "Governança de TI alinha:",
+            "options": [
+              {
+                "text": "Tecnologia aos objetivos e riscos do negócio",
+                "correct": true
+              },
+              {
+                "text": "Apenas compras de software",
+                "correct": false
+              },
+              {
+                "text": "Marketing e vendas",
+                "correct": false
+              },
+              {
+                "text": "Folha de pagamento",
+                "correct": false
+              }
+            ],
+            "explanation": "Governança define direção e controle.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Due diligence em M&A inclui avaliar:",
+            "options": [
+              {
+                "text": "Riscos de segurança e privacidade do alvo",
+                "correct": true
+              },
+              {
+                "text": "Apenas cor da marca",
+                "correct": false
+              },
+              {
+                "text": "Cardápio da cantina",
+                "correct": false
+              },
+              {
+                "text": "Estacionamento",
+                "correct": false
+              }
+            ],
+            "explanation": "Aquisições podem trazer passivos de dados.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Conformidade regulatória significa:",
+            "options": [
+              {
+                "text": "Atender leis e normas aplicáveis",
+                "correct": true
+              },
+              {
+                "text": "Ignorar legislação",
+                "correct": false
+              },
+              {
+                "text": "Copiar dados sem base legal",
+                "correct": false
+              },
+              {
+                "text": "Eliminar registros legais",
+                "correct": false
+              }
+            ],
+            "explanation": "Compliance reduz sanções e danos reputacionais.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Registro de tratamento de dados apoia:",
+            "options": [
+              {
+                "text": "Accountability e transparência",
+                "correct": true
+              },
+              {
+                "text": "Ocultação total",
+                "correct": false
+              },
+              {
+                "text": "Venda de dados",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de titulares",
+                "correct": false
+              }
+            ],
+            "explanation": "Documentação demonstra conformidade.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Pen test (teste de intrusão) simula:",
+            "options": [
+              {
+                "text": "Atacante para identificar falhas",
+                "correct": true
+              },
+              {
+                "text": "Backup diário",
+                "correct": false
+              },
+              {
+                "text": "Treinamento de RH",
+                "correct": false
+              },
+              {
+                "text": "Auditoria financeira",
+                "correct": false
+              }
+            ],
+            "explanation": "Testes éticos validam defesas.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Segregação de funções (SoD) evita:",
+            "options": [
+              {
+                "text": "Concentração de privilégios incompatíveis",
+                "correct": true
+              },
+              {
+                "text": "Trabalho em equipe",
+                "correct": false
+              },
+              {
+                "text": "Auditoria externa",
+                "correct": false
+              },
+              {
+                "text": "Documentação",
+                "correct": false
+              }
+            ],
+            "explanation": "Quem aprova não deve executar sem controle.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Indicadores de segurança (KPI/KRI) medem:",
+            "options": [
+              {
+                "text": "Eficácia do programa de SI",
+                "correct": true
+              },
+              {
+                "text": "Apenas lucro",
+                "correct": false
+              },
+              {
+                "text": "Número de funcionários",
+                "correct": false
+              },
+              {
+                "text": "Cor do logo",
+                "correct": false
+              }
+            ],
+            "explanation": "Métricas orientam decisões.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Gestão de vulnerabilidades inclui:",
+            "options": [
+              {
+                "text": "Identificar, priorizar e corrigir falhas",
+                "correct": true
+              },
+              {
+                "text": "Ignorar scans",
+                "correct": false
+              },
+              {
+                "text": "Publicar exploits",
+                "correct": false
+              },
+              {
+                "text": "Desativar patches",
+                "correct": false
+              }
+            ],
+            "explanation": "Ciclo contínuo reduz exposição.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Certificação ISO 27001 é obtida após:",
+            "options": [
+              {
+                "text": "Auditoria de certificação bem-sucedida",
+                "correct": true
+              },
+              {
+                "text": "Compra de software",
+                "correct": false
+              },
+              {
+                "text": "E-mail interno",
+                "correct": false
+              },
+              {
+                "text": "Reunião única",
+                "correct": false
+              }
+            ],
+            "explanation": "Organismo certificador valida conformidade.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Cultura de segurança madura apresenta:",
+            "options": [
+              {
+                "text": "Comportamento proativo e reporte de incidentes",
+                "correct": true
+              },
+              {
+                "text": "Medo de punição silenciosa",
+                "correct": false
+              },
+              {
+                "text": "Ocultação de erros",
+                "correct": false
+              },
+              {
+                "text": "Senhas compartilhadas",
+                "correct": false
+              }
+            ],
+            "explanation": "Confiança para reportar acelera resposta.",
+            "submateria": "Governança e conformidade",
+            "level": "medio"
+          }
+        ]
+      }
+    },
+    {
+      "code": "EXIN-PDPF",
+      "materia": "PDPF",
+      "title": "Privacy and Data Protection Foundation (PDPF)",
+      "description": "Conceitos essenciais de privacidade, LGPD e GDPR.",
+      "timeMinutes": 60,
+      "submaterias": {
+        "Fundamentos de privacidade": [
+          {
+            "type": "single",
+            "text": "Privacidade de dados relaciona-se principalmente a:",
+            "options": [
+              {
+                "text": "Direitos dos titulares sobre informações pessoais",
+                "correct": true
+              },
+              {
+                "text": "Velocidade de internet",
+                "correct": false
+              },
+              {
+                "text": "Hardware de servidores",
+                "correct": false
+              },
+              {
+                "text": "Marketing de produtos",
+                "correct": false
+              }
+            ],
+            "explanation": "Privacidade protege autodeterminação informativa.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Dado pessoal na LGPD é:",
+            "options": [
+              {
+                "text": "Informação relacionada a pessoa natural identificada ou identificável",
+                "correct": true
+              },
+              {
+                "text": "Apenas CPF impresso",
+                "correct": false
+              },
+              {
+                "text": "Somente dado anonimizado",
+                "correct": false
+              },
+              {
+                "text": "Qualquer dado agregado estatístico",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 5º LGPD define dado pessoal.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Dado anonimizado:",
+            "options": [
+              {
+                "text": "Não identifica titular, considerando meios técnicos",
+                "correct": true
+              },
+              {
+                "text": "Sempre é dado pessoal",
+                "correct": false
+              },
+              {
+                "text": "Exige consentimento renovado diário",
+                "correct": false
+              },
+              {
+                "text": "Proíbe qualquer uso",
+                "correct": false
+              }
+            ],
+            "explanation": "Anonimização irreversível sai do escopo.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Encarregado de Dados (DPO) atua como:",
+            "options": [
+              {
+                "text": "Canal de comunicação entre controlador, titulares e ANPD",
+                "correct": true
+              },
+              {
+                "text": "Substituto do CEO",
+                "correct": false
+              },
+              {
+                "text": "Auditor financeiro",
+                "correct": false
+              },
+              {
+                "text": "Gerente de vendas",
+                "correct": false
+              }
+            ],
+            "explanation": "DPO facilita conformidade e diálogo.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Princípio da finalidade exige:",
+            "options": [
+              {
+                "text": "Tratar dados para propósitos legítimos informados",
+                "correct": true
+              },
+              {
+                "text": "Usar dados para qualquer fim",
+                "correct": false
+              },
+              {
+                "text": "Alterar finalidade sem aviso",
+                "correct": false
+              },
+              {
+                "text": "Vender bases livremente",
+                "correct": false
+              }
+            ],
+            "explanation": "Finalidade limita e orienta tratamento.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Princípio da necessidade significa:",
+            "options": [
+              {
+                "text": "Coletar apenas o mínimo adequado",
+                "correct": true
+              },
+              {
+                "text": "Coletar todos os dados possíveis",
+                "correct": false
+              },
+              {
+                "text": "Armazenar indefinidamente",
+                "correct": false
+              },
+              {
+                "text": "Ignorar retenção",
+                "correct": false
+              }
+            ],
+            "explanation": "Proporcionalidade na coleta.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Consentimento válido deve ser:",
+            "options": [
+              {
+                "text": "Livre, informado e inequívoco",
+                "correct": true
+              },
+              {
+                "text": "Tácito e genérico",
+                "correct": false
+              },
+              {
+                "text": "Obtido por coação",
+                "correct": false
+              },
+              {
+                "text": "Silencioso por padrão",
+                "correct": false
+              }
+            ],
+            "explanation": "Consentimento é base legal específica.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Interesse legítimo exige:",
+            "options": [
+              {
+                "text": "Balanceamento com direitos do titular",
+                "correct": true
+              },
+              {
+                "text": "Ignorar titulares",
+                "correct": false
+              },
+              {
+                "text": "Proibir LIA",
+                "correct": false
+              },
+              {
+                "text": "Eliminar opt-out",
+                "correct": false
+              }
+            ],
+            "explanation": "Legitimate interest assessment é boa prática.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Privacy by design implica:",
+            "options": [
+              {
+                "text": "Integrar privacidade desde a concepção",
+                "correct": true
+              },
+              {
+                "text": "Adicionar privacidade só após lançamento",
+                "correct": false
+              },
+              {
+                "text": "Ignorar DPIA",
+                "correct": false
+              },
+              {
+                "text": "Coletar tudo primeiro",
+                "correct": false
+              }
+            ],
+            "explanation": "Proativo, não reativo.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Privacy by default exige:",
+            "options": [
+              {
+                "text": "Configurações mais protetivas por padrão",
+                "correct": true
+              },
+              {
+                "text": "Máxima coleta por padrão",
+                "correct": false
+              },
+              {
+                "text": "Compartilhamento amplo inicial",
+                "correct": false
+              },
+              {
+                "text": "Retenção infinita",
+                "correct": false
+              }
+            ],
+            "explanation": "Minimização desde o default.",
+            "submateria": "Fundamentos de privacidade",
+            "level": "medio"
+          }
+        ],
+        "LGPD — bases e direitos": [
+          {
+            "type": "single",
+            "text": "A LGPD (Lei 13.709/2018) regula:",
+            "options": [
+              {
+                "text": "Tratamento de dados pessoais",
+                "correct": true
+              },
+              {
+                "text": "Apenas dados públicos",
+                "correct": false
+              },
+              {
+                "text": "Somente setor financeiro",
+                "correct": false
+              },
+              {
+                "text": "Exclusivamente saúde",
+                "correct": false
+              }
+            ],
+            "explanation": "Marco legal brasileiro de proteção de dados.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Titular de dados tem direito de:",
+            "options": [
+              {
+                "text": "Acesso, correção, eliminação e portabilidade",
+                "correct": true
+              },
+              {
+                "text": "Ignorar políticas",
+                "correct": false
+              },
+              {
+                "text": "Acessar dados de terceiros livremente",
+                "correct": false
+              },
+              {
+                "text": "Eliminar logs de auditoria",
+                "correct": false
+              }
+            ],
+            "explanation": "Capítulo III LGPD lista direitos.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "ANPD é:",
+            "options": [
+              {
+                "text": "Autoridade Nacional de Proteção de Dados",
+                "correct": true
+              },
+              {
+                "text": "Agência de aviação",
+                "correct": false
+              },
+              {
+                "text": "Banco central",
+                "correct": false
+              },
+              {
+                "text": "Instituto de metrologia",
+                "correct": false
+              }
+            ],
+            "explanation": "Fiscaliza e orienta a LGPD no Brasil.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Controlador de dados:",
+            "options": [
+              {
+                "text": "Define finalidades e meios do tratamento",
+                "correct": true
+              },
+              {
+                "text": "Apenas armazena por ordem",
+                "correct": false
+              },
+              {
+                "text": "Nunca decide bases legais",
+                "correct": false
+              },
+              {
+                "text": "Sempre é o DPO",
+                "correct": false
+              }
+            ],
+            "explanation": "Controlador determina o 'porquê' e 'como'.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Operador de dados:",
+            "options": [
+              {
+                "text": "Trata em nome do controlador",
+                "correct": true
+              },
+              {
+                "text": "Sempre define finalidade",
+                "correct": false
+              },
+              {
+                "text": "Substitui ANPD",
+                "correct": false
+              },
+              {
+                "text": "Ignora contratos",
+                "correct": false
+              }
+            ],
+            "explanation": "Operador segue instruções do controlador.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Base legal 'execução de contrato' permite:",
+            "options": [
+              {
+                "text": "Tratar dados necessários ao contrato",
+                "correct": true
+              },
+              {
+                "text": "Qualquer marketing",
+                "correct": false
+              },
+              {
+                "text": "Venda de bases",
+                "correct": false
+              },
+              {
+                "text": "Dados de terceiros sem aviso",
+                "correct": false
+              }
+            ],
+            "explanation": "Dados indispensáveis à relação contratual.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Eliminação de dados deve ocorrer quando:",
+            "options": [
+              {
+                "text": "Não mais necessários ou titular solicita",
+                "correct": true
+              },
+              {
+                "text": "Sempre após 1 dia",
+                "correct": false
+              },
+              {
+                "text": "Nunca",
+                "correct": false
+              },
+              {
+                "text": "Apenas por marketing",
+                "correct": false
+              }
+            ],
+            "explanation": "Retenção limitada e direito ao apagamento.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Portabilidade permite ao titular:",
+            "options": [
+              {
+                "text": "Receber dados em formato estruturado",
+                "correct": true
+              },
+              {
+                "text": "Copiar dados de outros titulares",
+                "correct": false
+              },
+              {
+                "text": "Eliminar backups legais",
+                "correct": false
+              },
+              {
+                "text": "Ignorar segurança",
+                "correct": false
+              }
+            ],
+            "explanation": "Facilita mudança de fornecedor.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Oposição ao tratamento pode ser exercida quando:",
+            "options": [
+              {
+                "text": "Base legal não torna oposição inviável",
+                "correct": true
+              },
+              {
+                "text": "Sempre proibida",
+                "correct": false
+              },
+              {
+                "text": "Apenas por empresas públicas",
+                "correct": false
+              },
+              {
+                "text": "Somente via judicial",
+                "correct": false
+              }
+            ],
+            "explanation": "Titular pode se opor em certas bases.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Sanções da LGPD podem incluir:",
+            "options": [
+              {
+                "text": "Multa, publicização e bloqueio de dados",
+                "correct": true
+              },
+              {
+                "text": "Apenas advertência verbal",
+                "correct": false
+              },
+              {
+                "text": "Promoção de produtos",
+                "correct": false
+              },
+              {
+                "text": "Isenção total",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 52 prevê sanções administrativas.",
+            "submateria": "LGPD — bases e direitos",
+            "level": "medio"
+          }
+        ],
+        "GDPR — visão geral": [
+          {
+            "type": "single",
+            "text": "O GDPR aplica-se a:",
+            "options": [
+              {
+                "text": "Tratamento de dados de pessoas na UE",
+                "correct": true
+              },
+              {
+                "text": "Apenas empresas americanas",
+                "correct": false
+              },
+              {
+                "text": "Somente governo brasileiro",
+                "correct": false
+              },
+              {
+                "text": "Exclusivamente e-commerce BR",
+                "correct": false
+              }
+            ],
+            "explanation": "Regulamento europeu extra-territorial em casos definidos.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Multa máxima GDPR pode chegar a:",
+            "options": [
+              {
+                "text": "€20 milhões ou 4% do faturamento global",
+                "correct": true
+              },
+              {
+                "text": "€100 fixos",
+                "correct": false
+              },
+              {
+                "text": "Sem multas",
+                "correct": false
+              },
+              {
+                "text": "Apenas advertência",
+                "correct": false
+              }
+            ],
+            "explanation": "Sanções proporcionais e dissuasórias.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "DPO no GDPR é obrigatório quando:",
+            "options": [
+              {
+                "text": "Há monitoramento sistemático em larga escala ou dados sensíveis em larga escala",
+                "correct": true
+              },
+              {
+                "text": "Qualquer microempresa",
+                "correct": false
+              },
+              {
+                "text": "Nunca",
+                "correct": false
+              },
+              {
+                "text": "Apenas setor público BR",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 37 define obrigatoriedade.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Privacy Impact Assessment (PIA/DPIA) é exigida quando:",
+            "options": [
+              {
+                "text": "Tratamento provavelmente alto risco",
+                "correct": true
+              },
+              {
+                "text": "Sempre para e-mail",
+                "correct": false
+              },
+              {
+                "text": "Nunca",
+                "correct": false
+              },
+              {
+                "text": "Apenas marketing B2B",
+                "correct": false
+              }
+            ],
+            "explanation": "Avalia impacto antes do tratamento.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Transferência internacional GDPR exige:",
+            "options": [
+              {
+                "text": "Garantias adequadas ou mecanismos válidos",
+                "correct": true
+              },
+              {
+                "text": "Envio livre sem análise",
+                "correct": false
+              },
+              {
+                "text": "Ignorar titulares",
+                "correct": false
+              },
+              {
+                "text": "Apenas e-mail criptografado",
+                "correct": false
+              }
+            ],
+            "explanation": "Capítulo V regula transferências.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Cláusulas contratuais padrão (SCCs) servem para:",
+            "options": [
+              {
+                "text": "Legitimar transferências internacionais",
+                "correct": true
+              },
+              {
+                "text": "Eliminar DPO",
+                "correct": false
+              },
+              {
+                "text": "Publicar dados",
+                "correct": false
+              },
+              {
+                "text": "Ignorar LGPD",
+                "correct": false
+              }
+            ],
+            "explanation": "Mecanismo reconhecido pela UE.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Direito ao esquecimento relaciona-se a:",
+            "options": [
+              {
+                "text": "Apagamento de dados pessoais",
+                "correct": true
+              },
+              {
+                "text": "Esquecer senhas",
+                "correct": false
+              },
+              {
+                "text": "Eliminar empresas",
+                "correct": false
+              },
+              {
+                "text": "Apagar logs de segurança obrigatórios",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 17 GDPR — erasure.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Accountability no GDPR significa:",
+            "options": [
+              {
+                "text": "Demonstrar conformidade",
+                "correct": true
+              },
+              {
+                "text": "Ocultar tratamentos",
+                "correct": false
+              },
+              {
+                "text": "Eliminar registros",
+                "correct": false
+              },
+              {
+                "text": "Ignorar auditorias",
+                "correct": false
+              }
+            ],
+            "explanation": "Responsabilização proativa.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Representante na UE é necessário quando:",
+            "options": [
+              {
+                "text": "Controlador fora da UE oferece serviços na UE",
+                "correct": true
+              },
+              {
+                "text": "Empresa só atua no Brasil",
+                "correct": false
+              },
+              {
+                "text": "Sempre",
+                "correct": false
+              },
+              {
+                "text": "Nunca para startups",
+                "correct": false
+              }
+            ],
+            "explanation": "Ponto de contato para autoridades.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Notificação de violação GDPR em geral deve ocorrer em:",
+            "options": [
+              {
+                "text": "72 horas à autoridade",
+                "correct": true
+              },
+              {
+                "text": "1 ano",
+                "correct": false
+              },
+              {
+                "text": "Nunca",
+                "correct": false
+              },
+              {
+                "text": "Apenas se solicitado por cliente",
+                "correct": false
+              }
+            ],
+            "explanation": "Prazo salvo exceções documentadas.",
+            "submateria": "GDPR — visão geral",
+            "level": "medio"
+          }
+        ],
+        "Tratamento e segurança": [
+          {
+            "type": "single",
+            "text": "Minimização de dados exige:",
+            "options": [
+              {
+                "text": "Coletar só o necessário",
+                "correct": true
+              },
+              {
+                "text": "Coletar o máximo possível",
+                "correct": false
+              },
+              {
+                "text": "Retenção infinita",
+                "correct": false
+              },
+              {
+                "text": "Compartilhar com parceiros",
+                "correct": false
+              }
+            ],
+            "explanation": "Princípio GDPR e LGPD.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Pseudonimização:",
+            "options": [
+              {
+                "text": "Substitui identificadores por pseudônimos",
+                "correct": true
+              },
+              {
+                "text": "Anonimiza irreversivelmente sempre",
+                "correct": false
+              },
+              {
+                "text": "Elimina criptografia",
+                "correct": false
+              },
+              {
+                "text": "Publica dados abertos",
+                "correct": false
+              }
+            ],
+            "explanation": "Reduz risco mantendo utilidade.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Registro de operações de tratamento documenta:",
+            "options": [
+              {
+                "text": "Finalidades, categorias, bases e retenção",
+                "correct": true
+              },
+              {
+                "text": "Apenas senhas",
+                "correct": false
+              },
+              {
+                "text": "Salários",
+                "correct": false
+              },
+              {
+                "text": "Receitas",
+                "correct": false
+              }
+            ],
+            "explanation": "ROPA / registro de tratamentos.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Contrato com operador deve incluir:",
+            "options": [
+              {
+                "text": "Instruções, confidencialidade e segurança",
+                "correct": true
+              },
+              {
+                "text": "Marketing conjunto",
+                "correct": false
+              },
+              {
+                "text": "Venda de leads",
+                "correct": false
+              },
+              {
+                "text": "Acesso root compartilhado",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 39 LGPD e Art. 28 GDPR.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Incidente com dados pessoais envolve:",
+            "options": [
+              {
+                "text": "Acesso, vazamento ou perda não autorizada",
+                "correct": true
+              },
+              {
+                "text": "Backup bem-sucedido",
+                "correct": false
+              },
+              {
+                "text": "Patch aplicado",
+                "correct": false
+              },
+              {
+                "text": "Treinamento interno",
+                "correct": false
+              }
+            ],
+            "explanation": "Personal data breach.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Comunicação a titulares após incidente deve ser:",
+            "options": [
+              {
+                "text": "Clara, em prazo adequado, com medidas tomadas",
+                "correct": true
+              },
+              {
+                "text": "Oculta",
+                "correct": false
+              },
+              {
+                "text": "Apenas interna",
+                "correct": false
+              },
+              {
+                "text": "Opcional sempre",
+                "correct": false
+              }
+            ],
+            "explanation": "Transparência reduz danos.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Criptografia como medida de segurança ajuda:",
+            "options": [
+              {
+                "text": "Confidencialidade e integridade",
+                "correct": true
+              },
+              {
+                "text": "Marketing",
+                "correct": false
+              },
+              {
+                "text": "SEO",
+                "correct": false
+              },
+              {
+                "text": "Eliminar DPO",
+                "correct": false
+              }
+            ],
+            "explanation": "Controle técnico recomendado.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Retenção de dados deve seguir:",
+            "options": [
+              {
+                "text": "Política definida e prazos legais",
+                "correct": true
+              },
+              {
+                "text": "Armazenamento eterno",
+                "correct": false
+              },
+              {
+                "text": "Exclusão aleatória",
+                "correct": false
+              },
+              {
+                "text": "Ignorar contratos",
+                "correct": false
+              }
+            ],
+            "explanation": "Storage limitation.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Treinamento de privacidade para equipes reduz:",
+            "options": [
+              {
+                "text": "Erros e violações acidentais",
+                "correct": true
+              },
+              {
+                "text": "Necessidade de políticas",
+                "correct": false
+              },
+              {
+                "text": "Papel do DPO",
+                "correct": false
+              },
+              {
+                "text": "Logs",
+                "correct": false
+              }
+            ],
+            "explanation": "Humanos são vetor comum.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Privacy notice / aviso de privacidade informa:",
+            "options": [
+              {
+                "text": "Finalidades, bases, direitos e contato DPO",
+                "correct": true
+              },
+              {
+                "text": "Apenas slogan",
+                "correct": false
+              },
+              {
+                "text": "Senhas",
+                "correct": false
+              },
+              {
+                "text": "Código fonte",
+                "correct": false
+              }
+            ],
+            "explanation": "Transparência ao titular.",
+            "submateria": "Tratamento e segurança",
+            "level": "medio"
+          }
+        ],
+        "Papéis e responsabilidades": [
+          {
+            "type": "single",
+            "text": "Joint controllers (co-controladores) devem:",
+            "options": [
+              {
+                "text": "Definir responsabilidades por contrato",
+                "correct": true
+              },
+              {
+                "text": "Ignorar titulares",
+                "correct": false
+              },
+              {
+                "text": "Compartilhar sem base",
+                "correct": false
+              },
+              {
+                "text": "Eliminar registros",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 41 LGPD / Art. 26 GDPR.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Suboperador exige:",
+            "options": [
+              {
+                "text": "Autorização do controlador e garantias",
+                "correct": true
+              },
+              {
+                "text": "Livre contratação sem aviso",
+                "correct": false
+              },
+              {
+                "text": "Acesso total a dados",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de cláusulas",
+                "correct": false
+              }
+            ],
+            "explanation": "Cadeia de processamento.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "DPO deve reportar-se a:",
+            "options": [
+              {
+                "text": "Alta administração",
+                "correct": true
+              },
+              {
+                "text": "Apenas marketing",
+                "correct": false
+              },
+              {
+                "text": "Titulares diretamente",
+                "correct": false
+              },
+              {
+                "text": "Fornecedores",
+                "correct": false
+              }
+            ],
+            "explanation": "Independência funcional.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Conflito de interesses do DPO ocorre se:",
+            "options": [
+              {
+                "text": "DPO também aprova tratamentos que monitora",
+                "correct": true
+              },
+              {
+                "text": "DPO treina equipe",
+                "correct": false
+              },
+              {
+                "text": "DPO responde titulares",
+                "correct": false
+              },
+              {
+                "text": "DPO mantém ROPA",
+                "correct": false
+              }
+            ],
+            "explanation": "Independência é requisito.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Comitê de privacidade apoia:",
+            "options": [
+              {
+                "text": "Governança e decisões transversais",
+                "correct": true
+              },
+              {
+                "text": "Substituir ANPD",
+                "correct": false
+              },
+              {
+                "text": "Eliminar DPIA",
+                "correct": false
+              },
+              {
+                "text": "Venda de dados",
+                "correct": false
+              }
+            ],
+            "explanation": "Fórum multidisciplinar.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Data Protection Impact Assessment avalia:",
+            "options": [
+              {
+                "text": "Riscos à privacidade de titulares",
+                "correct": true
+              },
+              {
+                "text": "Apenas custos financeiros",
+                "correct": false
+              },
+              {
+                "text": "Cor do site",
+                "correct": false
+              },
+              {
+                "text": "Velocidade do app",
+                "correct": false
+              }
+            ],
+            "explanation": "DPIA/RIPD documenta mitigação.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Legitimate Interest Assessment documenta:",
+            "options": [
+              {
+                "text": "Teste de balanceamento",
+                "correct": true
+              },
+              {
+                "text": "Consentimento tácito",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de direitos",
+                "correct": false
+              },
+              {
+                "text": "Marketing spam",
+                "correct": false
+              }
+            ],
+            "explanation": "LIA suporta base de interesse legítimo.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Privacy governance inclui:",
+            "options": [
+              {
+                "text": "Políticas, papéis, métricas e cultura",
+                "correct": true
+              },
+              {
+                "text": "Apenas antivírus",
+                "correct": false
+              },
+              {
+                "text": "Somente firewall",
+                "correct": false
+              },
+              {
+                "text": "Exclusivamente jurídico",
+                "correct": false
+              }
+            ],
+            "explanation": "Programa holístico.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Due diligence de privacidade em terceiros verifica:",
+            "options": [
+              {
+                "text": "Conformidade e riscos do fornecedor",
+                "correct": true
+              },
+              {
+                "text": "Apenas preço",
+                "correct": false
+              },
+              {
+                "text": "Logo",
+                "correct": false
+              },
+              {
+                "text": "Estacionamento",
+                "correct": false
+              }
+            ],
+            "explanation": "Vendor risk management.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Accountability demonstra-se com:",
+            "options": [
+              {
+                "text": "Registros, políticas, treinamentos e auditorias",
+                "correct": true
+              },
+              {
+                "text": "Ocultação",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de logs legais",
+                "correct": false
+              },
+              {
+                "text": "Boca fechada",
+                "correct": false
+              }
+            ],
+            "explanation": "Evidências de conformidade.",
+            "submateria": "Papéis e responsabilidades",
+            "level": "medio"
+          }
+        ]
+      }
+    },
+    {
+      "code": "EXIN-PDPP",
+      "materia": "PDPP",
+      "title": "Privacy and Data Protection Practitioner (PDPP)",
+      "description": "Aplicação prática da LGPD/GDPR, casos reais, riscos e avaliações.",
+      "timeMinutes": 90,
+      "submaterias": {
+        "DPIA e gestão de riscos": [
+          {
+            "type": "single",
+            "text": "DPIA deve ser revisada quando:",
+            "options": [
+              {
+                "text": "Mudam finalidade, escopo ou tecnologia",
+                "correct": true
+              },
+              {
+                "text": "Nunca",
+                "correct": false
+              },
+              {
+                "text": "Apenas anualmente fixo",
+                "correct": false
+              },
+              {
+                "text": "Somente após multa",
+                "correct": false
+              }
+            ],
+            "explanation": "Reavaliação contínua de riscos.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "RIPD (Relatório de Impacto) na LGPD é exigido quando:",
+            "options": [
+              {
+                "text": "Tratamento pode gerar alto risco",
+                "correct": true
+              },
+              {
+                "text": "Sempre para cookies",
+                "correct": false
+              },
+              {
+                "text": "Nunca",
+                "correct": false
+              },
+              {
+                "text": "Apenas B2B",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 38 LGPD.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Consulta prévia à ANPD ocorre quando:",
+            "options": [
+              {
+                "text": "RIPD indica risco residual alto",
+                "correct": true
+              },
+              {
+                "text": "Qualquer cookie",
+                "correct": false
+              },
+              {
+                "text": "Backup diário",
+                "correct": false
+              },
+              {
+                "text": "Treinamento interno",
+                "correct": false
+              }
+            ],
+            "explanation": "Autoridade pode orientar mitigação.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Mitigação de risco inclui:",
+            "options": [
+              {
+                "text": "Controles técnicos e organizacionais",
+                "correct": true
+              },
+              {
+                "text": "Ignorar titulares",
+                "correct": false
+              },
+              {
+                "text": "Publicar dados",
+                "correct": false
+              },
+              {
+                "text": "Eliminar DPO",
+                "correct": false
+              }
+            ],
+            "explanation": "Reduzir probabilidade ou impacto.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Risco residual é:",
+            "options": [
+              {
+                "text": "Risco que permanece após controles",
+                "correct": true
+              },
+              {
+                "text": "Risco zero garantido",
+                "correct": false
+              },
+              {
+                "text": "Apenas risco financeiro",
+                "correct": false
+              },
+              {
+                "text": "Risco ignorado",
+                "correct": false
+              }
+            ],
+            "explanation": "Aceitação documentada pode ser necessária.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Matriz de risco combina:",
+            "options": [
+              {
+                "text": "Probabilidade e impacto",
+                "correct": true
+              },
+              {
+                "text": "Cor e tamanho",
+                "correct": false
+              },
+              {
+                "text": "Marketing e vendas",
+                "correct": false
+              },
+              {
+                "text": "Hardware e software apenas",
+                "correct": false
+              }
+            ],
+            "explanation": "Priorização de tratamentos.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Tratamento de dados sensíveis exige:",
+            "options": [
+              {
+                "text": "Cuidado reforçado e bases específicas",
+                "correct": true
+              },
+              {
+                "text": "Mesmas regras de dados comuns sempre",
+                "correct": false
+              },
+              {
+                "text": "Proibição absoluta",
+                "correct": false
+              },
+              {
+                "text": "Ignorar consentimento",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 11 LGPD / Art. 9 GDPR.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Dados de crianças requerem:",
+            "options": [
+              {
+                "text": "Consentimento do responsável e melhor interesse",
+                "correct": true
+              },
+              {
+                "text": "Coleta livre",
+                "correct": false
+              },
+              {
+                "text": "Venda permitida",
+                "correct": false
+              },
+              {
+                "text": "Ignorar idade",
+                "correct": false
+              }
+            ],
+            "explanation": "Proteção reforçada.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Decisões automatizadas com efeito legal exigem:",
+            "options": [
+              {
+                "text": "Direito de revisão humana e informação",
+                "correct": true
+              },
+              {
+                "text": "Proibição total sempre",
+                "correct": false
+              },
+              {
+                "text": "Ocultar lógica",
+                "correct": false
+              },
+              {
+                "text": "Eliminar oposição",
+                "correct": false
+              }
+            ],
+            "explanation": "Transparência algorítmica.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Privacy risk register centraliza:",
+            "options": [
+              {
+                "text": "Riscos, owners e planos de ação",
+                "correct": true
+              },
+              {
+                "text": "Apenas senhas",
+                "correct": false
+              },
+              {
+                "text": "Receitas",
+                "correct": false
+              },
+              {
+                "text": "Logos",
+                "correct": false
+              }
+            ],
+            "explanation": "Governança operacional.",
+            "submateria": "DPIA e gestão de riscos",
+            "level": "medio"
+          }
+        ],
+        "Operação do DPO": [
+          {
+            "type": "single",
+            "text": "DPO deve facilitar:",
+            "options": [
+              {
+                "text": "Exercício de direitos dos titulares",
+                "correct": true
+              },
+              {
+                "text": "Ocultação de tratamentos",
+                "correct": false
+              },
+              {
+                "text": "Venda de bases",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de registros legais",
+                "correct": false
+              }
+            ],
+            "explanation": "Canal de confiança.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Registro de tratamentos (ROPA) deve ser:",
+            "options": [
+              {
+                "text": "Atualizado e refletir realidade",
+                "correct": true
+              },
+              {
+                "text": "Estático por 10 anos",
+                "correct": false
+              },
+              {
+                "text": "Secreto para ANPD",
+                "correct": false
+              },
+              {
+                "text": "Opcional",
+                "correct": false
+              }
+            ],
+            "explanation": "Accountability.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Resposta a solicitação de titular deve ser:",
+            "options": [
+              {
+                "text": "Dentro de prazos legais",
+                "correct": true
+              },
+              {
+                "text": "Ignorada",
+                "correct": false
+              },
+              {
+                "text": "Apenas verbal",
+                "correct": false
+              },
+              {
+                "text": "Sem identificação",
+                "correct": false
+              }
+            ],
+            "explanation": "LGPD: 15 dias prorrogáveis; GDPR: 1 mês.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "DPO não é responsável por:",
+            "options": [
+              {
+                "text": "Decisões finais de negócio do controlador",
+                "correct": true
+              },
+              {
+                "text": "Orientar conformidade",
+                "correct": false
+              },
+              {
+                "text": "Treinar equipes",
+                "correct": false
+              },
+              {
+                "text": "Interface com ANPD",
+                "correct": false
+              }
+            ],
+            "explanation": "DPO assessora; controlador responde.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Conflito entre marketing e privacidade resolve-se com:",
+            "options": [
+              {
+                "text": "Base legal, LIA e opt-in quando aplicável",
+                "correct": true
+              },
+              {
+                "text": "Coleta máxima",
+                "correct": false
+              },
+              {
+                "text": "Ignorar opt-out",
+                "correct": false
+              },
+              {
+                "text": "Compra de listas",
+                "correct": false
+              }
+            ],
+            "explanation": "Balanceamento documentado.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Auditoria de privacidade verifica:",
+            "options": [
+              {
+                "text": "Conformidade prática vs políticas",
+                "correct": true
+              },
+              {
+                "text": "Apenas cor do site",
+                "correct": false
+              },
+              {
+                "text": "Lucro trimestral",
+                "correct": false
+              },
+              {
+                "text": "Número de funcionários",
+                "correct": false
+              }
+            ],
+            "explanation": "Gap analysis.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Plano de resposta a incidentes inclui:",
+            "options": [
+              {
+                "text": "Detecção, contenção, notificação e lições",
+                "correct": true
+              },
+              {
+                "text": "Ocultação",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de logs",
+                "correct": false
+              },
+              {
+                "text": "Silêncio total",
+                "correct": false
+              }
+            ],
+            "explanation": "Playbook testado.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Treinamento role-based para privacidade significa:",
+            "options": [
+              {
+                "text": "Conteúdo adaptado à função",
+                "correct": true
+              },
+              {
+                "text": "Mesmo treino para todos sem foco",
+                "correct": false
+              },
+              {
+                "text": "Apenas e-mail anual",
+                "correct": false
+              },
+              {
+                "text": "Nenhum registro",
+                "correct": false
+              }
+            ],
+            "explanation": "RH vs TI vs marketing.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "KPIs de privacidade podem incluir:",
+            "options": [
+              {
+                "text": "Prazo médio DSAR, incidentes, treinamentos",
+                "correct": true
+              },
+              {
+                "text": "Apenas faturamento",
+                "correct": false
+              },
+              {
+                "text": "Cor da UI",
+                "correct": false
+              },
+              {
+                "text": "Número de likes",
+                "correct": false
+              }
+            ],
+            "explanation": "Medir programa.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Relatório à direção sobre privacidade deve:",
+            "options": [
+              {
+                "text": "Resumir riscos, incidentes e investimentos",
+                "correct": true
+              },
+              {
+                "text": "Ocultar problemas",
+                "correct": false
+              },
+              {
+                "text": "Substituir DPO",
+                "correct": false
+              },
+              {
+                "text": "Eliminar DPIA",
+                "correct": false
+              }
+            ],
+            "explanation": "Governança executiva.",
+            "submateria": "Operação do DPO",
+            "level": "medio"
+          }
+        ],
+        "Casos práticos LGPD/GDPR": [
+          {
+            "type": "single",
+            "text": "Vazamento por e-mail errado exige:",
+            "options": [
+              {
+                "text": "Avaliar notificação ANPD/titulares",
+                "correct": true
+              },
+              {
+                "text": "Ignorar",
+                "correct": false
+              },
+              {
+                "text": "Publicar lista",
+                "correct": false
+              },
+              {
+                "text": "Eliminar backups legais",
+                "correct": false
+              }
+            ],
+            "explanation": "Incident response.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Marketing sem opt-in válido viola:",
+            "options": [
+              {
+                "text": "Princípios de finalidade e consentimento",
+                "correct": true
+              },
+              {
+                "text": "Apenas ISO 27001",
+                "correct": false
+              },
+              {
+                "text": "Normas contábeis",
+                "correct": false
+              },
+              {
+                "text": "Direito penal sempre",
+                "correct": false
+              }
+            ],
+            "explanation": "Comunicações precisam de base legal.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Funcionário acessa dados sem necessidade:",
+            "options": [
+              {
+                "text": "Incidente de acesso não autorizado",
+                "correct": true
+              },
+              {
+                "text": "Prática normal",
+                "correct": false
+              },
+              {
+                "text": "Direito do titular",
+                "correct": false
+              },
+              {
+                "text": "Backup",
+                "correct": false
+              }
+            ],
+            "explanation": "Need-to-know e logs.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Transferência para EUA pós-Schrems II exige:",
+            "options": [
+              {
+                "text": "Avaliar SCCs e medidas suplementares",
+                "correct": true
+              },
+              {
+                "text": "Transferência livre",
+                "correct": false
+              },
+              {
+                "text": "Ignorar GDPR",
+                "correct": false
+              },
+              {
+                "text": "Apenas criptografia sem análise",
+                "correct": false
+              }
+            ],
+            "explanation": "Jurisprudência europeia.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "App coleta localização contínua deve:",
+            "options": [
+              {
+                "text": "Informar, base legal clara e minimização",
+                "correct": true
+              },
+              {
+                "text": "Ocultar na política",
+                "correct": false
+              },
+              {
+                "text": "Retenção infinita",
+                "correct": false
+              },
+              {
+                "text": "Vender dados",
+                "correct": false
+              }
+            ],
+            "explanation": "Dados sensíveis de comportamento.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Eliminação solicitada com obrigação legal de retenção:",
+            "options": [
+              {
+                "text": "Retenção limitada ao exigido por lei",
+                "correct": true
+              },
+              {
+                "text": "Apagar tudo imediatamente",
+                "correct": false
+              },
+              {
+                "text": "Ignorar titular",
+                "correct": false
+              },
+              {
+                "text": "Publicar dados",
+                "correct": false
+              }
+            ],
+            "explanation": "Conflito de obrigações.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Cookies não essenciais requerem:",
+            "options": [
+              {
+                "text": "Consentimento prévio informado",
+                "correct": true
+              },
+              {
+                "text": "Carregamento automático",
+                "correct": false
+              },
+              {
+                "text": "Ocultar banner",
+                "correct": false
+              },
+              {
+                "text": "Retenção eterna",
+                "correct": false
+              }
+            ],
+            "explanation": "ePrivacy / boas práticas GDPR.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Fornecedor subcontrata sem aviso:",
+            "options": [
+              {
+                "text": "Violação contratual e risco",
+                "correct": true
+              },
+              {
+                "text": "Prática aceita",
+                "correct": false
+              },
+              {
+                "text": "Benefício automático",
+                "correct": false
+              },
+              {
+                "text": "Elimina DPO",
+                "correct": false
+              }
+            ],
+            "explanation": "Cadeia de responsabilidade.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Biometria para ponto exige:",
+            "options": [
+              {
+                "text": "Base legal, segurança reforçada e alternativa",
+                "correct": true
+              },
+              {
+                "text": "Coleta livre",
+                "correct": false
+              },
+              {
+                "text": "Compartilhamento público",
+                "correct": false
+              },
+              {
+                "text": "Retenção infinita",
+                "correct": false
+              }
+            ],
+            "explanation": "Dado sensível.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Pesquisa com dados pseudonimizados ainda requer:",
+            "options": [
+              {
+                "text": "Avaliar riscos e bases legais",
+                "correct": true
+              },
+              {
+                "text": "Nenhuma regra",
+                "correct": false
+              },
+              {
+                "text": "Publicação aberta",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de ética",
+                "correct": false
+              }
+            ],
+            "explanation": "Pseudonimização ≠ anonimização.",
+            "submateria": "Casos práticos LGPD/GDPR",
+            "level": "medio"
+          }
+        ],
+        "Contratos e terceiros": [
+          {
+            "type": "single",
+            "text": "DPA (Data Processing Agreement) deve definir:",
+            "options": [
+              {
+                "text": "Objeto, duração, instruções e subcontratação",
+                "correct": true
+              },
+              {
+                "text": "Apenas preço",
+                "correct": false
+              },
+              {
+                "text": "Marketing",
+                "correct": false
+              },
+              {
+                "text": "Logo",
+                "correct": false
+              }
+            ],
+            "explanation": "Art. 39 LGPD.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Auditoria de fornecedor cloud inclui:",
+            "options": [
+              {
+                "text": "Certificações, localização e subprocessadores",
+                "correct": true
+              },
+              {
+                "text": "Apenas uptime",
+                "correct": false
+              },
+              {
+                "text": "Cor do dashboard",
+                "correct": false
+              },
+              {
+                "text": "Número de VMs",
+                "correct": false
+              }
+            ],
+            "explanation": "Due diligence técnica.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Suboperador só pode ser contratado com:",
+            "options": [
+              {
+                "text": "Autorização e garantias equivalentes",
+                "correct": true
+              },
+              {
+                "text": "Livre escolha sem aviso",
+                "correct": false
+              },
+              {
+                "text": "Acesso root ao controlador",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de logs",
+                "correct": false
+              }
+            ],
+            "explanation": "Responsabilidade em cadeia.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Exit plan de fornecedor prevê:",
+            "options": [
+              {
+                "text": "Devolução ou eliminação segura de dados",
+                "correct": true
+              },
+              {
+                "text": "Retenção eterna pelo vendor",
+                "correct": false
+              },
+              {
+                "text": "Venda de base",
+                "correct": false
+              },
+              {
+                "text": "Ignorar titulares",
+                "correct": false
+              }
+            ],
+            "explanation": "Continuidade e portabilidade.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Cláusula de confidencialidade protege:",
+            "options": [
+              {
+                "text": "Dados pessoais e segredos de negócio",
+                "correct": true
+              },
+              {
+                "text": "Apenas marketing",
+                "correct": false
+              },
+              {
+                "text": "Opiniões públicas",
+                "correct": false
+              },
+              {
+                "text": "Notícias",
+                "correct": false
+              }
+            ],
+            "explanation": "NDA reforça contrato.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Transferência internacional via BCRs exige:",
+            "options": [
+              {
+                "text": "Regras vinculantes aprovadas",
+                "correct": true
+              },
+              {
+                "text": "E-mail informal",
+                "correct": false
+              },
+              {
+                "text": "Ignorar ANPD",
+                "correct": false
+              },
+              {
+                "text": "Apenas HTTPS",
+                "correct": false
+              }
+            ],
+            "explanation": "Binding Corporate Rules.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "SLA de privacidade pode incluir:",
+            "options": [
+              {
+                "text": "Prazos DSAR, notificação de incidentes",
+                "correct": true
+              },
+              {
+                "text": "Apenas latência",
+                "correct": false
+              },
+              {
+                "text": "Cor do app",
+                "correct": false
+              },
+              {
+                "text": "Número de likes",
+                "correct": false
+              }
+            ],
+            "explanation": "Métricas contratuais.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Due diligence reduz:",
+            "options": [
+              {
+                "text": "Riscos de terceiros não conformes",
+                "correct": true
+              },
+              {
+                "text": "Necessidade de contratos",
+                "correct": false
+              },
+              {
+                "text": "Papel do DPO",
+                "correct": false
+              },
+              {
+                "text": "Treinamentos",
+                "correct": false
+              }
+            ],
+            "explanation": "Vendor management.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Indenização em contrato de processamento:",
+            "options": [
+              {
+                "text": "Aloca riscos financeiros",
+                "correct": true
+              },
+              {
+                "text": "Elimina LGPD",
+                "correct": false
+              },
+              {
+                "text": "Substitui DPIA",
+                "correct": false
+              },
+              {
+                "text": "Remove DPO",
+                "correct": false
+              }
+            ],
+            "explanation": "Cláusula de liability.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Revisão anual de contratos verifica:",
+            "options": [
+              {
+                "text": "Mudanças regulatórias e operacionais",
+                "correct": true
+              },
+              {
+                "text": "Apenas inflação",
+                "correct": false
+              },
+              {
+                "text": "Logo",
+                "correct": false
+              },
+              {
+                "text": "Estacionamento",
+                "correct": false
+              }
+            ],
+            "explanation": "Contratos vivos.",
+            "submateria": "Contratos e terceiros",
+            "level": "medio"
+          }
+        ],
+        "Monitoramento e melhoria": [
+          {
+            "type": "single",
+            "text": "Programa de privacidade maduro inclui:",
+            "options": [
+              {
+                "text": "Políticas, DPIA, treinamento, auditoria e métricas",
+                "correct": true
+              },
+              {
+                "text": "Apenas banner de cookies",
+                "correct": false
+              },
+              {
+                "text": "Somente antivírus",
+                "correct": false
+              },
+              {
+                "text": "Nenhum registro",
+                "correct": false
+              }
+            ],
+            "explanation": "Ciclo PDCA de privacidade.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Revisão pós-incidente documenta:",
+            "options": [
+              {
+                "text": "Causa raiz e ações preventivas",
+                "correct": true
+              },
+              {
+                "text": "Culpa individual apenas",
+                "correct": false
+              },
+              {
+                "text": "Ocultação",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de logs",
+                "correct": false
+              }
+            ],
+            "explanation": "Lessons learned.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Privacy maturity model avalia:",
+            "options": [
+              {
+                "text": "Nível de capacidade organizacional",
+                "correct": true
+              },
+              {
+                "text": "Apenas faturamento",
+                "correct": false
+              },
+              {
+                "text": "Número de servidores",
+                "correct": false
+              },
+              {
+                "text": "Cor do site",
+                "correct": false
+              }
+            ],
+            "explanation": "Roadmap de evolução.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Integração LGPD + ISO 27001 beneficia:",
+            "options": [
+              {
+                "text": "Segurança e privacidade alinhadas",
+                "correct": true
+              },
+              {
+                "text": "Elimina DPO",
+                "correct": false
+              },
+              {
+                "text": "Remove DPIA",
+                "correct": false
+              },
+              {
+                "text": "Ignora titulares",
+                "correct": false
+              }
+            ],
+            "explanation": "Controles complementares.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Automated compliance tools auxiliam:",
+            "options": [
+              {
+                "text": "ROPA, DSAR e monitoramento",
+                "correct": true
+              },
+              {
+                "text": "Substituir DPO totalmente",
+                "correct": false
+              },
+              {
+                "text": "Eliminar políticas",
+                "correct": false
+              },
+              {
+                "text": "Vender dados",
+                "correct": false
+              }
+            ],
+            "explanation": "GRC tech.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Comunicação transparente após incidente inclui:",
+            "options": [
+              {
+                "text": "Natureza, dados afetados e medidas",
+                "correct": true
+              },
+              {
+                "text": "Ocultação total",
+                "correct": false
+              },
+              {
+                "text": "Apenas interno",
+                "correct": false
+              },
+              {
+                "text": "Dados de terceiros",
+                "correct": false
+              }
+            ],
+            "explanation": "Confiança do titular.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Benchmarking de privacidade compara:",
+            "options": [
+              {
+                "text": "Práticas com mercado e reguladores",
+                "correct": true
+              },
+              {
+                "text": "Apenas concorrentes ilegais",
+                "correct": false
+              },
+              {
+                "text": "Preços",
+                "correct": false
+              },
+              {
+                "text": "Logos",
+                "correct": false
+              }
+            ],
+            "explanation": "Melhoria contínua.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Certificação EXIN PDPP valida:",
+            "options": [
+              {
+                "text": "Competência prática do profissional",
+                "correct": true
+              },
+              {
+                "text": "ISO 27001 da empresa",
+                "correct": false
+              },
+              {
+                "text": "LGPD automática",
+                "correct": false
+              },
+              {
+                "text": "Eliminação de riscos",
+                "correct": false
+              }
+            ],
+            "explanation": "Certificação individual.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Trilha DPO EXIN completa reúne:",
+            "options": [
+              {
+                "text": "ISFS + PDPF + PDPP",
+                "correct": true
+              },
+              {
+                "text": "Apenas ISFS",
+                "correct": false
+              },
+              {
+                "text": "Somente GDPR",
+                "correct": false
+              },
+              {
+                "text": "Nenhum exame",
+                "correct": false
+              }
+            ],
+            "explanation": "Três exames independentes.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          },
+          {
+            "type": "single",
+            "text": "Encarregado deve equilibrar:",
+            "options": [
+              {
+                "text": "Negócio, compliance e direitos dos titulares",
+                "correct": true
+              },
+              {
+                "text": "Apenas marketing",
+                "correct": false
+              },
+              {
+                "text": "Somente TI",
+                "correct": false
+              },
+              {
+                "text": "Ignorar ANPD",
+                "correct": false
+              }
+            ],
+            "explanation": "Papel estratégico do DPO.",
+            "submateria": "Monitoramento e melhoria",
+            "level": "medio"
+          }
+        ]
+      }
+    }
+  ]
+}

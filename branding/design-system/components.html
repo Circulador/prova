@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0B0E14">
+  <title>Velora — Design System</title>
+  <link rel="icon" href="../favicon/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../theme/theme.css">
+  <link rel="stylesheet" href="components.css">
+  <style>
+    .ds-page { max-width: var(--container-lg); margin: 0 auto; padding: var(--space-8) var(--space-4) var(--space-16); }
+    .ds-hero { text-align: center; margin-bottom: var(--space-12); }
+    .ds-hero img { height: 72px; margin-bottom: var(--space-4); }
+    .ds-hero h1 { font-size: var(--text-3xl); margin: 0 0 var(--space-2); }
+    .ds-hero p { color: var(--text-secondary); max-width: 520px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <nav class="v-navbar">
+    <img src="../logo/velora-symbol.svg" alt="" width="32" height="32">
+    <strong>Velora</strong>
+    <span style="flex:1"></span>
+    <a class="v-nav-item" href="../design-system/design-system.md">Docs</a>
+  </nav>
+
+  <main class="ds-page">
+    <header class="ds-hero animate-fade-in">
+      <img src="../logo/logo-horizontal-color.svg" alt="Velora">
+      <h1>Design System</h1>
+      <p>Componentes reutilizáveis para Android, iOS, PWA, Web e Desktop.</p>
+    </header>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Botões</h2>
+      <div class="ds-row">
+        <button class="v-btn v-btn-primary">Primary</button>
+        <button class="v-btn v-btn-secondary">Secondary</button>
+        <button class="v-btn v-btn-ghost">Ghost</button>
+        <button class="v-btn v-btn-danger">Danger</button>
+        <button class="v-btn v-btn-primary v-btn-sm">Small</button>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Cards & Alerts</h2>
+      <div class="v-card v-card-glass" style="margin-bottom:var(--space-4)">
+        <h3 style="margin:0 0 var(--space-2)">Card glass</h3>
+        <p style="margin:0;color:var(--text-secondary)">Superfície elevada com blur e borda gradiente sutil.</p>
+      </div>
+      <div class="v-alert v-alert-info">Informação — sessão de estudo iniciada.</div>
+      <div class="v-alert v-alert-success" style="margin-top:var(--space-2)">Sucesso — simulado concluído com 82%.</div>
+    </section>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Inputs</h2>
+      <div class="v-field" style="max-width:360px">
+        <label class="v-label">Nome</label>
+        <input class="v-input" placeholder="Seu nome">
+      </div>
+      <div class="v-field" style="max-width:360px">
+        <label class="v-label">Matéria</label>
+        <select class="v-select"><option>Matemática</option><option>Português</option></select>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Badges & Tags</h2>
+      <div class="ds-row">
+        <span class="v-badge v-badge-brand">Nv 5</span>
+        <span class="v-badge v-badge-success">82%</span>
+        <span class="v-badge v-badge-warn">Revisar</span>
+        <span class="v-tag">FSRS</span>
+        <span class="v-tag">EM2</span>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Flashcard & Questão</h2>
+      <div class="v-flashcard v-card" style="max-width:480px;margin-bottom:var(--space-4)">
+        <div>Frente: O que é fotossíntese?</div>
+        <div class="v-flashcard-back">Processo de conversão de luz em energia química.</div>
+      </div>
+      <div class="v-question v-card" style="max-width:560px">
+        <div class="v-question-text">Qual alternativa representa um número primo?</div>
+        <div class="v-option"><span>A)</span> 15</div>
+        <div class="v-option correct"><span>B)</span> 17</div>
+        <div class="v-option"><span>C)</span> 21</div>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Dashboard & Gamificação</h2>
+      <div class="v-stat-grid" style="margin-bottom:var(--space-4)">
+        <div class="v-stat"><div class="v-stat-value">24</div><div class="v-stat-label">Simulados</div></div>
+        <div class="v-stat"><div class="v-stat-value text-gradient">78%</div><div class="v-stat-label">Média</div></div>
+        <div class="v-stat"><div class="v-stat-value">1.2k</div><div class="v-stat-label">XP</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-4)">
+        <span class="v-level">5</span>
+        <div style="flex:1"><div class="v-xp-bar"><span style="width:68%"></span></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3);max-width:400px">
+        <div class="v-achievement"><div class="v-achievement-icon">★</div><div style="font-size:var(--text-xs)">100 acertos</div></div>
+        <div class="v-achievement"><div class="v-achievement-icon">⚡</div><div style="font-size:var(--text-xs)">7 dias</div></div>
+        <div class="v-achievement"><div class="v-achievement-icon">🏆</div><div style="font-size:var(--text-xs)">Top 10</div></div>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Tabela (Ranking)</h2>
+      <table class="v-table v-card" style="padding:0;overflow:hidden">
+        <thead><tr><th>#</th><th>Aluno</th><th>XP</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Ana</td><td>2.450</td></tr>
+          <tr><td>2</td><td>Bruno</td><td>2.120</td></tr>
+          <tr><td>3</td><td>Você</td><td>1.890</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Perfil</h2>
+      <div class="v-card" style="max-width:400px">
+        <div class="v-profile-header">
+          <div class="v-avatar">RC</div>
+          <div><strong>Rodolfo</strong><br><span style="color:var(--text-secondary);font-size:var(--text-sm)">Nível 5 · 1.240 XP</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2 class="ds-title">Modal (preview)</h2>
+      <div class="v-modal" style="position:relative;box-shadow:var(--shadow-md)">
+        <div class="v-modal-header">Configurar simulado</div>
+        <div class="v-modal-body">Escolha quantidade, timer e modo treino antes de iniciar.</div>
+        <div class="v-modal-footer">
+          <button class="v-btn v-btn-ghost">Cancelar</button>
+          <button class="v-btn v-btn-primary">Iniciar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
