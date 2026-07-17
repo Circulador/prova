@@ -1,14 +1,14 @@
 'use strict';
 
 /** Velora PWA — shell v2 (2026). Bump SHELL_CACHE ao alterar precache. */
-const SHELL_CACHE = 'velora-shell-v6';
-const RUNTIME_CACHE = 'velora-runtime-v6';
+const SHELL_CACHE = 'velora-shell-v7';
+const RUNTIME_CACHE = 'velora-runtime-v7';
 
 const PRECACHE = [
   './',
   './index.html',
   './404.html',
-  './data/dpo-global-bank.js',
+  './data/knowledge-os-bank.js',
   './forge/knowledge-forge.js',
   './manifest.webmanifest',
   './branding/favicon/favicon.svg',

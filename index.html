@@ -924,6 +924,15 @@ body.player-paused #p-pause.active{background:var(--warn-soft);border-color:var(
 .lib-forge-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;margin-bottom:12px;border-radius:var(--radius-md);background:var(--accent-soft);border:1px solid var(--border)}
 .lib-forge-banner p{margin:0;font-size:12px;color:var(--text-1);line-height:1.45;flex:1;min-width:140px}
 .q-fsrs-badge{font-size:10px;font-weight:600;color:var(--accent)}
+.inc-strip{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 12px;margin-bottom:12px;border-radius:var(--radius-md);background:var(--bg-2);border:1px solid var(--border-soft);font-size:12px;color:var(--text-1)}
+.inc-strip-meta{color:var(--text-2);flex:1;min-width:160px}
+.inc-progress-bar{height:6px;background:var(--bg-3);border-radius:4px;overflow:hidden;min-width:80px;flex:1;max-width:140px}
+.inc-progress-bar>span{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .3s ease}
+.inc-phase-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.player-incremental-badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:12px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--border);white-space:nowrap}
+.ec-inc-panel{display:flex;flex-direction:column;gap:10px;padding:10px 0}
+.ec-inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.ec-inc-grid{grid-template-columns:1fr}}
 @media(max-width:640px){.fc-stats{grid-template-columns:repeat(2,1fr)}}
 .progress-mini{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px}
 .progress-mini .xp-bar{flex:1;height:6px}
@@ -1213,7 +1222,7 @@ body[data-network="offline"] .network-pill.is-offline::before{
 <div id="loading-overlay"><div class="spinner"></div><div id="loading-msg" style="font-size:13px;color:var(--text-1)">Carregando…</div></div>
 <div id="modal-region"></div>
 
-<script src="data/dpo-global-bank.js"></script>
+<script src="data/knowledge-os-bank.js"></script>
 <script src="forge/knowledge-forge.js"></script>
 <script>
 'use strict';
@@ -1350,7 +1359,14 @@ const I18n = {
       'fc.filterQty':'Quantidade','fc.filterPreview':'{n} card(s) na sessão','fc.filterClear':'Limpar filtros','fc.filterSelectAll':'Marcar grupo',
       'fc.createManual':'Criar manualmente','fc.createAi':'Gerar com IA','fc.newCardTitle':'Nova questão → flashcard',
       'fc.newCardSave':'Salvar no baralho','fc.forgeBanner':'Gerar vários flashcards de uma vez com a Forja (comando → JSON → banco).',
-      'lib.forgeGenerate':'Gerar com IA','lib.forgeHintQuestions':'Importar em lote ou gerar questões, flashcards e simulados na Forja.','lib.forgeHintTracks':'Gerar trilhas, simulados ou pacotes de estudo com IA.'
+      'lib.forgeGenerate':'Gerar com IA','lib.forgeHintQuestions':'Importar em lote ou gerar questões, flashcards e simulados na Forja.','lib.forgeHintTracks':'Gerar trilhas, simulados ou pacotes de estudo com IA.',
+      'session.progressiveMode':'Progressivo','session.progressiveHint':'Blocos cumulativos com 4 fases — ordem fixa, embaralhar perguntas, embaralhar tudo e validação.',
+      'inc.title':'Aprendizagem progressiva','inc.blockSize':'Tamanho do bloco','inc.passTarget':'Meta de acertos (%)','inc.useOfficialPass':'Usar percentual oficial da certificação',
+      'inc.continue':'Continuar progressivo','inc.start':'Iniciar progressivo','inc.phase':'Fase {n}','inc.block':'Bloco {cur}/{tot}',
+      'inc.phase1':'Ordem fixa','inc.phase2':'Perguntas embaralhadas','inc.phase3':'Perguntas e respostas embaralhadas','inc.phase4':'Validação',
+      'inc.stripHint':'Mesma trilha em Trilhas, Questões e Flashcards — estudo conectado por certificação.','inc.fcBlock':'Cards do bloco atual',
+      'inc.passedPhase':'Fase concluída!','inc.failedValidation':'Meta não atingida ({pct}% · mínimo {min}%)','inc.blockUnlocked':'Bloco liberado — revisão cumulativa até {n} questões',
+      'inc.complete':'Trilha concluída no modo progressivo!','inc.noOfficialPass':'Esta certificação não publica percentual linear — use sua meta personalizada.'
     },
     'en-US': {
       'nav.home':'Home','nav.library':'Library','nav.progress':'Progress','nav.settings':'Settings','nav.help':'Help',
@@ -1410,7 +1426,14 @@ const I18n = {
       'fc.filterQty':'Quantity','fc.filterPreview':'{n} card(s) in session','fc.filterClear':'Clear filters','fc.filterSelectAll':'Select group',
       'fc.createManual':'Create manually','fc.createAi':'Generate with AI','fc.newCardTitle':'New question → flashcard',
       'fc.newCardSave':'Save to deck','fc.forgeBanner':'Generate many flashcards at once with Forge (command → JSON → database).',
-      'lib.forgeGenerate':'Generate with AI','lib.forgeHintQuestions':'Bulk import or generate questions, flashcards and exams in Forge.','lib.forgeHintTracks':'Generate tracks, practice exams or study packs with AI.'
+      'lib.forgeGenerate':'Generate with AI','lib.forgeHintQuestions':'Bulk import or generate questions, flashcards and exams in Forge.','lib.forgeHintTracks':'Generate tracks, practice exams or study packs with AI.',
+      'session.progressiveMode':'Progressive','session.progressiveHint':'Cumulative blocks with 4 phases — fixed order, shuffle questions, shuffle all, validation.',
+      'inc.title':'Progressive learning','inc.blockSize':'Block size','inc.passTarget':'Pass target (%)','inc.useOfficialPass':'Use official certification pass rate',
+      'inc.continue':'Continue progressive','inc.start':'Start progressive','inc.phase':'Phase {n}','inc.block':'Block {cur}/{tot}',
+      'inc.phase1':'Fixed order','inc.phase2':'Shuffled questions','inc.phase3':'Shuffled Q&A','inc.phase4':'Validation',
+      'inc.stripHint':'Same track across Tracks, Questions and Flashcards — certification-linked study.','inc.fcBlock':'Current block cards',
+      'inc.passedPhase':'Phase complete!','inc.failedValidation':'Target not met ({pct}% · min {min}%)','inc.blockUnlocked':'Block unlocked — cumulative review through {n} questions',
+      'inc.complete':'Track complete in progressive mode!','inc.noOfficialPass':'This certification has no linear public pass % — set your own target.'
     }
   },
   locale(){ return this._locale; },
@@ -1550,7 +1573,7 @@ const HelpCenter = {
       {id:'import', section:'howto', kw:['importar','csv','json','exportar','perfil'],
         title:L('Importar e exportar conteúdo','Import and export content'),
         body:L(
-          '<p><strong>Importar:</strong> Biblioteca → Importar (ou Personalizar → Mais opções).</p><ul><li><strong>CSV</strong> · <strong>JSON</strong> — questões e trilhas em lote</li></ul><p>Conteúdo importado alimenta flashcards, estatísticas e progresso como qualquer questão criada no app.</p><p><strong>Exportar perfil de sessão:</strong> JSON com filtros e modo — não substitui histórico.</p><p><strong>Reset conteúdo seed</strong> (console, após deploy):</p><pre style="font-size:11px;overflow:auto">localStorage.removeItem(\'ef_global_dpo_seeded_v2\');\nlocalStorage.removeItem(\'ef_cleanup_global_dpo_v2\');\nlocation.reload();</pre>',
+          '<p><strong>Importar:</strong> Biblioteca → Importar (ou Personalizar → Mais opções).</p><ul><li><strong>CSV</strong> · <strong>JSON</strong> — questões e trilhas em lote</li></ul><p>Conteúdo importado alimenta flashcards, estatísticas e progresso como qualquer questão criada no app.</p><p><strong>Exportar perfil de sessão:</strong> JSON com filtros e modo — não substitui histórico.</p><p><strong>Reset conteúdo seed</strong> (console, após deploy):</p><pre style="font-size:11px;overflow:auto">localStorage.removeItem(\'ef_knowledge_os_seeded_v3\');\nlocalStorage.removeItem(\'ef_cleanup_knowledge_os_v3\');\nlocation.reload();</pre>',
           '<p>Import: Library → Import or Customize → More. CSV/JSON batch import feeds flashcards, stats and progress like any created question. Session profile JSON exports filter config — not history. Seed reset via console keys above.</p>'
         )},
       {id:'domains', section:'howto', kw:['dominio','legal','governanca','tecnico','radar','areas'],
@@ -2877,11 +2900,16 @@ class DashboardView {
     const qCount = e.questionIds.length;
     const title = compact ? (e.materia || e.title || '(sem título)') : (e.title || '(sem título)');
     const meta = compact ? [e.title !== e.materia ? e.title : null, `${qCount} questões`, `${e.timeMinutes||60} min`].filter(Boolean).join(' · ') : [e.materia||e.trilha, qCount+' questões', e.timeMinutes+' min'].filter(Boolean).join(' · ');
+    const inc = IncrementalLearningController.summary(e.id);
+    const incBadge = inc && !inc.completed
+      ? `<span class="inc-phase-pill" title="${I18n.t('session.progressiveMode')}">B${inc.block}/${inc.blocks}</span>`
+      : (inc?.completed ? `<span class="inc-phase-pill">✓</span>` : '');
     return `<div class="list-row list-row-compact">
       <div class="meta">
-        <div class="title">${Util.escapeHtml(title)}</div>
+        <div class="title">${Util.escapeHtml(title)} ${incBadge}</div>
         <div class="desc">${Util.escapeHtml(meta)}</div>
       </div>
+      <button class="btn btn-sm" data-inc-start="${e.id}" type="button" title="${I18n.t('session.progressiveMode')}">${Icons.layers}</button>
       <button class="btn btn-sm btn-primary" data-play-exam="${e.id}" title="Iniciar" aria-label="Iniciar">${Icons.play}</button>
       ${compact ? '' : `<button class="btn btn-icon btn-ghost btn-sm" data-edit-exam="${e.id}" title="Editar">${Icons.edit}</button>`}
     </div>`;
@@ -3067,7 +3095,12 @@ class QuestionBankView {
     const content = f
       ? (all.filter(match).length ? all.filter(match).map(q=>this._row(q)).join('') : DashboardView._empty('Nenhuma questão', 'Ajuste a busca.'))
       : this._renderTree(BankHierarchy.groupByExam());
+    const activeExam = IncrementalLearningController.getActiveExamId();
+    const incStrip = activeExam && StorageManager.getExam(activeExam)
+      ? IncrementalLearningController.renderStrip(activeExam)
+      : '';
     this.el.innerHTML = `
+      ${incStrip}
       <p class="lib-connect-strip">${I18n.t('lib.forgeHintQuestions')} <button type="button" class="btn-link" id="qb-forge-link">${Icons.sparkles} ${I18n.t('lib.forgeGenerate')}</button></p>
       <div class="row between" style="margin-bottom:12px;gap:8px">
         <input class="input" id="qb-search" placeholder="${I18n.isEn() ? 'Search track, subject or text…' : 'Buscar por prova, matéria ou texto…'}" value="${Util.escapeHtml(filter)}">
@@ -3081,6 +3114,7 @@ class QuestionBankView {
     this.el.querySelector('#qb-new').addEventListener('click', ()=>QuestionEditorController.openModal(null, ()=>this._renderList(this.el.querySelector('#qb-search').value)));
     this.el.querySelector('#qb-forge')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.questionParams()));
     this.el.querySelector('#qb-forge-link')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.questionParams()));
+    IncrementalLearningController.bindStrip(this.el);
     this.el.querySelector('#qb-search').addEventListener('input', e=>this._renderList(e.target.value));
     this._bindActions(all);
   }
@@ -4346,13 +4380,17 @@ class ExamConfigModal {
               <span class="field-label" id="ec-product-label">${I18n.t('session.studyHow')}</span>
               <div class="ec-product-segment" role="group" aria-labelledby="ec-product-label">
                 <button type="button" class="ec-product-btn active" data-product="learn" title="${I18n.t('session.trainHint')}">${I18n.t('session.trainMode')}</button>
+                <button type="button" class="ec-product-btn" data-product="progressive" title="${I18n.t('session.progressiveHint')}">${I18n.t('session.progressiveMode')}</button>
                 <button type="button" class="ec-product-btn" data-product="flashcards" title="${I18n.t('session.fcHint')}">${I18n.t('lib.flashcards')}</button>
                 <button type="button" class="ec-product-btn" data-product="exam" title="${I18n.t('session.examHint')}">${I18n.t('session.examMode')}</button>
               </div>
               <p class="ec-seg-hint" id="ec-product-hint">${I18n.t('session.trainHint')}</p>
             </div>
+            <div class="field hidden" id="ec-inc-panel-wrap">
+              <div class="ec-inc-panel" id="ec-inc-panel"></div>
+            </div>
             <div class="field">
-              <label for="ec-exam-global">Prova</label>
+              <label for="ec-exam-global">${I18n.isEn() ? 'Track / exam' : 'Trilha / certificação'}</label>
               <select class="select" id="ec-exam-global">${opts}</select>
             </div>
             <div class="field hidden" id="ec-session-field" aria-hidden="true">
@@ -4581,22 +4619,87 @@ class ExamConfigModal {
     return modalEl.querySelector('.ec-product-btn.active')?.dataset.product || 'learn';
   }
 
+  static _renderIncPanel(modalEl){
+    const wrap = modalEl.querySelector('#ec-inc-panel-wrap');
+    const panel = modalEl.querySelector('#ec-inc-panel');
+    if(!wrap || !panel) return;
+    const examId = modalEl.querySelector('#ec-exam-global')?.value;
+    const exam = StorageManager.getExam(examId);
+    if(!exam){ panel.innerHTML = ''; return; }
+    const p = IncrementalLearningController.ensure(examId);
+    const info = IncrementalLearningController.getOfficialPassInfo(exam);
+    const s = IncrementalLearningController.summary(examId);
+    panel.innerHTML = `
+      <strong>${I18n.t('inc.title')}</strong>
+      ${s ? IncrementalLearningController.renderStrip(examId, { compact: true }) : ''}
+      <div class="ec-inc-grid">
+        <div class="field"><label>${I18n.t('inc.blockSize')}</label>
+          <select class="select" id="ec-inc-block">
+            ${[10,20,25,50].map(n=>`<option value="${n}" ${p.blockSize===n?'selected':''}>${n}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>${I18n.t('inc.passTarget')}</label>
+          <input class="input" id="ec-inc-pass" type="number" min="50" max="100" value="${p.passThreshold}" ${p.useOfficialPass?'disabled':''}>
+        </div>
+      </div>
+      <label class="checkbox-row"><input type="checkbox" id="ec-inc-official" ${p.useOfficialPass?'checked':''}> ${I18n.t('inc.useOfficialPass')}</label>
+      ${info.available && info.pct ? `<p class="hint">${Util.escapeHtml(info.ref || '')}: ${info.pct}%</p>` : `<p class="hint">${Util.escapeHtml(info.note || I18n.t('inc.noOfficialPass'))}</p>`}
+      <label class="checkbox-row"><input type="checkbox" id="ec-inc-shuf-q" ${p.autoShuffleQ!==false?'checked':''}> ${I18n.t('inc.phase2')}</label>
+      <label class="checkbox-row"><input type="checkbox" id="ec-inc-shuf-alt" ${p.autoShuffleAlt!==false?'checked':''}> ${I18n.t('inc.phase3')}</label>
+      <label class="checkbox-row"><input type="checkbox" id="ec-inc-wrong" ${p.repeatWrongOnly?'checked':''}> ${I18n.isEn() ? 'Repeat wrong answers only' : 'Repetir apenas questões incorretas'}</label>
+      <div class="field"><label>${I18n.isEn() ? 'Max attempts (optional)' : 'Máx. tentativas (opcional)'}</label>
+        <input class="input" id="ec-inc-max" type="number" min="0" placeholder="${I18n.isEn() ? 'Unlimited' : 'Ilimitado'}" value="${p.maxAttempts||''}">
+      </div>
+      <button type="button" class="btn btn-sm btn-ghost" id="ec-inc-reset">${I18n.isEn() ? 'Reset progressive progress' : 'Reiniciar progresso progressivo'}</button>`;
+    panel.querySelector('#ec-inc-official')?.addEventListener('change', e=>{
+      panel.querySelector('#ec-inc-pass').disabled = e.target.checked;
+    });
+    panel.querySelector('#ec-inc-reset')?.addEventListener('click', ()=>{
+      IncrementalLearningController.applyConfig(examId, { ...IncrementalLearningController.DEFAULTS, reset: true });
+      this._renderIncPanel(modalEl);
+      Toast.show(I18n.isEn() ? 'Progressive progress reset.' : 'Progresso progressivo reiniciado.', 'success');
+    });
+  }
+
+  static _collectIncConfig(modalEl){
+    const examId = modalEl.querySelector('#ec-exam-global')?.value;
+    const maxRaw = parseInt(modalEl.querySelector('#ec-inc-max')?.value, 10);
+    return {
+      blockSize: parseInt(modalEl.querySelector('#ec-inc-block')?.value, 10) || 10,
+      passThreshold: parseInt(modalEl.querySelector('#ec-inc-pass')?.value, 10) || 70,
+      useOfficialPass: !!modalEl.querySelector('#ec-inc-official')?.checked,
+      maxAttempts: maxRaw > 0 ? maxRaw : null,
+      autoShuffleQ: !!modalEl.querySelector('#ec-inc-shuf-q')?.checked,
+      autoShuffleAlt: !!modalEl.querySelector('#ec-inc-shuf-alt')?.checked,
+      autoReview: true,
+      repeatWrongOnly: !!modalEl.querySelector('#ec-inc-wrong')?.checked,
+      repeatHardOnly: false,
+      repeatForgetting: false,
+      reset: false
+    };
+  }
+
   static _setStudyProduct(modalEl, product){
-    const valid = ['learn', 'flashcards', 'exam'];
+    const valid = ['learn', 'progressive', 'flashcards', 'exam'];
     if(!valid.includes(product)) product = 'learn';
     modalEl.querySelectorAll('[data-product]').forEach(btn=>{
       btn.classList.toggle('active', btn.dataset.product === product);
     });
     const hints = {
       learn: I18n.t('session.trainHint'),
+      progressive: I18n.t('session.progressiveHint'),
       flashcards: I18n.t('session.fcHint'),
       exam: I18n.t('session.examHint')
     };
     const hintEl = modalEl.querySelector('#ec-product-hint');
     if(hintEl) hintEl.textContent = hints[product] || hints.learn;
     this._setSessionType(modalEl, product === 'learn');
-    modalEl.querySelector('#ec-shuffle-wrap')?.classList.toggle('hidden', product === 'flashcards');
-    modalEl.querySelector('#ec-adv-toggle-wrap')?.classList.toggle('hidden', product === 'flashcards');
+    modalEl.querySelector('#ec-shuffle-wrap')?.classList.toggle('hidden', product === 'flashcards' || product === 'progressive');
+    modalEl.querySelector('#ec-adv-toggle-wrap')?.classList.toggle('hidden', product === 'flashcards' || product === 'progressive');
+    modalEl.querySelector('#ec-inc-panel-wrap')?.classList.toggle('hidden', product !== 'progressive');
+    modalEl.querySelector('#ec-basic-qty')?.closest('.field')?.classList.toggle('hidden', product === 'progressive');
+    modalEl.querySelector('.ec-qty-presets')?.closest('.field')?.classList.toggle('hidden', product === 'progressive');
+    if(product === 'progressive') this._renderIncPanel(modalEl);
     if(product === 'flashcards'){
       modalEl.querySelector('#ec-advanced')?.classList.add('hidden');
       modalEl.querySelector('#ec-adv-toggle')?.setAttribute('aria-expanded', 'false');
@@ -4896,6 +4999,7 @@ class ExamConfigModal {
       if(rFrom && !modalEl._rangeEdited){ rFrom.value = 1; rTo.value = Math.min(15, total || 15); }
       modalEl._showAllDist = false;
       this._syncBasicToMode(modalEl);
+      if(this._getStudyProduct(modalEl) === 'progressive') this._renderIncPanel(modalEl);
       this._updatePreview(modalEl);
     };
 
@@ -5130,6 +5234,14 @@ class ExamConfigModal {
     modalEl.querySelector('[data-cancel]')?.addEventListener('click', closeFn);
     modalEl.querySelector('[data-ok]')?.addEventListener('click', ()=>{
       const product = this._getStudyProduct(modalEl);
+      if(product === 'progressive'){
+        const examId = modalEl.querySelector('#ec-exam-global')?.value;
+        if(!examId){ Toast.show(I18n.isEn() ? 'Pick a track.' : 'Escolha uma trilha.', 'warn'); return; }
+        IncrementalLearningController.applyConfig(examId, this._collectIncConfig(modalEl));
+        closeFn();
+        IncrementalLearningController.start(examId);
+        return;
+      }
       if(product === 'flashcards'){
         const examId = modalEl.querySelector('#ec-exam-global')?.value;
         const limit = Math.max(1, parseInt(modalEl.querySelector('#ec-basic-qty')?.value, 10) || 20);
@@ -5298,6 +5410,257 @@ class ExamConfigModal {
 }
 
 /* =========================================================================
+   INCREMENTAL LEARNING (Progressive cumulative blocks — 4 phases)
+   Connected across Trilhas · Questões · Flashcards via active certification.
+   ========================================================================= */
+class IncrementalLearningController {
+  static KEY = 'ef_incremental_v1';
+  static ACTIVE_KEY = 'ef_incremental_active_exam';
+  static DEFAULTS = {
+    blockSize: 10,
+    passThreshold: 70,
+    useOfficialPass: false,
+    maxAttempts: null,
+    autoShuffleQ: true,
+    autoShuffleAlt: true,
+    autoReview: true,
+    repeatWrongOnly: false,
+    repeatHardOnly: false,
+    repeatForgetting: false,
+    fullReviewBeforeExam: true
+  };
+  static OFFICIAL_PASS = {
+    'EXIN-PDPP': { pct: 65, ref: 'EXIN PDPP exam specification (26/40 = 65%)' },
+    'EXIN-PDPF': { pct: 65, ref: 'EXIN PDPF exam specification' },
+    'EXIN-ISFS': { pct: 65, ref: 'EXIN ISFS exam specification' }
+  };
+  static OFFICIAL_NON_PCT = {
+    'ISC2-CISSP': 'ISC2 CISSP uses scaled scoring (700/1000) — not a simple percentage.',
+    'ISACA-CISM': 'ISACA CISM uses a scaled score — see the official Candidate Guide.'
+  };
+
+  static _all(){
+    try{ return JSON.parse(localStorage.getItem(this.KEY)||'{}'); }catch(e){ return {}; }
+  }
+  static _saveAll(data){
+    try{ localStorage.setItem(this.KEY, JSON.stringify(data)); }catch(e){}
+  }
+  static getActiveExamId(){
+    try{ return localStorage.getItem(this.ACTIVE_KEY)||''; }catch(e){ return ''; }
+  }
+  static setActiveExamId(examId){
+    try{
+      if(examId) localStorage.setItem(this.ACTIVE_KEY, examId);
+      else localStorage.removeItem(this.ACTIVE_KEY);
+    }catch(e){}
+  }
+  static ensure(examId){
+    const all = this._all();
+    if(!all[examId]){
+      all[examId] = {
+        ...this.DEFAULTS,
+        currentBlock: 1,
+        currentPhase: 1,
+        phaseAttempts: {},
+        blockStats: [],
+        masteredIds: [],
+        startedAt: new Date().toISOString(),
+        completed: false
+      };
+      this._saveAll(all);
+    }
+    return all[examId];
+  }
+  static save(examId, progress){
+    const all = this._all();
+    all[examId] = progress;
+    this._saveAll(all);
+  }
+  static getOfficialPassInfo(exam){
+    const code = exam?.code || '';
+    if(this.OFFICIAL_PASS[code]) return { ...this.OFFICIAL_PASS[code], available: true };
+    if(this.OFFICIAL_NON_PCT[code]) return { available: false, note: this.OFFICIAL_NON_PCT[code] };
+    if(exam?.passScore) return { pct: exam.passScore, ref: exam.title, available: true, fallback: true };
+    return { available: false, note: I18n.t('inc.noOfficialPass') };
+  }
+  static passThreshold(exam, progress){
+    if(progress.useOfficialPass){
+      const info = this.getOfficialPassInfo(exam);
+      if(info.available && info.pct != null) return info.pct;
+    }
+    return Math.min(100, Math.max(50, progress.passThreshold || 70));
+  }
+  static totalBlocks(exam, blockSize){
+    const n = exam?.questionIds?.length || 0;
+    return Math.max(1, Math.ceil(n / blockSize));
+  }
+  static unlockedCount(exam, progress){
+    const total = exam?.questionIds?.length || 0;
+    const bs = progress.blockSize || 10;
+    const block = progress.currentBlock || 1;
+    return Math.min(total, block * bs);
+  }
+  static questionPool(exam, progress){
+    const ids = exam?.questionIds || [];
+    return ids.slice(0, this.unlockedCount(exam, progress));
+  }
+  static phaseLabel(phase){
+    const map = { 1: I18n.t('inc.phase1'), 2: I18n.t('inc.phase2'), 3: I18n.t('inc.phase3'), 4: I18n.t('inc.phase4') };
+    return map[phase] || '';
+  }
+  static summary(examId){
+    const exam = StorageManager.getExam(examId);
+    if(!exam?.questionIds?.length) return null;
+    const p = this.ensure(examId);
+    const total = exam.questionIds.length;
+    const blocks = this.totalBlocks(exam, p.blockSize);
+    const unlocked = this.unlockedCount(exam, p);
+    const pctDone = Math.round((unlocked / total) * 100);
+    const phase = p.currentPhase || 1;
+    const block = p.currentBlock || 1;
+    return {
+      examId, exam, progress: p, total, blocks, unlocked, pctDone, phase, block,
+      passThreshold: this.passThreshold(exam, p),
+      officialInfo: this.getOfficialPassInfo(exam),
+      completed: !!p.completed
+    };
+  }
+  static buildPlayerConfig(examId){
+    const exam = StorageManager.getExam(examId);
+    if(!exam) return null;
+    const progress = this.ensure(examId);
+    if(progress.completed) return null;
+    this.setActiveExamId(examId);
+    const phase = progress.currentPhase || 1;
+    let pool = this.questionPool(exam, progress);
+    if(progress.repeatWrongOnly){
+      pool = pool.filter(id=>{
+        const s = StorageManager.getStat(id);
+        return s.seen > 0 && s.correct < s.seen;
+      });
+      if(!pool.length) pool = this.questionPool(exam, progress);
+    }
+    const shuffleQ = phase === 1 ? false : (phase >= 2 && progress.autoShuffleQ !== false);
+    const shuffleAlt = phase >= 3 && progress.autoShuffleAlt !== false;
+    return {
+      examId,
+      questionIds: pool,
+      incrementalMode: true,
+      incrementalPhase: phase,
+      incrementalBlock: progress.currentBlock,
+      trainingMode: phase < 4,
+      timerOn: false,
+      shuffleQuestions: shuffleQ,
+      shuffleAlternatives: shuffleAlt,
+      preSubmitReview: false,
+      showAnswerAfterSelect: phase < 4,
+      allowRevealAnswer: phase < 4
+    };
+  }
+  static start(examId){
+    const cfg = this.buildPlayerConfig(examId);
+    if(!cfg){
+      Toast.show(I18n.t('inc.complete'), 'success');
+      return;
+    }
+    PlayerController.start(cfg);
+  }
+  static openConfig(examId){
+    ExamConfigModal.open(examId, { product: 'progressive' });
+  }
+  static onSessionComplete(examId, historyEntry, state){
+    const exam = StorageManager.getExam(examId);
+    const progress = this.ensure(examId);
+    const phase = state?.incrementalPhase || progress.currentPhase || 1;
+    const block = state?.incrementalBlock || progress.currentBlock || 1;
+    const key = `${block}:${phase}`;
+    progress.phaseAttempts = progress.phaseAttempts || {};
+    progress.phaseAttempts[key] = (progress.phaseAttempts[key] || 0) + 1;
+    progress.blockStats = progress.blockStats || [];
+    progress.blockStats.push({
+      block, phase,
+      pct: historyEntry.percentage,
+      correct: historyEntry.correctCount,
+      total: historyEntry.totalCount,
+      date: historyEntry.date,
+      duration: historyEntry.timeSpentSeconds
+    });
+    if(phase < 4){
+      progress.currentPhase = phase + 1;
+      this.save(examId, progress);
+      return {
+        ok: true, advanced: 'phase', nextPhase: phase + 1, block,
+        message: `${I18n.t('inc.passedPhase')} → ${this.phaseLabel(phase + 1)}`
+      };
+    }
+    const min = this.passThreshold(exam, progress);
+    const passed = historyEntry.percentage >= min;
+    if(!passed){
+      const max = progress.maxAttempts;
+      if(max && progress.phaseAttempts[key] >= max){
+        return { ok: false, advanced: false, retry: true, maxAttempts: true, min, pct: historyEntry.percentage };
+      }
+      return { ok: false, advanced: false, retry: true, min, pct: historyEntry.percentage };
+    }
+    const totalBlocks = this.totalBlocks(exam, progress.blockSize);
+    if(block >= totalBlocks){
+      progress.completed = true;
+      progress.completedAt = new Date().toISOString();
+      this.save(examId, progress);
+      return { ok: true, advanced: 'complete', message: I18n.t('inc.complete') };
+    }
+    progress.currentBlock = block + 1;
+    progress.currentPhase = 1;
+    const cumulative = this.unlockedCount(exam, progress);
+    this.save(examId, progress);
+    return {
+      ok: true, advanced: 'block', nextBlock: progress.currentBlock, cumulative,
+      message: I18n.t('inc.blockUnlocked').replace('{n}', String(cumulative))
+    };
+  }
+  static renderStrip(examId, opts={}){
+    const s = this.summary(examId);
+    if(!s) return '';
+    const phaseLbl = this.phaseLabel(s.phase);
+    const blockLbl = I18n.t('inc.block').replace('{cur}', s.block).replace('{tot}', s.blocks);
+    const btn = s.completed
+      ? `<span class="inc-phase-pill">${I18n.t('inc.complete')}</span>`
+      : `<button type="button" class="btn btn-sm btn-primary" data-inc-continue="${examId}">${Icons.play} ${I18n.t('inc.continue')}</button>`;
+    return `
+      <div class="inc-strip" data-inc-strip="${examId}">
+        <span class="inc-phase-pill">${Util.escapeHtml(blockLbl)} · ${Util.escapeHtml(phaseLbl)}</span>
+        <div class="inc-progress-bar" title="${s.pctDone}%"><span style="width:${s.pctDone}%"></span></div>
+        <span class="inc-strip-meta">${s.unlocked}/${s.total} · meta ${s.passThreshold}%</span>
+        ${btn}
+        ${opts.compact ? '' : `<span class="hint" style="width:100%;margin-top:2px">${I18n.t('inc.stripHint')}</span>`}
+      </div>`;
+  }
+  static bindStrip(el){
+    el?.querySelectorAll('[data-inc-continue]').forEach(b=>{
+      b.addEventListener('click', ()=> this.start(b.dataset.incContinue));
+    });
+  }
+  static applyConfig(examId, cfg){
+    const p = this.ensure(examId);
+    Object.assign(p, {
+      blockSize: cfg.blockSize,
+      passThreshold: cfg.passThreshold,
+      useOfficialPass: cfg.useOfficialPass,
+      maxAttempts: cfg.maxAttempts,
+      autoShuffleQ: cfg.autoShuffleQ,
+      autoShuffleAlt: cfg.autoShuffleAlt,
+      autoReview: cfg.autoReview,
+      repeatWrongOnly: cfg.repeatWrongOnly,
+      repeatHardOnly: cfg.repeatHardOnly,
+      repeatForgetting: cfg.repeatForgetting
+    });
+    if(cfg.reset) { p.currentBlock = 1; p.currentPhase = 1; p.completed = false; p.phaseAttempts = {}; p.blockStats = []; }
+    this.save(examId, p);
+    this.setActiveExamId(examId);
+  }
+}
+
+/* =========================================================================
    PLAYER CONTROLLER (execução do exame em tela cheia)
    ========================================================================= */
 class PlayerController {
@@ -5407,8 +5770,11 @@ class PlayerController {
       candidateName: config.candidateName || resumeSession?.candidateName || '',
       trainingMode,
       timerOn,
-      showAnswerAfterSelect: trainingMode ? true : !!settings.showAnswerAfterSelect,
-      allowRevealAnswer: trainingMode ? true : (settings.allowRevealAnswer !== false),
+      showAnswerAfterSelect: config.showAnswerAfterSelect != null ? !!config.showAnswerAfterSelect : (trainingMode ? true : !!settings.showAnswerAfterSelect),
+      allowRevealAnswer: config.allowRevealAnswer != null ? !!config.allowRevealAnswer : (trainingMode ? true : (settings.allowRevealAnswer !== false)),
+      incrementalMode: !!config.incrementalMode,
+      incrementalPhase: config.incrementalPhase || 1,
+      incrementalBlock: config.incrementalBlock || 1,
       allowFinishAnytime: settings.allowFinishAnytime !== false,
       preSubmitReview: config.preSubmitReview !== false && !trainingMode,
       paused: false,
@@ -5466,11 +5832,14 @@ class PlayerController {
     const root = document.getElementById('player-view');
     const cand = this.state.candidateName ? `<span class="player-candidate" title="${Util.escapeHtml(this.state.candidateName)}">${Util.escapeHtml(this.state.candidateName)}</span>` : '';
     const train = this.state.trainingMode ? `<span class="player-training-badge">${I18n.t('session.trainMode')}</span>` : '';
+    const inc = this.state.incrementalMode
+      ? `<span class="player-incremental-badge">${Util.escapeHtml(IncrementalLearningController.phaseLabel(this.state.incrementalPhase))} · ${I18n.t('inc.block').replace('{cur}', this.state.incrementalBlock).replace('{tot}', IncrementalLearningController.totalBlocks(this.state.exam, IncrementalLearningController.ensure(this.state.exam.id).blockSize))}</span>`
+      : '';
     root.innerHTML = `
       <div class="player-top">
         <button class="btn btn-icon btn-ghost" id="p-exit" title="Sair" aria-label="Sair">${Icons.close}</button>
         <button class="btn btn-icon btn-ghost" id="p-toggle-nav" title="Mostrar/ocultar questões" aria-label="Mostrar ou ocultar questões">${Icons.menu}</button>
-        ${cand}${train}
+        ${cand}${train}${inc}
         <div class="player-progress-wrap"><div class="player-progress-bar" id="p-progress" style="width:0%"></div></div>
         <div class="player-timer-grp">
           <button class="btn btn-sm" id="p-pause" type="button" title="Pausar cronômetro" aria-label="Pausar">⏸</button>
@@ -6134,6 +6503,16 @@ class PlayerController {
     StorageManager.addHistory(historyEntry);
     StorageManager.clearSession();
 
+    let incrementalOutcome = null;
+    if(this.state.incrementalMode){
+      incrementalOutcome = IncrementalLearningController.onSessionComplete(exam.id, historyEntry, this.state);
+      historyEntry.incremental = {
+        phase: this.state.incrementalPhase,
+        block: this.state.incrementalBlock,
+        outcome: incrementalOutcome
+      };
+    }
+
     // Gamificação: XP, nível e conquistas
     const gameResult = Gamification.registerExam({correctCount, totalCount: questions.length, percentage});
 
@@ -6156,9 +6535,27 @@ class ResultView {
     const {exam, detail, historyEntry} = params;
     this._data = params;
     const pct = historyEntry.percentage;
-    const color = pct>=exam.passScore ? 'var(--good)' : 'var(--bad)';
+    const inc = historyEntry.incremental;
+    const outcome = inc?.outcome;
+    const incProgress = inc ? IncrementalLearningController.ensure(exam.id) : null;
+    const passMin = incProgress ? IncrementalLearningController.passThreshold(exam, incProgress) : exam.passScore;
+    const passedDisplay = inc && inc.phase === 4 ? pct >= passMin : historyEntry.passed;
+    const color = passedDisplay ? 'var(--good)' : 'var(--bad)';
     const circumference = 2*Math.PI*62;
     const dash = circumference*(pct/100);
+    let incBanner = '';
+    let incPrimaryBtn = '';
+    if(inc){
+      if(outcome?.ok && outcome.advanced === 'complete'){
+        incBanner = `<div class="card card-compact" style="margin-bottom:12px;border-color:var(--good)"><p style="margin:0;font-size:13px">${Util.escapeHtml(outcome.message||I18n.t('inc.complete'))}</p></div>`;
+      } else if(outcome?.ok){
+        incBanner = `<div class="card card-compact" style="margin-bottom:12px;border-color:var(--good)"><p style="margin:0;font-size:13px">${Util.escapeHtml(outcome.message||I18n.t('inc.passedPhase'))}</p></div>`;
+        incPrimaryBtn = `<button class="btn btn-primary" id="r-inc-next">${Icons.play} ${I18n.t('inc.continue')}</button>`;
+      } else if(outcome?.retry){
+        incBanner = `<div class="card card-compact" style="margin-bottom:12px;border-color:var(--warn)"><p style="margin:0;font-size:13px">${I18n.t('inc.failedValidation').replace('{pct}', String(pct)).replace('{min}', String(passMin))}</p></div>`;
+        incPrimaryBtn = `<button class="btn btn-primary" id="r-inc-retry">${Icons.play} ${I18n.isEn() ? 'Retry validation' : 'Tentar validação'}</button>`;
+      }
+    }
     el.innerHTML = `
       <div class="score-hero">
         <div class="score-ring">
@@ -6169,9 +6566,10 @@ class ResultView {
           </svg>
           <div class="pct" style="color:${color}">${pct}%</div>
         </div>
-        <h2 style="font-size:20px;margin-bottom:4px">${historyEntry.passed?'Aprovado 🎉':'Não atingiu a nota mínima'}</h2>
-        <p style="color:var(--text-2);font-size:13px">${Util.escapeHtml(exam.title)} · nota mínima ${exam.passScore}%</p>
+        <h2 style="font-size:20px;margin-bottom:4px">${inc ? (passedDisplay ? I18n.t('inc.passedPhase') : (inc.phase===4 ? I18n.t('inc.failedValidation').replace('{pct}','').replace('{min}','') : I18n.t('inc.passedPhase'))) : (historyEntry.passed?'Aprovado 🎉':'Não atingiu a nota mínima')}</h2>
+        <p style="color:var(--text-2);font-size:13px">${Util.escapeHtml(exam.title)}${inc ? ` · ${IncrementalLearningController.phaseLabel(inc.phase)} · meta ${passMin}%` : ` · nota mínima ${exam.passScore}%`}</p>
       </div>
+      ${incBanner}
       ${this._xpBanner(params.gameResult)}
       ${this._gapsBanner(detail)}
       <div class="result-grid">
@@ -6180,8 +6578,9 @@ class ResultView {
         <div class="card stat-card"><span class="label">Tempo gasto</span><span class="value">${Util.formatDuration(historyEntry.timeSpentSeconds)}</span></div>
         <div class="card stat-card"><span class="label">Marcadas</span><span class="value" style="color:var(--warn)">${historyEntry.markedCount}</span></div>
       </div>
-      <div class="row" style="gap:10px;margin-top:10px">
-        <button class="btn btn-primary" id="r-review">Revisar respostas</button>
+      <div class="row" style="gap:10px;margin-top:10px;flex-wrap:wrap">
+        ${incPrimaryBtn}
+        <button class="btn ${incPrimaryBtn?'':'btn-primary'}" id="r-review">Revisar respostas</button>
         <button class="btn" id="r-smart">Revisão inteligente</button>
         <button class="btn" id="r-retry-wrong">Refazer apenas erradas</button>
         <button class="btn" id="r-retry-marked">Refazer apenas marcadas</button>
@@ -6192,7 +6591,12 @@ class ResultView {
     el.querySelector('#r-dashboard').addEventListener('click', ()=> App.instance.router.go('home'));
     el.querySelector('#r-retry-wrong').addEventListener('click', ()=> this._retry(detail.filter(d=>!d.correct), exam));
     el.querySelector('#r-retry-marked').addEventListener('click', ()=> this._retry(detail.filter(d=>d.marked), exam));
-    el.querySelector('#r-smart').addEventListener('click', ()=> PlayerController.startSmartReview());
+    el.querySelector('#r-smart')?.addEventListener('click', ()=> PlayerController.startSmartReview());
+    el.querySelector('#r-inc-next')?.addEventListener('click', ()=>{
+      Toast.show(inc?.outcome?.message || I18n.t('inc.continue'), 'success');
+      IncrementalLearningController.start(exam.id);
+    });
+    el.querySelector('#r-inc-retry')?.addEventListener('click', ()=> IncrementalLearningController.start(exam.id));
   }
   _gapsBanner(detail){
     const gaps = AITutor.gapsFromDetail(detail).filter(g=>g.acc<100);
@@ -6296,7 +6700,7 @@ class ReviewView {
 }
 
 /* =========================================================================
-   DPO GLOBAL — tracks by region (loaded from data/dpo-global-bank.js)
+   KNOWLEDGE OS — seed bank (loaded from data/knowledge-os-bank.js)
    ========================================================================= */
 class BankHelpers {
   static mkOpts(list, correctIdx, listPt=null){
@@ -6393,33 +6797,22 @@ class SessionConfig {
 }
 
 class DataCleanup {
-  static FLAG = 'ef_cleanup_global_dpo_v2';
+  static FLAG = 'ef_cleanup_knowledge_os_v3';
   static run(){
     if(localStorage.getItem(this.FLAG)) return;
-    const em2Exam = e => /^(EM2-)/.test(e.code||'') || e.serie==='2º Ano EM' || (e.tags||[]).includes('2º Ano EM');
-    const cyber = /ciber|cyber|CYBER-/i;
-    const legacyExam = e => {
-      if(/^(CYBER-|HIST-RF-50)/.test(e.code||'')) return true;
-      if(cyber.test([e.category,e.title,e.code,...(e.tags||[])].join(' '))) return true;
-      if(em2Exam(e)) return true;
-      if((e.trilha||'').includes('Trilha DPO — EXIN') && !e.region) return true;
-      if(/^EXIN-/.test(e.code||'') && !e.region) return true;
-      return false;
-    };
-    const em2Q = q => (q.tags||[]).includes('2º Ano EM') || /^EM2-/.test(q.category||'');
-    const legacyQ = q => {
-      if(em2Q(q)) return true;
-      const blob = [q.category,q.materia,q.submateria,...(q.tags||[]),q.text].join(' ');
-      if(cyber.test(blob)) return true;
-      if((q.tags||[]).includes('Trilha DPO — EXIN') && !q.stemEn) return true;
-      return false;
-    };
-    const qs = StorageManager.getQuestions().filter(q=>!legacyQ(q));
-    StorageManager.saveQuestions(qs);
-    const kept = new Set(qs.map(q=>q.id));
-    const exams = StorageManager.getExams().filter(e=>!legacyExam(e)).map(e=>({...e, questionIds:(e.questionIds||[]).filter(id=>kept.has(id))}));
-    StorageManager.saveExams(exams);
-    ['ef_demo_seeded_v1','ef_french_rev_seeded_v2','ef_cleanup_em2_v1','ef_cleanup_em2_v2','ef_em2_seeded_v1','ef_exin_dpo_seeded_v1','ef_cleanup_exin_dpo_v1','ef_global_dpo_seeded_v2'].forEach(k=>localStorage.removeItem(k));
+    StorageManager.saveQuestions([]);
+    StorageManager.saveExams([]);
+    try{ localStorage.removeItem('ef_fsrs_cards_v2'); }catch(e){}
+    try{ localStorage.removeItem('ef_qstats'); }catch(e){}
+    try{ localStorage.removeItem('ef_fc_marked_v1'); }catch(e){}
+    try{ localStorage.removeItem('ef_fc_filters_v1'); }catch(e){}
+    try{ localStorage.removeItem('ef_fc_reveal_all_v1'); }catch(e){}
+    try{ localStorage.removeItem('ef_demo_progress_meta'); }catch(e){}
+    [
+      'ef_demo_seeded_v1','ef_french_rev_seeded_v2','ef_cleanup_em2_v1','ef_cleanup_em2_v2',
+      'ef_em2_seeded_v1','ef_exin_dpo_seeded_v1','ef_cleanup_exin_dpo_v1',
+      'ef_global_dpo_seeded_v2','ef_cleanup_global_dpo_v2','ef_knowledge_os_seeded_v3'
+    ].forEach(k=>{ try{ localStorage.removeItem(k); }catch(e){} });
     localStorage.setItem(this.FLAG,'1');
   }
 }
@@ -6454,18 +6847,57 @@ class BankHierarchy {
   static count(qs){ return qs.length; }
 }
 
-class GlobalDPOSeeder {
-  static FLAG_KEY = 'ef_global_dpo_seeded_v2';
-  static get BANK(){ return typeof DPO_GLOBAL_BANK !== 'undefined' ? DPO_GLOBAL_BANK : null; }
+class KnowledgeOSSeeder {
+  static FLAG_KEY = 'ef_knowledge_os_seeded_v3';
+  static get BANK(){ return typeof KNOWLEDGE_OS_BANK !== 'undefined' ? KNOWLEDGE_OS_BANK : null; }
   static get TRACKS(){ return this.BANK?.tracks || []; }
-  static TRILHA_DESC = "Trilha global de Encarregado de Dados — certificações por continente, ludic e bilingue EN/PT.";
-  /** Campos v2 repassados do bank → Question.nodeMeta (Privacy Knowledge OS) */
+  static TRILHA_DESC = "Velora Knowledge OS — Privacy, Data Protection, Information Security & Security Management.";
   static NODE_META_SCALAR_KEYS = [
     'primaryLaw', 'secondaryLaw', 'bloomLevel', 'estimatedMinutes', 'cognitiveLevel',
-    'examObjective', 'officialReference', 'knowledgeArea', 'country', 'continent',
+    'examObjective', 'officialReference', 'officialReferences', 'knowledgeArea', 'country', 'continent',
     'story', 'analogy', 'feynman', 'mnemonic', 'visualAssociation', 'learningViews',
-    'revisionHistory', 'language'
+    'revisionHistory', 'language', 'nodeId', 'knowledgeNode', 'domain', 'subdomain',
+    'nistMappings', 'certifications', 'learningObjective', 'description', 'concepts',
+    'bestPractices', 'commonErrors', 'risks', 'controls', 'flashcards', 'uncertainty'
   ];
+
+  static _nodeMap(){
+    const bank = this.BANK;
+    if(!bank) return {};
+    if(!bank._nodeMapCache){
+      bank._nodeMapCache = Object.fromEntries((bank.knowledgeNodes || []).map(n=>[n.id, n]));
+    }
+    return bank._nodeMapCache;
+  }
+
+  static _enrichFromKnowledgeNode(raw, meta){
+    const nid = raw.knowledgeNode || raw.nodeId || meta.knowledgeNode;
+    const node = nid ? this._nodeMap()[nid] : null;
+    if(!node) return meta;
+    meta.knowledgeNode = nid;
+    meta.nodeId = nid;
+    meta.learningObjective = meta.learningObjective || node.learningObjective;
+    meta.description = meta.description || node.description;
+    meta.concepts = meta.concepts || node.concepts;
+    meta.bestPractices = meta.bestPractices || node.bestPractices;
+    meta.commonErrors = meta.commonErrors || node.commonErrors;
+    meta.risks = meta.risks || node.risks;
+    meta.controls = meta.controls || node.controls;
+    meta.nistMappings = meta.nistMappings || node.nistMappings;
+    meta.certifications = meta.certifications || node.certificationMappings;
+    meta.officialReferences = meta.officialReferences || node.officialReferences;
+    meta.uncertainty = meta.uncertainty || node.uncertainty;
+    meta.flashcards = meta.flashcards || node.flashcards;
+    if(node.analogies?.[0] && !meta.analogy) meta.analogy = node.analogies[0];
+    if(node.scenarios?.[0] && !meta.story) meta.story = node.scenarios[0];
+    if(!meta.learningViews){
+      meta.learningViews = {};
+      const textView = (body)=>({ viewId: Util.uid('lv'), locale: 'pt-BR', body });
+      if(node.analogies?.[0]) meta.learningViews.analogy = textView(node.analogies[0]);
+      if(node.scenarios?.[0]) meta.learningViews.story = textView(node.scenarios[0]);
+    }
+    return meta;
+  }
 
   static _buildNodeMeta(raw, cert, submateria){
     const meta = {};
@@ -6479,8 +6911,13 @@ class GlobalDPOSeeder {
       stub: !!cert.stub
     };
     meta.region = meta.region || cert.region || cert.trackId || 'global';
-    meta.knowledgeArea = meta.knowledgeArea || submateria;
+    meta.knowledgeArea = meta.knowledgeArea || raw.domain || submateria;
+    meta.knowledgeNode = meta.knowledgeNode || raw.knowledgeNode || raw.nodeId || null;
+    meta.nodeId = meta.nodeId || raw.nodeId || raw.id || null;
     meta.difficulty = meta.difficulty || raw.level || 'medio';
+    if(raw.nistMappings?.length) meta.nistMappings = raw.nistMappings;
+    if(raw.certifications?.length) meta.certifications = raw.certifications;
+    if(raw.officialReferences?.length) meta.officialReferences = raw.officialReferences;
     if(!meta.learningViews && (raw.story || raw.analogy || raw.feynman || raw.mnemonic || raw.visualAssociation)){
       meta.learningViews = Object.assign({}, meta.learningViews || {});
       const textView = (body)=>({ viewId: Util.uid('lv'), locale: meta.language || 'pt-BR', body });
@@ -6496,12 +6933,12 @@ class GlobalDPOSeeder {
         };
       }
     }
-    return Object.keys(meta).length ? meta : null;
+    return this._enrichFromKnowledgeNode(raw, meta);
   }
 
   static trilhaLabel(cert){
     const track = this.TRACKS.find(t=>t.id===cert.trackId || t.region===cert.region);
-    return track ? `${track.name} — DPO` : 'Global — DPO';
+    return track ? track.name : (cert.trackId || 'Knowledge OS');
   }
 
   static _normalizeOpts(raw){
@@ -6525,6 +6962,7 @@ class GlobalDPOSeeder {
     const extraTags = Array.isArray(raw.tags) ? raw.tags : [];
     const nodeMeta = this._buildNodeMeta(raw, cert, submateria);
     return {
+      id: raw.id || raw.nodeId || undefined,
       type: raw.type || 'single',
       text: stemPt || stemEn,
       stemEn, stemPt,
@@ -6545,7 +6983,7 @@ class GlobalDPOSeeder {
     if(localStorage.getItem(this.FLAG_KEY)) return;
     const bank = this.BANK;
     if(!bank?.certifications?.length){
-      console.warn('[GlobalDPOSeeder] DPO_GLOBAL_BANK not loaded');
+      console.warn('[KnowledgeOSSeeder] KNOWLEDGE_OS_BANK not loaded');
       return;
     }
     DataCleanup.run();
@@ -6574,9 +7012,9 @@ class GlobalDPOSeeder {
         timeMinutes: cert.timeMinutes || 60,
         passScore: 70,
         author: 'Velora',
-        version: bank.version || '2.0',
-        tags: [trilha, cert.materia, 'certificação', cert.org || '', cert.region || 'global'],
-        questionIds: qs.map(q => q.id),
+        version: bank.version || '3.0',
+        tags: [trilha, cert.materia, 'certificação', cert.org || '', cert.trackId || 'global'],
+        questionIds: [...new Set(qs.map(q => q.id))],
         stub: !!cert.stub
       });
       StorageManager.upsertExam(exam);
@@ -6584,9 +7022,10 @@ class GlobalDPOSeeder {
     localStorage.setItem(this.FLAG_KEY, '1');
   }
 
-  /** Dev helper: localStorage.removeItem('ef_global_dpo_seeded_v2') then reload */
+  /** Dev helper: localStorage.removeItem('ef_knowledge_os_seeded_v3') then reload */
   static resetFlag(){ localStorage.removeItem(this.FLAG_KEY); }
 }
+const GlobalDPOSeeder = KnowledgeOSSeeder;
 /* =========================================================================
    HUB NAVIGATION + FSRS (OnePage — máx. 3 cliques)
    ========================================================================= */
@@ -6720,7 +7159,10 @@ class FlashcardController {
     if(opts.examId){
       const ids = new Set(StorageManager.getExam(opts.examId)?.questionIds || []);
       qs = qs.filter(q=>ids.has(q.id));
-      return qs;
+    }
+    if(opts.questionIds?.length){
+      const ids = new Set(opts.questionIds);
+      qs = qs.filter(q=>ids.has(q.id));
     }
     if(opts.trilhas?.length){
       const ids = this._idsForTrilhas(opts.trilhas);
@@ -6732,10 +7174,6 @@ class FlashcardController {
     }
     if(opts.tags?.length){
       qs = qs.filter(q=>opts.tags.some(t=>FSRS.temas(q).includes(t)));
-    }
-    if(opts.questionIds?.length){
-      const ids = new Set(opts.questionIds);
-      qs = qs.filter(q=>ids.has(q.id));
     }
     return qs;
   }
@@ -6899,8 +7337,13 @@ class FlashcardsHubView {
     const saved = FlashcardController._loadSavedFilters();
     const scope = saved.scope || 'due';
     const qty = saved.limit || 20;
+    const activeExam = IncrementalLearningController.getActiveExamId();
+    const incStrip = activeExam && StorageManager.getExam(activeExam)
+      ? IncrementalLearningController.renderStrip(activeExam)
+      : '';
     el.innerHTML = `
-      <p class="fc-info">${I18n.isEn() ? 'Each <strong>question</strong> becomes a flashcard (front = stem, back = answer + explanation). Create or edit in <strong>Questions</strong>.' : 'Cada <strong>questão</strong> do banco gera automaticamente um flashcard (frente = enunciado, verso = resposta + explicação). Crie ou edite conteúdo na aba <strong>Questões</strong>.'}</p>
+      ${incStrip}
+      <p class="fc-info">${I18n.isEn() ? 'Each <strong>question</strong> becomes a flashcard (front = stem, back = answer + explanation). Linked to your <strong>progressive track</strong> when active.' : 'Cada <strong>questão</strong> gera um flashcard. Conectado à <strong>trilha progressiva</strong> ativa quando houver.'}</p>
       <div class="fc-stats">
         <div class="fc-stat"><strong>${st.total}</strong><span>Cards</span></div>
         <div class="fc-stat"><strong>${st.due}</strong><span>${I18n.isEn() ? 'Due' : 'Para revisar'}</span></div>
@@ -6930,6 +7373,7 @@ class FlashcardsHubView {
       </div>
       <div class="hub-actions-bar">
         <button class="btn btn-sm btn-primary" type="button" id="fc-study">${Icons.play} ${I18n.isEn() ? 'Study flashcards' : 'Estudar flashcards'}</button>
+        ${activeExam ? `<button class="btn btn-sm" type="button" id="fc-inc-block">${Icons.layers} ${I18n.t('inc.fcBlock')}</button>` : ''}
         <div class="fc-create-split">
           <button class="btn btn-sm" type="button" id="fc-new">${Icons.plus} ${I18n.t('fc.createManual')}</button>
           <button class="btn btn-sm" type="button" id="fc-forge">${Icons.sparkles} ${I18n.t('fc.createAi')}</button>
@@ -6976,6 +7420,14 @@ class FlashcardsHubView {
       LibraryForge.open(LibraryForge.flashcardParams(FlashcardsHubView._collectFilters(el)));
     });
     el.querySelector('#fc-questions')?.addEventListener('click', ()=> App.instance.router.go('content', {tab:'questoes'}));
+    IncrementalLearningController.bindStrip(el);
+    el.querySelector('#fc-inc-block')?.addEventListener('click', ()=>{
+      const exId = IncrementalLearningController.getActiveExamId();
+      if(!exId){ Toast.show(I18n.isEn() ? 'Start progressive mode from Tracks first.' : 'Inicie o modo progressivo em Trilhas primeiro.', 'warn'); return; }
+      const s = IncrementalLearningController.summary(exId);
+      const pool = IncrementalLearningController.questionPool(s.exam, s.progress);
+      FlashcardController.start(Math.min(30, pool.length), { examId: exId, scope: 'all', questionIds: pool });
+    });
     update();
   }
 }
@@ -7115,8 +7567,12 @@ class ContentHubView {
         <span class="spacer"></span>
         <button class="btn btn-sm btn-ghost" id="ch-select" type="button">${I18n.t('lib.select')}</button>
       </div>`;
+    const activeExam = IncrementalLearningController.getActiveExamId();
+    const activeStrip = activeExam && StorageManager.getExam(activeExam)
+      ? IncrementalLearningController.renderStrip(activeExam)
+      : '';
     const footer = this._selectMode ? '' : `<div class="hub-footer"><button class="btn btn-ghost btn-sm" id="ch-smart" type="button">${I18n.t('lib.smartReview')}</button></div>`;
-    panel.innerHTML = `${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma trilha','Recarregue a página para carregar o conteúdo inicial.')}</div>${footer}`;
+    panel.innerHTML = `${activeStrip}${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma trilha','Recarregue a página para carregar o conteúdo inicial.')}</div>${footer}`;
     panel.querySelector('#ch-forge')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.trackParams()));
     panel.querySelector('#ch-forge-link')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.trackParams()));
     panel.querySelector('#ch-new')?.addEventListener('click', ()=> App.instance.router.go('builder', {}));
@@ -7154,6 +7610,8 @@ class ContentHubView {
     });
     if(!this._selectMode){
       panel.querySelectorAll('[data-play-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.playExam)));
+      panel.querySelectorAll('[data-inc-start]').forEach(b=> b.addEventListener('click', ()=> IncrementalLearningController.openConfig(b.dataset.incStart)));
+      IncrementalLearningController.bindStrip(panel);
     }
   }
   async _deleteSelected(){
@@ -7514,7 +7972,7 @@ class App {
   constructor(){
     App.instance = this;
     DataCleanup.run();
-    GlobalDPOSeeder.seed();
+    KnowledgeOSSeeder.seed();
     KnowledgeRepository.validatePhase1();
     this.router = new Router(this);
     this._registerRoutes();
@@ -7714,7 +8172,7 @@ Object.assign(window, {
   BuilderView, QuestionBankView, HistoryView, ProfileView, SettingsView, ResultView, ReviewView,
   QuestionEditorController, PlayerController, ImportController, ExportController, ExamConfigModal,
   StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam,
-  KnowledgeNormalizer, KnowledgeRepository
+  KnowledgeNormalizer, KnowledgeRepository, IncrementalLearningController
 });
 
 document.addEventListener('DOMContentLoaded', ()=>{
