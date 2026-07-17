@@ -1025,7 +1025,7 @@ body[data-network="offline"] .network-pill.is-offline::before{
 
 <div id="player-view"></div>
 <div id="toast-region"></div>
-<div id="loading-overlay"><div class="spinner"></div><div id="loading-msg" style="font-size:13px;color:var(--text-1)">Preparando Velora…</div></div>
+<div id="loading-overlay" class="hidden"><div class="spinner"></div><div id="loading-msg" style="font-size:13px;color:var(--text-1)">Preparando Velora…</div></div>
 <div id="modal-region"></div>
 
 <script src="forge/forge-engines.js" defer></script>
@@ -8227,25 +8227,70 @@ function parseAppHash(){ const parts=(location.hash||'').replace(/^#/,'').split(
 /* =========================================================================
    APP BOOTSTRAP
    ========================================================================= */
+function loadScriptOnce(src){
+  if(document.querySelector(`script[data-velora-src="${src}"]`)) return Promise.resolve();
+  return new Promise((resolve, reject)=>{
+    const s = document.createElement('script');
+    s.src = src;
+    s.dataset.veloraSrc = src;
+    s.onload = ()=> resolve();
+    s.onerror = ()=> reject(new Error('Falha ao carregar ' + src));
+    document.head.appendChild(s);
+  });
+}
+async function loadKnowledgeBankIfNeeded(){
+  if(localStorage.getItem('ef_knowledge_os_seeded_v3')) return;
+  await Promise.race([
+    loadScriptOnce('./data/knowledge-os-bank.js'),
+    new Promise((_, reject)=> setTimeout(()=> reject(new Error('Timeout ao carregar banco de conteúdo')), 120000))
+  ]);
+}
+async function bootstrapVelora(){
+  const finish = ()=> Loading.hide();
+  try{
+    Loading.show(I18n?.t?.('common.loading') || 'Preparando Velora…');
+    if(typeof ForgeEngines !== 'undefined') await ForgeEngines.handleOAuthCallback();
+    const needsBank = !localStorage.getItem('ef_knowledge_os_seeded_v3');
+    if(needsBank) Loading.show(I18n?.t?.('common.loading') || 'Carregando conteúdo…');
+    await loadKnowledgeBankIfNeeded();
+    if(typeof ChartHelpers === 'undefined' || typeof App === 'undefined'){
+      throw new Error('Script principal incompleto — recarregue com Ctrl+Shift+R');
+    }
+    new App();
+  }catch(err){
+    console.error('Erro ao iniciar Velora', err);
+    document.body.innerHTML = `<div style="padding:40px;color:#f85149;font-family:sans-serif">Erro ao iniciar a aplicação: ${String(err.message || err)}</div>`;
+  }finally{
+    finish();
+  }
+}
+
 class App {
   static instance = null;
   constructor(){
     App.instance = this;
     DataCleanup.run();
-    GlobalDPOSeeder.seed();
+    KnowledgeOSSeeder.seed();
+    if(KnowledgeRepository._debugEnabled()) KnowledgeRepository.validatePhase1();
     this.router = new Router(this);
     this._registerRoutes();
     this._buildTabbar();
     this._bindTopbar();
     this.applySettings(StorageManager.getSettings());
-    setupLudicComments();
     const hash = parseAppHash();
-    const valid = ['home','content','progress','builder','settings','result','review'];
+    const valid = ['home','content','progress','builder','settings','result','review','help','forge'];
     let route = valid.includes(hash.route) ? hash.route : 'home';
     if(hash.route === 'study') route = 'content';
-    const params = hash.tab && hash.tab !== 'cards' ? {tab: hash.tab === 'exames' ? 'certificacoes' : hash.tab} : (hash.route === 'study' ? {tab:'certificacoes'} : {});
+    const params = hash.tab
+      ? {tab: hash.tab === 'exames' ? 'certificacoes' : (hash.tab === 'cards' ? 'flashcards' : hash.tab)}
+      : (hash.route === 'study' ? {tab:'certificacoes'} : {});
     this.router.go(route, params);
-    this._setupPWA();
+    this._setupNetworkStatus();
+    const defer = window.requestIdleCallback || ((fn)=> setTimeout(fn, 1));
+    defer(()=>{
+      setupLudicComments();
+      this._registerServiceWorker();
+    });
   }
   _setupNetworkStatus(){
     const pill = document.getElementById('network-pill');
@@ -8262,60 +8307,13 @@ class App {
     window.addEventListener('online', apply);
     window.addEventListener('offline', apply);
   }
-  _registerRoutes(){
-    this.router.register('home', new DashboardView());
-    this.router.register('content', new ContentHubView());
-    this.router.register('progress', new ProgressHubView());
-    this.router.register('builder', new BuilderView());
-    this.router.register('settings', new SettingsView());
-    this.router.register('result', new ResultView());
-    this.router.register('review', new ReviewView());
-  }
-  _buildTabbar(){
-    const bar = document.getElementById('tabbar');
-    if(!bar) return;
-    const logo = document.createElement('div');
-    logo.className = 'tabbar-logo-wrap';
-    logo.innerHTML = '<img src="branding/logo/symbol-white.svg" width="32" height="32" alt=""><span>Velora</span>';
-    bar.appendChild(logo);
-    const items = [
-      {route:'home', icon:Icons.dashboard, label:'Início', title:'Página inicial'},
-      {route:'content', icon:Icons.content, label:'Biblioteca', title:'Certificações e questões'},
-      {route:'progress', icon:Icons.progress, label:'Progresso', title:'Estatísticas e histórico'},
-    ];
-    items.forEach(it=>{
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'tabbar-btn';
-      btn.dataset.route = it.route;
-      btn.setAttribute('aria-label', it.title);
-      btn.title = it.title;
-      btn.innerHTML = `${it.icon}<span>${it.label}</span>`;
-      btn.addEventListener('click', ()=>this.router.go(it.route));
-      bar.appendChild(btn);
-    });
-  }
-  _bindTopbar(){
-    const btn = document.getElementById('topbar-settings-btn');
-    if(btn){ btn.innerHTML = Icons.settings; btn.addEventListener('click', ()=>this.router.go('settings')); }
-  }
-  applySettings(s){
-    document.body.classList.toggle('light', !s.darkMode);
-    document.documentElement.style.setProperty('--font-scale', s.fontSize || 1);
-    document.body.style.fontFamily = s.font==='mono' ? 'var(--mono)' : 'var(--sans)';
-  }
-
-  /* ---------- PWA: manifest estático + service worker + instalação ---------- */
-  _setupPWA(){
-    this._setupNetworkStatus();
+  _registerServiceWorker(){
     try{
       window.addEventListener('beforeinstallprompt', (e)=>{
         e.preventDefault();
         this._deferredInstall = e;
       });
-
       if(!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) return;
-
       navigator.serviceWorker.register('./sw.js', { scope: './' }).then((reg)=>{
         reg.addEventListener('updatefound', ()=>{
           const nw = reg.installing;
@@ -8328,6 +8326,83 @@ class App {
         });
       }).catch(()=>{});
     }catch(err){ /* PWA opcional; não bloqueia o app */ }
+  }
+  _registerRoutes(){
+    this.router.register('home', new DashboardView());
+    this.router.register('content', new ContentHubView());
+    this.router.register('progress', new ProgressHubView());
+    this.router.register('builder', new BuilderView());
+    this.router.register('settings', new SettingsView());
+    this.router.register('help', new HelpView());
+    this.router.register('forge', new ForgeView());
+    this.router.register('result', new ResultView());
+    this.router.register('review', new ReviewView());
+  }
+  _buildTabbar(){
+    const bar = document.getElementById('tabbar');
+    if(!bar) return;
+    bar.innerHTML = '';
+    const logo = document.createElement('div');
+    logo.className = 'tabbar-logo-wrap';
+    logo.innerHTML = '<img src="branding/logo/symbol-color.svg" width="32" height="32" alt=""><span>velora</span>';
+    bar.appendChild(logo);
+    const items = [
+      {route:'home', icon:Icons.dashboard, labelKey:'nav.home', titleKey:'nav.homeTitle'},
+      {route:'content', icon:Icons.content, labelKey:'nav.library', titleKey:'nav.libraryTitle'},
+      {route:'progress', icon:Icons.progress, labelKey:'nav.progress', titleKey:'nav.progressTitle'},
+    ];
+    items.forEach(it=>{
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tabbar-btn';
+      btn.dataset.route = it.route;
+      const label = I18n.t(it.labelKey);
+      const title = I18n.t(it.titleKey);
+      btn.setAttribute('aria-label', title);
+      btn.title = title;
+      btn.innerHTML = `${it.icon}<span data-i18n="${it.labelKey}">${label}</span>`;
+      btn.addEventListener('click', ()=>this.router.go(it.route));
+      bar.appendChild(btn);
+    });
+  }
+  _refreshChrome(){
+    this._buildTabbar();
+    if(this.router.current){
+      const v = this.router.routes[this.router.current];
+      if(v) document.getElementById('topbar-title').textContent = v.title || this.router.current;
+    }
+    const settingsBtn = document.getElementById('topbar-settings-btn');
+    if(settingsBtn) settingsBtn.setAttribute('aria-label', I18n.t('nav.settings'));
+  }
+  _bindTopbar(){
+    const btn = document.getElementById('topbar-settings-btn');
+    if(btn){ btn.innerHTML = Icons.settings; btn.setAttribute('aria-label', I18n.t('nav.settings')); btn.addEventListener('click', ()=>this.router.go('settings')); }
+  }
+  applySettings(s){
+    I18n.initFromSettings(s);
+    document.body.classList.toggle('light', !s.darkMode);
+    document.documentElement.lang = I18n.locale() === 'en-US' ? 'en' : 'pt-BR';
+    document.documentElement.style.colorScheme = s.darkMode ? 'dark' : 'light';
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.content = s.darkMode ? '#081021' : '#faf8f5';
+    const scale = Number(s.fontSize) || 1;
+    document.documentElement.style.setProperty('--font-scale', scale);
+    [[12,'xs'],[13,'sm'],[15,'md'],[18,'lg'],[22,'xl']].forEach(([base, key])=>{
+      document.documentElement.style.setProperty(`--text-${key}`, (base * scale) + 'px');
+    });
+    document.body.style.fontSize = (14 * scale) + 'px';
+    document.body.classList.toggle('font-mono', s.font === 'mono');
+    document.body.classList.toggle('font-sans', s.font !== 'mono');
+    this._refreshChrome();
+    if(this.router.current && !['builder','result','review'].includes(this.router.current)){
+      this.router.go(this.router.current, this.router._lastParams || {});
+    }
+  }
+
+  /* ---------- PWA: manifest estático + service worker + instalação ---------- */
+  _setupPWA(){
+    this._setupNetworkStatus();
+    this._registerServiceWorker();
   }
 
   _isAppInstalled(){
@@ -8343,26 +8418,26 @@ class App {
   _renderInstallCard(){
     const state = this._getInstallState();
     const badges = {
-      installed: ['Instalado', 'badge-good'],
-      prompt: ['Pronto para instalar', 'badge-accent'],
-      manual: ['Instruções', 'badge-warn']
+      installed: [I18n.t('settings.installDone'), 'badge-good'],
+      prompt: [I18n.t('settings.installReady'), 'badge-accent'],
+      manual: [I18n.t('settings.installHow'), 'badge-warn']
     };
     const [label, cls] = badges[state];
-    const btnLabel = state === 'installed' ? 'Já instalado' : state === 'prompt' ? 'Instalar aplicativo' : 'Como instalar';
+    const btnLabel = state === 'installed' ? I18n.t('settings.installDone') : state === 'prompt' ? I18n.t('settings.installBtn') : I18n.t('settings.installHow');
     const btnClass = state === 'installed' ? 'btn btn-ghost' : 'btn btn-primary';
     const disabled = state === 'installed' ? ' disabled' : '';
     return `
       <div class="card card-compact" id="s-pwa-card">
         <div class="row between" style="margin-bottom:8px">
-          <span style="font-weight:600;font-size:13.5px">Instalar aplicativo</span>
+          <span style="font-weight:600;font-size:13.5px">${I18n.t('settings.installApp')}</span>
           <span class="badge ${cls}">${label}</span>
         </div>
         <p style="font-size:12.5px;color:var(--text-2);line-height:1.55;margin:0 0 12px">
-          Use o Velora offline, com ícone na tela inicial — como um app nativo no celular ou desktop.
+          ${I18n.t('settings.installDesc')}
         </p>
         <button class="${btnClass}" id="s-install"${disabled}>${btnLabel}</button>
         <details style="margin-top:10px;font-size:12px;color:var(--text-2);line-height:1.6">
-          <summary style="cursor:pointer;font-weight:600;color:var(--text-1)">Instruções manuais</summary>
+          <summary style="cursor:pointer;font-weight:600;color:var(--text-1)">${I18n.t('settings.installManual')}</summary>
           <p style="margin:8px 0 0">
             <strong>Android / Chrome:</strong> menu ⋮ → Adicionar à tela inicial.<br>
             <strong>iPhone / Safari:</strong> Compartilhar → Adicionar à Tela de Início.<br>
@@ -8403,23 +8478,14 @@ class App {
 /* Enhancement layers usam window.* — em strict mode as classes não vinculam ao window automaticamente */
 Object.assign(window, {
   App, Router, DashboardView, ContentHubView, ProgressHubView, HelpView,
-  BuilderView, QuestionBankView, HistoryView, ProfileView, SettingsView, ResultView, ReviewView,
+  BuilderView, QuestionBankView, HistoryView, SettingsView, ResultView, ReviewView,
   QuestionEditorController, PlayerController, ImportController, ExportController, ExamConfigModal,
   StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam,
   KnowledgeNormalizer, KnowledgeRepository, IncrementalLearningController, FSRS,
   I18n, ProgressAnalytics, FlashcardController
 });
-</script>
-<script src="gps/velora-gps.js"></script>
-<script>
-Object.assign(window, {
-  LearningGoal, LearnerModel, ReadinessEngine, RouteOptimizer, RouteChainController,
-  SimulationEngine, CompetencyEngine, ColdRetrievalController, LearningProfileExport, GpsUi
-});
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  bootstrapVelora();
-});
+document.addEventListener('DOMContentLoaded', ()=> bootstrapVelora());
 </script>
-
+<script src="./gps/velora-gps.js" defer></script>
 </body></html>

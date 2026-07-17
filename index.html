@@ -1222,7 +1222,7 @@ body[data-network="offline"] .network-pill.is-offline::before{
 
 <div id="player-view"></div>
 <div id="toast-region"></div>
-<div id="loading-overlay"><div class="spinner"></div><div id="loading-msg" style="font-size:13px;color:var(--text-1)">Preparando Velora…</div></div>
+<div id="loading-overlay" class="hidden"><div class="spinner"></div><div id="loading-msg" style="font-size:13px;color:var(--text-1)">Preparando Velora…</div></div>
 <div id="modal-region"></div>
 
 <script src="forge/forge-engines.js" defer></script>
@@ -8437,10 +8437,15 @@ function loadScriptOnce(src){
 }
 async function loadKnowledgeBankIfNeeded(){
   if(localStorage.getItem('ef_knowledge_os_seeded_v3')) return;
-  await loadScriptOnce('data/knowledge-os-bank.js');
+  await Promise.race([
+    loadScriptOnce('./data/knowledge-os-bank.js'),
+    new Promise((_, reject)=> setTimeout(()=> reject(new Error('Timeout ao carregar banco de conteúdo')), 120000))
+  ]);
 }
 async function bootstrapVelora(){
+  const finish = ()=> Loading.hide();
   try{
+    Loading.show(I18n?.t?.('common.loading') || 'Preparando Velora…');
     if(typeof ForgeEngines !== 'undefined') await ForgeEngines.handleOAuthCallback();
     const needsBank = !localStorage.getItem('ef_knowledge_os_seeded_v3');
     if(needsBank) Loading.show(I18n?.t?.('common.loading') || 'Carregando conteúdo…');
@@ -8449,11 +8454,11 @@ async function bootstrapVelora(){
       throw new Error('Script principal incompleto — recarregue com Ctrl+Shift+R');
     }
     new App();
-    Loading.hide();
   }catch(err){
-    Loading.hide();
     console.error('Erro ao iniciar Velora', err);
     document.body.innerHTML = `<div style="padding:40px;color:#f85149;font-family:sans-serif">Erro ao iniciar a aplicação: ${String(err.message || err)}</div>`;
+  }finally{
+    finish();
   }
 }
 
@@ -8676,17 +8681,9 @@ Object.assign(window, {
   KnowledgeNormalizer, KnowledgeRepository, IncrementalLearningController, FSRS,
   I18n, ProgressAnalytics, FlashcardController
 });
-</script>
-<script src="gps/velora-gps.js"></script>
-<script>
-Object.assign(window, {
-  LearningGoal, LearnerModel, ReadinessEngine, RouteOptimizer, RouteChainController,
-  SimulationEngine, CompetencyEngine, ColdRetrievalController, LearningProfileExport, GpsUi
-});
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  bootstrapVelora();
-});
+document.addEventListener('DOMContentLoaded', ()=> bootstrapVelora());
 </script>
+<script src="./gps/velora-gps.js" defer></script>
 
 </body></html>
