@@ -307,3 +307,5 @@ Este manifesto é aplicado automaticamente via `.cursor/rules/`:
 | Modelo de dados + Grafo | `velora-data-model.mdc` |
 | IA invisível | `velora-ai-invisible.mdc` |
 | Gate de implementação | `velora-implementation-gate.mdc` |
+
+**Schema e migração:** [`docs/KNOWLEDGE-MODEL.md`](KNOWLEDGE-MODEL.md)
