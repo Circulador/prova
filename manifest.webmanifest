@@ -1,0 +1,55 @@
+{
+  "id": "velora-knowledge-os",
+  "name": "Velora — Estude. Evolua. Conquiste.",
+  "short_name": "Velora",
+  "description": "Knowledge OS de estudos offline-first — simulados, biblioteca e progresso.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0E14",
+  "theme_color": "#0B0E14",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "branding/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "branding/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "branding/favicon/favicon.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Início",
+      "short_name": "Início",
+      "description": "Continuar de onde parou",
+      "url": "./#home"
+    },
+    {
+      "name": "Biblioteca",
+      "short_name": "Biblioteca",
+      "description": "Certificações e questões",
+      "url": "./#content"
+    },
+    {
+      "name": "Progresso",
+      "short_name": "Progresso",
+      "description": "Estatísticas e histórico",
+      "url": "./#progress"
+    }
+  ]
+}

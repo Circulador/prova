@@ -7,8 +7,10 @@ Velora é um **Knowledge Operating System**, não um app de simulados.
 1. **[Manifesto de Arquitetura](docs/MANIFESTO-ARQUITETURA.md)** — requisitos arquiteturais, UX, IA e dados
 2. **[Modelo de Conhecimento](docs/KNOWLEDGE-MODEL.md)** — schema Knowledge Node + plano de migração
 3. **[Modelo de Repaginação UI](docs/UI-REDESIGN-MODEL.md)** — shell offline-first, breakpoints, componentes
-4. **[Design System](branding/design-system/design-system.md)** — tokens visuais, componentes, breakpoints
-3. **Regras Cursor** — `.cursor/rules/velora-*.mdc` (aplicadas automaticamente)
+4. **[Arquitetura PWA](docs/PWA-ARCHITECTURE.md)** — Service Worker, cache, installability, roadmap
+5. **[Prompt IA PWA](docs/PWA-AI-PROMPT.md)** — prompt para implementação com artigo de referência
+6. **[Design System](branding/design-system/design-system.md)** — tokens visuais, componentes, breakpoints
+7. **Regras Cursor** — `.cursor/rules/velora-*.mdc` (aplicadas automaticamente)
 
 ## Stack atual
 

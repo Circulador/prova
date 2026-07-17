@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Velora">
 <meta name="description" content="Velora — plataforma gamificada de estudos e simulados EXIN DPO offline.">
 <link rel="icon" type="image/svg+xml" href="branding/favicon/favicon.svg">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="branding/icons/app-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -919,6 +920,17 @@ body.player-open .main{padding-bottom:0!important}
 .xp-bar>span{background:var(--gradient-brand)}
 .reward-pop{background:var(--bg-glass);backdrop-filter:blur(12px);border-color:var(--accent)}
 @media(max-width:1023px){.topbar-brand .topbar-app-name{display:none}}
+.network-pill{
+  flex-shrink:0;font-size:11px;font-weight:600;padding:5px 10px;border-radius:999px;
+  border:1px solid var(--border);background:var(--bg-1);color:var(--text-2);
+  letter-spacing:.02em;white-space:nowrap;
+}
+.network-pill.is-offline{border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+.network-pill.is-online{display:none}
+body[data-network="offline"] .network-pill.is-offline{display:inline-flex;align-items:center;gap:6px}
+body[data-network="offline"] .network-pill.is-offline::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--warn);flex-shrink:0;
+}
 @media(min-width:1024px){
   .tabbar{width:var(--sidebar-width);padding:16px 12px;background:rgba(10,10,14,.95);align-items:stretch;gap:4px}
   .tabbar-logo-wrap{display:flex;align-items:center;gap:10px;padding:8px 10px 20px;margin-bottom:8px;border-bottom:1px solid var(--border)}
@@ -945,6 +957,7 @@ body.player-open .main{padding-bottom:0!important}
       </div>
       <span class="crumb" id="topbar-crumb"></span>
       <div class="topbar-spacer"></div>
+      <span class="network-pill is-offline" id="network-pill" role="status" aria-live="polite" hidden>Offline</span>
       <button class="btn btn-ghost btn-icon" id="topbar-settings-btn" aria-label="Ajustes"></button>
     </div>
     <div id="views"></div>
@@ -5115,6 +5128,21 @@ class App {
     this.router.go(route, params);
     this._setupPWA();
   }
+  _setupNetworkStatus(){
+    const pill = document.getElementById('network-pill');
+    const apply = ()=>{
+      const offline = !navigator.onLine;
+      document.body.dataset.network = offline ? 'offline' : 'online';
+      if(!pill) return;
+      pill.hidden = !offline;
+      pill.textContent = offline ? 'Offline' : '';
+      pill.classList.toggle('is-offline', offline);
+      pill.classList.toggle('is-online', !offline);
+    };
+    apply();
+    window.addEventListener('online', apply);
+    window.addEventListener('offline', apply);
+  }
   _registerRoutes(){
     this.router.register('home', new DashboardView());
     this.router.register('content', new ContentHubView());
@@ -5158,49 +5186,28 @@ class App {
     document.body.style.fontFamily = s.font==='mono' ? 'var(--mono)' : 'var(--sans)';
   }
 
-  /* ---------- PWA: manifest dinâmico + service worker + botão instalar ---------- */
+  /* ---------- PWA: manifest estático + service worker + instalação ---------- */
   _setupPWA(){
+    this._setupNetworkStatus();
     try{
-      // Manifest injetado via Blob (funciona quando servido por http/https)
-      const icon = 'branding/icons/app-icon.svg';
-      const manifest = {
-        name:'Velora — Estude. Evolua. Conquiste.', short_name:'Velora',
-        start_url:'.', display:'standalone', background_color:'#0A0A0E', theme_color:'#0A0A0E',
-        description:'Velora — plataforma gamificada de estudos offline.',
-        icons:[
-          {src:icon, sizes:'192x192', type:'image/svg+xml', purpose:'any maskable'},
-          {src:icon, sizes:'512x512', type:'image/svg+xml', purpose:'any maskable'}
-        ]
-      };
-      const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
-      const link = document.createElement('link');
-      link.rel = 'manifest'; link.href = URL.createObjectURL(blob);
-      document.head.appendChild(link);
-
-      // Service worker (só registra em contexto seguro http/https; ignora em file://)
-      if('serviceWorker' in navigator && location.protocol.startsWith('http')){
-        const swCode = `
-          const CACHE='velora-v1';
-          self.addEventListener('install',e=>{self.skipWaiting()});
-          self.addEventListener('activate',e=>{e.waitUntil(self.clients.claim())});
-          self.addEventListener('fetch',e=>{
-            if(e.request.method!=='GET')return;
-            e.respondWith(
-              caches.open(CACHE).then(c=>c.match(e.request).then(r=>{
-                const net=fetch(e.request).then(resp=>{try{c.put(e.request,resp.clone())}catch(_){}; return resp}).catch(()=>r);
-                return r||net;
-              }))
-            );
-          });`;
-        const swUrl = URL.createObjectURL(new Blob([swCode], {type:'text/javascript'}));
-        navigator.serviceWorker.register(swUrl).catch(()=>{});
-      }
-
-      // Instalar (disponível a qualquer momento via menu ⋯)
       window.addEventListener('beforeinstallprompt', (e)=>{
         e.preventDefault();
         this._deferredInstall = e;
       });
+
+      if(!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) return;
+
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).then((reg)=>{
+        reg.addEventListener('updatefound', ()=>{
+          const nw = reg.installing;
+          if(!nw) return;
+          nw.addEventListener('statechange', ()=>{
+            if(nw.state === 'installed' && navigator.serviceWorker.controller){
+              Toast.show('Nova versão disponível. Atualize quando terminar o simulado.', 'warn');
+            }
+          });
+        });
+      }).catch(()=>{});
     }catch(err){ /* PWA opcional; não bloqueia o app */ }
   }
 
