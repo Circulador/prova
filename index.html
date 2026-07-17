@@ -105,20 +105,29 @@ body.light{
   --bg-1:var(--bg-surface);
   --bg-2:var(--bg-elevated);
   --bg-3:#ebe6df;
+  --bg-glass:rgba(255,255,255,.78);
+  --bg-overlay:rgba(250,248,245,.88);
   --border:rgba(26,22,20,.12);
   --border-soft:rgba(26,22,20,.07);
+  --border-strong:rgba(26,22,20,.18);
   --text-0:#1a1614;
   --text-1:#5c554f;
   --text-2:#8a827a;
-  --accent:#a86b47;
-  --accent-soft:rgba(168,107,71,.12);
-  --accent-strong:#8f5738;
+  --text-primary:var(--text-0);
+  --text-secondary:var(--text-1);
+  --text-tertiary:var(--text-2);
+  --accent:#7B5CFF;
+  --accent-soft:rgba(123,92,255,.12);
+  --accent-strong:#6344E8;
   --good:#4d8260;
   --good-soft:rgba(77,130,96,.12);
   --bad:#b8554e;
   --bad-soft:rgba(184,85,78,.12);
   --warn:#9a7f2e;
   --warn-soft:rgba(154,127,46,.12);
+  --gradient-aurora:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(123,92,255,.1),transparent 60%),radial-gradient(ellipse 70% 50% at 85% 90%,rgba(0,212,255,.08),transparent 55%),var(--bg-base);
+  --shadow-2:0 4px 16px rgba(26,22,20,.08);
+  --shadow-3:0 8px 32px rgba(26,22,20,.12);
 }
 ::-webkit-scrollbar{width:0;height:0;display:none}
 *{scrollbar-width:none;-ms-overflow-style:none}
@@ -263,7 +272,9 @@ a{color:var(--accent)}
 /* ---------- Forms ---------- */
 .field{margin-bottom:16px}
 .field label{display:block;font-size:12.5px;font-weight:600;color:var(--text-1);margin-bottom:6px}
+.field-required > label::after{content:' *';color:var(--bad);font-weight:700}
 .field .hint{font-size:11.5px;color:var(--text-2);margin-top:4px}
+.field-hint{font-size:11.5px;color:var(--text-2);margin-top:4px;line-height:1.45}
 .input,.select,.textarea{
   width:100%;padding:9px 11px;border-radius:var(--radius-sm);
   border:1px solid var(--border);background:var(--bg-2);color:var(--text-0);
@@ -737,8 +748,31 @@ a{color:var(--accent)}
 .home-track-title{font-size:var(--text-sm);font-weight:650;color:var(--text-2);margin:0 0 8px;text-transform:uppercase;letter-spacing:.04em}
 .home-progress-summary{display:flex;flex-wrap:wrap;gap:12px 18px;font-size:var(--text-xs);color:var(--text-2);margin-bottom:16px;padding:10px 12px;background:var(--bg-2);border-radius:var(--radius-md);border:1px solid var(--border-soft)}
 .home-progress-summary strong{color:var(--text-0);font-weight:650}
-.home-foot{display:flex;justify-content:center;padding-top:4px}
+.home-foot{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 12px;padding-top:4px}
 .home-foot .btn{font-size:var(--text-sm);color:var(--text-2)}
+.help-search-wrap{position:relative;margin-bottom:16px}
+.help-search-wrap .input{width:100%;padding-right:36px}
+.help-dropdown{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;max-height:240px;overflow-y:auto;
+  background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-2);z-index:40;display:none;flex-direction:column;padding:4px;
+}
+.help-dropdown.show{display:flex}
+.help-drop-item{
+  text-align:left;padding:10px 12px;border-radius:var(--radius-sm);border:none;background:transparent;
+  color:var(--text-0);cursor:pointer;width:100%;
+}
+.help-drop-item:hover,.help-drop-item.active{background:var(--bg-3)}
+.help-drop-item small{display:block;font-size:11px;color:var(--text-2);margin-top:2px}
+.help-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.help-tab{padding:8px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-2);font-size:13px;font-weight:600;color:var(--text-1);cursor:pointer}
+.help-tab.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.help-topic{margin-bottom:14px;padding:16px;border-radius:var(--radius-lg);background:var(--bg-glass);border:1px solid var(--border)}
+.help-topic h3{font-size:var(--text-md);font-weight:650;margin:0 0 8px;color:var(--text-0)}
+.help-topic p,.help-topic li{font-size:var(--text-sm);color:var(--text-1);line-height:1.6}
+.help-topic ul{margin:8px 0 0;padding-left:18px}
+.help-topic-id{scroll-margin-top:72px}
+.view-help{max-width:720px;margin:0 auto;width:100%}
 .tabbar{
   position:fixed;bottom:0;left:0;right:0;z-index:80;
   display:flex;align-items:stretch;
@@ -807,6 +841,12 @@ body.player-paused #p-pause.active{background:var(--warn-soft);border-color:var(
 .study-group-title{font-size:var(--text-sm);font-weight:600;color:var(--text-2);margin:0 0 8px 2px}
 .hub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .hub-stat{font-size:13px;color:var(--text-2);margin-bottom:12px}
+.fc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.fc-stat{padding:10px 8px;border-radius:var(--radius-md);background:var(--bg-glass);border:1px solid var(--border-soft);text-align:center}
+.fc-stat strong{display:block;font-size:17px;font-weight:650;color:var(--text-0)}
+.fc-stat span{font-size:10px;color:var(--text-2)}
+.fc-info{font-size:12.5px;color:var(--text-2);line-height:1.55;margin-bottom:14px}
+@media(max-width:640px){.fc-stats{grid-template-columns:repeat(2,1fr)}}
 .progress-mini{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px}
 .progress-mini .xp-bar{flex:1;height:6px}
 
@@ -1115,6 +1155,135 @@ const Util = {
 };
 
 /* ---------------------------------------------------------------------
+   I18n — interface da plataforma (PT / EN)
+--------------------------------------------------------------------- */
+const I18n = {
+  _locale: 'pt-BR',
+  _dict: {
+    'pt-BR': {
+      'nav.home':'Início','nav.library':'Biblioteca','nav.progress':'Progresso','nav.settings':'Ajustes','nav.help':'Ajuda',
+      'nav.homeTitle':'Página inicial','nav.libraryTitle':'Certificações, questões e flashcards','nav.progressTitle':'Estatísticas e histórico',
+      'home.greetMorning':'Bom dia','home.greetAfternoon':'Boa tarde','home.greetEvening':'Boa noite',
+      'home.ready':'Pronto para evoluir hoje?','home.student':'Estudante','home.tracks':'Trilhas DPO Global',
+      'home.continue':'Continuar simulado','home.answered':'respondidas','home.smartSession':'Sessão inteligente',
+      'home.presetFull':'Completo','home.presetQuick':'Rápido','home.presetErrors':'Só erros','home.presetSprint':'Sprint','home.presetMarathon':'Maratona',
+      'home.viewProgress':'Ver progresso','home.faq':'FAQ','home.howto':'Como usar',
+      'lib.certs':'Certificações','lib.questions':'Questões','lib.flashcards':'Flashcards',
+      'lib.newExam':'Novo exame','lib.import':'Importar','lib.select':'Selecionar','lib.smartReview':'Revisão inteligente',
+      'settings.title':'Ajustes','settings.back':'← Voltar','settings.darkTheme':'Tema escuro','settings.lightTheme':'Tema claro',
+      'settings.font':'Fonte','settings.fontSans':'Normal','settings.fontMono':'Mono','settings.fontSize':'Tamanho',
+      'settings.uiLocale':'Idioma da plataforma','settings.uiPt':'Português (BR)','settings.uiEn':'English (US)',
+      'settings.qLang':'Idioma das questões','settings.qDual':'EN + PT (dual)','settings.qEn':'English','settings.qPt':'Português',
+      'settings.defaultTimer':'Tempo padrão (min)','settings.feedback':'Feedback após responder',
+      'settings.reveal':'Permitir revelar resposta manualmente','settings.finishAnytime':'Finalizar a qualquer momento',
+      'settings.demoTitle':'Dados de demonstração','settings.demoDesc':'Simula simulados, flashcards e lacunas para visualizar gráficos em Progresso.',
+      'settings.demoGen':'Gerar dados demo','settings.demoClear':'Remover dados demo','settings.demoActive':'Dados demo ativos.',
+      'settings.save':'Salvar','settings.saved':'Salvo.','settings.installApp':'Instalar aplicativo',
+      'settings.installDone':'Já instalado','settings.installBtn':'Instalar aplicativo','settings.installHow':'Como instalar',
+      'settings.installDesc':'Use o Velora offline, com ícone na tela inicial — como um app nativo no celular ou desktop.',
+      'settings.installReady':'Pronto para instalar','settings.installManual':'Instruções manuais',
+      'help.title':'FAQ & Como usar','help.search':'Buscar tema…','help.faqTab':'FAQ','help.howTab':'Como usar','help.noResults':'Nenhum tema encontrado.',
+      'common.save':'Salvar','common.cancel':'Cancelar','common.confirm':'Confirmar','common.back':'Voltar',
+      'progress.title':'Progresso','builder.title':'Criador de Exames'
+    },
+    'en-US': {
+      'nav.home':'Home','nav.library':'Library','nav.progress':'Progress','nav.settings':'Settings','nav.help':'Help',
+      'nav.homeTitle':'Home page','nav.libraryTitle':'Certifications, questions and flashcards','nav.progressTitle':'Stats and history',
+      'home.greetMorning':'Good morning','home.greetAfternoon':'Good afternoon','home.greetEvening':'Good evening',
+      'home.ready':'Ready to grow today?','home.student':'Learner','home.tracks':'Global DPO Tracks',
+      'home.continue':'Continue exam','home.answered':'answered','home.smartSession':'Smart session',
+      'home.presetFull':'Full','home.presetQuick':'Quick','home.presetErrors':'Errors only','home.presetSprint':'Sprint','home.presetMarathon':'Marathon',
+      'home.viewProgress':'View progress','home.faq':'FAQ','home.howto':'How to use',
+      'lib.certs':'Certifications','lib.questions':'Questions','lib.flashcards':'Flashcards',
+      'lib.newExam':'New exam','lib.import':'Import','lib.select':'Select','lib.smartReview':'Smart review',
+      'settings.title':'Settings','settings.back':'← Back','settings.darkTheme':'Dark theme','settings.lightTheme':'Light theme',
+      'settings.font':'Font','settings.fontSans':'Sans','settings.fontMono':'Mono','settings.fontSize':'Size',
+      'settings.uiLocale':'Platform language','settings.uiPt':'Português (BR)','settings.uiEn':'English (US)',
+      'settings.qLang':'Question language','settings.qDual':'EN + PT (dual)','settings.qEn':'English','settings.qPt':'Português',
+      'settings.defaultTimer':'Default time (min)','settings.feedback':'Feedback after answering',
+      'settings.reveal':'Allow manual answer reveal','settings.finishAnytime':'Finish anytime',
+      'settings.demoTitle':'Demo data','settings.demoDesc':'Simulates exams, flashcards and gaps to preview Progress charts.',
+      'settings.demoGen':'Generate demo data','settings.demoClear':'Remove demo data','settings.demoActive':'Demo data active.',
+      'settings.save':'Save','settings.saved':'Saved.','settings.installApp':'Install app',
+      'settings.installDone':'Already installed','settings.installBtn':'Install app','settings.installHow':'How to install',
+      'settings.installDesc':'Use Velora offline with a home screen icon — like a native app on phone or desktop.',
+      'settings.installReady':'Ready to install','settings.installManual':'Manual instructions',
+      'help.title':'FAQ & How to','help.search':'Search topic…','help.faqTab':'FAQ','help.howTab':'How to','help.noResults':'No topics found.',
+      'common.save':'Save','common.cancel':'Cancel','common.confirm':'Confirm','common.back':'Back',
+      'progress.title':'Progress','builder.title':'Exam builder'
+    }
+  },
+  locale(){ return this._locale; },
+  isEn(){ return this._locale === 'en-US'; },
+  setLocale(loc){ this._locale = loc === 'en-US' ? 'en-US' : 'pt-BR'; },
+  initFromSettings(s){ this.setLocale(s?.uiLocale || s?.language || 'pt-BR'); },
+  t(key, vars={}){
+    const bag = this._dict[this._locale] || this._dict['pt-BR'];
+    let str = bag[key] ?? this._dict['pt-BR'][key] ?? key;
+    Object.entries(vars).forEach(([k,v])=>{ str = str.replace(new RegExp('\\{'+k+'\\}','g'), v); });
+    return str;
+  }
+};
+
+const HelpCenter = {
+  topics(){
+    const en = I18n.isEn();
+    const L = (pt, enTxt)=> en ? enTxt : pt;
+    return [
+      {id:'overview', section:'faq', kw:['velora','knowledge','os','plataforma','platform','what'],
+        title:L('O que é o Velora?','What is Velora?'),
+        body:L('Velora é um Knowledge OS para certificações DPO e privacidade. Questões, flashcards e simulados são visualizações do mesmo conhecimento — não módulos separados.','Velora is a Knowledge OS for DPO and privacy certifications. Questions, flashcards and exams are views of the same knowledge — not separate modules.')},
+      {id:'home', section:'howto', kw:['inicio','home','dashboard','sessao','smart'],
+        title:L('Início — sessões e trilhas','Home — sessions and tracks'),
+        body:L('<ul><li><strong>Continuar</strong> retoma o simulado pausado.</li><li><strong>Sessão inteligente</strong> prioriza lacunas (AITutor + FSRS).</li><li>Presets: Completo, Rápido, Só erros, Sprint, Maratona.</li><li>Trilhas por continente abrem o modal de configuração antes do player.</li></ul>','<ul><li><strong>Continue</strong> resumes a paused exam.</li><li><strong>Smart session</strong> prioritizes weak areas (AITutor + FSRS).</li><li>Presets: Full, Quick, Errors only, Sprint, Marathon.</li><li>Continent tracks open the config modal before the player.</li></ul>')},
+      {id:'library-certs', section:'howto', kw:['biblioteca','certificacoes','certifications','library','exame'],
+        title:L('Biblioteca — Certificações','Library — Certifications'),
+        body:L('Lista certificações DPO global por trilha. Toque ▶ para configurar e iniciar. <strong>+ Novo exame</strong> cria simulados personalizados (título* e categoria* obrigatórios). <strong>Importar</strong> aceita CSV/JSON.','Lists global DPO certifications by track. Tap ▶ to configure and start. <strong>+ New exam</strong> creates custom exams (title* and category* required). <strong>Import</strong> accepts CSV/JSON.')},
+      {id:'library-questions', section:'howto', kw:['questoes','questions','banco','bank','criar'],
+        title:L('Biblioteca — Questões','Library — Questions'),
+        body:L('Banco hierárquico por trilha → certificação → sub-matéria. Botão + cria questões (single, multi, boolean, etc.). Cada questão alimenta estatísticas, progresso e flashcards.','Hierarchical bank by track → certification → sub-topic. + button creates questions (single, multi, boolean, etc.). Each question feeds stats, progress and flashcards.')},
+      {id:'library-flashcards', section:'howto', kw:['flashcards','cards','fsrs','anki','repeticao'],
+        title:L('Biblioteca — Flashcards','Library — Flashcards'),
+        body:L('Cada questão gera um card (frente = enunciado, verso = resposta). Estude com FSRS: De novo · Difícil · Bom · Fácil. Progresso aparece em Progresso e no mapa de domínios.','Each question becomes a card (front = stem, back = answer). Study with FSRS: Again · Hard · Good · Easy. Progress shows in Progress and domain radar.')},
+      {id:'exam-config', section:'howto', kw:['modal','configurar','simulado','filtro','shuffle'],
+        title:L('Configurar simulado','Configure exam'),
+        body:L('Exclusões: dominadas, respondidas hoje, nunca vistas. Embaralhar questões/alternativas. Estratégias Sprint/Maratona. Filtros por dificuldade e tags. Export/import JSON de perfil.','Exclusions: mastered, answered today, unseen. Shuffle questions/options. Sprint/Marathon strategies. Difficulty and tag filters. JSON profile export/import.')},
+      {id:'player', section:'howto', kw:['player','treino','simulado','pausar','explicar'],
+        title:L('Player de estudo','Study player'),
+        body:L('Treino: feedback imediato, Explicar (IA), revelar resposta. Simulado: cronômetro, revisão pré-envio, menu ⋯ (marcar, pausar). Footer: Anterior · Marcar · Próxima/Enviar.','Training: instant feedback, Explain (AI), reveal answer. Exam mode: timer, pre-submit review, ⋯ menu (mark, pause). Footer: Previous · Mark · Next/Submit.')},
+      {id:'progress', section:'howto', kw:['progresso','radar','kpi','grafico','lacunas'],
+        title:L('Progresso e radar','Progress and radar'),
+        body:L('KPIs locais: simulados, acertos, sequência, XP. Gráfico de aranha por domínio (Legal, Governança, Técnico…). Pontos fortes e lacunas com botão <strong>Estudar lacunas</strong>.','Local KPIs: exams, accuracy, streak, XP. Spider chart by domain (Legal, Governance, Technical…). Strengths and gaps with <strong>Study gaps</strong> button.')},
+      {id:'settings', section:'faq', kw:['ajustes','settings','tema','idioma','pwa','instalar'],
+        title:L('Ajustes','Settings'),
+        body:L('<ul><li><strong>Tema escuro/claro</strong> — aplica ao salvar ou ao alternar o switch.</li><li><strong>Idioma da plataforma</strong> — PT ou EN (interface).</li><li><strong>Idioma das questões</strong> — dual EN+PT ou só um idioma no enunciado.</li><li><strong>Instalar aplicativo</strong> — PWA offline.</li><li><strong>Dados demo</strong> — simula histórico para testar Progresso.</li></ul>','<ul><li><strong>Dark/light theme</strong> — applies on save or when toggling.</li><li><strong>Platform language</strong> — PT or EN (UI).</li><li><strong>Question language</strong> — dual EN+PT or single language in stems.</li><li><strong>Install app</strong> — offline PWA.</li><li><strong>Demo data</strong> — simulates history for Progress testing.</li></ul>')},
+      {id:'offline', section:'faq', kw:['offline','pwa','localstorage','sem internet'],
+        title:L('Funciona offline?','Works offline?'),
+        body:L('Sim. Dados ficam no navegador (localStorage). PWA cacheia o shell. Pill <strong>Offline</strong> aparece sem rede — o app continua funcionando.','Yes. Data stays in the browser (localStorage). PWA caches the shell. <strong>Offline</strong> pill shows without network — the app keeps working.')},
+      {id:'bilingual', section:'faq', kw:['bilingue','english','portugues','idioma','dual'],
+        title:L('Bilingue EN/PT','Bilingual EN/PT'),
+        body:L('<strong>Idioma da plataforma</strong> muda menus e textos. <strong>Idioma das questões</strong> controla se enunciados aparecem em dual, só EN ou só PT — independentes.','<strong>Platform language</strong> changes menus and labels. <strong>Question language</strong> controls dual, EN-only or PT-only stems — independent settings.')},
+      {id:'create-exam', section:'faq', kw:['criar','exame','obrigatorio','mandatory','titulo'],
+        title:L('Campos obrigatórios ao criar exame','Required fields when creating an exam'),
+        body:L('Obrigatórios: <strong>Título*</strong>, <strong>Categoria/trilha*</strong> e ao menos <strong>1 questão vinculada</strong>. Demais campos têm padrão (60 min, 70% nota mínima).','Required: <strong>Title*</strong>, <strong>Category/track*</strong> and at least <strong>1 linked question</strong>. Other fields default (60 min, 70% pass score).')},
+      {id:'import', section:'howto', kw:['importar','csv','json','apkg'],
+        title:L('Importar conteúdo','Import content'),
+        body:L('Biblioteca → Importar. Adaptadores convertem CSV/JSON para questões e exames. Conteúdo importado alimenta flashcards e progresso como o banco DPO global.','Library → Import. Adapters convert CSV/JSON into questions and exams. Imported content feeds flashcards and progress like the global DPO bank.')}
+    ];
+  },
+  search(q, section){
+    const needle = (q||'').trim().toLowerCase();
+    let list = this.topics();
+    if(section && section !== 'all') list = list.filter(t=>t.section===section);
+    if(!needle) return list;
+    return list.filter(t=>{
+      const blob = (t.title+' '+t.body+' '+(t.kw||[]).join(' ')).toLowerCase();
+      return blob.includes(needle) || (t.kw||[]).some(k=>k.includes(needle));
+    });
+  }
+};
+
+/* ---------------------------------------------------------------------
    Toast / Modal / Loading (UI Components)
 --------------------------------------------------------------------- */
 class Toast {
@@ -1249,6 +1418,7 @@ class StorageManager {
     const defaults = {
       darkMode:true, font:'sans', fontSize:1, sound:true,
       defaultTimer:60, randomOrder:false, randomAlternatives:false, language:'pt-BR',
+      uiLocale:'pt-BR',
       bilingualMode:'dual',
       showAnswerAfterSelect:true, allowRevealAnswer:true, allowFinishAnytime:true
     };
@@ -2139,10 +2309,12 @@ class Router {
     this.app = app;
     this.routes = {};
     this.current = null;
+    this._lastParams = {};
   }
   register(name, view){ this.routes[name] = view; }
   go(name, params={}){
-    const tabMap = {study:{route:'content',tab:'certificacoes'}, profile:{route:'progress'}, history:{route:'progress'}, bank:{route:'content',tab:'questoes'}, progress:{route:'progress'}, dashboard:{route:'home'}};
+    this._lastParams = params;
+    const tabMap = {study:{route:'content',tab:'certificacoes'}, profile:{route:'progress'}, history:{route:'progress'}, bank:{route:'content',tab:'questoes'}, progress:{route:'progress'}, dashboard:{route:'home'}, help:{route:'help'}};
     if(tabMap[name]){ const m=tabMap[name]; if(m.tab) params={...params,tab:m.tab}; name=m.route||name; }
     if(this.current && this.routes[this.current]?.onLeave) this.routes[this.current].onLeave();
     document.querySelectorAll('#views .view').forEach(v=>v.classList.add('hidden'));
@@ -2160,7 +2332,7 @@ class Router {
     document.getElementById('topbar-title').textContent = view.title || name;
     document.getElementById('topbar-crumb').textContent = view.crumb ? `/ ${view.crumb}` : '';
     this._updateRail(name);
-    if(['home','content','progress'].includes(name)) try{ location.hash = name + (params.tab ? '/'+params.tab : ''); }catch(_){}
+    if(['home','content','progress','help'].includes(name)) try{ location.hash = name + (params.tab ? '/'+params.tab : ''); }catch(_){}
     view.render(el, params);
   }
   _updateRail(name){
@@ -2198,13 +2370,13 @@ const Icons = {
 
 /* ---------- Dashboard ---------- */
 class DashboardView {
-  get title(){ return 'Início'; }
+  get title(){ return I18n.t('nav.home'); }
   get crumb(){ return ''; }
   static _greeting(){
     const h = new Date().getHours();
-    if(h < 12) return 'Bom dia';
-    if(h < 18) return 'Boa tarde';
-    return 'Boa noite';
+    if(h < 12) return I18n.t('home.greetMorning');
+    if(h < 18) return I18n.t('home.greetAfternoon');
+    return I18n.t('home.greetEvening');
   }
   static _badgeClass(pct){
     return pct >= 70 ? 'badge-good' : pct >= 50 ? 'badge-warn' : 'badge-bad';
@@ -2254,28 +2426,28 @@ class DashboardView {
     const grouped = DashboardView._groupCertsByTrack(allCerts);
     const answered = session?.answers ? Object.keys(session.answers).filter(k=>session.answers[k]!==undefined&&session.answers[k]!==null).length : 0;
     const totalQ = sessionExam?.questionIds?.length || 0;
-    const name = DashboardView._studentName() || 'Estudante';
+    const name = DashboardView._studentName() || I18n.t('home.student');
     const progressSummary = DashboardView._homeProgressSummary();
 
     const resumeBlock = sessionExam ? `
       <div class="home-hero">
         <div class="home-hero-body">
-          <div class="home-hero-label">Continuar simulado</div>
+          <div class="home-hero-label">${I18n.t('home.continue')}</div>
           <div class="home-hero-title">${Util.escapeHtml(sessionExam.materia || sessionExam.title)}</div>
-          <div class="home-hero-meta">${answered} de ${totalQ} respondidas</div>
+          <div class="home-hero-meta">${answered}/${totalQ} · ${I18n.t('home.answered')}</div>
         </div>
         <button class="btn btn-primary" id="home-resume" type="button" aria-label="Continuar">${Icons.play}</button>
       </div>` : '';
 
     const actionBar = `
       <div class="home-actions">
-        <button class="btn btn-primary" id="home-smart" type="button">Sessão inteligente</button>
-        <div class="home-presets" role="group" aria-label="Presets de simulado">
-          <button class="btn btn-sm" type="button" data-preset="full" title="Todas as questões">Completo</button>
-          <button class="btn btn-sm" type="button" data-preset="quick" title="15 questões sorteadas">Rápido</button>
-          <button class="btn btn-sm" type="button" data-preset="errors" title="Só questões erradas">Só erros</button>
-          <button class="btn btn-sm" type="button" data-preset="sprint" title="10 questões · 15 min">Sprint</button>
-          <button class="btn btn-sm" type="button" data-preset="marathon" title="Todas · tempo estendido">Maratona</button>
+        <button class="btn btn-primary" id="home-smart" type="button">${I18n.t('home.smartSession')}</button>
+        <div class="home-presets" role="group" aria-label="Presets">
+          <button class="btn btn-sm" type="button" data-preset="full" title="">${I18n.t('home.presetFull')}</button>
+          <button class="btn btn-sm" type="button" data-preset="quick" title="">${I18n.t('home.presetQuick')}</button>
+          <button class="btn btn-sm" type="button" data-preset="errors" title="">${I18n.t('home.presetErrors')}</button>
+          <button class="btn btn-sm" type="button" data-preset="sprint" title="">${I18n.t('home.presetSprint')}</button>
+          <button class="btn btn-sm" type="button" data-preset="marathon" title="">${I18n.t('home.presetMarathon')}</button>
         </div>
       </div>`;
 
@@ -2298,18 +2470,22 @@ class DashboardView {
     }).join('');
 
     el.innerHTML = `
-      <p class="home-kicker">Trilhas DPO Global</p>
-      <h1 class="home-greet">${DashboardView._greeting()}, ${Util.escapeHtml(name)}<span class="home-greet-name">Pronto para evoluir hoje?</span></h1>
+      <p class="home-kicker">${I18n.t('home.tracks')}</p>
+      <h1 class="home-greet">${DashboardView._greeting()}, ${Util.escapeHtml(name)}<span class="home-greet-name">${I18n.t('home.ready')}</span></h1>
       ${allCerts.length ? `<p class="home-greet-name" style="margin:-12px 0 12px">${Util.escapeHtml(GlobalDPOSeeder.TRILHA_DESC||'')}</p>` : ''}
       ${progressSummary}
       ${resumeBlock}
       ${allCerts.length ? actionBar : ''}
       ${allCerts.length ? listSections : DashboardView._empty('Nenhuma certificação', 'Recarregue a página para carregar o banco DPO global.')}
       <div class="home-foot">
-        <button class="btn btn-ghost btn-sm" id="home-progress" type="button">Ver progresso</button>
+        <button class="btn btn-ghost btn-sm" id="home-faq" type="button">${I18n.t('home.faq')}</button>
+        <button class="btn btn-ghost btn-sm" id="home-howto" type="button">${I18n.t('home.howto')}</button>
+        <button class="btn btn-ghost btn-sm" id="home-progress" type="button">${I18n.t('home.viewProgress')}</button>
       </div>`;
 
     el.querySelector('#home-resume')?.addEventListener('click', ()=> PlayerController.start(session.examId, session));
+    el.querySelector('#home-faq')?.addEventListener('click', ()=> App.instance.router.go('help', {tab:'faq'}));
+    el.querySelector('#home-howto')?.addEventListener('click', ()=> App.instance.router.go('help', {tab:'howto'}));
     el.querySelector('#home-progress')?.addEventListener('click', ()=> App.instance.router.go('progress'));
     el.querySelector('#home-smart')?.addEventListener('click', ()=> PlayerController.startSmartReview());
     el.querySelectorAll('[data-quick-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.quickExam)));
@@ -2351,7 +2527,7 @@ class DashboardView {
 
 /* ---------- Exam Builder ---------- */
 class BuilderView {
-  get title(){ return 'Criador de Exames'; }
+  get title(){ return I18n.t('builder.title'); }
   get crumb(){ return 'Novo / Editar'; }
   render(el, params={}){
     this.exam = params.examId ? new Exam(StorageManager.getExam(params.examId)) : new Exam();
@@ -2369,10 +2545,10 @@ class BuilderView {
 
       <div id="tab-meta">
         <div class="form-grid">
-          <div class="field full"><label>Título</label><input class="input" id="f-title" value="${Util.escapeHtml(e.title)}" placeholder="Ex: AZ-900 — Fundamentos do Azure"></div>
+          <div class="field full field-required"><label>Título</label><input class="input" id="f-title" value="${Util.escapeHtml(e.title)}" placeholder="Ex: LGPD — Simulado personalizado" required></div>
           <div class="field full"><label>Descrição</label><textarea class="textarea" id="f-desc" placeholder="Breve descrição do exame">${Util.escapeHtml(e.description)}</textarea></div>
-          <div class="field"><label>Categoria</label><input class="input" id="f-category" value="${Util.escapeHtml(e.category)}" placeholder="Cloud, Segurança, Redes..."></div>
-          <div class="field"><label>Código</label><input class="input" id="f-code" value="${Util.escapeHtml(e.code)}" placeholder="AZ-900"></div>
+          <div class="field field-required"><label>Categoria / trilha</label><input class="input" id="f-category" value="${Util.escapeHtml(e.category)}" placeholder="Ex: Brasil — DPO, Personalizado…" required></div>
+          <div class="field"><label>Código</label><input class="input" id="f-code" value="${Util.escapeHtml(e.code)}" placeholder="LGPD-CUSTOM"></div>
           <div class="field"><label>Idioma</label>
             <select class="select" id="f-language">
               <option value="pt-BR" ${e.language==='pt-BR'?'selected':''}>Português (BR)</option>
@@ -2391,6 +2567,7 @@ class BuilderView {
             </div>
           </div>
         </div>
+        <p class="field-hint" style="margin-top:8px">Campos com <strong style="color:var(--bad)">*</strong> são obrigatórios. Na aba <em>Questões vinculadas</em>, selecione ao menos 1 questão para poder iniciar o simulado.</p>
         <div class="row" style="margin-top:8px">
           <button class="btn btn-primary" id="b-save">Salvar exame</button>
           ${e.id && StorageManager.getExam(e.id) ? `<button class="btn btn-danger" id="b-delete">${Icons.trash} Excluir</button>` : ''}
@@ -2487,10 +2664,14 @@ class BuilderView {
     e.author = el.querySelector('#f-author').value.trim();
     e.version = el.querySelector('#f-version').value.trim();
     e.updatedAt = new Date().toISOString();
-    if(!e.title){ Toast.show('Informe um título para o exame.', 'error'); return; }
+    if(!e.trilha) e.trilha = e.category;
+    if(!e.materia) e.materia = e.code || e.title.split('—')[0]?.trim() || e.category || 'Personalizado';
+    if(!e.title){ Toast.show('Informe o título do exame.', 'error'); el.querySelector('#f-title')?.focus(); return; }
+    if(!e.category){ Toast.show('Informe a categoria / trilha.', 'error'); el.querySelector('#f-category')?.focus(); return; }
+    if(!e.questionIds.length){ Toast.show('Vincule ao menos 1 questão na aba Questões vinculadas.', 'error'); el.querySelector('[data-tab="questions"]')?.click(); return; }
     StorageManager.upsertExam(e);
     Toast.show('Exame salvo com sucesso.', 'success');
-    App.instance.router.go('home');
+    App.instance.router.go('content', {tab:'certificacoes'});
   }
 }
 
@@ -2992,7 +3173,7 @@ class ChartHelpers {
 
 class ProgressHubView {
   constructor(){ this.history = new HistoryView(); }
-  get title(){ return 'Progresso'; }
+  get title(){ return I18n.t('progress.title'); }
   get crumb(){ return ''; }
   static _insightList(items, emptyMsg){
     if(!items.length) return `<span style="color:var(--text-2)">${emptyMsg}</span>`;
@@ -3074,39 +3255,251 @@ class ProgressHubView {
   }
 }
 
+/* ---------- Demo progress (settings) ---------- */
+class DemoProgressSeeder {
+  static META_KEY = 'ef_demo_progress_meta';
+  static hasDemo(){
+    try{ return !!localStorage.getItem(this.META_KEY); }catch(e){ return false; }
+  }
+  static _meta(){ try{ return JSON.parse(localStorage.getItem(this.META_KEY)||'null'); }catch(e){ return null; } }
+  static _saveMeta(m){ try{ localStorage.setItem(this.META_KEY, JSON.stringify(m)); }catch(e){} }
+  static run(){
+    if(this.hasDemo()) this.clear();
+    const exams = StorageManager.getExams().filter(e=>e.questionIds?.length);
+    const exam = exams[0] || StorageManager.getExams()[0];
+    if(!exam) { Toast.show('Carregue o banco DPO antes de gerar demo.', 'warn'); return; }
+    const allQs = StorageManager.getQuestions();
+    const byArea = { Legal:[], Governança:[], Técnico:[], Titular:[], 'Transfer.':[], Riscos:[] };
+    allQs.forEach(q=>{
+      const blob = `${q.submateria||''} ${q.category||''} ${(q.tags||[]).join(' ')}`.toLowerCase();
+      if(/lgpd|gdpr|legal|regulament|lei/.test(blob)) byArea.Legal.push(q.id);
+      else if(/govern|dpo|política|policy/.test(blob)) byArea.Governança.push(q.id);
+      else if(/segurança|security|iso|27001/.test(blob)) byArea.Técnico.push(q.id);
+      else if(/direito|rights|consent|titular/.test(blob)) byArea.Titular.push(q.id);
+      else if(/transfer|cross|fronteir|internacional/.test(blob)) byArea['Transfer.'].push(q.id);
+      else if(/risco|risk|dpia|incident/.test(blob)) byArea.Riscos.push(q.id);
+    });
+    const pick = (arr,n)=>arr.slice(0,n);
+    const targets = {
+      Legal: { ids: pick(byArea.Legal, 12), acc: 0.82 },
+      Governança: { ids: pick(byArea.Governança, 10), acc: 0.74 },
+      Técnico: { ids: pick(byArea.Técnico, 10), acc: 0.48 },
+      Titular: { ids: pick(byArea.Titular, 8), acc: 0.58 },
+      'Transfer.': { ids: pick(byArea['Transfer.'], 8), acc: 0.42 },
+      Riscos: { ids: pick(byArea.Riscos, 8), acc: 0.52 }
+    };
+    const stats = StorageManager.getStats();
+    const demoQids = [];
+    Object.values(targets).forEach(({ids, acc})=>{
+      ids.forEach(qid=>{
+        demoQids.push(qid);
+        const seen = 8 + Math.floor(Math.random()*6);
+        const correct = Math.round(seen * acc);
+        stats[qid] = {
+          seen, correct,
+          streak: acc >= 0.7 ? 3 : 0,
+          ease: acc >= 0.7 ? 2.5 : 1.6,
+          due: Date.now() + (acc < 0.6 ? -3600000 : 86400000 * 2),
+          last: Date.now() - 86400000
+        };
+      });
+    });
+    StorageManager.saveStats(stats);
+    const histIds = [];
+    const history = StorageManager.getHistory();
+    const pctSeries = [52, 58, 61, 55, 68, 72, 66, 74, 78, 71];
+    pctSeries.forEach((pct, i)=>{
+      const id = Util.uid('hist_demo');
+      histIds.push(id);
+      const total = 15;
+      const correctCount = Math.round(total * pct / 100);
+      history.unshift({
+        id, examId: exam.id,
+        examTitle: `[Demo] ${exam.materia || exam.title} — sessão ${i+1}`,
+        date: new Date(Date.now() - (pctSeries.length - i) * 86400000 * 1.4).toISOString(),
+        correctCount, totalCount: total, percentage: pct,
+        timeSpentSeconds: 720 + i * 40,
+        passed: pct >= 70,
+        markedCount: Math.floor(Math.random()*3),
+        detail: []
+      });
+    });
+    StorageManager._set(StorageManager.KEYS.HISTORY, history);
+    const fsrs = FSRS.all();
+    demoQids.slice(0, 20).forEach((qid, i)=>{
+      const weak = i % 3 === 0;
+      fsrs[qid] = {
+        due: weak ? Date.now() - 60000 : Date.now() + 86400000,
+        stability: weak ? 1.2 : 4 + i * 0.2,
+        difficulty: weak ? 7.5 : 4,
+        reps: 3 + (i % 4),
+        lapses: weak ? 2 : 0,
+        state: weak ? 'learning' : 'review',
+        last: Date.now() - 86400000,
+        correct: weak ? 1 : 3
+      };
+    });
+    FSRS.save(fsrs);
+    const g = StorageManager.getGame();
+    g.xp = Math.max(g.xp, 420);
+    g.level = Math.max(g.level, 3);
+    g.bestStreak = Math.max(g.bestStreak, 5);
+    g.examsCompleted = Math.max(g.examsCompleted, pctSeries.length);
+    g.totalCorrect = Math.max(g.totalCorrect, 85);
+    g.lastActive = new Date().toISOString();
+    StorageManager.saveGame(g);
+    this._saveMeta({ histIds, qids: demoQids });
+  }
+  static clear(){
+    const meta = this._meta();
+    if(!meta) return;
+    const drop = new Set(meta.histIds || []);
+    StorageManager._set(StorageManager.KEYS.HISTORY, StorageManager.getHistory().filter(h=>!drop.has(h.id)));
+    const stats = StorageManager.getStats();
+    (meta.qids || []).forEach(qid=>{ delete stats[qid]; });
+    StorageManager.saveStats(stats);
+    const fsrs = FSRS.all();
+    (meta.qids || []).forEach(qid=>{ delete fsrs[qid]; });
+    FSRS.save(fsrs);
+    try{ localStorage.removeItem(this.META_KEY); }catch(e){}
+  }
+}
+
+/* ---------- Help / FAQ View ---------- */
+class HelpView {
+  get title(){ return I18n.t('help.title'); }
+  get crumb(){ return ''; }
+  render(el, params={}){
+    el.classList.add('view-help');
+    const section = params.tab === 'howto' ? 'howto' : 'faq';
+    const topics = HelpCenter.search('', section);
+    el.innerHTML = `
+      <button class="btn btn-ghost btn-sm" id="help-back" style="margin-bottom:14px">${I18n.t('settings.back')}</button>
+      <div class="help-search-wrap">
+        <input class="input" id="help-q" type="search" placeholder="${I18n.t('help.search')}" autocomplete="off">
+        <div class="help-dropdown" id="help-drop" role="listbox"></div>
+      </div>
+      <div class="help-tabs" role="tablist">
+        <button type="button" class="help-tab ${section==='faq'?'active':''}" data-help-tab="faq">${I18n.t('help.faqTab')}</button>
+        <button type="button" class="help-tab ${section==='howto'?'active':''}" data-help-tab="howto">${I18n.t('help.howTab')}</button>
+      </div>
+      <div id="help-topics">${this._topicsHtml(topics)}</div>`;
+    el.querySelector('#help-back').onclick = ()=> App.instance.router.go('home');
+    el.querySelectorAll('[data-help-tab]').forEach(b=>{
+      b.onclick = ()=> App.instance.router.go('help', {tab: b.dataset.helpTab});
+    });
+    const qEl = el.querySelector('#help-q');
+    const drop = el.querySelector('#help-drop');
+    const renderDrop = (items)=>{
+      if(!items.length){ drop.classList.remove('show'); drop.innerHTML=''; return; }
+      drop.innerHTML = items.slice(0,8).map(t=>`<button type="button" class="help-drop-item" data-goto="${t.id}">${Util.escapeHtml(t.title)}<small>${t.section==='faq'?'FAQ':'How to'}</small></button>`).join('');
+      drop.classList.add('show');
+      drop.querySelectorAll('[data-goto]').forEach(btn=>{
+        btn.onclick = ()=>{
+          document.getElementById('help-'+btn.dataset.goto)?.scrollIntoView({behavior:'smooth',block:'start'});
+          drop.classList.remove('show');
+        };
+      });
+    };
+    qEl.addEventListener('input', ()=>{
+      const items = HelpCenter.search(qEl.value, section);
+      renderDrop(items);
+      el.querySelector('#help-topics').innerHTML = this._topicsHtml(items);
+    });
+    qEl.addEventListener('focus', ()=> renderDrop(HelpCenter.search(qEl.value, section)));
+    this._outsideClick = (e)=>{ if(!el.contains(e.target)) drop.classList.remove('show'); };
+    document.addEventListener('click', this._outsideClick);
+  }
+  _topicsHtml(list){
+    if(!list.length) return `<div class="chart-empty">${I18n.t('help.noResults')}</div>`;
+    return list.map(t=>`<article class="help-topic help-topic-id" id="help-${t.id}"><h3>${Util.escapeHtml(t.title)}</h3><div>${t.body}</div></article>`).join('');
+  }
+  onLeave(){
+    const el = document.getElementById('view-help');
+    if(el) el.classList.remove('view-help');
+    if(this._outsideClick) document.removeEventListener('click', this._outsideClick);
+  }
+}
+
 /* ---------- Settings View ---------- */
 class SettingsView {
-  get title(){ return 'Ajustes'; }
+  get title(){ return I18n.t('settings.title'); }
   get crumb(){ return ''; }
   render(el){
     const s = StorageManager.getSettings();
+    const uiLoc = s.uiLocale || s.language || 'pt-BR';
     el.innerHTML = `
-      <button class="btn btn-ghost btn-sm" id="s-back" style="margin-bottom:14px">← Voltar</button>
+      <button class="btn btn-ghost btn-sm" id="s-back" style="margin-bottom:14px">${I18n.t('settings.back')}</button>
       <div class="card card-compact" style="margin-bottom:10px">
         <div class="row between" style="margin-bottom:12px">
-          <span style="font-weight:600;font-size:13.5px">Tema escuro</span>
-          <div class="switch ${s.darkMode?'on':''}" id="s-dark"></div>
+          <span style="font-weight:600;font-size:13.5px">${I18n.t('settings.darkTheme')}</span>
+          <div class="switch ${s.darkMode?'on':''}" id="s-dark" role="switch" aria-checked="${s.darkMode?'true':'false'}"></div>
         </div>
         <div class="form-grid">
-          <div class="field"><label>Fonte</label><select class="select" id="s-font"><option value="sans" ${s.font==='sans'?'selected':''}>Normal</option><option value="mono" ${s.font==='mono'?'selected':''}>Mono</option></select></div>
-          <div class="field"><label>Tamanho</label><select class="select" id="s-fontsize"><option value="0.9" ${s.fontSize==0.9?'selected':''}>P</option><option value="1" ${s.fontSize==1?'selected':''}>M</option><option value="1.15" ${s.fontSize==1.15?'selected':''}>G</option></select></div>
-          <div class="field"><label>Idioma das questões</label><select class="select" id="s-bilingual"><option value="dual" ${(s.bilingualMode||'dual')==='dual'?'selected':''}>EN + PT (dual)</option><option value="en" ${s.bilingualMode==='en'?'selected':''}>English</option><option value="pt" ${s.bilingualMode==='pt'?'selected':''}>Português</option></select></div>
+          <div class="field field-required"><label>${I18n.t('settings.uiLocale')}</label><select class="select" id="s-ui-locale"><option value="pt-BR" ${uiLoc==='pt-BR'?'selected':''}>${I18n.t('settings.uiPt')}</option><option value="en-US" ${uiLoc==='en-US'?'selected':''}>${I18n.t('settings.uiEn')}</option></select></div>
+          <div class="field"><label>${I18n.t('settings.font')}</label><select class="select" id="s-font"><option value="sans" ${s.font==='sans'?'selected':''}>${I18n.t('settings.fontSans')}</option><option value="mono" ${s.font==='mono'?'selected':''}>${I18n.t('settings.fontMono')}</option></select></div>
+          <div class="field"><label>${I18n.t('settings.fontSize')}</label><select class="select" id="s-fontsize"><option value="0.9" ${s.fontSize==0.9?'selected':''}>P</option><option value="1" ${s.fontSize==1?'selected':''}>M</option><option value="1.15" ${s.fontSize==1.15?'selected':''}>G</option></select></div>
+          <div class="field"><label>${I18n.t('settings.qLang')}</label><select class="select" id="s-bilingual"><option value="dual" ${(s.bilingualMode||'dual')==='dual'?'selected':''}>${I18n.t('settings.qDual')}</option><option value="en" ${s.bilingualMode==='en'?'selected':''}>${I18n.t('settings.qEn')}</option><option value="pt" ${s.bilingualMode==='pt'?'selected':''}>${I18n.t('settings.qPt')}</option></select></div>
         </div>
       </div>
       <div class="card card-compact" style="margin-bottom:10px">
-        <div class="field"><label>Tempo padrão (min)</label><input class="input" type="number" id="s-timer" value="${s.defaultTimer}"></div>
-        <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-feedback" ${s.showAnswerAfterSelect?'checked':''}> Feedback após responder</label>
-        <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-reveal" ${s.allowRevealAnswer?'checked':''}> Permitir revelar resposta manualmente</label>
-        <label class="checkbox-row"><input type="checkbox" id="s-finish-anytime" ${s.allowFinishAnytime?'checked':''}> Finalizar a qualquer momento</label>
+        <div class="field"><label>${I18n.t('settings.defaultTimer')}</label><input class="input" type="number" id="s-timer" value="${s.defaultTimer}"></div>
+        <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-feedback" ${s.showAnswerAfterSelect?'checked':''}> ${I18n.t('settings.feedback')}</label>
+        <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-reveal" ${s.allowRevealAnswer?'checked':''}> ${I18n.t('settings.reveal')}</label>
+        <label class="checkbox-row"><input type="checkbox" id="s-finish-anytime" ${s.allowFinishAnytime?'checked':''}> ${I18n.t('settings.finishAnytime')}</label>
+      </div>
+      <div class="card card-compact" style="margin-bottom:10px" id="s-demo-card">
+        <div style="font-weight:600;font-size:13.5px;margin-bottom:6px">${I18n.t('settings.demoTitle')}</div>
+        <p style="font-size:12.5px;color:var(--text-2);line-height:1.55;margin:0 0 12px">${I18n.t('settings.demoDesc')}</p>
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm btn-primary" type="button" id="s-demo-gen">${I18n.t('settings.demoGen')}</button>
+          <button class="btn btn-sm btn-ghost" type="button" id="s-demo-clear" ${DemoProgressSeeder.hasDemo()?'':'disabled'}>${I18n.t('settings.demoClear')}</button>
+        </div>
+        ${DemoProgressSeeder.hasDemo() ? `<p class="field-hint" style="margin-top:8px;margin-bottom:0">${I18n.t('settings.demoActive')}</p>` : ''}
       </div>
       ${App.instance._renderInstallCard()}
       <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px">
-        <button class="btn btn-primary" id="s-save">Salvar</button>
+        <button class="btn btn-primary" id="s-save">${I18n.t('settings.save')}</button>
+        <button class="btn btn-ghost" id="s-help" type="button">${I18n.t('help.title')}</button>
       </div>`;
     el.querySelector('#s-back').onclick = ()=> App.instance.router.go('home');
-    el.querySelector('#s-dark').onclick = e=> e.currentTarget.classList.toggle('on');
+    el.querySelector('#s-help')?.addEventListener('click', ()=> App.instance.router.go('help'));
+    el.querySelector('#s-dark').onclick = e=>{
+      const sw = e.currentTarget;
+      sw.classList.toggle('on');
+      const darkMode = sw.classList.contains('on');
+      sw.setAttribute('aria-checked', darkMode ? 'true' : 'false');
+      const merged = {...StorageManager.getSettings(), darkMode};
+      StorageManager.saveSettings(merged);
+      App.instance.applySettings(merged);
+    };
+    el.querySelector('#s-ui-locale')?.addEventListener('change', ()=>{
+      const uiLocale = el.querySelector('#s-ui-locale').value;
+      const merged = {...StorageManager.getSettings(), uiLocale, language: uiLocale};
+      StorageManager.saveSettings(merged);
+      App.instance.applySettings(merged);
+      App.instance.router.go('settings');
+    });
     const installBtn = el.querySelector('#s-install');
     if(installBtn) installBtn.onclick = ()=> App.instance._promptInstall();
+    el.querySelector('#s-demo-gen')?.addEventListener('click', async ()=>{
+      const ok = await Modal.confirm({
+        title: I18n.isEn() ? 'Generate demo data' : 'Gerar dados de demonstração',
+        message: I18n.isEn() ? 'Adds simulated history, domain stats and flashcard progress. Real data is kept; only demo entries can be removed later.' : 'Isso adiciona histórico simulado, estatísticas por domínio e progresso de flashcards. Seus dados reais são preservados; apenas entradas demo são removíveis depois.',
+        confirmLabel: I18n.isEn() ? 'Generate' : 'Gerar'
+      });
+      if(!ok) return;
+      DemoProgressSeeder.run();
+      Toast.show(I18n.isEn() ? 'Demo data generated. Open Progress.' : 'Dados demo gerados. Abra Progresso para ver.', 'success');
+      App.instance.router.go('settings');
+    });
+    el.querySelector('#s-demo-clear')?.addEventListener('click', async ()=>{
+      const ok = await Modal.confirm({title: I18n.isEn() ? 'Remove demo data' : 'Remover dados demo', message: I18n.isEn() ? 'Delete simulated exams and stats?' : 'Apagar simulados e estatísticas de demonstração?', confirmLabel: I18n.isEn() ? 'Remove' : 'Remover', danger:true});
+      if(!ok) return;
+      DemoProgressSeeder.clear();
+      Toast.show(I18n.isEn() ? 'Demo data removed.' : 'Dados demo removidos.', 'success');
+      App.instance.router.go('settings');
+    });
     el.querySelector('#s-save').onclick = ()=>{
       const newSettings = {
         darkMode: el.querySelector('#s-dark').classList.contains('on'),
@@ -3116,7 +3509,8 @@ class SettingsView {
         defaultTimer: Number(el.querySelector('#s-timer').value)||60,
         randomOrder: s.randomOrder,
         randomAlternatives: s.randomAlternatives,
-        language: s.language,
+        language: el.querySelector('#s-ui-locale')?.value || uiLoc,
+        uiLocale: el.querySelector('#s-ui-locale')?.value || uiLoc,
         bilingualMode: el.querySelector('#s-bilingual')?.value || 'dual',
         showAnswerAfterSelect: el.querySelector('#s-feedback').checked,
         allowRevealAnswer: el.querySelector('#s-reveal').checked,
@@ -3124,7 +3518,7 @@ class SettingsView {
       };
       StorageManager.saveSettings(newSettings);
       App.instance.applySettings(newSettings);
-      Toast.show('Salvo.', 'success');
+      Toast.show(I18n.t('settings.saved'), 'success');
     };
   }
 }
@@ -5598,6 +5992,123 @@ const FSRS = {
   makeExam(title,qs){ if(!qs.length){Toast.show('Nenhuma questão encontrada.','warn');return;} const ex=new Exam({id:Util.uid('exam_filter'),title,description:'Prova gerada por filtro.',category:'Revisão',timeMinutes:Math.max(5,Math.round(qs.length*1.2)),passScore:70,questionIds:qs.map(q=>q.id)}); StorageManager.upsertExam(ex); ExamConfigModal.open(ex.id); }
 };
 
+class FlashcardController {
+  static _queue = [];
+  static _idx = 0;
+  static _revealed = false;
+  static _close = null;
+  static _dueDeck(limit=20){
+    const now = Date.now();
+    return FSRS.questions()
+      .map(q=>({ q, p: FSRS.priority(q), c: FSRS.card(q) }))
+      .filter(x=>!x.c.reps || x.c.due<=now || x.c.state==='new')
+      .sort((a,b)=>b.p-a.p)
+      .slice(0, limit)
+      .map(x=>x.q);
+  }
+  static start(limit=20){
+    this._queue = this._dueDeck(limit);
+    if(!this._queue.length){
+      this._queue = FSRS.questions().slice(0, Math.min(limit, FSRS.questions().length));
+    }
+    if(!this._queue.length){ Toast.show('Crie questões na aba Questões — cada uma vira um flashcard.', 'warn'); return; }
+    this._idx = 0;
+    this._revealed = false;
+    this._render();
+  }
+  static _render(){
+    if(this._idx >= this._queue.length){
+      Toast.show('Sessão de flashcards concluída.', 'success');
+      this._close?.();
+      return;
+    }
+    const q = this._queue[this._idx];
+    const card = FSRS.card(q);
+    const back = FSRS.backText(q);
+    const cat = [q.materia, q.submateria||q.category].filter(Boolean).join(' · ') || 'Geral';
+    const body = `
+      <div class="anki-compact">
+        <div class="anki-card card card-compact" id="fc-card" style="cursor:pointer;min-height:160px">
+          <div style="font-size:11px;color:var(--text-2);margin-bottom:8px">${Util.escapeHtml(cat)}</div>
+          <div class="anki-front">${Util.escapeHtml(q.text)}</div>
+          ${this._revealed ? `<div class="anki-back">${Util.escapeHtml(back)}</div>` : `<div style="font-size:12px;color:var(--text-2);margin-top:12px">Toque no card para revelar</div>`}
+        </div>
+        <div class="anki-meta">
+          <span class="anki-meta-count">${this._idx+1} / ${this._queue.length} · ${card.state||'new'}</span>
+        </div>
+        ${this._revealed ? `<div class="anki-ratings">
+          <button type="button" class="anki-rate anki-rate-again" data-rate="again">De novo</button>
+          <button type="button" class="anki-rate anki-rate-hard" data-rate="hard">Difícil</button>
+          <button type="button" class="anki-rate anki-rate-good" data-rate="good">Bom</button>
+          <button type="button" class="anki-rate anki-rate-easy" data-rate="easy">Fácil</button>
+        </div>` : ''}
+      </div>`;
+    if(this._close){
+      this._close();
+      this._close = null;
+    }
+    const {close, el} = Modal.open({
+      title: 'Flashcards',
+      wide: true,
+      modalClass: 'anki-modal',
+      bodyHtml: body,
+      onMount: (backdrop, closeFn)=>{
+        this._close = closeFn;
+        backdrop.querySelector('#fc-card')?.addEventListener('click', ()=>{
+          if(!this._revealed){ this._revealed = true; this._render(); }
+        });
+        backdrop.querySelectorAll('[data-rate]').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            FSRS.schedule(q, btn.dataset.rate);
+            AITutor.record(q.id, btn.dataset.rate !== 'again');
+            this._idx++;
+            this._revealed = false;
+            this._render();
+          });
+        });
+      }
+    });
+    this._close = close;
+  }
+}
+
+class FlashcardsHubView {
+  render(el){
+    const st = FSRS.stats();
+    const qs = FSRS.questions();
+    el.innerHTML = `
+      <p class="fc-info">Cada <strong>questão</strong> do banco gera automaticamente um flashcard (frente = enunciado, verso = resposta + explicação). Crie ou edite conteúdo na aba <strong>Questões</strong>.</p>
+      <div class="fc-stats">
+        <div class="fc-stat"><strong>${st.total}</strong><span>Cards</span></div>
+        <div class="fc-stat"><strong>${st.due}</strong><span>Para revisar</span></div>
+        <div class="fc-stat"><strong>${st.newc}</strong><span>Novos</span></div>
+        <div class="fc-stat"><strong>${st.retention}%</strong><span>Retenção</span></div>
+      </div>
+      <div class="hub-actions-bar">
+        <button class="btn btn-sm btn-primary" type="button" id="fc-study">${Icons.play} Estudar flashcards</button>
+        <button class="btn btn-sm" type="button" id="fc-new">${Icons.plus} Criar flashcard</button>
+        <button class="btn btn-sm btn-ghost" type="button" id="fc-questions">Ver questões</button>
+      </div>
+      <div class="card card-compact" style="margin-top:14px">
+        <div style="font-size:13px;font-weight:650;margin-bottom:8px">Como funciona</div>
+        <ul style="font-size:12.5px;color:var(--text-2);line-height:1.6;margin:0;padding-left:18px">
+          <li>Flashcards usam repetição espaçada (FSRS) — avalie com <em>De novo · Difícil · Bom · Fácil</em></li>
+          <li>Progresso aparece em <strong>Progresso</strong> e alimenta lacunas por domínio</li>
+          <li>Importar APKG/CSV na aba Certificações também alimenta o baralho</li>
+        </ul>
+      </div>
+      ${!qs.length ? DashboardView._empty('Nenhum flashcard', 'Crie uma questão para gerar seu primeiro card.') : ''}`;
+    el.querySelector('#fc-study')?.addEventListener('click', ()=> FlashcardController.start(20));
+    el.querySelector('#fc-new')?.addEventListener('click', ()=>{
+      QuestionEditorController.openModal(null, ()=>{
+        Toast.show('Questão salva — flashcard disponível no baralho.', 'success');
+        this.render(el);
+      });
+    });
+    el.querySelector('#fc-questions')?.addEventListener('click', ()=> App.instance.router.go('content', {tab:'questoes'}));
+  }
+}
+
 class StudyFilterView {
   render(el){
     const qs=FSRS.questions(); const cats=FSRS.uniq(qs.map(q=>q.category||'Sem categoria')); const temas=FSRS.uniq(qs.flatMap(q=>FSRS.temas(q)));
@@ -5613,23 +6124,30 @@ class StudyFilterView {
 class ContentHubView {
   constructor(){
     this.bank = new QuestionBankView();
+    this.flashcards = new FlashcardsHubView();
     this._selectMode = false;
     this._selected = new Set();
     this._panelEl = null;
   }
-  get title(){ return 'Biblioteca'; }
+  get title(){ return I18n.t('nav.library'); }
   get crumb(){ return ''; }
   _normTab(tab){
     if(tab === 'exames') return 'certificacoes';
+    if(tab === 'cards') return 'flashcards';
     return tab || 'certificacoes';
   }
   render(el, params={}){
     const tab = this._normTab(params.tab);
-    const tabs = [{id:'certificacoes', label:'Certificações'}, {id:'questoes', label:'Questões'}];
+    const tabs = [
+      {id:'certificacoes', label:I18n.t('lib.certs')},
+      {id:'questoes', label:I18n.t('lib.questions')},
+      {id:'flashcards', label:I18n.t('lib.flashcards')}
+    ];
     el.innerHTML = HubHelpers.tabs(tabs, tab) + '<div id="hub-panel"></div>';
     HubHelpers.bindTabs(el, 'content');
     this._panelEl = el.querySelector('#hub-panel');
     if(tab === 'questoes') this.bank.render(this._panelEl);
+    else if(tab === 'flashcards') this.flashcards.render(this._panelEl);
     else this._renderCertificacoes();
   }
   _studyGroups(exams){
@@ -5719,12 +6237,12 @@ class ContentHubView {
         <button class="btn btn-sm btn-ghost" id="ch-cancel-sel" type="button">Cancelar</button>
       </div>` : `
       <div class="hub-actions-bar">
-        <button class="btn btn-sm" id="ch-new" type="button">${Icons.plus} Novo exame</button>
-        <button class="btn btn-sm" id="ch-import" type="button">${Icons.upload} Importar</button>
+        <button class="btn btn-sm" id="ch-new" type="button">${Icons.plus} ${I18n.t('lib.newExam')}</button>
+        <button class="btn btn-sm" id="ch-import" type="button">${Icons.upload} ${I18n.t('lib.import')}</button>
         <span class="spacer"></span>
-        <button class="btn btn-sm btn-ghost" id="ch-select" type="button">Selecionar</button>
+        <button class="btn btn-sm btn-ghost" id="ch-select" type="button">${I18n.t('lib.select')}</button>
       </div>`;
-    const footer = this._selectMode ? '' : `<div class="hub-footer"><button class="btn btn-ghost btn-sm" id="ch-smart" type="button">Revisão inteligente</button></div>`;
+    const footer = this._selectMode ? '' : `<div class="hub-footer"><button class="btn btn-ghost btn-sm" id="ch-smart" type="button">${I18n.t('lib.smartReview')}</button></div>`;
     panel.innerHTML = `${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma certificação','Recarregue a página para carregar o banco DPO global.')}</div>${footer}`;
     panel.querySelector('#ch-new')?.addEventListener('click', ()=> App.instance.router.go('builder', {}));
     panel.querySelector('#ch-import')?.addEventListener('click', ()=> ImportController.openModal());
@@ -5802,10 +6320,12 @@ class App {
     this.applySettings(StorageManager.getSettings());
     setupLudicComments();
     const hash = parseAppHash();
-    const valid = ['home','content','progress','builder','settings','result','review'];
+    const valid = ['home','content','progress','builder','settings','result','review','help'];
     let route = valid.includes(hash.route) ? hash.route : 'home';
     if(hash.route === 'study') route = 'content';
-    const params = hash.tab && hash.tab !== 'cards' ? {tab: hash.tab === 'exames' ? 'certificacoes' : hash.tab} : (hash.route === 'study' ? {tab:'certificacoes'} : {});
+    const params = hash.tab
+      ? {tab: hash.tab === 'exames' ? 'certificacoes' : (hash.tab === 'cards' ? 'flashcards' : hash.tab)}
+      : (hash.route === 'study' ? {tab:'certificacoes'} : {});
     this.router.go(route, params);
     this._setupPWA();
   }
@@ -5830,41 +6350,63 @@ class App {
     this.router.register('progress', new ProgressHubView());
     this.router.register('builder', new BuilderView());
     this.router.register('settings', new SettingsView());
+    this.router.register('help', new HelpView());
     this.router.register('result', new ResultView());
     this.router.register('review', new ReviewView());
   }
   _buildTabbar(){
     const bar = document.getElementById('tabbar');
     if(!bar) return;
+    bar.innerHTML = '';
     const logo = document.createElement('div');
     logo.className = 'tabbar-logo-wrap';
     logo.innerHTML = '<img src="branding/logo/symbol-white.svg" width="32" height="32" alt=""><span>Velora</span>';
     bar.appendChild(logo);
     const items = [
-      {route:'home', icon:Icons.dashboard, label:'Início', title:'Página inicial'},
-      {route:'content', icon:Icons.content, label:'Biblioteca', title:'Certificações e questões'},
-      {route:'progress', icon:Icons.progress, label:'Progresso', title:'Estatísticas e histórico'},
+      {route:'home', icon:Icons.dashboard, labelKey:'nav.home', titleKey:'nav.homeTitle'},
+      {route:'content', icon:Icons.content, labelKey:'nav.library', titleKey:'nav.libraryTitle'},
+      {route:'progress', icon:Icons.progress, labelKey:'nav.progress', titleKey:'nav.progressTitle'},
     ];
     items.forEach(it=>{
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'tabbar-btn';
       btn.dataset.route = it.route;
-      btn.setAttribute('aria-label', it.title);
-      btn.title = it.title;
-      btn.innerHTML = `${it.icon}<span>${it.label}</span>`;
+      const label = I18n.t(it.labelKey);
+      const title = I18n.t(it.titleKey);
+      btn.setAttribute('aria-label', title);
+      btn.title = title;
+      btn.innerHTML = `${it.icon}<span data-i18n="${it.labelKey}">${label}</span>`;
       btn.addEventListener('click', ()=>this.router.go(it.route));
       bar.appendChild(btn);
     });
   }
+  _refreshChrome(){
+    this._buildTabbar();
+    if(this.router.current){
+      const v = this.router.routes[this.router.current];
+      if(v) document.getElementById('topbar-title').textContent = v.title || this.router.current;
+    }
+    const settingsBtn = document.getElementById('topbar-settings-btn');
+    if(settingsBtn) settingsBtn.setAttribute('aria-label', I18n.t('nav.settings'));
+  }
   _bindTopbar(){
     const btn = document.getElementById('topbar-settings-btn');
-    if(btn){ btn.innerHTML = Icons.settings; btn.addEventListener('click', ()=>this.router.go('settings')); }
+    if(btn){ btn.innerHTML = Icons.settings; btn.setAttribute('aria-label', I18n.t('nav.settings')); btn.addEventListener('click', ()=>this.router.go('settings')); }
   }
   applySettings(s){
+    I18n.initFromSettings(s);
     document.body.classList.toggle('light', !s.darkMode);
+    document.documentElement.lang = I18n.locale() === 'en-US' ? 'en' : 'pt-BR';
+    document.documentElement.style.colorScheme = s.darkMode ? 'dark' : 'light';
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.content = s.darkMode ? '#0A0A0E' : '#faf8f5';
     document.documentElement.style.setProperty('--font-scale', s.fontSize || 1);
     document.body.style.fontFamily = s.font==='mono' ? 'var(--mono)' : 'var(--sans)';
+    this._refreshChrome();
+    if(this.router.current && !['builder','result','review'].includes(this.router.current)){
+      this.router.go(this.router.current, this.router._lastParams || {});
+    }
   }
 
   /* ---------- PWA: manifest estático + service worker + instalação ---------- */
@@ -5905,26 +6447,26 @@ class App {
   _renderInstallCard(){
     const state = this._getInstallState();
     const badges = {
-      installed: ['Instalado', 'badge-good'],
-      prompt: ['Pronto para instalar', 'badge-accent'],
-      manual: ['Instruções', 'badge-warn']
+      installed: [I18n.t('settings.installDone'), 'badge-good'],
+      prompt: [I18n.t('settings.installReady'), 'badge-accent'],
+      manual: [I18n.t('settings.installHow'), 'badge-warn']
     };
     const [label, cls] = badges[state];
-    const btnLabel = state === 'installed' ? 'Já instalado' : state === 'prompt' ? 'Instalar aplicativo' : 'Como instalar';
+    const btnLabel = state === 'installed' ? I18n.t('settings.installDone') : state === 'prompt' ? I18n.t('settings.installBtn') : I18n.t('settings.installHow');
     const btnClass = state === 'installed' ? 'btn btn-ghost' : 'btn btn-primary';
     const disabled = state === 'installed' ? ' disabled' : '';
     return `
       <div class="card card-compact" id="s-pwa-card">
         <div class="row between" style="margin-bottom:8px">
-          <span style="font-weight:600;font-size:13.5px">Instalar aplicativo</span>
+          <span style="font-weight:600;font-size:13.5px">${I18n.t('settings.installApp')}</span>
           <span class="badge ${cls}">${label}</span>
         </div>
         <p style="font-size:12.5px;color:var(--text-2);line-height:1.55;margin:0 0 12px">
-          Use o Velora offline, com ícone na tela inicial — como um app nativo no celular ou desktop.
+          ${I18n.t('settings.installDesc')}
         </p>
         <button class="${btnClass}" id="s-install"${disabled}>${btnLabel}</button>
         <details style="margin-top:10px;font-size:12px;color:var(--text-2);line-height:1.6">
-          <summary style="cursor:pointer;font-weight:600;color:var(--text-1)">Instruções manuais</summary>
+          <summary style="cursor:pointer;font-weight:600;color:var(--text-1)">${I18n.t('settings.installManual')}</summary>
           <p style="margin:8px 0 0">
             <strong>Android / Chrome:</strong> menu ⋮ → Adicionar à tela inicial.<br>
             <strong>iPhone / Safari:</strong> Compartilhar → Adicionar à Tela de Início.<br>
@@ -5964,7 +6506,7 @@ class App {
 
 /* Enhancement layers usam window.* — em strict mode as classes não vinculam ao window automaticamente */
 Object.assign(window, {
-  App, Router, DashboardView, ContentHubView, ProgressHubView,
+  App, Router, DashboardView, ContentHubView, ProgressHubView, HelpView,
   BuilderView, QuestionBankView, HistoryView, ProfileView, SettingsView, ResultView, ReviewView,
   QuestionEditorController, PlayerController, ImportController, ExportController, ExamConfigModal,
   StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam,
