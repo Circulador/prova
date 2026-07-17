@@ -438,6 +438,13 @@ const ForgeProviderOllama = {
 
 const ForgeProvider = {
   async generate(system, user, config, intent){
+    if(typeof ForgeEngines !== 'undefined' && ForgeEngines.hasActiveEngine()){
+      try{
+        return await ForgeEngines.callAI(system, user);
+      }catch(e){
+        console.warn('[ForgeProvider] Engine fallback:', e.message);
+      }
+    }
     const provider = config.provider || 'local';
     if(provider === 'ollama'){
       return ForgeProviderOllama.generate(system, user, config, intent);
@@ -640,7 +647,8 @@ const ForgeOrchestrator = {
         break;
       }catch(e){
         lastError = e.message;
-        if(!config.apiKey) break;
+        const hasCloud = config.apiKey || (typeof ForgeEngines !== 'undefined' && ForgeEngines.hasActiveEngine());
+        if(!hasCloud) break;
         user += `\n\nError: ${e.message}. Return valid JSON only.`;
       }
     }
@@ -653,7 +661,9 @@ const ForgeOrchestrator = {
       intent,
       status: 'preview',
       data,
-      provider: config.apiKey ? (config.model || 'openai') : (config.provider || 'local')
+      provider: (typeof ForgeEngines !== 'undefined' && ForgeEngines.hasActiveEngine())
+        ? (ForgeEngines.getEngine(1)?.provider || ForgeEngines.getEngine(2)?.provider || 'engine')
+        : (config.apiKey ? (config.model || 'openai') : (config.provider || 'local'))
     };
     ForgeStorage.addHistory(entry);
     return {entry, intent, data};
@@ -668,4 +678,4 @@ const ForgeOrchestrator = {
   }
 };
 
-Object.assign(window, {ForgeStorage, ForgeSchemas, ForgeIntentParser, ForgeRAG, ForgeProvider, ForgeRegistry, ForgeOrchestrator});
+Object.assign(window, {ForgeStorage, ForgeSchemas, ForgeIntentParser, ForgeRAG, ForgeProvider, ForgeRegistry, ForgeOrchestrator, ForgeProviderLocal, ForgeProviderMock});
