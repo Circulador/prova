@@ -1136,6 +1136,9 @@ const I18n = {
       'home.continue':'Continuar de onde parei','home.answered':'respondidas','home.smartSession':'Sessão inteligente',
       'home.studyNow':'Estudar agora','home.customize':'Personalizar','home.mastery':'Domínio consolidado','home.gapHint':'Lacuna: {area}',
       'home.tracksExpand':'Ver trilhas e certificações','home.studyHint':'~10 min · lacunas e revisão',
+      'home.recent':'Recentes','home.aboutVelora':'Sobre o Velora',
+      'session.qty10':'10 questões','session.qty20':'20 questões','session.qtyAll':'Todas',
+      'fc.revealAll':'Revelar resposta sempre','fc.markCard':'Marcar card',
       'home.presetFull':'Completo','home.presetQuick':'Rápido','home.presetErrors':'Só erros','home.presetSprint':'Sprint','home.presetMarathon':'Maratona',
       'session.configure':'Configurar sessão','session.start':'Começar','session.examMode':'Prova completa','session.trainMode':'Aprendizado',
       'session.examHint':'Como na prova — feedback no final.','session.trainHint':'Veja respostas, explique e revise no fluxo.',
@@ -1174,6 +1177,9 @@ const I18n = {
       'home.continue':'Continue where you left off','home.answered':'answered','home.smartSession':'Smart session',
       'home.studyNow':'Study now','home.customize':'Customize','home.mastery':'Consolidated mastery','home.gapHint':'Gap: {area}',
       'home.tracksExpand':'View tracks and certifications','home.studyHint':'~10 min · gaps and review',
+      'home.recent':'Recent','home.aboutVelora':'About Velora',
+      'session.qty10':'10 questions','session.qty20':'20 questions','session.qtyAll':'All',
+      'fc.revealAll':'Always reveal answer','fc.markCard':'Mark card',
       'home.presetFull':'Full','home.presetQuick':'Quick','home.presetErrors':'Errors only','home.presetSprint':'Sprint','home.presetMarathon':'Marathon',
       'session.configure':'Configure session','session.start':'Start','session.examMode':'Full exam','session.trainMode':'Learning',
       'session.examHint':'Exam-like — feedback at the end.','session.trainHint':'See answers, explain and review in flow.',
@@ -2422,8 +2428,24 @@ class DashboardView {
       <h1 class="home-greet">${I18n.t('home.ready')}</h1>
       <span class="home-os-badge">${I18n.t('home.osBadge')}</span>
       <p class="home-mission">${I18n.t('home.mission')}</p>
-      <p class="home-story">${I18n.t('home.story')}</p>
-      <p class="home-family">${I18n.t('home.family')}</p>
+      <details class="home-story-details">
+        <summary>${I18n.t('home.aboutVelora')}</summary>
+        <p class="home-story">${I18n.t('home.story')}</p>
+        <p class="home-family">${I18n.t('home.family')}</p>
+      </details>
+    </div>`;
+  }
+  static _recentBlock(){
+    const hist = StorageManager.getHistory().slice(-3).reverse();
+    if(!hist.length) return '';
+    const items = hist.map(h=>`
+      <button type="button" class="home-recent-btn" data-recent-exam="${Util.escapeHtml(h.examId)}">
+        <span class="home-recent-title">${Util.escapeHtml(h.examTitle || 'Sessão')}</span>
+        <span class="home-recent-meta">${Util.formatDate(h.date)} · ${h.percentage ?? 0}%</span>
+      </button>`).join('');
+    return `<div class="home-recent">
+      <h2 class="home-recent-label">${I18n.t('home.recent')}</h2>
+      <div class="home-recent-list">${items}</div>
     </div>`;
   }
   render(el){
@@ -2435,7 +2457,7 @@ class DashboardView {
     const grouped = DashboardView._groupCertsByTrack(allCerts);
     const answered = session?.answers ? Object.keys(session.answers).filter(k=>session.answers[k]!==undefined&&session.answers[k]!==null).length : 0;
     const totalQ = sessionExam?.questionIds?.length || 0;
-    const progressSummary = DashboardView._homeProgressSummary();
+    const recentBlock = DashboardView._recentBlock();
 
     const resumeBlock = sessionExam ? `
       <div class="home-hero">
@@ -2484,9 +2506,9 @@ class DashboardView {
 
     el.innerHTML = `
       ${DashboardView._welcomeBlock()}
-      ${progressSummary}
       ${resumeBlock}
       ${allCerts.length ? actionBar : ''}
+      ${recentBlock}
       ${tracksBlock}
       <div class="home-foot">
         <button class="btn btn-ghost btn-sm" id="home-faq" type="button">${I18n.t('home.faq')}</button>
@@ -2501,6 +2523,7 @@ class DashboardView {
     el.querySelector('#home-study-now')?.addEventListener('click', ()=> PlayerController.startStudyNow());
     el.querySelector('#home-customize')?.addEventListener('click', ()=> ExamConfigModal.open());
     el.querySelectorAll('[data-quick-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.quickExam)));
+    el.querySelectorAll('[data-recent-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.recentExam)));
   }
   onLeave(){
     const el = document.getElementById('view-home');
@@ -3868,41 +3891,47 @@ class ExamConfigModal {
               <input type="checkbox" id="ec-training" class="visually-hidden" hidden aria-hidden="true">
             </div>
             <div class="field">
-              <label for="ec-strategy">Estratégia</label>
-              <select class="select" id="ec-strategy">
-                <option value="normal">Normal — configuração manual</option>
-                <option value="sprint">Sprint — 10 questões · 15 min</option>
-                <option value="marathon">Maratona — todas · tempo estendido</option>
-                <option value="cat">CAT adaptativo — Sessão inteligente (Home)</option>
-              </select>
-            </div>
-            <details class="ec-candidate-details">
-              <summary>Nome do candidato (opcional)</summary>
-              <input class="input" id="ec-candidate" type="text" placeholder="Seu nome" value="${Util.escapeHtml(candidate)}" autocomplete="name">
-            </details>
-            <div class="field">
-              <label for="ec-basic-qty">Quantidade de questões</label>
-              <div class="ec-qty-row">
-                <button type="button" class="btn btn-sm" id="ec-qty-all">Todas (${total})</button>
-                <input class="input" id="ec-basic-qty" type="number" min="1" max="${total}" value="${total}" aria-label="Quantidade">
-                <span class="hint">de ${total}</span>
+              <label for="ec-basic-qty">${I18n.isEn() ? 'Questions' : 'Quantidade'}</label>
+              <div class="ec-qty-presets">
+                <button type="button" class="btn btn-sm" id="ec-qty-10">${I18n.t('session.qty10')}</button>
+                <button type="button" class="btn btn-sm" id="ec-qty-20">${I18n.t('session.qty20')}</button>
+                <button type="button" class="btn btn-sm" id="ec-qty-all">${I18n.t('session.qtyAll')} (${total})</button>
               </div>
+              <input class="input" id="ec-basic-qty" type="number" min="1" max="${total}" value="${Math.min(10, total)}" aria-label="Quantidade">
             </div>
             <div class="ec-options" style="margin-top:0;padding-top:0;border-top:none">
-              <div class="ec-timer-row">
-                <label class="checkbox-row"><input type="checkbox" id="ec-timer-on" checked> Cronômetro ativo</label>
-                <div class="field ec-timer-min"><label for="ec-time">Tempo limite (min)</label><input class="input" id="ec-time" type="number" min="1" max="600" value="${examTime}"></div>
-              </div>
-              <div class="ec-filter-row" style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
-                <label class="checkbox-row"><input type="checkbox" id="ec-shuffle-q" checked> Embaralhar questões</label>
-                <label class="checkbox-row"><input type="checkbox" id="ec-shuffle-alt"> Embaralhar alternativas</label>
-                <label class="checkbox-row"><input type="checkbox" id="ec-ex-mastered"> Excluir dominadas (≥3 acertos seguidos)</label>
-                <label class="checkbox-row"><input type="checkbox" id="ec-ex-today"> Excluir respondidas hoje</label>
+              <label class="checkbox-row"><input type="checkbox" id="ec-shuffle-q" checked> ${I18n.isEn() ? 'Shuffle questions' : 'Embaralhar questões'}</label>
+              <div class="ec-timer-row-wrap" id="ec-timer-row-wrap">
+                <div class="ec-timer-row">
+                  <label class="checkbox-row"><input type="checkbox" id="ec-timer-on" checked> ${I18n.isEn() ? 'Timer on' : 'Cronômetro ativo'}</label>
+                  <div class="field ec-timer-min"><label for="ec-time">${I18n.isEn() ? 'Time limit (min)' : 'Tempo limite (min)'}</label><input class="input" id="ec-time" type="number" min="1" max="600" value="${examTime}"></div>
+                </div>
               </div>
             </div>
           </div>
-          <button type="button" class="ec-advanced-toggle" id="ec-adv-toggle" aria-expanded="false">⚙ Mais opções (questões, histórico, importar…)</button>
-          <div class="ec-advanced hidden" id="ec-advanced">${this._advancedPanelsHtml(sectionsHtml, defN, defTo, defaultExamId)}</div>
+          <button type="button" class="ec-advanced-toggle" id="ec-adv-toggle" aria-expanded="false">⚙ ${I18n.isEn() ? 'More options (strategy, filters, import…)' : 'Mais opções (estratégia, filtros, importar…)'}</button>
+          <div class="ec-advanced hidden" id="ec-advanced">
+            <div class="ec-adv-extra">
+              <div class="field">
+                <label for="ec-strategy">${I18n.isEn() ? 'Strategy' : 'Estratégia'}</label>
+                <select class="select" id="ec-strategy">
+                  <option value="normal">${I18n.isEn() ? 'Normal' : 'Normal — manual'}</option>
+                  <option value="sprint">Sprint — 10 · 15 min</option>
+                  <option value="marathon">${I18n.isEn() ? 'Marathon — all · extended time' : 'Maratona — todas · tempo estendido'}</option>
+                </select>
+              </div>
+              <details class="ec-candidate-details">
+                <summary>${I18n.isEn() ? 'Candidate name (optional)' : 'Nome do candidato (opcional)'}</summary>
+                <input class="input" id="ec-candidate" type="text" placeholder="${I18n.isEn() ? 'Your name' : 'Seu nome'}" value="${Util.escapeHtml(candidate)}" autocomplete="name">
+              </details>
+              <div class="ec-filter-row" style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+                <label class="checkbox-row"><input type="checkbox" id="ec-shuffle-alt"> ${I18n.isEn() ? 'Shuffle alternatives' : 'Embaralhar alternativas'}</label>
+                <label class="checkbox-row"><input type="checkbox" id="ec-ex-mastered"> ${I18n.isEn() ? 'Exclude mastered (≥3 streak)' : 'Excluir dominadas (≥3 acertos seguidos)'}</label>
+                <label class="checkbox-row"><input type="checkbox" id="ec-ex-today"> ${I18n.isEn() ? 'Exclude answered today' : 'Excluir respondidas hoje'}</label>
+              </div>
+            </div>
+            ${this._advancedPanelsHtml(sectionsHtml, defN, defTo, defaultExamId)}
+          </div>
         </div>
       </div>`;
   }
@@ -4060,6 +4089,9 @@ class ExamConfigModal {
     });
     const hint = modalEl.querySelector('#ec-session-hint');
     if(hint) hint.textContent = treino ? I18n.t('session.trainHint') : I18n.t('session.examHint');
+    modalEl.querySelector('#ec-timer-row-wrap')?.classList.toggle('hidden', !!treino);
+    const timerOn = modalEl.querySelector('#ec-timer-on');
+    if(timerOn) timerOn.checked = !treino;
   }
 
   static _syncBasicToMode(modalEl){
@@ -4073,7 +4105,7 @@ class ExamConfigModal {
     if(qty < 1) qty = 1;
     qtyEl.value = qty;
     const allBtn = modalEl.querySelector('#ec-qty-all');
-    if(allBtn) allBtn.textContent = `Todas (${total})`;
+      if(allBtn) allBtn.textContent = `${I18n.t('session.qtyAll')} (${total})`;
     const full = modalEl.querySelector('[name="ec-mode"][value="full"]');
     const count = modalEl.querySelector('[name="ec-mode"][value="count"]');
     const nCount = modalEl.querySelector('#ec-n-count');
@@ -4315,7 +4347,7 @@ class ExamConfigModal {
       const rFrom = modalEl.querySelector('#ec-range-from');
       const rTo = modalEl.querySelector('#ec-range-to');
       const basicQty = modalEl.querySelector('#ec-basic-qty');
-      if(basicQty){ basicQty.max = total; basicQty.value = total; modalEl._countEdited = false; }
+      if(basicQty){ basicQty.max = total; basicQty.value = Math.min(10, total || 10); modalEl._countEdited = false; }
       if(nCount && !modalEl._countEdited) nCount.value = Math.min(15, total || 15);
       if(rFrom && !modalEl._rangeEdited){ rFrom.value = 1; rTo.value = Math.min(15, total || 15); }
       modalEl._showAllDist = false;
@@ -4367,6 +4399,16 @@ class ExamConfigModal {
       this._syncBasicToMode(modalEl);
       this._updatePreview(modalEl);
     });
+    const setQty = (n)=>{
+      const total = StorageManager.getExam(modalEl.querySelector('#ec-exam-global').value)?.questionIds?.length || 0;
+      const basicQty = modalEl.querySelector('#ec-basic-qty');
+      const val = Math.min(n, total || n);
+      if(basicQty){ basicQty.value = val; modalEl._countEdited = true; }
+      this._syncBasicToMode(modalEl);
+      this._updatePreview(modalEl);
+    };
+    modalEl.querySelector('#ec-qty-10')?.addEventListener('click', ()=> setQty(10));
+    modalEl.querySelector('#ec-qty-20')?.addEventListener('click', ()=> setQty(20));
 
     modalEl.querySelector('#ec-adv-toggle')?.addEventListener('click', ()=>{
       const adv = modalEl.querySelector('#ec-advanced');
@@ -6044,7 +6086,19 @@ class FlashcardController {
   static _queue = [];
   static _idx = 0;
   static _revealed = false;
+  static _revealAll = false;
   static _close = null;
+  static _MARKED_KEY = 'ef_fc_marked_v1';
+  static _REVEAL_ALL_KEY = 'ef_fc_reveal_all_v1';
+
+  static _loadMarked(){
+    try{ return new Set(JSON.parse(localStorage.getItem(this._MARKED_KEY)||'[]')); }catch(e){ return new Set(); }
+  }
+  static _saveMarked(set){
+    try{ localStorage.setItem(this._MARKED_KEY, JSON.stringify([...set])); }catch(e){}
+  }
+  static _showBack(){ return this._revealAll || this._revealed; }
+
   static _dueDeck(limit=20){
     const now = Date.now();
     return FSRS.questions()
@@ -6062,6 +6116,7 @@ class FlashcardController {
     if(!this._queue.length){ Toast.show('Crie questões na aba Questões — cada uma vira um flashcard.', 'warn'); return; }
     this._idx = 0;
     this._revealed = false;
+    try{ this._revealAll = localStorage.getItem(this._REVEAL_ALL_KEY) === '1'; }catch(e){ this._revealAll = false; }
     this._render();
   }
   static _render(){
@@ -6074,21 +6129,31 @@ class FlashcardController {
     const card = FSRS.card(q);
     const back = FSRS.backText(q);
     const cat = [q.materia, q.submateria||q.category].filter(Boolean).join(' · ') || 'Geral';
+    const marked = this._loadMarked();
+    const isMarked = marked.has(q.id);
+    const showBack = this._showBack();
     const body = `
       <div class="anki-compact">
-        <div class="anki-card card card-compact" id="fc-card" style="cursor:pointer;min-height:160px">
+        <div class="fc-toolbar">
+          <span class="fc-toolbar-count">${this._idx+1} / ${this._queue.length}</span>
+          <div class="fc-toolbar-actions">
+            <button type="button" class="btn btn-sm btn-ghost btn-icon${this._revealAll?' active':''}" id="fc-reveal-all" aria-pressed="${this._revealAll}" title="${I18n.t('fc.revealAll')}">${this._revealAll ? Icons.eye : Icons.eyeOff}</button>
+            <button type="button" class="btn btn-sm btn-ghost btn-icon${isMarked?' active':''}" id="fc-star" aria-pressed="${isMarked}" title="${I18n.t('fc.markCard')}">${isMarked ? Icons.starFilled : Icons.star}</button>
+          </div>
+        </div>
+        <div class="anki-card card card-compact" id="fc-card" style="cursor:${showBack?'default':'pointer'};min-height:160px">
           <div style="font-size:11px;color:var(--text-2);margin-bottom:8px">${Util.escapeHtml(cat)}</div>
           <div class="anki-front">${Util.escapeHtml(q.text)}</div>
-          ${this._revealed ? `<div class="anki-back">${Util.escapeHtml(back)}</div>` : `<div style="font-size:12px;color:var(--text-2);margin-top:12px">Toque no card para revelar</div>`}
+          ${showBack ? `<div class="anki-back">${Util.escapeHtml(back)}</div>` : `<div style="font-size:12px;color:var(--text-2);margin-top:12px">${I18n.isEn() ? 'Tap card to reveal' : 'Toque no card para revelar'}</div>`}
         </div>
         <div class="anki-meta">
-          <span class="anki-meta-count">${this._idx+1} / ${this._queue.length} · ${card.state||'new'}</span>
+          <span class="anki-meta-count">${card.state||'new'}${isMarked ? ' · ★' : ''}</span>
         </div>
-        ${this._revealed ? `<div class="anki-ratings">
-          <button type="button" class="anki-rate anki-rate-again" data-rate="again">De novo</button>
-          <button type="button" class="anki-rate anki-rate-hard" data-rate="hard">Difícil</button>
-          <button type="button" class="anki-rate anki-rate-good" data-rate="good">Bom</button>
-          <button type="button" class="anki-rate anki-rate-easy" data-rate="easy">Fácil</button>
+        ${showBack ? `<div class="anki-ratings">
+          <button type="button" class="anki-rate anki-rate-again" data-rate="again">${I18n.isEn() ? 'Again' : 'De novo'}</button>
+          <button type="button" class="anki-rate anki-rate-hard" data-rate="hard">${I18n.isEn() ? 'Hard' : 'Difícil'}</button>
+          <button type="button" class="anki-rate anki-rate-good" data-rate="good">${I18n.isEn() ? 'Good' : 'Bom'}</button>
+          <button type="button" class="anki-rate anki-rate-easy" data-rate="easy">${I18n.isEn() ? 'Easy' : 'Fácil'}</button>
         </div>` : ''}
       </div>`;
     if(this._close){
@@ -6096,14 +6161,28 @@ class FlashcardController {
       this._close = null;
     }
     const {close, el} = Modal.open({
-      title: 'Flashcards',
+      title: I18n.isEn() ? 'Flashcards' : 'Flashcards',
       wide: true,
       modalClass: 'anki-modal',
       bodyHtml: body,
       onMount: (backdrop, closeFn)=>{
         this._close = closeFn;
+        backdrop.querySelector('#fc-reveal-all')?.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          this._revealAll = !this._revealAll;
+          try{ localStorage.setItem(this._REVEAL_ALL_KEY, this._revealAll ? '1' : '0'); }catch(err){}
+          if(this._revealAll) this._revealed = true;
+          this._render();
+        });
+        backdrop.querySelector('#fc-star')?.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          const m = this._loadMarked();
+          m.has(q.id) ? m.delete(q.id) : m.add(q.id);
+          this._saveMarked(m);
+          this._render();
+        });
         backdrop.querySelector('#fc-card')?.addEventListener('click', ()=>{
-          if(!this._revealed){ this._revealed = true; this._render(); }
+          if(!this._showBack()){ this._revealed = true; this._render(); }
         });
         backdrop.querySelectorAll('[data-rate]').forEach(btn=>{
           btn.addEventListener('click', ()=>{
