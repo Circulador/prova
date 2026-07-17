@@ -3419,38 +3419,40 @@ class ChartHelpers {
       return `<rect x="${x}" y="${y}" width="${barW}" height="${hgt}" rx="2" class="chart-bar-${cls}"><title>${h.percentage}%</title></rect>`;
     }).join('');
     return `<svg class="chart-spark" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">${bars}</svg>`;
-  },
-  static bars(rows, maxLabel=12){
-    if(!rows.length) return `<div class="chart-empty">Sem dados ainda</div>`;
-    return rows.map(r=>{
-      const pct = Math.max(0, Math.min(100, r.value||0));
-      const color = pct>=70?'var(--good)':pct>=50?'var(--warn)':'var(--bad)';
-      const lbl = Util.escapeHtml(String(r.label||'').slice(0,maxLabel));
-      return `<div class="progress-bar-row"><span class="lbl" title="${lbl}">${lbl}</span><div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="val">${pct}%</span></div>`;
-    }).join('');
-  },
-  static weekActivity(history){
-    const days = Array.from({length:7},(_,i)=>{
-      const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - (6-i));
-      return { key:d.toISOString().slice(0,10), label:d.toLocaleDateString(I18n.locale(), {weekday:'short'}), count:0 };
-    });
-    history.forEach(h=>{
-      const key = (h.date||'').slice(0,10);
-      const slot = days.find(d=>d.key===key);
-      if(slot) slot.count++;
-    });
-    const max = Math.max(1, ...days.map(d=>d.count));
-    const w = 280, h = 72, pad = 8;
-    const barW = (w - pad*2) / 7 - 4;
-    const bars = days.map((d,i)=>{
-      const bh = Math.max(2, (d.count / max) * (h - 24));
-      const x = pad + i * (barW + 4);
-      const y = h - 16 - bh;
-      return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" rx="2" fill="var(--accent)" opacity="${d.count?1:.25}"><title>${d.label}: ${d.count}</title></rect><text x="${x+barW/2}" y="${h-4}" text-anchor="middle" font-size="9" fill="var(--text-2)">${Util.escapeHtml(d.label.slice(0,3))}</text>`;
-    }).join('');
-    return `<svg class="chart-spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${bars}</svg>`;
   }
 }
+
+ChartHelpers.bars = function(rows, maxLabel=12){
+  if(!rows.length) return `<div class="chart-empty">Sem dados ainda</div>`;
+  return rows.map(r=>{
+    const pct = Math.max(0, Math.min(100, r.value||0));
+    const color = pct>=70?'var(--good)':pct>=50?'var(--warn)':'var(--bad)';
+    const lbl = Util.escapeHtml(String(r.label||'').slice(0,maxLabel));
+    return `<div class="progress-bar-row"><span class="lbl" title="${lbl}">${lbl}</span><div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="val">${pct}%</span></div>`;
+  }).join('');
+};
+
+ChartHelpers.weekActivity = function(history){
+  const days = Array.from({length:7},(_,i)=>{
+    const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - (6-i));
+    return { key:d.toISOString().slice(0,10), label:d.toLocaleDateString(I18n.locale(), {weekday:'short'}), count:0 };
+  });
+  history.forEach(h=>{
+    const key = (h.date||'').slice(0,10);
+    const slot = days.find(d=>d.key===key);
+    if(slot) slot.count++;
+  });
+  const max = Math.max(1, ...days.map(d=>d.count));
+  const w = 280, h = 72, pad = 8;
+  const barW = (w - pad*2) / 7 - 4;
+  const bars = days.map((d,i)=>{
+    const bh = Math.max(2, (d.count / max) * (h - 24));
+    const x = pad + i * (barW + 4);
+    const y = h - 16 - bh;
+    return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" rx="2" fill="var(--accent)" opacity="${d.count?1:.25}"><title>${d.label}: ${d.count}</title></rect><text x="${x+barW/2}" y="${h-4}" text-anchor="middle" font-size="9" fill="var(--text-2)">${Util.escapeHtml(d.label.slice(0,3))}</text>`;
+  }).join('');
+  return `<svg class="chart-spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${bars}</svg>`;
+};
 
 class ProgressHubView {
   constructor(){ this.history = new HistoryView(); }
