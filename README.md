@@ -6,6 +6,7 @@ Velora é um **Sistema Operacional de Conhecimento** para formação em privacid
 
 **Arquitetura (obrigatória):** [`docs/MANIFESTO-ARQUITETURA.md`](docs/MANIFESTO-ARQUITETURA.md)  
 **Privacy Knowledge OS:** [`docs/PRIVACY-KNOWLEDGE-OS.md`](docs/PRIVACY-KNOWLEDGE-OS.md)  
+**Brief para outras IAs:** [`docs/PLATFORM-BRIEF.md`](docs/PLATFORM-BRIEF.md)  
 **Trilhas DPO global:** [`docs/DPO-GLOBAL-TRACKS.md`](docs/DPO-GLOBAL-TRACKS.md)  
 **Design visual:** [`branding/design-system/design-system.md`](branding/design-system/design-system.md)  
 **Agentes Cursor:** [`AGENTS.md`](AGENTS.md)
@@ -66,8 +67,8 @@ Dados em [`data/dpo-global-bank.js`](data/dpo-global-bank.js) · inventário com
 4. **Progresso** — estatísticas e histórico.
 5. **Configurar simulado** — exclusões (já acertadas, hoje, nunca vistas), embaralhar, cronômetro.
 6. **Player** — Pausar, Explicar, revisão pré-envio (simulado).
-7. **Ajustes → Idioma das questões** — `dual` (EN+PT), `en` ou `pt`.
-8. Instale como PWA: menu **⋯ → Instalar aplicativo** (HTTPS).
+7. **Ajustes → Instalar aplicativo** — PWA offline (card dedicado com status e instruções iOS/Android).
+8. Idioma das questões em **Ajustes** — `dual` (EN+PT), `en` ou `pt`.
 
 ### Atualizar conteúdo após deploy
 

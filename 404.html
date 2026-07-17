@@ -531,10 +531,29 @@ a{color:var(--accent)}
 .q-option.selected .marker{border-color:var(--accent);background:var(--accent)}
 .q-option .letter{font-weight:700;color:var(--text-2);margin-right:2px}
 .player-footer{
-  height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;border-top:1px solid var(--border);background:var(--bg-1);
+  flex-shrink:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--border);background:var(--bg-1);
 }
-.player-footer .grp{display:flex;gap:8px}
+.player-footer #p-prev{justify-self:start}
+.player-footer #p-mark{justify-self:center}
+.player-footer #p-primary{justify-self:end}
+.player-footer .btn{min-height:44px;padding:10px 16px}
+.player-timer-grp{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.player-more{position:relative;flex-shrink:0}
+.player-more-menu{
+  position:absolute;top:calc(100% + 6px);right:0;min-width:220px;
+  background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-2);padding:6px;display:none;flex-direction:column;gap:2px;z-index:200;
+}
+.player-more-menu.show{display:flex}
+.player-more-item{
+  display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+  padding:10px 12px;border-radius:var(--radius-sm);background:transparent;border:none;
+  color:var(--text-0);font-size:13px;font-weight:500;min-height:44px;cursor:pointer;
+}
+.player-more-item:hover{background:var(--bg-3)}
+.player-more-item.active{color:var(--accent);background:var(--accent-soft)}
+.player-more-item:disabled{opacity:.45;cursor:not-allowed}
 /* --- feedback / reveal de resposta --- */
 .q-option.opt-correct{border-color:var(--good);background:var(--good-soft)}
 .q-option.opt-correct .marker{border-color:var(--good);background:var(--good);color:#fff}
@@ -633,9 +652,9 @@ a{color:var(--accent)}
   .player-question-area{padding:20px 16px;max-width:100%}
   .q-text{font-size:15.5px;margin-bottom:18px}
   .q-option{padding:14px 12px}
-  .player-footer{height:auto;flex-wrap:wrap;gap:8px;padding:10px 12px}
-  .player-footer .grp{flex:1 1 100%;justify-content:space-between}
-  .player-footer .btn{flex:1;justify-content:center;padding:11px 8px}
+  .player-footer{grid-template-columns:1fr auto 1fr;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px))}
+  .player-footer .btn{padding:11px 12px;font-size:13px}
+  .player-timer-grp .btn-sm{min-height:40px;padding:6px 10px}
 }
 
 /* result / review */
@@ -2923,13 +2942,14 @@ class SettingsView {
         <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-reveal" ${s.allowRevealAnswer?'checked':''}> Permitir revelar resposta manualmente</label>
         <label class="checkbox-row"><input type="checkbox" id="s-finish-anytime" ${s.allowFinishAnytime?'checked':''}> Finalizar a qualquer momento</label>
       </div>
-      <div class="row" style="gap:8px;flex-wrap:wrap">
+      ${App.instance._renderInstallCard()}
+      <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px">
         <button class="btn btn-primary" id="s-save">Salvar</button>
-        <button class="btn" id="s-install">Instalar app</button>
       </div>`;
     el.querySelector('#s-back').onclick = ()=> App.instance.router.go('home');
     el.querySelector('#s-dark').onclick = e=> e.currentTarget.classList.toggle('on');
-    el.querySelector('#s-install').onclick = ()=> App.instance._promptInstall();
+    const installBtn = el.querySelector('#s-install');
+    if(installBtn) installBtn.onclick = ()=> App.instance._promptInstall();
     el.querySelector('#s-save').onclick = ()=>{
       const newSettings = {
         darkMode: el.querySelector('#s-dark').classList.contains('on'),
@@ -4258,12 +4278,14 @@ class PlayerController {
         <button class="btn btn-icon btn-ghost" id="p-toggle-nav" title="Mostrar/ocultar questões" aria-label="Mostrar ou ocultar questões">${Icons.menu}</button>
         ${cand}${train}
         <div class="player-progress-wrap"><div class="player-progress-bar" id="p-progress" style="width:0%"></div></div>
-        ${this.state.allowRevealAnswer ? `<div class="player-reveal-grp" id="p-reveal-grp">
-          <button class="btn btn-sm" id="p-reveal-q" type="button" title="Mostrar resposta da questão atual">${Icons.eye} Revelar questão</button>
-          <button class="btn btn-sm" id="p-reveal-all" type="button" title="Revelar respostas em todas as questões">Modo revisão</button>
-        </div>` : ''}
-        <button class="btn btn-sm" id="p-pause" type="button" title="Pausar cronômetro">Pausar</button>
-        <div class="timer-pill" id="p-timer">--:--</div>
+        <div class="player-timer-grp">
+          <button class="btn btn-sm" id="p-pause" type="button" title="Pausar cronômetro" aria-label="Pausar">⏸</button>
+          <div class="timer-pill" id="p-timer" role="timer" aria-live="off">--:--</div>
+        </div>
+        <div class="player-more" id="p-more-wrap">
+          <button class="btn btn-icon btn-ghost" id="p-more-btn" type="button" aria-label="Mais opções" aria-haspopup="true" aria-expanded="false">${Icons.more}</button>
+          <div class="player-more-menu" id="p-more-menu" role="menu" aria-label="Ações da sessão"></div>
+        </div>
       </div>
       <div class="player-body">
         <div class="player-nav-list" id="p-nav" role="navigation" aria-label="Navegação entre questões"></div>
@@ -4271,16 +4293,9 @@ class PlayerController {
       </div>
       <div id="p-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
       <div class="player-footer">
-        <div class="grp">
-          <button class="btn" id="p-prev">← Anterior</button>
-          <button class="btn" id="p-skip">Pular</button>
-        </div>
-        <div class="grp">
-          <button class="btn" id="p-mark" type="button">${Icons.star} Marcar</button>
-          <button class="btn" id="p-explain" type="button" title="Ver explicação">Explicar</button>
-          <button class="btn btn-primary" id="p-next">Próxima →</button>
-          <button class="btn btn-danger" id="p-finish">Finalizar</button>
-        </div>
+        <button class="btn" id="p-prev" type="button">← Anterior</button>
+        <button class="btn" id="p-mark" type="button">${Icons.star} Marcar</button>
+        <button class="btn btn-primary" id="p-primary" type="button">Próxima →</button>
       </div>
     `;
     root.querySelector('#p-exit').addEventListener('click', async ()=>{
@@ -4288,17 +4303,23 @@ class PlayerController {
       if(ok) this._exitWithoutSaving();
     });
     root.querySelector('#p-prev').addEventListener('click', ()=>this._move(-1));
-    root.querySelector('#p-next').addEventListener('click', ()=>this._move(1));
-    root.querySelector('#p-skip').addEventListener('click', ()=>this._move(1));
+    root.querySelector('#p-primary').addEventListener('click', ()=>this._handlePrimaryAction());
     root.querySelector('#p-mark').addEventListener('click', ()=>this._toggleMark());
-    root.querySelector('#p-finish').addEventListener('click', ()=>this._confirmFinish());
     root.querySelector('#p-toggle-nav').addEventListener('click', ()=>{
       root.querySelector('#p-nav').classList.toggle('collapsed');
     });
-    root.querySelector('#p-reveal-q')?.addEventListener('click', ()=> this._toggleRevealCurrent());
-    root.querySelector('#p-reveal-all')?.addEventListener('click', ()=> this._toggleRevealAll());
-    root.querySelector('#p-pause')?.addEventListener('click', ()=> this._togglePause());
-    root.querySelector('#p-explain')?.addEventListener('click', ()=> this._showExplain());
+    root.querySelector('#p-pause')?.addEventListener('click', ()=>this._togglePause());
+    root.querySelector('#p-more-btn')?.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      this._togglePlayerMenu();
+    });
+    this._menuOutsideClick = (e)=>{
+      const wrap = document.getElementById('p-more-wrap');
+      if(wrap && !wrap.contains(e.target)) this._closePlayerMenu();
+    };
+    document.addEventListener('click', this._menuOutsideClick);
+    this._renderPlayerMenu();
+    this._updateFooterButtons();
 
     // Navegação por teclado (acessibilidade / eficiência no desktop)
     this._keyHandler = (e)=>{
@@ -4307,9 +4328,9 @@ class PlayerController {
       if(tag==='input' || tag==='textarea' || tag==='select') return;
       if(e.defaultPrevented) return;
       const q = this.state.questions[this.state.currentIndex];
-      if(e.key==='ArrowRight'){ e.preventDefault(); this._move(1); }
+      if(e.key==='ArrowRight'){ e.preventDefault(); this._handlePrimaryAction(); }
       else if(e.key==='ArrowLeft'){ e.preventDefault(); this._move(-1); }
-      else if(e.key==='Enter'){ e.preventDefault(); this._move(1); }
+      else if(e.key==='Enter'){ e.preventDefault(); this._handlePrimaryAction(); }
       else if(/^[1-9]$/.test(e.key) && ['single','boolean','image','multi'].includes(q.type)){
         const idx = Number(e.key)-1;
         if(q.options[idx]){ e.preventDefault(); this._selectByIndex(idx); }
@@ -4332,9 +4353,111 @@ class PlayerController {
       const dx = t.clientX - tsx, dy = t.clientY - tsy, dt = Date.now()-tst;
       // gesto válido: horizontal, rápido, e não sobre uma seleção de texto
       if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)*1.8 && dt < 600){
-        if(dx < 0) this._move(1); else this._move(-1);
+        if(dx < 0) this._handlePrimaryAction(); else this._move(-1);
       }
     }, {passive:true});
+  }
+
+  static _isAnswered(q){
+    const a = this.state.answers[q.id];
+    return a !== undefined && a !== null && (!Array.isArray(a) ? String(a).length>0 : a.length>0);
+  }
+
+  static _shouldShowSubmit(){
+    if(this.state.trainingMode) return false;
+    const {questions, currentIndex} = this.state;
+    const isLast = currentIndex >= questions.length - 1;
+    const allAnswered = questions.every(q => this._isAnswered(q));
+    return isLast || allAnswered;
+  }
+
+  static _updateFooterButtons(){
+    const prev = document.getElementById('p-prev');
+    const primary = document.getElementById('p-primary');
+    if(!prev || !primary || !this.state) return;
+    const {questions, currentIndex, trainingMode} = this.state;
+    prev.disabled = currentIndex <= 0;
+    if(this._shouldShowSubmit()){
+      primary.textContent = 'Enviar simulado';
+      primary.className = 'btn btn-primary';
+      primary.disabled = false;
+    } else {
+      primary.textContent = 'Próxima →';
+      primary.className = 'btn btn-primary';
+      primary.disabled = trainingMode && currentIndex >= questions.length - 1;
+    }
+  }
+
+  static _handlePrimaryAction(){
+    if(this._shouldShowSubmit()) this._confirmFinish();
+    else {
+      const {questions, currentIndex, trainingMode} = this.state;
+      if(trainingMode && currentIndex >= questions.length - 1) return;
+      this._move(1);
+    }
+  }
+
+  static _closePlayerMenu(){
+    const menu = document.getElementById('p-more-menu');
+    const btn = document.getElementById('p-more-btn');
+    menu?.classList.remove('show');
+    btn?.setAttribute('aria-expanded', 'false');
+  }
+
+  static _togglePlayerMenu(){
+    const menu = document.getElementById('p-more-menu');
+    const btn = document.getElementById('p-more-btn');
+    if(!menu || !btn) return;
+    const open = menu.classList.toggle('show');
+    btn.setAttribute('aria-expanded', String(open));
+    if(open) this._renderPlayerMenu();
+  }
+
+  static _renderPlayerMenu(){
+    const menu = document.getElementById('p-more-menu');
+    if(!menu || !this.state) return;
+    const s = this.state;
+    const q = s.questions[s.currentIndex];
+    const isMarked = s.marked.has(q.id);
+    const items = [];
+    const add = (action, label, extra='') => items.push(
+      `<button type="button" class="player-more-item${extra}" data-action="${action}" role="menuitem">${label}</button>`
+    );
+    add('mark', isMarked ? `${Icons.starFilled} Desmarcar` : `${Icons.star} Marcar questão`);
+    if(s.trainingMode){
+      add('explain', 'Explicar');
+      if(s.allowRevealAnswer){
+        const curRevealed = s.revealPersistent || s.revealed.has(q.id);
+        add('reveal-q', `${Icons.eye} ${curRevealed ? 'Ocultar resposta' : 'Revelar questão'}`, curRevealed ? ' active' : '');
+        add('reveal-all', s.revealPersistent ? 'Desativar modo revisão' : 'Modo revisão', s.revealPersistent ? ' active' : '');
+      }
+    }
+    add('pause', s.paused ? 'Retomar' : 'Pausar');
+    add('exit', 'Sair');
+    menu.innerHTML = items.join('');
+    const revealQ = menu.querySelector('[data-action="reveal-q"]');
+    if(revealQ) revealQ.disabled = s.revealPersistent;
+    menu.querySelectorAll('[data-action]').forEach(el=>{
+      el.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        this._closePlayerMenu();
+        this._onMenuAction(el.dataset.action);
+      });
+    });
+  }
+
+  static _onMenuAction(action){
+    switch(action){
+      case 'mark': this._toggleMark(); break;
+      case 'explain': this._showExplain(); break;
+      case 'reveal-q': this._toggleRevealCurrent(); break;
+      case 'reveal-all': this._toggleRevealAll(); break;
+      case 'pause': this._togglePause(); break;
+      case 'exit':
+        Modal.confirm({title:'Sair do exame', message:'Seu progresso será perdido. Deseja realmente sair?', confirmLabel:'Sair', danger:true})
+          .then(ok=>{ if(ok) this._exitWithoutSaving(); });
+        break;
+    }
   }
 
   static _announce(msg){
@@ -4359,6 +4482,7 @@ class PlayerController {
     this._persistSession();
     this._renderQuestion();
     this._renderNav();
+    this._updateFooterButtons();
   }
   static _trackStreak(q){
     // Atualiza streak apenas para tipos objetivos com resposta imediata
@@ -4383,10 +4507,13 @@ class PlayerController {
     else this.state.timer.resume();
     const btn = document.getElementById('p-pause');
     if(btn){
-      btn.textContent = this.state.paused ? 'Retomar' : 'Pausar';
+      btn.textContent = this.state.paused ? '▶' : '⏸';
+      btn.title = this.state.paused ? 'Retomar cronômetro' : 'Pausar cronômetro';
+      btn.setAttribute('aria-label', this.state.paused ? 'Retomar' : 'Pausar');
       btn.classList.toggle('active', this.state.paused);
     }
     document.body.classList.toggle('player-paused', this.state.paused);
+    this._renderPlayerMenu();
   }
 
   static _showExplain(){
@@ -4419,25 +4546,20 @@ class PlayerController {
   }
 
   static _updateRevealControls(){
-    const btnQ = document.getElementById('p-reveal-q');
-    const btnAll = document.getElementById('p-reveal-all');
-    if(!this.state || (!btnQ && !btnAll)) return;
+    const menu = document.getElementById('p-more-menu');
+    if(!this.state || !menu) return;
     const q = this.state.questions[this.state.currentIndex];
     const curRevealed = this.state.revealPersistent || this.state.revealed.has(q.id);
+    const btnQ = menu.querySelector('[data-action="reveal-q"]');
+    const btnAll = menu.querySelector('[data-action="reveal-all"]');
     if(btnQ){
       btnQ.classList.toggle('active', curRevealed);
-      btnQ.setAttribute('aria-pressed', String(curRevealed));
       btnQ.disabled = this.state.revealPersistent;
-      btnQ.title = this.state.revealPersistent
-        ? 'Modo revisão ativo — todas as respostas visíveis'
-        : (this.state.revealed.has(q.id) ? 'Ocultar resposta desta questão' : 'Mostrar resposta da questão atual');
+      btnQ.innerHTML = `${Icons.eye} ${curRevealed ? 'Ocultar resposta' : 'Revelar questão'}`;
     }
     if(btnAll){
       btnAll.classList.toggle('active', this.state.revealPersistent);
-      btnAll.setAttribute('aria-pressed', String(this.state.revealPersistent));
-      btnAll.title = this.state.revealPersistent
-        ? 'Desativar modo revisão (ocultar respostas reveladas)'
-        : 'Revelar respostas em todas as questões';
+      btnAll.textContent = this.state.revealPersistent ? 'Desativar modo revisão' : 'Modo revisão';
     }
   }
 
@@ -4485,6 +4607,8 @@ class PlayerController {
   static _cleanup(){
     this.state?.timer?.stop();
     if(this._keyHandler){ document.removeEventListener('keydown', this._keyHandler); this._keyHandler = null; }
+    if(this._menuOutsideClick){ document.removeEventListener('click', this._menuOutsideClick); this._menuOutsideClick = null; }
+    document.body.classList.remove('player-paused');
     document.getElementById('player-view').classList.remove('show');
     document.body.classList.remove('player-open');
     if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
@@ -4638,6 +4762,7 @@ class PlayerController {
       this.state.answers[q.id] = e.target.value;
       this._persistSession();
       this._renderNav();
+      this._updateFooterButtons();
     });
     area.querySelectorAll('[data-match-idx]').forEach(sel=>sel.addEventListener('change', ()=>{
       const ans = this.state.answers[q.id] || {};
@@ -4645,6 +4770,7 @@ class PlayerController {
       this.state.answers[q.id] = ans;
       this._persistSession();
       this._renderNav();
+      this._updateFooterButtons();
     }));
     if(q.type==='sequence'){
       this._bindSequenceDrag(area, q);
@@ -4654,6 +4780,7 @@ class PlayerController {
     }
     this._updateMarkButton();
     this._updateRevealControls();
+    this._updateFooterButtons();
   }
 
   static _bindSequenceDrag(area, q){
@@ -4690,6 +4817,7 @@ class PlayerController {
     this._checkMilestone();
     this._persistSession();
     this._renderQuestion(); this._renderNav();
+    this._updateFooterButtons();
   }
   static _checkMilestone(){
     const total = this.state.questions.length;
@@ -4707,6 +4835,7 @@ class PlayerController {
     this._persistSession();
     this._renderNav();
     this._updateMarkButton();
+    this._renderPlayerMenu();
   }
   static _updateMarkButton(){
     const btn = document.getElementById('p-mark');
@@ -5605,23 +5734,72 @@ class App {
     }catch(err){ /* PWA opcional; não bloqueia o app */ }
   }
 
+  _isAppInstalled(){
+    return window.matchMedia('(display-mode: standalone)').matches
+      || window.matchMedia('(display-mode: fullscreen)').matches
+      || window.navigator.standalone === true;
+  }
+  _getInstallState(){
+    if(this._isAppInstalled()) return 'installed';
+    if(this._deferredInstall) return 'prompt';
+    return 'manual';
+  }
+  _renderInstallCard(){
+    const state = this._getInstallState();
+    const badges = {
+      installed: ['Instalado', 'badge-good'],
+      prompt: ['Pronto para instalar', 'badge-accent'],
+      manual: ['Instruções', 'badge-warn']
+    };
+    const [label, cls] = badges[state];
+    const btnLabel = state === 'installed' ? 'Já instalado' : state === 'prompt' ? 'Instalar aplicativo' : 'Como instalar';
+    const btnClass = state === 'installed' ? 'btn btn-ghost' : 'btn btn-primary';
+    const disabled = state === 'installed' ? ' disabled' : '';
+    return `
+      <div class="card card-compact" id="s-pwa-card">
+        <div class="row between" style="margin-bottom:8px">
+          <span style="font-weight:600;font-size:13.5px">Instalar aplicativo</span>
+          <span class="badge ${cls}">${label}</span>
+        </div>
+        <p style="font-size:12.5px;color:var(--text-2);line-height:1.55;margin:0 0 12px">
+          Use o Velora offline, com ícone na tela inicial — como um app nativo no celular ou desktop.
+        </p>
+        <button class="${btnClass}" id="s-install"${disabled}>${btnLabel}</button>
+        <details style="margin-top:10px;font-size:12px;color:var(--text-2);line-height:1.6">
+          <summary style="cursor:pointer;font-weight:600;color:var(--text-1)">Instruções manuais</summary>
+          <p style="margin:8px 0 0">
+            <strong>Android / Chrome:</strong> menu ⋮ → Adicionar à tela inicial.<br>
+            <strong>iPhone / Safari:</strong> Compartilhar → Adicionar à Tela de Início.<br>
+            <strong>Desktop:</strong> ícone de instalar na barra de endereço.<br>
+            <em style="display:block;margin-top:8px">Requer HTTPS (GitHub Pages). Arquivo local funciona offline, mas sem instalação nativa.</em>
+          </p>
+        </details>
+      </div>`;
+  }
   async _promptInstall(){
+    if(this._isAppInstalled()){
+      Toast.show('O Velora já está instalado neste dispositivo.', 'success');
+      return;
+    }
     if(this._deferredInstall){
       this._deferredInstall.prompt();
-      await this._deferredInstall.userChoice.catch(()=>{});
+      const choice = await this._deferredInstall.userChoice.catch(()=>null);
       this._deferredInstall = null;
-    } else {
-      Modal.open({
-        title:'Instalar o Velora',
-        bodyHtml:`<p style="font-size:13.5px;color:var(--text-1);line-height:1.7">
-          Para instalar no seu dispositivo:<br><br>
-          <strong>Android/Chrome:</strong> menu ⋮ → "Adicionar à tela inicial".<br>
-          <strong>iPhone/Safari:</strong> botão Compartilhar → "Adicionar à Tela de Início".<br>
-          <strong>Desktop:</strong> ícone de instalar na barra de endereço.<br><br>
-          <em>Obs.: a instalação como app requer que a página seja aberta por um servidor (http/https). Aberto como arquivo local, ele funciona 100% offline, mas sem instalação nativa.</em>
-        </p>`
-      });
+      if(choice?.outcome === 'accepted'){
+        Toast.show('App instalado. Abra pelo ícone na tela inicial.', 'success');
+      }
+      return;
     }
+    Modal.open({
+      title:'Instalar o Velora',
+      bodyHtml:`<p style="font-size:13.5px;color:var(--text-1);line-height:1.7">
+        Para instalar no seu dispositivo:<br><br>
+        <strong>Android/Chrome:</strong> menu ⋮ → "Adicionar à tela inicial".<br>
+        <strong>iPhone/Safari:</strong> botão Compartilhar → "Adicionar à Tela de Início".<br>
+        <strong>Desktop:</strong> ícone de instalar na barra de endereço.<br><br>
+        <em>Obs.: a instalação como app requer que a página seja aberta por um servidor (http/https). Aberto como arquivo local, ele funciona 100% offline, mas sem instalação nativa.</em>
+      </p>`
+    });
   }
 
 }
