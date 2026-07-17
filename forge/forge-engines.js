@@ -27,6 +27,25 @@ const ForgeEngines = {
     'gemini-2.5-pro'
   ],
 
+  /** Google OAuth with Gemini CLI client_id only works on localhost — not on GitHub Pages. */
+  isGeminiOAuthSupported(){
+    const h = (location.hostname || '').toLowerCase();
+    return h === 'localhost' || h === '127.0.0.1' || h === '[::1]';
+  },
+
+  geminiUnavailableMessage(){
+    return I18n?.t?.('forge.geminiUnavailable')
+      || 'Login Google Gemini não está disponível neste site. Use OpenRouter (inclui Gemini gratuito).';
+  },
+
+  sanitizeSelections(){
+    [1, 2].forEach(n=>{
+      if(this.getEngineSelection(n) === 'gemini' && !this.isGeminiOAuthSupported()){
+        this.setEngineSelection(n, 'none');
+      }
+    });
+  },
+
   _redirectUri(){
     return window.location.origin + window.location.pathname;
   },
@@ -172,6 +191,9 @@ const ForgeEngines = {
       return;
     }
     if(provider === 'gemini'){
+      if(!this.isGeminiOAuthSupported()){
+        throw new Error(this.geminiUnavailableMessage());
+      }
       const params = new URLSearchParams({
         response_type: 'code',
         client_id: this.GEMINI_CLIENT_ID,
@@ -365,16 +387,20 @@ const ForgeEngines = {
 
   renderEngineCard(num){
     const sel = this.getEngineSelection(num);
+    const gemSupported = this.isGeminiOAuthSupported();
+    const gemSel = (sel === 'gemini' && !gemSupported) ? 'none' : sel;
     const meta = this.statusMeta(num);
-    const connected = this.isConnected(sel);
-    const modelOpts = sel === 'gemini'
+    const connected = this.isConnected(gemSel);
+    const modelOpts = gemSel === 'gemini'
       ? this.GEMINI_MODELS
-      : sel === 'openrouter' ? this.OPENROUTER_MODELS : [];
-    const curModel = sel === 'gemini' ? this.getGeminiModel() : sel === 'openrouter' ? this.getOpenRouterModel() : '';
+      : gemSel === 'openrouter' ? this.OPENROUTER_MODELS : [];
+    const curModel = gemSel === 'gemini' ? this.getGeminiModel() : gemSel === 'openrouter' ? this.getOpenRouterModel() : '';
     const label = num === 1 ? (I18n?.t?.('forge.engine1') || 'Engine 1') : (I18n?.t?.('forge.engine2') || 'Engine 2');
     const none = I18n?.t?.('forge.engineNone') || 'Nenhuma';
     const or = I18n?.t?.('forge.engineOpenRouter') || 'OpenRouter';
-    const gem = I18n?.t?.('forge.engineGemini') || 'Google Gemini';
+    const gem = gemSupported
+      ? (I18n?.t?.('forge.engineGemini') || 'Google Gemini')
+      : (I18n?.t?.('forge.engineGeminiOff') || 'Google Gemini (indisponível neste site)');
     return `
       <div class="card card-compact forge-engine-card" data-engine-card="${num}" style="margin-bottom:10px">
         <div class="row between" style="margin-bottom:8px;gap:8px;flex-wrap:wrap">
@@ -385,9 +411,9 @@ const ForgeEngines = {
           <div class="field full">
             <label>${I18n?.t?.('forge.provider') || 'Provedor'}</label>
             <select class="select" id="forge-eng-sel-${num}">
-              <option value="none" ${sel==='none'?'selected':''}>${none}</option>
-              <option value="openrouter" ${sel==='openrouter'?'selected':''}>${or}</option>
-              <option value="gemini" ${sel==='gemini'?'selected':''}>${gem}</option>
+              <option value="none" ${gemSel==='none'?'selected':''}>${none}</option>
+              <option value="openrouter" ${gemSel==='openrouter'?'selected':''}>${or}</option>
+              <option value="gemini" ${gemSel==='gemini'?'selected':''} ${gemSupported?'':'disabled'}>${gem}</option>
             </select>
           </div>
           <div class="field full ${connected && modelOpts.length ? '' : 'hidden'}" id="forge-eng-model-wrap-${num}">
@@ -405,7 +431,13 @@ const ForgeEngines = {
   },
 
   bindEngineCards(root){
+    this.sanitizeSelections();
     [1,2].forEach(num=>this._bindEngineCard(root, num));
+    const hint = root.querySelector('#forge-gemini-hint');
+    if(hint && !this.isGeminiOAuthSupported()){
+      hint.classList.remove('hidden');
+      hint.innerHTML = I18n?.t?.('forge.geminiHintOpenRouter') || hint.textContent;
+    }
   },
 
   _bindEngineCard(root, num){
@@ -435,7 +467,13 @@ const ForgeEngines = {
         }
       }
     };
-    sel?.addEventListener('change', refresh);
+    sel?.addEventListener('change', ()=>{
+      if(sel.value === 'gemini' && !ForgeEngines.isGeminiOAuthSupported()){
+        sel.value = 'none';
+        Toast?.show?.(ForgeEngines.geminiUnavailableMessage(), 'warn');
+      }
+      refresh();
+    });
     connect?.addEventListener('click', async ()=>{
       const p = sel.value;
       if(p === 'none') return;

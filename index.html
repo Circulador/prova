@@ -1357,7 +1357,7 @@ const I18n = {
       'forge.platformMobile':'No celular/tablet use <strong>Biblioteca local</strong>. Ollama não roda no aparelho.',
       'forge.platformDesktop':'No PC: biblioteca local (padrão), Ollama local ou chave API opcional. Nada passa pelos servidores do Velora.',
       'forge.apiKeyPrivacy':'A chave fica só neste navegador e vai direto à URL que você configurou. Não há login OAuth no app — use a chave da sua conta ou um gateway seu (LM Studio, OpenRouter, etc.).',
-      'forge.engine1':'Engine 1','forge.engine2':'Engine 2 (fallback)','forge.engineNone':'Nenhuma','forge.engineOpenRouter':'OpenRouter','forge.engineGemini':'Google Gemini','forge.connect':'Conectar','forge.disconnect':'Desconectar','forge.enginesTitle':'Engines de IA (OAuth — só neste dispositivo)','forge.libraryLink':'Abrir Forja IA com contexto desta aba',
+      'forge.engine1':'Engine 1','forge.engine2':'Engine 2 (fallback)','forge.engineNone':'Nenhuma','forge.engineOpenRouter':'OpenRouter','forge.engineGemini':'Google Gemini','forge.engineGeminiOff':'Google Gemini (indisponível neste site)','forge.geminiUnavailable':'Login Google Gemini não funciona no Velora publicado (GitHub Pages): o cliente OAuth não aceita este endereço. Use OpenRouter — funciona no celular e inclui modelos Gemini gratuitos.','forge.geminiHintOpenRouter':'Google Gemini direto só funciona em localhost. Neste site use OpenRouter → modelo google/gemini-flash-1.5:free.','forge.connect':'Conectar','forge.disconnect':'Desconectar','forge.enginesTitle':'Engines de IA (OAuth — só neste dispositivo)','forge.libraryLink':'Abrir Forja IA com contexto desta aba',
       'forge.history':'Histórico de gerações','forge.examples':'Exemplos','forge.regenerate':'Regenerar','forge.duplicate':'Duplicar','forge.export':'Exportar','forge.template':'Salvar modelo','forge.uploadDoc':'Enviar documento (texto)',
       'fc.filterTitle':'Montar sessão','fc.filterHint':'Combine filtros (opcional). Vazio = baralho inteiro.',
       'fc.scopeDue':'Revisão FSRS (vencidos + novos)','fc.scopeAll':'Todos os cards','fc.scopeNew':'Só novos','fc.scopeMarked':'Só marcados ★',
@@ -1428,7 +1428,7 @@ const I18n = {
       'forge.platformMobile':'On phone/tablet use <strong>Local library</strong>. Ollama does not run on the device.',
       'forge.platformDesktop':'On PC: local library (default), local Ollama or optional API key. Nothing goes through Velora servers.',
       'forge.apiKeyPrivacy':'The key stays in this browser and goes directly to your configured URL. No OAuth login in the app — use your account key or your own gateway (LM Studio, OpenRouter, etc.).',
-      'forge.engine1':'Engine 1','forge.engine2':'Engine 2 (fallback)','forge.engineNone':'None','forge.engineOpenRouter':'OpenRouter','forge.engineGemini':'Google Gemini','forge.connect':'Connect','forge.disconnect':'Disconnect','forge.enginesTitle':'AI engines (OAuth — this device only)','forge.libraryLink':'Open Forge AI with this tab context',
+      'forge.engine1':'Engine 1','forge.engine2':'Engine 2 (fallback)','forge.engineNone':'None','forge.engineOpenRouter':'OpenRouter','forge.engineGemini':'Google Gemini','forge.engineGeminiOff':'Google Gemini (unavailable on this site)','forge.geminiUnavailable':'Google Gemini login does not work on published Velora (GitHub Pages): OAuth client rejects this URL. Use OpenRouter — works on mobile and includes free Gemini models.','forge.geminiHintOpenRouter':'Direct Google Gemini only works on localhost. On this site use OpenRouter → model google/gemini-flash-1.5:free.','forge.connect':'Connect','forge.disconnect':'Disconnect','forge.enginesTitle':'AI engines (OAuth — this device only)','forge.libraryLink':'Open Forge AI with this tab context',
       'forge.history':'Generation history','forge.examples':'Examples','forge.regenerate':'Regenerate','forge.duplicate':'Duplicate','forge.export':'Export','forge.template':'Save template','forge.uploadDoc':'Upload document (text)',
       'fc.filterTitle':'Build session','fc.filterHint':'Combine filters (optional). Empty = full deck.',
       'fc.scopeDue':'FSRS review (due + new)','fc.scopeAll':'All cards','fc.scopeNew':'New only','fc.scopeMarked':'Marked ★ only',
@@ -1521,8 +1521,8 @@ const HelpCenter = {
       {id:'forge-ai', section:'faq', kw:['forja','forge','ia','api','ollama','gerar','demo'],
         title:L('Forja — gerar conteúdo sem expor conta','Forge — generate content without exposing your account'),
         body:L(
-          '<p>A <strong>Forja IA</strong> está conectada em toda a Biblioteca:</p><ul><li><strong>Trilhas</strong> → botão Forja IA (simulados/trilhas)</li><li><strong>Questões</strong> → Forja IA (quiz)</li><li><strong>Flashcards</strong> → Gerar com IA</li></ul><p>Todos abrem a mesma Forja com contexto da aba e voltam após salvar.</p><p><strong>Engines OAuth (Engine 1 + fallback Engine 2):</strong> OpenRouter (PKCE oficial) ou Google Gemini. Tokens ficam só neste dispositivo. Sem engine conectada, usa <em>Biblioteca local</em> (conteúdo real offline).</p><p><strong>Ollama</strong> continua só no PC. <strong>Gemini OAuth</strong> pode falhar no GitHub Pages se o Google não autorizar o redirect — use OpenRouter no celular como alternativa.</p>',
-          '<p><strong>Forge AI</strong> is linked across Library: Tracks, Questions (Forge AI button), Flashcards (Generate with AI). Same Forge, tab context, return after save. Engine 1/2 OAuth (OpenRouter PKCE, Gemini). Tokens device-local. Fallback: local library. Ollama desktop-only.</p>'
+          '<p>A <strong>Forja IA</strong> está conectada em toda a Biblioteca (Trilhas · Questões · Flashcards).</p><p><strong>OpenRouter (Engine 1):</strong> login OAuth recomendado no celular e no site publicado — inclui <code>google/gemini-flash-1.5:free</code>.</p><p><strong>Google Gemini direto:</strong> não funciona em <code>github.io</code> (erro <em>invalid_client</em>) — o Google exige OAuth app próprio com URL autorizada. Só disponível em <code>localhost</code> para testes.</p><p>Sem engine: <em>Biblioteca local</em> usa conteúdo real offline.</p>',
+          '<p>Forge AI is linked across Library tabs. <strong>OpenRouter</strong> recommended on published site (includes free Gemini). <strong>Direct Google Gemini OAuth</strong> fails on github.io (invalid_client) — localhost only. Fallback: local library.</p>'
         )},
       {id:'progressive-mode', section:'faq', kw:['progressivo','incremental','bloco','fase','aprendizagem'],
         title:L('Modo progressivo — blocos e revisão cumulativa','Progressive mode — blocks and cumulative review'),
@@ -7797,6 +7797,7 @@ class ForgeView {
       <div class="card card-compact hidden" id="forge-library-ctx" style="margin-bottom:10px"></div>
       <div style="font-weight:650;font-size:13.5px;margin:12px 0 8px">${I18n.t('forge.enginesTitle')}</div>
       ${typeof ForgeEngines !== 'undefined' ? ForgeEngines.renderEngineCard(1) + ForgeEngines.renderEngineCard(2) : ''}
+      <p class="hint hidden" id="forge-gemini-hint" style="margin:0 0 12px;line-height:1.55;font-size:12px"></p>
       <div class="forge-config">
         <details>
           <summary>${I18n.t('forge.config')}</summary>
