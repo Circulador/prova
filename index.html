@@ -374,12 +374,24 @@ a{color:var(--accent)}
   .ec-preview{position:sticky;top:0;max-height:calc(70vh - 20px);overflow-y:auto}
 }
 .modal-ec .modal-body{max-height:min(72vh,calc(100dvh - 150px));overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media (max-width:639px){
+  .modal-backdrop{align-items:stretch;padding:0}
+  .modal-backdrop.show .modal-ec{transform:none}
+}
 .modal-ec .modal-footer{position:sticky;bottom:0;background:var(--bg-elevated);border-top:1px solid var(--border);z-index:2;box-shadow:0 -8px 24px rgba(0,0,0,.25)}
 @media (max-width:639px){
   .ec-layout{display:flex;flex-direction:column}
   .ec-preview{order:-1}
   .ec-dist-more{margin-top:6px;font-size:11px;color:var(--text-2)}
   .ec-dist-bars.is-collapsed .ec-dist-row:nth-child(n+5){display:none}
+  .modal-ec{width:100%;max-width:100%;max-height:100dvh;height:100dvh;margin:0;border-radius:0}
+  .modal-ec .modal-body{max-height:none;flex:1}
+  .modal-ec .modal-footer{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+}
+@media (min-width:768px){
+  .ec-adv-layout{flex-direction:row;align-items:flex-start;gap:16px}
+  .ec-adv-nav{flex:0 0 min(220px,38%);max-height:min(50vh,420px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .ec-adv-panels{flex:1}
 }
 .ec-basic-block{display:flex;flex-direction:column;gap:14px}
 .ec-segment{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-0)}
@@ -404,12 +416,19 @@ a{color:var(--accent)}
 .ec-advanced-toggle[aria-expanded="true"]{border-style:solid;border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 .ec-advanced{margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft)}
 .ec-advanced.hidden{display:none}
-.ec-adv-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-.ec-adv-tab{
-  flex:0 0 auto;min-height:40px;padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:var(--bg-1);
-  color:var(--text-1);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;
+.ec-adv-layout{display:flex;flex-direction:column;gap:12px}
+.ec-adv-nav{display:flex;flex-direction:column;gap:6px}
+.ec-adv-nav-btn{
+  width:100%;min-height:52px;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-md);
+  background:var(--bg-1);color:inherit;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:2px;
+  transition:border-color .15s,background .15s;
 }
-.ec-adv-tab.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.ec-adv-nav-btn.active{border-color:var(--accent);background:var(--accent-soft)}
+.ec-adv-nav-label{font-size:14px;font-weight:600;color:var(--text-0);line-height:1.2}
+.ec-adv-nav-desc{font-size:11px;font-weight:400;color:var(--text-2);line-height:1.3}
+.ec-adv-panels{min-width:0}
+.ec-adv-tabs{display:none}
+.ec-adv-tab{display:none}
 .ec-adv-panel.hidden{display:none}
 .ec-stub-list{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
 .ec-stub-list li{font-size:12.5px;color:var(--text-2);padding:8px 10px;border:1px solid var(--border-soft);border-radius:var(--radius-sm);background:var(--bg-0);opacity:.65}
@@ -698,7 +717,7 @@ a{color:var(--accent)}
   position:relative;
 }
 .tabbar-btn svg{width:20px;height:20px;flex-shrink:0}
-.tabbar-btn span{font-size:10px;line-height:1.1}
+.tabbar-btn span{font-size:11px;line-height:1.15;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .tabbar-btn.active{color:var(--accent);font-weight:600}
 .tabbar-btn.active::after{
   content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
@@ -707,10 +726,13 @@ a{color:var(--accent)}
 body.player-open .tabbar{display:none}
 body.player-open .main{padding-bottom:0!important}
 
-/* Tabbar — mobile bottom */
-.hub-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0}
-.hub-tab{flex-shrink:0;padding:10px 14px;border:none;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:var(--text-2);font-size:13px;font-weight:500;min-height:var(--touch)}
-.hub-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:transparent}
+/* Tabbar — mobile-first: bottom nav (phone + tablet) */
+.hub-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;border-bottom:none;padding-bottom:0}
+.hub-tab{
+  text-align:center;border:1px solid var(--border);border-radius:var(--radius-md);
+  border-bottom:1px solid var(--border)!important;background:var(--bg-1);min-height:48px;
+}
+.hub-tab.active{color:var(--accent);border-color:var(--accent)!important;background:var(--accent-soft)}
 .hub-menu{position:relative;display:inline-block}
 .hub-menu>summary{list-style:none;cursor:pointer}
 .hub-menu>summary::-webkit-details-marker{display:none}
@@ -825,19 +847,22 @@ body.player-open .main{padding-bottom:0!important}
   .progress-details-grid{grid-template-columns:1fr}
 }
 
-@media(min-width:769px){
+/* Desktop only (1024px+): sidebar — tablets keep bottom nav (mobile-first) */
+@media(min-width:1024px){
   #app{flex-direction:row}
   .tabbar{
-    position:fixed;top:0;left:0;bottom:0;right:auto;width:72px;flex-direction:column;
-    height:100dvh;padding:12px 6px calc(12px + env(safe-area-inset-bottom,0px));
+    position:fixed;top:0;left:0;bottom:0;right:auto;width:var(--sidebar-width);
+    height:100dvh;flex-direction:column;align-items:stretch;
+    padding:16px 12px calc(16px + env(safe-area-inset-bottom,0px));
     border-top:none;border-right:1px solid var(--border);
   }
-  .tabbar-btn{flex:0;min-height:52px;width:100%;border-radius:var(--radius-sm)}
+  .tabbar-btn{flex:0;flex-direction:row;justify-content:flex-start;gap:12px;padding:10px 14px;min-height:48px;width:100%;border-radius:var(--radius-sm)}
+  .tabbar-btn span{font-size:13px}
   .tabbar-btn.active{background:var(--accent-soft)}
-  .tabbar-btn.active::after{top:auto;bottom:0;left:50%;transform:translateX(-50%);width:24px;height:2px}
-  .main{margin-left:72px;padding-bottom:0;overflow:hidden}
+  .tabbar-btn.active::after{display:none}
+  .main{margin-left:var(--sidebar-width);padding-bottom:0}
   .view{padding:24px 32px 28px}
-  .view-home{max-width:480px}
+  .view-home{max-width:520px}
   .list-row-compact .btn-icon{display:inline-flex}
   .topbar{height:52px;padding:0 24px}
   .topbar h1{font-size:16px}
@@ -846,6 +871,7 @@ body.player-open .main{padding-bottom:0!important}
 
 <style id="velora-overrides">
 .main{background:transparent;padding-bottom:calc(60px + env(safe-area-inset-bottom,0px))}
+@media(min-width:1024px){.main{padding-bottom:0}}
 .topbar{padding:0 16px;height:52px;background:rgba(26,26,43,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
 .topbar-brand{display:flex;align-items:center;gap:10px;min-width:0}
 .topbar-logo{width:28px;height:28px;flex-shrink:0;border-radius:8px}
@@ -889,16 +915,14 @@ body.player-open .main{padding-bottom:0!important}
 .q-option.opt-wrong{border-color:var(--text-2);background:rgba(100,116,139,.12)}
 .xp-bar>span{background:var(--gradient-brand)}
 .reward-pop{background:var(--bg-glass);backdrop-filter:blur(12px);border-color:var(--accent)}
-@media(max-width:768px){.topbar-brand .topbar-app-name{display:none}}
-@media(min-width:769px){
+@media(max-width:1023px){.topbar-brand .topbar-app-name{display:none}}
+@media(min-width:1024px){
   .tabbar{width:var(--sidebar-width);padding:16px 12px;background:rgba(10,10,14,.95);align-items:stretch;gap:4px}
   .tabbar-logo-wrap{display:flex;align-items:center;gap:10px;padding:8px 10px 20px;margin-bottom:8px;border-bottom:1px solid var(--border)}
   .tabbar-logo-wrap img{width:32px;height:32px}
   .tabbar-logo-wrap span{font-size:18px;font-weight:700;background:var(--gradient-brand);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .tabbar-btn{flex-direction:row;justify-content:flex-start;gap:12px;padding:10px 14px;min-height:48px}
   .tabbar-btn svg{padding:0;background:transparent!important}
-  .tabbar-btn span{font-size:13px}
-  .main{margin-left:var(--sidebar-width)}
+  .main{margin-left:var(--sidebar-width);padding-bottom:0}
   .topbar-brand .topbar-logo{display:none}
 }
 </style>
@@ -2729,24 +2753,31 @@ class ExamConfigModal {
         </fieldset>`;
   }
 
+  static ADV_TABS = [
+    {id:'selecao', label:'Questões', desc:'Quais entram no simulado'},
+    {id:'filtros', label:'Filtros', desc:'Tema, tag e dificuldade'},
+    {id:'estrategia', label:'Estratégia', desc:'Oficial, revisão ou sprint'},
+    {id:'tempo', label:'Tempo', desc:'Cronômetro e limites'},
+    {id:'aleatoriedade', label:'Ordem', desc:'Embaralhar questões'},
+    {id:'exclusao', label:'Exclusão', desc:'Ignorar já acertadas'},
+    {id:'feedback', label:'Feedback', desc:'Respostas durante a sessão'},
+    {id:'finalizacao', label:'Finalização', desc:'Revisão antes de enviar'},
+    {id:'inteligencia', label:'Inteligência', desc:'IA e probabilidade'},
+    {id:'historico', label:'Histórico', desc:'Suas notas anteriores'},
+    {id:'config', label:'Perfis', desc:'Salvar e restaurar'},
+    {id:'importacao', label:'Importar', desc:'JSON, CSV e outros'},
+  ];
+
   static _advancedPanelsHtml(sectionsHtml, defN, defTo){
-    const tabs = [
-      {id:'selecao', label:'Seleção'},
-      {id:'filtros', label:'Filtros'},
-      {id:'estrategia', label:'Estratégia'},
-      {id:'tempo', label:'Tempo'},
-      {id:'aleatoriedade', label:'Aleatoriedade'},
-      {id:'exclusao', label:'Exclusão'},
-      {id:'feedback', label:'Feedback'},
-      {id:'finalizacao', label:'Finalização'},
-      {id:'inteligencia', label:'Inteligência'},
-      {id:'historico', label:'Histórico'},
-      {id:'config', label:'Config'},
-      {id:'importacao', label:'Importação'},
-    ];
+    const nav = this.ADV_TABS.map(t=>`
+      <button type="button" class="ec-adv-nav-btn ${t.id==='selecao'?'active':''}" data-adv-tab="${t.id}" role="tab" aria-selected="${t.id==='selecao'?'true':'false'}">
+        <span class="ec-adv-nav-label">${t.label}</span>
+        <span class="ec-adv-nav-desc">${t.desc}</span>
+      </button>`).join('');
     return `
-      <div class="ec-adv-tabs" role="tablist">${tabs.map(t=>`<button type="button" class="ec-adv-tab ${t.id==='selecao'?'active':''}" data-adv-tab="${t.id}">${t.label}</button>`).join('')}</div>
-      <div class="ec-adv-panels">
+      <div class="ec-adv-layout">
+        <nav class="ec-adv-nav" role="tablist" aria-label="Opções avançadas">${nav}</nav>
+        <div class="ec-adv-panels">
         <div class="ec-adv-panel" data-adv-panel="selecao">${this._selectionFieldsetHtml(sectionsHtml, defN, defTo)}</div>
         <div class="ec-adv-panel hidden" data-adv-panel="filtros">
           <p class="hint" style="margin-bottom:10px">Refine o pool por metadados da questão.</p>
@@ -2792,6 +2823,7 @@ class ExamConfigModal {
           <p class="hint" style="margin-bottom:10px">Importe bancos em JSON, CSV ou outros formatos.</p>
           <button type="button" class="btn btn-sm btn-primary" id="ec-open-import">${Icons.upload} Abrir importação</button>
         </div>
+      </div>
       </div>`;
   }
 
@@ -2841,7 +2873,7 @@ class ExamConfigModal {
               </div>
             </div>
           </div>
-          <button type="button" class="ec-advanced-toggle" id="ec-adv-toggle" aria-expanded="false">⚙ Configuração avançada</button>
+          <button type="button" class="ec-advanced-toggle" id="ec-adv-toggle" aria-expanded="false">⚙ Mais opções (filtros, histórico, importar…)</button>
           <div class="ec-advanced hidden" id="ec-advanced">${this._advancedPanelsHtml(sectionsHtml, defN, defTo)}</div>
         </div>
       </div>`;
@@ -3230,12 +3262,16 @@ class ExamConfigModal {
       const adv = modalEl.querySelector('#ec-advanced');
       const btn = modalEl.querySelector('#ec-adv-toggle');
       const open = adv?.classList.toggle('hidden') === false;
-      if(btn){ btn.setAttribute('aria-expanded', open ? 'true' : 'false'); btn.textContent = open ? '⚙ Ocultar configuração avançada' : '⚙ Configuração avançada'; }
+      if(btn){ btn.setAttribute('aria-expanded', open ? 'true' : 'false'); btn.textContent = open ? '⚙ Ocultar opções avançadas' : '⚙ Mais opções (filtros, histórico, importar…)'; }
     });
 
     modalEl.querySelectorAll('[data-adv-tab]').forEach(tab=>{
       tab.addEventListener('click', ()=>{
-        modalEl.querySelectorAll('[data-adv-tab]').forEach(t=>t.classList.toggle('active', t===tab));
+        modalEl.querySelectorAll('[data-adv-tab]').forEach(t=>{
+          const on = t===tab;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
         modalEl.querySelectorAll('[data-adv-panel]').forEach(p=>p.classList.add('hidden'));
         modalEl.querySelector(`[data-adv-panel="${tab.dataset.advTab}"]`)?.classList.remove('hidden');
       });
@@ -4816,16 +4852,17 @@ class App {
     logo.innerHTML = '<img src="branding/logo/symbol-white.svg" width="32" height="32" alt=""><span>Velora</span>';
     bar.appendChild(logo);
     const items = [
-      {route:'home', icon:Icons.dashboard, label:'Início'},
-      {route:'content', icon:Icons.content, label:'Biblioteca'},
-      {route:'progress', icon:Icons.progress, label:'Progresso'},
+      {route:'home', icon:Icons.dashboard, label:'Início', title:'Página inicial'},
+      {route:'content', icon:Icons.content, label:'Biblioteca', title:'Certificações e questões'},
+      {route:'progress', icon:Icons.progress, label:'Progresso', title:'Estatísticas e histórico'},
     ];
     items.forEach(it=>{
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'tabbar-btn';
       btn.dataset.route = it.route;
-      btn.setAttribute('aria-label', it.label);
+      btn.setAttribute('aria-label', it.title);
+      btn.title = it.title;
       btn.innerHTML = `${it.icon}<span>${it.label}</span>`;
       btn.addEventListener('click', ()=>this.router.go(it.route));
       bar.appendChild(btn);
