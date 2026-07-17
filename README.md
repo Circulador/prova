@@ -26,11 +26,11 @@ Stack: monolito HTML/CSS/JS · GitHub Pages · **offline-first** · **PWA** · m
 
 | Área | Funcionalidades |
 |------|-----------------|
-| **Início** | Boas-vindas, sessão inteligente, presets (Completo / Rápido / Só erros / Sprint / Maratona), trilhas por continente, FAQ e Como usar |
-| **Biblioteca** | Certificações · Questões · **Flashcards** (FSRS) · criar exame · importar |
-| **Progresso** | KPIs locais, gráfico de aranha por domínio, pontos fortes/lacunas, histórico |
-| **Player** | Treino e simulado · pausar · explicar · menu ⋯ · footer 3 botões |
-| **Ajustes** | Tema escuro/claro · **idioma da plataforma PT/EN** · idioma das questões · PWA · dados demo |
+| **Início** | Estudar agora (~10 min) · Personalizar · Recentes · Continuar sessão · trilhas colapsadas · FAQ/Como usar |
+| **Biblioteca** | Certificações · Questões · Flashcards (FSRS, olho fixo, estrela) · criar exame · importar |
+| **Progresso** | Mastery · lacunas · KPIs · seções colapsáveis · histórico configurável (5–Todas) |
+| **Player** | Aprendizado / Prova · Esta/Todas (revelar) · Marcar · Explicar · menu ⋯ |
+| **Ajustes** | Tema · idioma UI + questões · PWA · demo · limite de histórico |
 
 ---
 
@@ -38,8 +38,8 @@ Stack: monolito HTML/CSS/JS · GitHub Pages · **offline-first** · **PWA** · m
 
 Três objetivos simultâneos:
 
-1. **Passar na prova** — simulados, presets, revisão inteligente  
-2. **Reter por anos** — repetição espaçada (FSRS), analogias, storytelling  
+1. **Passar na prova** — sessões tipo prova, cronômetro, revisão pré-envio, refazer erradas  
+2. **Reter por anos** — FSRS, mastery score, Estudar agora / lacunas  
 3. **Aplicar no trabalho** — casos práticos, comparativo multi-país (roadmap)
 
 ---
@@ -65,14 +65,16 @@ Dados: [`data/dpo-global-bank.js`](data/dpo-global-bank.js)
 
 ## Como usar
 
+Documentação completa in-app: **Início → FAQ** ou **Como usar** (busca por tema).
+
 1. Abra [circulador.github.io/prova](https://circulador.github.io/prova/) (mobile first).
-2. **Início** — leia o manifesto de boas-vindas; use Sessão inteligente ou escolha uma trilha.
-3. **Início → FAQ / Como usar** — busca por tema (flashcards, radar, offline, player…).
-4. **Biblioteca** — Certificações (▶ simulado) · Questões (+ criar) · Flashcards (estudar FSRS).
-5. **+ Novo exame** — campos obrigatórios: **Título\***, **Categoria/trilha\***, ≥1 questão vinculada.
-6. **Progresso** — radar de domínios, KPIs, botão *Estudar lacunas*.
-7. **Ajustes** — idioma da plataforma, tema, instalar PWA, gerar **dados demo** para testar gráficos.
-8. **Player** — treino (feedback + Explicar) ou simulado (cronômetro + revisão pré-envio).
+2. **Início → Estudar agora** — sessão ~10 min em modo Aprendizado (lacunas prioritárias).
+3. **Personalizar** — prova, quantidade (10/20/Todas), Aprendizado vs Prova completa, opções avançadas.
+4. **Biblioteca** — Certificações (▶) · Questões (+) · Flashcards (FSRS + olho/estrela).
+5. **Progresso** — mastery, lacunas, **Estudar lacunas**; histórico com dropdown 5–Todas.
+6. **Player** — botões **Esta** / **Todas** (revelar) · **Marcar** no rodapé · **Explicar** no menu ⋯.
+7. **Personalizar / ▶ Biblioteca** — escolha **Aprendizado · Flashcards · Prova** (padrão: Aprendizado).
+8. **Ajustes** — idioma plataforma vs questões, PWA, limite de histórico, dados demo.
 
 ### Reset após deploy
 

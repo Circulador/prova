@@ -587,11 +587,19 @@ a{color:var(--accent)}
 .feedback-box.incorrect .fb-head{color:var(--bad)}
 .feedback-box .fb-line{font-size:13px;color:var(--text-1);margin-bottom:3px}
 .feedback-box .fb-explain{font-size:12.5px;color:var(--text-1);margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);line-height:1.6}
-.player-reveal-grp{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.player-reveal-grp .btn-sm{padding:6px 10px;font-size:12px;white-space:nowrap;min-height:36px}
-#p-reveal-q.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-#p-reveal-all.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
-#p-reveal-q svg,#p-reveal-all svg{width:14px;height:14px;flex-shrink:0}
+.player-reveal-grp{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.player-reveal-btn{display:inline-flex;align-items:center;gap:4px;padding:5px 8px;font-size:11px;font-weight:650;min-height:32px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-2);color:var(--text-1)}
+.player-reveal-btn svg{width:14px;height:14px;flex-shrink:0}
+.player-reveal-btn.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+#p-reveal-all.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+#p-reveal-all.active svg{stroke:#fff}
+.player-reveal-btn:disabled{opacity:.4;cursor:not-allowed}
+.progress-history-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:16px 0 10px}
+.progress-history-head h3{margin:0;font-size:var(--text-md)}
+.progress-history-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.select-sm{padding:6px 10px;font-size:12px;min-height:34px;width:auto;max-width:140px}
+.progress-kpi-grid.compact-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:639px){.progress-kpi-grid.compact-4{grid-template-columns:repeat(2,1fr)}}
 
 /* --- legenda do grid de navegação --- */
 .nav-legend{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 14px;padding:2px 2px 10px;margin-bottom:4px;border-bottom:1px dashed var(--border);font-size:11px;color:var(--text-2)}
@@ -1141,11 +1149,17 @@ const I18n = {
       'fc.revealAll':'Revelar resposta sempre','fc.markCard':'Marcar card',
       'home.presetFull':'Completo','home.presetQuick':'Rápido','home.presetErrors':'Só erros','home.presetSprint':'Sprint','home.presetMarathon':'Maratona',
       'session.configure':'Configurar sessão','session.start':'Começar','session.examMode':'Prova completa','session.trainMode':'Aprendizado',
+      'session.studyHow':'Como estudar','session.fcHint':'Repetição espaçada (FSRS) desta certificação.',
       'session.examHint':'Como na prova — feedback no final.','session.trainHint':'Veja respostas, explique e revise no fluxo.',
-      'player.revealQuestion':'Revelar esta questão','player.revealAll':'Revelar todas (fixo)','player.mark':'Marcar','player.marked':'Marcada',
+      'session.qtyCards':'Quantidade de cards','session.previewFc':'Resumo dos flashcards',
+      'player.revealQuestion':'Revelar esta questão','player.revealAll':'Revelar todas (fixo)','player.revealThis':'Esta','player.revealEvery':'Todas',
+      'player.mark':'Marcar','player.marked':'Marcada',
       'player.submit':'Enviar sessão','player.next':'Próxima →','player.prev':'← Anterior','player.exitTitle':'Sair da sessão',
       'player.exitMsg':'Seu progresso será perdido. Deseja realmente sair?',
       'progress.mastery':'Domínio','progress.sessions':'Sessões','progress.gaps':'Lacunas','progress.questions':'Questões vistas',
+      'progress.domainsChart':'Gráfico de domínios','progress.moreStats':'Mais estatísticas','progress.recentTrend':'Evolução recente',
+      'progress.resultDist':'Distribuição de resultados','progress.historyTitle':'Histórico de sessões','progress.showHistory':'Mostrar',
+      'progress.historyAll':'Todas','progress.historyAttempts':'{n} tentativa(s)',
       'home.viewProgress':'Ver progresso','home.faq':'FAQ','home.howto':'Como usar',
       'lib.certs':'Certificações','lib.questions':'Questões','lib.flashcards':'Flashcards',
       'lib.newExam':'Novo exame','lib.import':'Importar','lib.select':'Selecionar','lib.smartReview':'Revisão inteligente',
@@ -1161,6 +1175,7 @@ const I18n = {
       'settings.installDone':'Já instalado','settings.installBtn':'Instalar aplicativo','settings.installHow':'Como instalar',
       'settings.installDesc':'Use o Velora offline, com ícone na tela inicial — como um app nativo no celular ou desktop.',
       'settings.installReady':'Pronto para instalar','settings.installManual':'Instruções manuais',
+      'settings.historyLimit':'Histórico em Progresso','settings.historyLimitHint':'Quantas sessões listar',
       'help.title':'FAQ & Como usar','help.search':'Buscar tema…','help.faqTab':'FAQ','help.howTab':'Como usar','help.noResults':'Nenhum tema encontrado.',
       'common.save':'Salvar','common.cancel':'Cancelar','common.confirm':'Confirmar','common.back':'Voltar',
       'progress.title':'Progresso','builder.title':'Criador de Exames'
@@ -1182,11 +1197,17 @@ const I18n = {
       'fc.revealAll':'Always reveal answer','fc.markCard':'Mark card',
       'home.presetFull':'Full','home.presetQuick':'Quick','home.presetErrors':'Errors only','home.presetSprint':'Sprint','home.presetMarathon':'Marathon',
       'session.configure':'Configure session','session.start':'Start','session.examMode':'Full exam','session.trainMode':'Learning',
+      'session.studyHow':'How to study','session.fcHint':'FSRS spaced repetition for this certification.',
       'session.examHint':'Exam-like — feedback at the end.','session.trainHint':'See answers, explain and review in flow.',
-      'player.revealQuestion':'Reveal this question','player.revealAll':'Reveal all (fixed)','player.mark':'Mark','player.marked':'Marked',
+      'session.qtyCards':'Number of cards','session.previewFc':'Flashcards summary',
+      'player.revealQuestion':'Reveal this question','player.revealAll':'Reveal all (fixed)','player.revealThis':'This','player.revealEvery':'All',
+      'player.mark':'Mark','player.marked':'Marked',
       'player.submit':'Submit session','player.next':'Next →','player.prev':'← Previous','player.exitTitle':'Leave session',
       'player.exitMsg':'Your progress will be lost. Leave anyway?',
       'progress.mastery':'Mastery','progress.sessions':'Sessions','progress.gaps':'Gaps','progress.questions':'Questions seen',
+      'progress.domainsChart':'Domain chart','progress.moreStats':'More stats','progress.recentTrend':'Recent trend',
+      'progress.resultDist':'Results distribution','progress.historyTitle':'Session history','progress.showHistory':'Show',
+      'progress.historyAll':'All','progress.historyAttempts':'{n} attempt(s)',
       'home.viewProgress':'View progress','home.faq':'FAQ','home.howto':'How to use',
       'lib.certs':'Certifications','lib.questions':'Questions','lib.flashcards':'Flashcards',
       'lib.newExam':'New exam','lib.import':'Import','lib.select':'Select','lib.smartReview':'Smart review',
@@ -1202,6 +1223,7 @@ const I18n = {
       'settings.installDone':'Already installed','settings.installBtn':'Install app','settings.installHow':'How to install',
       'settings.installDesc':'Use Velora offline with a home screen icon — like a native app on phone or desktop.',
       'settings.installReady':'Ready to install','settings.installManual':'Manual instructions',
+      'settings.historyLimit':'History in Progress','settings.historyLimitHint':'How many sessions to list',
       'help.title':'FAQ & How to','help.search':'Search topic…','help.faqTab':'FAQ','help.howTab':'How to','help.noResults':'No topics found.',
       'common.save':'Save','common.cancel':'Cancel','common.confirm':'Confirm','common.back':'Back',
       'progress.title':'Progress','builder.title':'Exam builder'
@@ -1224,45 +1246,177 @@ const HelpCenter = {
     const en = I18n.isEn();
     const L = (pt, enTxt)=> en ? enTxt : pt;
     return [
-      {id:'overview', section:'faq', kw:['velora','knowledge','os','plataforma','platform','what'],
+      /* ── FAQ ── */
+      {id:'overview', section:'faq', kw:['velora','knowledge','os','plataforma','platform','what','o que e'],
         title:L('O que é o Velora?','What is Velora?'),
-        body:L('Velora é um Knowledge OS para certificações DPO e privacidade. Questões, flashcards e simulados são visualizações do mesmo conhecimento — não módulos separados.','Velora is a Knowledge OS for DPO and privacy certifications. Questions, flashcards and exams are views of the same knowledge — not separate modules.')},
-      {id:'home', section:'howto', kw:['inicio','home','dashboard','sessao','smart'],
-        title:L('Início — sessões e trilhas','Home — sessions and tracks'),
-        body:L('<ul><li><strong>Continuar</strong> retoma o simulado pausado.</li><li><strong>Sessão inteligente</strong> prioriza lacunas (AITutor + FSRS).</li><li>Presets: Completo, Rápido, Só erros, Sprint, Maratona.</li><li>Trilhas por continente abrem o modal de configuração antes do player.</li></ul>','<ul><li><strong>Continue</strong> resumes a paused exam.</li><li><strong>Smart session</strong> prioritizes weak areas (AITutor + FSRS).</li><li>Presets: Full, Quick, Errors only, Sprint, Marathon.</li><li>Continent tracks open the config modal before the player.</li></ul>')},
-      {id:'library-certs', section:'howto', kw:['biblioteca','certificacoes','certifications','library','exame'],
-        title:L('Biblioteca — Certificações','Library — Certifications'),
-        body:L('Lista certificações DPO global por trilha. Toque ▶ para configurar e iniciar. <strong>+ Novo exame</strong> cria simulados personalizados (título* e categoria* obrigatórios). <strong>Importar</strong> aceita CSV/JSON.','Lists global DPO certifications by track. Tap ▶ to configure and start. <strong>+ New exam</strong> creates custom exams (title* and category* required). <strong>Import</strong> accepts CSV/JSON.')},
-      {id:'library-questions', section:'howto', kw:['questoes','questions','banco','bank','criar'],
-        title:L('Biblioteca — Questões','Library — Questions'),
-        body:L('Banco hierárquico por trilha → certificação → sub-matéria. Botão + cria questões (single, multi, boolean, etc.). Cada questão alimenta estatísticas, progresso e flashcards.','Hierarchical bank by track → certification → sub-topic. + button creates questions (single, multi, boolean, etc.). Each question feeds stats, progress and flashcards.')},
-      {id:'library-flashcards', section:'howto', kw:['flashcards','cards','fsrs','anki','repeticao'],
-        title:L('Biblioteca — Flashcards','Library — Flashcards'),
-        body:L('Cada questão gera um card (frente = enunciado, verso = resposta). Estude com FSRS: De novo · Difícil · Bom · Fácil. Progresso aparece em Progresso e no mapa de domínios.','Each question becomes a card (front = stem, back = answer). Study with FSRS: Again · Hard · Good · Easy. Progress shows in Progress and domain radar.')},
-      {id:'exam-config', section:'howto', kw:['modal','configurar','simulado','filtro','shuffle'],
-        title:L('Configurar simulado','Configure exam'),
-        body:L('Exclusões: dominadas, respondidas hoje, nunca vistas. Embaralhar questões/alternativas. Estratégias Sprint/Maratona. Filtros por dificuldade e tags. Export/import JSON de perfil.','Exclusions: mastered, answered today, unseen. Shuffle questions/options. Sprint/Marathon strategies. Difficulty and tag filters. JSON profile export/import.')},
-      {id:'player', section:'howto', kw:['player','treino','simulado','pausar','explicar'],
-        title:L('Player de estudo','Study player'),
-        body:L('Treino: feedback imediato, Explicar (IA), olhinho no topo (esta questão ou todas). Simulado: cronômetro, revisão pré-envio. Footer: Anterior · Marcar · Próxima/Enviar.','Training: instant feedback, Explain (AI), eye toggles in top bar (this question or all). Exam mode: timer, pre-submit review. Footer: Previous · Mark · Next/Submit.')},
-      {id:'progress', section:'howto', kw:['progresso','radar','kpi','grafico','lacunas'],
-        title:L('Progresso e radar','Progress and radar'),
-        body:L('KPIs locais: simulados, acertos, sequência, XP. Gráfico de aranha por domínio (Legal, Governança, Técnico…). Pontos fortes e lacunas com botão <strong>Estudar lacunas</strong>.','Local KPIs: exams, accuracy, streak, XP. Spider chart by domain (Legal, Governance, Technical…). Strengths and gaps with <strong>Study gaps</strong> button.')},
-      {id:'settings', section:'faq', kw:['ajustes','settings','tema','idioma','pwa','instalar'],
-        title:L('Ajustes','Settings'),
-        body:L('<ul><li><strong>Tema escuro/claro</strong> — aplica ao salvar ou ao alternar o switch.</li><li><strong>Idioma da plataforma</strong> — PT ou EN (interface).</li><li><strong>Idioma das questões</strong> — dual EN+PT ou só um idioma no enunciado.</li><li><strong>Instalar aplicativo</strong> — PWA offline.</li><li><strong>Dados demo</strong> — simula histórico para testar Progresso.</li></ul>','<ul><li><strong>Dark/light theme</strong> — applies on save or when toggling.</li><li><strong>Platform language</strong> — PT or EN (UI).</li><li><strong>Question language</strong> — dual EN+PT or single language in stems.</li><li><strong>Install app</strong> — offline PWA.</li><li><strong>Demo data</strong> — simulates history for Progress testing.</li></ul>')},
-      {id:'offline', section:'faq', kw:['offline','pwa','localstorage','sem internet'],
-        title:L('Funciona offline?','Works offline?'),
-        body:L('Sim. Dados ficam no navegador (localStorage). PWA cacheia o shell. Pill <strong>Offline</strong> aparece sem rede — o app continua funcionando.','Yes. Data stays in the browser (localStorage). PWA caches the shell. <strong>Offline</strong> pill shows without network — the app keeps working.')},
-      {id:'bilingual', section:'faq', kw:['bilingue','english','portugues','idioma','dual'],
-        title:L('Bilingue EN/PT','Bilingual EN/PT'),
-        body:L('<strong>Idioma da plataforma</strong> muda menus e textos. <strong>Idioma das questões</strong> controla se enunciados aparecem em dual, só EN ou só PT — independentes.','<strong>Platform language</strong> changes menus and labels. <strong>Question language</strong> controls dual, EN-only or PT-only stems — independent settings.')},
-      {id:'create-exam', section:'faq', kw:['criar','exame','obrigatorio','mandatory','titulo'],
+        body:L(
+          '<p><strong>Velora</strong> é um <strong>Knowledge Operating System</strong> (Knowledge OS) para formação em <strong>privacidade, proteção de dados e certificações DPO</strong> — nacional e internacional.</p><p>Não é apenas um banco de questões, um app de flashcards ou um simulador VCE. Todo conteúdo é modelado como <strong>conhecimento conectado</strong>; questões, flashcards, sessões de estudo, explicações e estatísticas são <strong>visualizações do mesmo conhecimento</strong>.</p><ul><li><strong>Live:</strong> circulador.github.io/prova</li><li><strong>Stack:</strong> PWA offline-first · mobile-first · dados no navegador</li><li><strong>Conteúdo:</strong> ~301 questões autorais · 19 certificações · 5 trilhas geográficas</li></ul>',
+          '<p><strong>Velora</strong> is a <strong>Knowledge Operating System</strong> for <strong>privacy, data protection and DPO certifications</strong> — national and international.</p><p>It is not just a question bank, flashcard app or VCE simulator. Content is modeled as <strong>connected knowledge</strong>; questions, flashcards, study sessions, explanations and analytics are <strong>views of the same knowledge</strong>.</p><ul><li><strong>Live:</strong> circulador.github.io/prova</li><li><strong>Stack:</strong> offline-first PWA · mobile-first · browser-local data</li><li><strong>Content:</strong> ~301 author questions · 19 certifications · 5 geographic tracks</li></ul>'
+        )},
+      {id:'knowledge-os', section:'faq', kw:['knowledge','node','nó','grafo','arquitetura','os'],
+        title:L('O que significa Knowledge OS?','What does Knowledge OS mean?'),
+        body:L(
+          '<p>Cada conceito (ex.: base legal LGPD, DPIA, transferência internacional) existe <strong>uma vez</strong> no sistema. A partir dele derivam-se automaticamente:</p><ul><li>Questões de múltipla escolha, boolean, matching, etc.</li><li>Flashcards com repetição espaçada (FSRS)</li><li>Estatísticas por domínio (Legal, Governança, Técnico…)</li><li>Sessões inteligentes que priorizam lacunas</li><li>Explicações contextuais (IA offline)</li></ul><p>Várias certificações (CIPP/E, LGPD, EXIN…) podem referenciar o <strong>mesmo conceito</strong>. Você estuda conhecimento, não listas isoladas.</p>',
+          '<p>Each concept (e.g. LGPD legal basis, DPIA, cross-border transfer) exists <strong>once</strong> in the system. From it you automatically get:</p><ul><li>Multiple-choice, boolean, matching questions, etc.</li><li>Flashcards with spaced repetition (FSRS)</li><li>Domain analytics (Legal, Governance, Technical…)</li><li>Smart sessions targeting weak areas</li><li>Contextual explanations (offline AI)</li></ul><p>Multiple certifications (CIPP/E, LGPD, EXIN…) can reference the <strong>same concept</strong>. You study knowledge, not isolated lists.</p>'
+        )},
+      {id:'mission', section:'faq', kw:['missao','mission','objetivo','dpo','certificacao'],
+        title:L('Quais são os objetivos do Velora?','What are Velora\'s goals?'),
+        body:L(
+          '<p>Três objetivos simultâneos:</p><ol><li><strong>Passar na prova</strong> — sessões tipo prova, cronômetro, revisão pré-envio, readiness por certificação.</li><li><strong>Reter por anos</strong> — FSRS, mastery score, revisão inteligente, domínio consolidado.</li><li><strong>Aplicar no trabalho</strong> — cenários lúdicos do dia a dia, conteúdo bilingue EN/PT, casos práticos (roadmap).</li></ol><p>O conteúdo é <strong>autoral</strong> e alinhado a outlines públicos — <strong>não copia provas oficiais</strong> nem brain dumps.</p>',
+          '<p>Three simultaneous goals:</p><ol><li><strong>Pass the exam</strong> — exam-like sessions, timer, pre-submit review, certification readiness.</li><li><strong>Retain for years</strong> — FSRS, mastery score, smart review, consolidated mastery.</li><li><strong>Apply at work</strong> — everyday scenarios, bilingual EN/PT content, practical cases (roadmap).</li></ol><p>Content is <strong>authorial</strong> and aligned with public outlines — <strong>not official exam copies</strong> or brain dumps.</p>'
+        )},
+      {id:'offline', section:'faq', kw:['offline','pwa','localstorage','sem internet','instalar'],
+        title:L('Funciona offline? Como instalar?','Works offline? How to install?'),
+        body:L(
+          '<p><strong>Sim.</strong> O Velora foi projetado offline-first:</p><ul><li><strong>Dados</strong> (questões respondidas, histórico, flashcards FSRS, ajustes) ficam no <strong>localStorage</strong> do navegador — nada é enviado a servidores.</li><li><strong>PWA:</strong> em Ajustes → <strong>Instalar aplicativo</strong> adiciona ícone na tela inicial (celular ou desktop).</li><li>O <strong>service worker</strong> cacheia o shell do app; sem internet o Velora continua abrindo.</li><li>Um indicador <strong>Offline</strong> aparece quando não há rede.</li></ul><p><strong>Limitação:</strong> instalar exige HTTPS (GitHub Pages) e navegador compatível (Chrome, Edge, Safari, Firefox).</p>',
+          '<p><strong>Yes.</strong> Velora is offline-first:</p><ul><li><strong>Data</strong> (answers, history, FSRS flashcards, settings) stays in browser <strong>localStorage</strong> — nothing is sent to servers.</li><li><strong>PWA:</strong> Settings → <strong>Install app</strong> adds a home screen icon (phone or desktop).</li><li>The <strong>service worker</strong> caches the app shell; Velora opens without internet.</li><li>An <strong>Offline</strong> pill shows when there is no network.</li></ul><p><strong>Limitation:</strong> install requires HTTPS (GitHub Pages) and a compatible browser.</p>'
+        )},
+      {id:'bilingual', section:'faq', kw:['bilingue','english','portugues','idioma','dual','en','pt'],
+        title:L('Bilingue EN/PT — como funciona?','Bilingual EN/PT — how it works?'),
+        body:L(
+          '<p>Existem <strong>dois controles independentes</strong> em Ajustes:</p><ul><li><strong>Idioma da plataforma</strong> (PT ou EN) — menus, botões, FAQ, Progresso, modais.</li><li><strong>Idioma das questões</strong> — <em>Dual EN+PT</em> (enunciado nos dois idiomas), <em>só English</em> ou <em>só Português</em>.</li></ul><p>Isso permite, por exemplo, interface em português com questões só em inglês — ideal para certificações IAPP/EXIN.</p><p>Muitas questões usam cenários lúdicos bilingues (WhatsApp, encomendas, academia…) para fixar vocabulário técnico EN no fluxo.</p>',
+          '<p>There are <strong>two independent controls</strong> in Settings:</p><ul><li><strong>Platform language</strong> (PT or EN) — menus, buttons, FAQ, Progress, modals.</li><li><strong>Question language</strong> — <em>Dual EN+PT</em>, <em>English only</em> or <em>Portuguese only</em>.</li></ul><p>Example: Portuguese UI with English-only stems — ideal for IAPP/EXIN certifications.</p><p>Many questions use bilingual everyday scenarios to reinforce technical English vocabulary.</p>'
+        )},
+      {id:'data-privacy', section:'faq', kw:['privacidade','dados','local','servidor','gdpr','seguranca'],
+        title:L('Meus dados vão para algum servidor?','Does my data go to any server?'),
+        body:L(
+          '<p><strong>Não.</strong> Todo progresso fica <strong>localmente</strong> no seu dispositivo:</p><ul><li>Histórico de sessões e tentativas</li><li>Estatísticas por questão (acertos, streak, FSRS)</li><li>Flashcards agendados</li><li>XP, nível, conquistas</li><li>Sessão pausada (retomar depois)</li><li>Ajustes e preferências</li></ul><p>Se limpar dados do navegador ou trocar de dispositivo, o histórico se perde — a menos que você exporte perfis JSON pelo modal Personalizar (funcionalidade avançada).</p>',
+          '<p><strong>No.</strong> All progress stays <strong>locally</strong> on your device:</p><ul><li>Session history and attempts</li><li>Per-question stats (accuracy, streak, FSRS)</li><li>Scheduled flashcards</li><li>XP, level, achievements</li><li>Paused session (resume later)</li><li>Settings and preferences</li></ul><p>Clearing browser data or switching devices loses history — unless you export JSON profiles via Customize (advanced).</p>'
+        )},
+      {id:'mastery', section:'faq', kw:['mastery','dominio','consolidado','kpi','score','73'],
+        title:L('O que é Domínio consolidado (Mastery)?','What is Consolidated Mastery?'),
+        body:L(
+          '<p><strong>Domínio consolidado</strong> é a métrica principal do Velora — não horas estudadas nem streak isolado.</p><p>Calculado a partir de cada questão que você já respondeu:</p><ul><li><strong>70%</strong> — taxa de acertos (correct/seen)</li><li><strong>30%</strong> — estabilidade (streak de acertos, até 5)</li></ul><p>Aparece na <strong>Início</strong> (faixa de mastery) e em <strong>Progresso</strong> (gauge + KPI). Meta: subir mastery meses após a prova, não só na véspera.</p>',
+          '<p><strong>Consolidated Mastery</strong> is Velora\'s main metric — not hours studied or streak alone.</p><p>Computed from each question you have answered:</p><ul><li><strong>70%</strong> — accuracy rate (correct/seen)</li><li><strong>30%</strong> — stability (correct streak, up to 5)</li></ul><p>Shown on <strong>Home</strong> (mastery strip) and <strong>Progress</strong> (gauge + KPI). Goal: raise mastery months after the exam, not only the day before.</p>'
+        )},
+      {id:'create-exam', section:'faq', kw:['criar','exame','obrigatorio','mandatory','titulo','novo'],
         title:L('Campos obrigatórios ao criar exame','Required fields when creating an exam'),
-        body:L('Obrigatórios: <strong>Título*</strong>, <strong>Categoria/trilha*</strong> e ao menos <strong>1 questão vinculada</strong>. Demais campos têm padrão (60 min, 70% nota mínima).','Required: <strong>Title*</strong>, <strong>Category/track*</strong> and at least <strong>1 linked question</strong>. Other fields default (60 min, 70% pass score).')},
-      {id:'import', section:'howto', kw:['importar','csv','json','apkg'],
-        title:L('Importar conteúdo','Import content'),
-        body:L('Biblioteca → Importar. Adaptadores convertem CSV/JSON para questões e exames. Conteúdo importado alimenta flashcards e progresso como o banco DPO global.','Library → Import. Adapters convert CSV/JSON into questions and exams. Imported content feeds flashcards and progress like the global DPO bank.')}
+        body:L(
+          '<p>Em Biblioteca → Certificações → <strong>+ Novo exame</strong>:</p><ul><li><strong>Título*</strong> — nome do simulado personalizado</li><li><strong>Categoria/trilha*</strong> — ex.: Brasil — DPO, Personalizado</li><li><strong>≥ 1 questão vinculada</strong> — na aba Questões vinculadas</li></ul><p>Campos com asterisco (*) vermelho na UI. Padrões automáticos: 60 min, nota mínima 70%.</p><p>Questões criadas ou importadas alimentam automaticamente flashcards, estatísticas e progresso.</p>',
+          '<p>Library → Certifications → <strong>+ New exam</strong>:</p><ul><li><strong>Title*</strong></li><li><strong>Category/track*</strong></li><li><strong>≥ 1 linked question</strong></li></ul><p>Fields marked with (*) in the UI. Defaults: 60 min, 70% pass score.</p><p>Created or imported questions automatically feed flashcards, stats and progress.</p>'
+        )},
+      {id:'demo-data', section:'faq', kw:['demo','demonstracao','teste','grafico','progresso'],
+        title:L('Dados de demonstração','Demo data'),
+        body:L(
+          '<p>Em <strong>Ajustes → Dados de demonstração</strong> você pode:</p><ul><li><strong>Gerar dados demo</strong> — simula histórico de sessões, estatísticas por domínio e progresso FSRS para visualizar gráficos sem estudar horas.</li><li><strong>Remover dados demo</strong> — apaga apenas entradas marcadas como demo; seus dados reais são preservados.</li></ul><p>Útil para explorar Progresso (radar, histórico, distribuição) antes de acumular histórico real.</p>',
+          '<p>In <strong>Settings → Demo data</strong>:</p><ul><li><strong>Generate demo data</strong> — simulates session history, domain stats and FSRS progress to preview charts.</li><li><strong>Remove demo data</strong> — deletes demo entries only; real data is kept.</li></ul><p>Useful to explore Progress before building real history.</p>'
+        )},
+      {id:'not-velora', section:'faq', kw:['nao e','not','vce','duolingo','anki','dumps'],
+        title:L('O que o Velora NÃO é?','What Velora is NOT?'),
+        body:L(
+          '<ul><li><strong>Não</strong> vende dumps ou questões vazadas (ExamTopics).</li><li><strong>Não</strong> é gamificação infantil estilo Duolingo — mastery &gt; coruja.</li><li><strong>Não</strong> substitui cursos oficiais vendor — complementa estudo autônomo.</li><li><strong>Não</strong> sincroniza nuvem entre dispositivos (por design, privacidade).</li><li><strong>Não</strong> exige conta ou login.</li></ul>',
+          '<ul><li><strong>Not</strong> exam dumps or leaked questions.</li><li><strong>Not</strong> childish Duolingo-style gamification — mastery &gt; mascot.</li><li><strong>Not</strong> a replacement for official vendor courses — complements self-study.</li><li><strong>Not</strong> cloud sync across devices (by design, for privacy).</li><li><strong>Not</strong> account or login required.</li></ul>'
+        )},
+
+      /* ── COMO USAR ── */
+      {id:'nav', section:'howto', kw:['navegacao','menu','tabbar','sidebar','inicio','biblioteca'],
+        title:L('Navegação — Início, Biblioteca, Progresso','Navigation — Home, Library, Progress'),
+        body:L(
+          '<p><strong>Mobile/tablet:</strong> barra inferior com 3 abas + ícone ⚙ Ajustes no topo.</p><p><strong>Desktop (≥1024px):</strong> sidebar lateral à esquerda.</p><table style="width:100%;font-size:12.5px;border-collapse:collapse;margin-top:8px"><tr><td><strong>Início</strong></td><td>Estudar agora, continuar sessão, recentes, trilhas</td></tr><tr><td><strong>Biblioteca</strong></td><td>Certificações · Questões · Flashcards · importar · criar exame</td></tr><tr><td><strong>Progresso</strong></td><td>Mastery, lacunas, histórico configurável</td></tr><tr><td><strong>Ajustes ⚙</strong></td><td>Tema, idiomas, PWA, demo, limite de histórico</td></tr><tr><td><strong>FAQ / Como usar</strong></td><td>Links no rodapé da Início ou Ajustes → FAQ</td></tr></table><p>Regra de produto: ações importantes em <strong>até 3 toques</strong>.</p>',
+          '<p><strong>Mobile/tablet:</strong> bottom bar with 3 tabs + ⚙ Settings in top bar.</p><p><strong>Desktop (≥1024px):</strong> left sidebar.</p><table style="width:100%;font-size:12.5px;border-collapse:collapse;margin-top:8px"><tr><td><strong>Home</strong></td><td>Study now, resume, recents, tracks</td></tr><tr><td><strong>Library</strong></td><td>Certifications · Questions · Flashcards · import · new exam</td></tr><tr><td><strong>Progress</strong></td><td>Mastery, gaps, configurable history</td></tr><tr><td><strong>Settings ⚙</strong></td><td>Theme, languages, PWA, demo, history limit</td></tr></table><p>Product rule: important actions in <strong>up to 3 taps</strong>.</p>'
+        )},
+      {id:'home', section:'howto', kw:['inicio','home','estudar agora','personalizar','recentes','continuar'],
+        title:L('Início — Estudar agora e trilhas','Home — Study now and tracks'),
+        body:L(
+          '<p>A Início concentra a <strong>próxima ação</strong> — sem scroll longo.</p><ol><li><strong>Continuar de onde parei</strong> — aparece se há sessão pausada; retoma exatamente onde parou (respostas, marcas, olhos).</li><li><strong>Domínio consolidado</strong> — % mastery + lacuna principal (se houver).</li><li><strong>Estudar agora</strong> — 1 toque · ~10 min · mix inteligente de lacunas (modo Aprendizado, sem modal).</li><li><strong>Personalizar</strong> — abre modal completo (prova, quantidade, filtros avançados).</li><li><strong>Recentes</strong> — últimas 3 sessões; toque reabre Personalizar na mesma certificação.</li><li><strong>Ver trilhas e certificações</strong> — lista colapsada por continente (Global, Brasil, Europa…).</li><li><strong>Sobre o Velora</strong> — história e missão (expansível).</li></ol><p>Rodapé: atalhos FAQ · Como usar · Ver progresso.</p>',
+          '<p>Home focuses on your <strong>next action</strong> — minimal scroll.</p><ol><li><strong>Continue where you left off</strong> — if a session is paused.</li><li><strong>Consolidated mastery</strong> — % + main gap (if any).</li><li><strong>Study now</strong> — 1 tap · ~10 min · smart gap mix (Learning mode, no modal).</li><li><strong>Customize</strong> — full modal (exam mode, quantity, advanced filters).</li><li><strong>Recents</strong> — last 3 sessions; tap reopens Customize for that cert.</li><li><strong>View tracks and certifications</strong> — collapsed list by continent.</li><li><strong>About Velora</strong> — expandable story.</li></ol>'
+        )},
+      {id:'session-config', section:'howto', kw:['modal','configurar','sessao','personalizar','10','20','treino','prova'],
+        title:L('Personalizar sessão (modal)','Customize session (modal)'),
+        body:L(
+          '<p>Abre via <strong>Personalizar</strong>, trilha na Início ou ▶ na Biblioteca.</p><p><strong>Como estudar</strong> (3 modos — mesma certificação, views do mesmo conhecimento):</p><ul><li><strong>Aprendizado</strong> — feedback imediato, sem cronômetro (padrão)</li><li><strong>Flashcards</strong> — FSRS da certificação escolhida</li><li><strong>Prova completa</strong> — cronômetro, revisão pré-envio</li></ul><p><strong>Camada simples:</strong> prova · quantidade · embaralhar (Aprendizado/Prova).</p><p><strong>Mais opções</strong> (colapsado; oculto em Flashcards): estratégia, filtros, perfis JSON, importação.</p>',
+          '<p>Opens via Customize, Home track or Library ▶.</p><p><strong>How to study</strong> (3 modes — same cert, views of one knowledge): Learning (default) · Flashcards (FSRS) · Full exam.</p><p>Simple layer: exam · quantity · shuffle. More options collapsed (hidden for Flashcards).</p>'
+        )},
+      {id:'player', section:'howto', kw:['player','treino','simulado','pausar','explicar','marcar','olho','esta','todas'],
+        title:L('Player de estudo — controles completos','Study player — full controls'),
+        body:L(
+          '<p><strong>Topo:</strong></p><ul><li><strong>✕</strong> — sair (confirma; salva sessão pausada se não enviar)</li><li><strong>☰</strong> — mostrar/ocultar grade de questões (no mobile inicia colapsada)</li><li><strong>Aprendizado</strong> — badge amarelo no modo treino</li><li><strong>Barra de progresso</strong> — questão atual / total</li><li><strong>⏸</strong> — pausar/retomar cronômetro (modo prova)</li><li><strong>Esta</strong> — olho: revela/oculta <em>só esta questão</em></li><li><strong>Todas</strong> — ícone camadas: liga/desliga revelar <em>todas</em> (modo fixo; desabilita "Esta")</li><li><strong>⋯</strong> — Explicar (IA) · Pausar · Sair</li></ul><p><strong>Rodapé:</strong> ← Anterior · ★ Marcar · Próxima → / Enviar sessão</p><p><strong>Modo Aprendizado:</strong> feedback após responder; botão Explicar; olhos ativos.</p><p><strong>Modo Prova completa:</strong> cronômetro; revisão pré-envio; olhos se permitido em Ajustes.</p><p><strong>Atalhos:</strong> ←/→ ou Enter (próxima) · M (marcar) · 1-9 ou A-D (alternativas) · swipe horizontal no mobile.</p>',
+          '<p><strong>Top bar:</strong> ✕ exit · ☰ question grid (collapsed on mobile) · Learning badge · progress · ⏸ timer · <strong>This</strong> eye (current Q) · <strong>All</strong> layers icon (all Qs) · ⋯ menu</p><p><strong>Footer:</strong> ← Previous · ★ Mark · Next → / Submit</p><p><strong>Learning mode:</strong> instant feedback · Explain · eye toggles</p><p><strong>Full exam:</strong> timer · pre-submit review · eyes if enabled in Settings</p><p><strong>Shortcuts:</strong> arrows/Enter · M mark · 1-9/A-D · horizontal swipe</p>'
+        )},
+      {id:'library-certs', section:'howto', kw:['biblioteca','certificacoes','certifications','library','exame','importar'],
+        title:L('Biblioteca — Certificações','Library — Certifications'),
+        body:L(
+          '<p>Lista <strong>19 certificações DPO</strong> agrupadas por trilha (Global, Brasil, Europa, Américas, Ásia).</p><ul><li>Toque <strong>▶</strong> — abre Personalizar para aquela certificação</li><li><strong>+ Novo exame</strong> — criar simulado personalizado (campos obrigatórios *)</li><li><strong>Importar</strong> — CSV/JSON de questões e exames</li><li><strong>Selecionar</strong> — modo bulk para exportar ou agrupar</li><li><strong>Revisão inteligente</strong> — atalho para lacunas</li></ul><p>Conteúdo seed: EXIN, IAPP, PECB, ISACA CDPSE, ISO 27701, CNIL, TÜV, UK GDPR e mais (~301 questões).</p>',
+          '<p>Lists <strong>19 DPO certifications</strong> by track. ▶ opens Customize · + New exam · Import CSV/JSON · Select bulk · Smart review shortcut. Seed: EXIN, IAPP, PECB, ISACA, ISO 27701, CNIL, TÜV, UK GDPR (~301 questions).</p>'
+        )},
+      {id:'library-questions', section:'howto', kw:['questoes','questions','banco','bank','criar','tipos'],
+        title:L('Biblioteca — Questões','Library — Questions'),
+        body:L(
+          '<p>Banco hierárquico: <strong>trilha → certificação → sub-matéria → questões</strong>.</p><p><strong>Tipos suportados:</strong> single (múltipla escolha), multi, boolean, short text, matching, sequence, image.</p><p>Botão <strong>+</strong> abre editor modal. Cada questão alimenta:</p><ul><li>Estatísticas individuais (seen, correct, streak)</li><li>Domínio no radar (Legal, Governança, Técnico, Titular, Transfer., Riscos)</li><li>Flashcard FSRS automático</li><li>Sessões inteligentes e revisão de erros</li></ul>',
+          '<p>Hierarchical bank: track → certification → sub-topic → questions. Types: single, multi, boolean, short, matching, sequence, image. Each question feeds stats, domain radar, FSRS flashcard and smart sessions.</p>'
+        )},
+      {id:'library-flashcards', section:'howto', kw:['flashcards','cards','fsrs','anki','repeticao','estrela','olho'],
+        title:L('Biblioteca — Flashcards (FSRS)','Library — Flashcards (FSRS)'),
+        body:L(
+          '<p>Cada questão gera automaticamente um card:</p><ul><li><strong>Frente</strong> = enunciado</li><li><strong>Verso</strong> = resposta correta + explicação (se houver)</li></ul><p>Ao tocar <strong>Estudar flashcards</strong>:</p><ul><li>Barra superior: contador <em>3 / 20</em></li><li><strong>Olho</strong> — revelar resposta sempre (persiste entre sessões)</li><li><strong>Estrela</strong> — marcar card para revisão</li><li>Toque no card — revela verso (se olho global desligado)</li><li>Avalie: <strong>De novo · Difícil · Bom · Fácil</strong> (algoritmo FSRS agenda próxima revisão)</li></ul><p>Cards vencidos entram na fila priorizada. Stats: total, para revisar, novos, retenção %.</p>',
+          '<p>Each question auto-generates a card. Study flow: counter · eye (always reveal, persistent) · star (mark) · tap to flip · rate Again/Hard/Good/Easy (FSRS schedules next review). Due cards are prioritized.</p>'
+        )},
+      {id:'progress', section:'howto', kw:['progresso','radar','kpi','grafico','lacunas','historico','mastery'],
+        title:L('Progresso — mapa de conhecimento','Progress — knowledge map'),
+        body:L(
+          '<p><strong>Em destaque (sempre visível):</strong></p><ul><li><strong>Gauge</strong> — domínio consolidado (mastery %)</li><li><strong>4 KPIs</strong> — Domínio · Lacunas · Questões vistas · Sessões</li><li><strong>Pontos fortes / Lacunas</strong> — por domínio (≥3 respostas, threshold 65%)</li><li><strong>Estudar lacunas</strong> — inicia sessão ~10 min nas áreas fracas</li><li><strong>Ir para trilhas</strong> — volta à Início</li></ul><p><strong>Seções colapsadas</strong> (toque para expandir):</p><ul><li>Gráfico de domínios (radar)</li><li>Mais estatísticas (sequência dias, sessões ≥70%)</li><li>Evolução recente (barras)</li><li>Distribuição de resultados + por certificação</li></ul><p><strong>Histórico de sessões:</strong> dropdown <strong>5 · 10 · 20 · 50 · Todas</strong> (padrão 10; também em Ajustes). Botão <strong>Revisar</strong> abre erros da tentativa. 🗑 limpa todo histórico.</p>',
+          '<p><strong>Always visible:</strong> mastery gauge · 4 KPIs · strengths/gaps · Study gaps button</p><p><strong>Collapsed sections:</strong> domain radar · more stats · recent trend · result distribution</p><p><strong>Session history:</strong> dropdown 5/10/20/50/All (default 10; also in Settings) · Review button · clear trash</p>'
+        )},
+      {id:'settings', section:'howto', kw:['ajustes','settings','tema','idioma','pwa','historico','feedback'],
+        title:L('Ajustes — todas as opções','Settings — all options'),
+        body:L(
+          '<ul><li><strong>Tema escuro/claro</strong> — alterna na hora (switch ou Salvar)</li><li><strong>Idioma da plataforma</strong> — PT-BR ou EN-US (menus, FAQ, Progresso)</li><li><strong>Fonte / Tamanho</strong> — Sans, Mono · P, M, G</li><li><strong>Idioma das questões</strong> — Dual EN+PT · English · Português</li><li><strong>Tempo padrão (min)</strong> — default do cronômetro em novos simulados</li><li><strong>Feedback após responder</strong> — mostra correção imediata no treino</li><li><strong>Permitir revelar resposta manualmente</strong> — botões Esta/Todas no player</li><li><strong>Finalizar a qualquer momento</strong> — enviar sessão incompleta</li><li><strong>Histórico em Progresso</strong> — quantas tentativas listar (5/10/20/50/Todas)</li><li><strong>Dados demo</strong> — gerar/remover histórico simulado</li><li><strong>Instalar aplicativo</strong> — PWA offline</li></ul><p>Toque <strong>Salvar</strong> para persistir preferências de estudo. Idioma da plataforma aplica imediatamente ao trocar.</p>',
+          '<ul><li>Dark/light theme · Platform language PT/EN · Font/size · Question language · Default timer · Feedback after answer · Allow manual reveal · Finish anytime · History limit in Progress · Demo data · Install PWA</li></ul><p>Tap <strong>Save</strong> for study prefs. Platform language applies immediately on change.</p>'
+        )},
+      {id:'import', section:'howto', kw:['importar','csv','json','exportar','perfil'],
+        title:L('Importar e exportar conteúdo','Import and export content'),
+        body:L(
+          '<p><strong>Importar:</strong> Biblioteca → Importar (ou Personalizar → Mais opções → Importar).</p><ul><li><strong>CSV</strong> — colunas mapeáveis para questões</li><li><strong>JSON</strong> — exames + questões em lote</li></ul><p>Conteúdo importado alimenta flashcards, estatísticas e progresso como o banco DPO global.</p><p><strong>Exportar perfil de sessão:</strong> Personalizar → Mais opções → Perfis → Exportar JSON (filtros, quantidade, modo treino/prova). Importar restaura configuração — não substitui histórico.</p><p><strong>Reset banco DPO</strong> (após deploy, console):</p><pre style="font-size:11px;overflow:auto">localStorage.removeItem(\'ef_global_dpo_seeded_v2\');\nlocalStorage.removeItem(\'ef_cleanup_global_dpo_v2\');\nlocation.reload();</pre>',
+          '<p>Import: Library → Import or Customize → More → Import. CSV/JSON supported. Exported session profiles (JSON) save filter config — not history. DPO bank reset via console keys above.</p>'
+        )},
+      {id:'domains', section:'howto', kw:['dominio','legal','governanca','tecnico','radar','areas'],
+        title:L('Domínios de conhecimento','Knowledge domains'),
+        body:L(
+          '<p>O radar e as lacunas classificam questões em <strong>6 domínios</strong> (via tags e metadados):</p><ul><li><strong>Legal</strong> — LGPD, GDPR, regulamentação, compliance</li><li><strong>Governança</strong> — DPO, políticas, programas de privacidade</li><li><strong>Técnico</strong> — segurança, ISO 27001, criptografia, controles</li><li><strong>Titular</strong> — direitos, consentimento, DSAR</li><li><strong>Transfer.</strong> — transferências internacionais, SCCs</li><li><strong>Riscos</strong> — DPIA, incidentes, avaliação de impacto</li></ul><p>Mínimo <strong>3 respostas</strong> por área para aparecer no radar. Lacuna = área &lt;65% com dados suficientes.</p>',
+          '<p>Radar and gaps use <strong>6 domains</strong>: Legal · Governance · Technical · Data subject · Transfers · Risks. Minimum 3 answers per area for radar. Gap = area &lt;65% with enough data.</p>'
+        )},
+      {id:'keyboard', section:'howto', kw:['atalho','teclado','keyboard','swipe','acessibilidade'],
+        title:L('Atalhos e gestos','Shortcuts and gestures'),
+        body:L(
+          '<p><strong>Desktop (player aberto):</strong></p><ul><li><strong>→ / Enter</strong> — próxima ou enviar</li><li><strong>←</strong> — anterior</li><li><strong>1-9</strong> ou <strong>A-D</strong> — selecionar alternativa</li><li><strong>M</strong> — marcar questão</li></ul><p><strong>Mobile:</strong></p><ul><li>Swipe horizontal na área da questão — anterior/próxima</li><li>Botões grandes no rodapé (alcance do polegar)</li><li>Grade de questões colapsada por padrão — expandir via ☰</li></ul>',
+          '<p>Desktop: arrows/Enter · 1-9/A-D · M mark. Mobile: horizontal swipe · footer thumb reach · collapsed question grid via ☰.</p>'
+        )},
+      {id:'smart-session', section:'howto', kw:['inteligente','smart','lacunas','estudar agora','pickWeak','prioridade','10 min'],
+        title:L('Sessão inteligente — Estudar agora / lacunas','Smart session — Study now / gaps'),
+        body:L(
+          '<p>Três atalhos usam o <strong>mesmo motor de prioridade</strong> (AITutor offline):</p><ul><li><strong>Início → Estudar agora</strong></li><li><strong>Progresso → Estudar lacunas</strong></li><li><strong>Biblioteca → Revisão inteligente</strong> (rodapé da aba Certificações)</li><li><strong>Resultado → Revisão inteligente</strong> (após enviar sessão)</li></ul><p><strong>Como funciona:</strong></p><ol><li>O algoritmo analisa <em>todas</em> as questões do banco e calcula uma <strong>prioridade</strong> por questão.</li><li>Prioriza: baixa taxa de acerto · questões vencidas (atrasadas na revisão) · nunca vistas · erros recentes (rever em ~10 min).</li><li>Seleciona as <strong>10</strong> de maior prioridade (≈10 min).</li><li>Monta uma sessão temporária <em>Sessão de estudo inteligente</em> em modo <strong>Aprendizado</strong> (sem cronômetro, feedback imediato, embaralhado).</li></ol><p><strong>Pré-requisito:</strong> é preciso ter respondido ao menos algumas questões antes — senão aparece aviso para usar <strong>Personalizar</strong> primeiro.</p><p>Após cada resposta, o tutor atualiza estatísticas (SM-2 simplificado) que alimentam lacunas, flashcards FSRS e o próximo Estudar agora.</p>',
+          '<p>Three shortcuts share the same <strong>priority engine</strong> (offline AITutor): Home Study now · Progress Study gaps · Library Smart review · Result Smart review.</p><p>Algorithm scores every question by low accuracy, overdue review, unseen items and recent errors; picks top <strong>10</strong> (~10 min) into a temporary Learning session (no timer, instant feedback, shuffled).</p><p>Requires some answered history first — otherwise use Customize for a short session.</p>'
+        )},
+      {id:'results-review', section:'howto', kw:['resultado','score','revisar','refazer','erradas','marcadas','enviar'],
+        title:L('Resultado da sessão e revisão de erros','Session results and error review'),
+        body:L(
+          '<p>Ao <strong>Enviar sessão</strong> (modo Aprendizado ou Prova completa):</p><ol><li><strong>Modo Prova completa</strong> — tela <em>Revisar antes de enviar</em> lista questões (✓ respondida · — em branco · ★ marcada); toque no número para voltar ao player; ou envie direto.</li><li><strong>Tela de resultado</strong> — anel com % · aprovado/reprovado vs nota mínima (padrão 70%) · acertos/erros/tempo/marcadas · banner de lacunas da tentativa · barra de XP.</li></ol><p><strong>Ações pós-resultado:</strong></p><ul><li><strong>Revisar respostas</strong> — lista questão a questão: sua resposta, gabarito, explicação (se houver), destaque verde/vermelho</li><li><strong>Revisão inteligente</strong> — nova sessão ~10 min nas mais fracas (mesmo motor do Estudar agora)</li><li><strong>Refazer apenas erradas</strong> — mini-sessão só com erros desta tentativa</li><li><strong>Refazer apenas marcadas</strong> — só questões com ★</li><li><strong>Voltar ao Início</strong></li></ul><p><strong>Progresso → Histórico → Revisar</strong> reabre a revisão detalhada de qualquer tentativa passada (mesmo formato), sem refazer a prova.</p>',
+          '<p>On submit: Full exam mode shows pre-submit review grid (✓/—/★). Result screen: score ring · pass/fail · stats · gap banner · XP bar.</p><p>Actions: Review answers · Smart review · Retry wrong only · Retry marked only · Back to Home. Progress history Review reopens past attempt detail.</p>'
+        )},
+      {id:'explain-ai', section:'howto', kw:['explicar','explain','ia','tutor','offline','feedback'],
+        title:L('Explicar e feedback (IA offline)','Explain and feedback (offline AI)'),
+        body:L(
+          '<p>O Velora inclui um <strong>tutor offline</strong> — sem chamadas a servidores externos.</p><p><strong>Feedback imediato (Aprendizado):</strong> após selecionar alternativa, caixa verde/vermelha mostra se acertou, gabarito e texto explicativo cadastrado na questão. Controlado por Ajustes → <em>Feedback após responder</em>.</p><p><strong>Explicar (menu ⋯):</strong> disponível no modo Aprendizado; abre modal com explicação completa da questão atual. Se não houver texto cadastrado, avisa que a questão não tem explicação.</p><p><strong>Por trás:</strong> cada resposta alimenta <code>ef_qstats</code> (seen, correct, streak, ease, due) — base do FSRS, lacunas, Estudar agora e preview "Revisar N questões" no Personalizar.</p>',
+          '<p>Velora includes an <strong>offline tutor</strong> — no external API calls.</p><p>Learning mode: instant feedback box after answering. Explain (⋯ menu): full explanation modal when available. Each answer updates per-question stats powering FSRS, gaps and Study now.</p>'
+        )},
+      {id:'gamification', section:'faq', kw:['xp','nivel','level','conquista','achievement','gamificacao','coruja'],
+        title:L('XP, nível e conquistas','XP, level and achievements'),
+        body:L(
+          '<p>Gamificação <strong>leve</strong> — reforço, não distração (mastery continua sendo a métrica principal).</p><ul><li><strong>XP</strong> — +10 por acerto · +25 ao concluir sessão · +50 bônus se 100%</li><li><strong>Nível</strong> — calculado pela raiz do XP (√); barra aparece na tela de resultado</li><li><strong>Conquistas</strong> (desbloqueio automático): Primeiros Passos (1ª sessão) · Nota Máxima (100%) · Em Chamas (10 acertos seguidos) · Estudioso (5 sessões) · Centurião (100 acertos totais) · Veterano (nível 5) · Coruja (estudar após meia-noite)</li></ul><p>Pop-up de celebração ao desbloquear. Dados em <code>ef_game</code> no localStorage — mesmo escopo local que o resto do progresso.</p>',
+          '<p>Light gamification — mastery remains the north star.</p><ul><li>XP: +10/correct · +25/session · +50 perfect bonus</li><li>Level from XP curve; bar on result screen</li><li>Achievements: first session, 100%, 10 streak, 5 sessions, 100 total correct, level 5, night owl</li></ul><p>Stored locally in ef_game.</p>'
+        )},
+      {id:'tracks-content', section:'faq', kw:['trilha','track','global','brasil','europa','certificacao','exin','iapp'],
+        title:L('Trilhas e certificações disponíveis','Available tracks and certifications'),
+        body:L(
+          '<p><strong>5 trilhas geográficas:</strong></p><ul><li><strong>Global</strong> — conceitos transversais GDPR/LGPD</li><li><strong>Brasil</strong> — LGPD, ANPD, DPO nacional</li><li><strong>Europa</strong> — GDPR, CNIL, UK GDPR, EXIN</li><li><strong>Américas</strong> — IAPP CIPP/US, PECB</li><li><strong>Ásia</strong> — frameworks regionais</li></ul><p><strong>Exemplos de certs:</strong> EXIN Privacy &amp; Data Protection, IAPP CIPP/E/C, PECB ISO 27701, ISACA CDPSE, CNIL DPO, TÜV, stubs AIGP/FIP.</p><p>Detalhes completos: docs/DPO-GLOBAL-TRACKS.md no repositório GitHub.</p>',
+          '<p><strong>5 tracks:</strong> Global · Brazil · Europe · Americas · Asia. Examples: EXIN, IAPP CIPP/E/C, PECB, ISACA CDPSE, CNIL, TÜV. See docs/DPO-GLOBAL-TRACKS.md on GitHub.</p>'
+        )},
+      {id:'troubleshoot', section:'faq', kw:['problema','erro','nao carrega','reset','limpar','bug'],
+        title:L('Problemas comuns','Common issues'),
+        body:L(
+          '<ul><li><strong>Sem questões / banco vazio</strong> — recarregue a página; verifique se o seeder DPO rodou (primeira visita).</li><li><strong>Progresso zerado</strong> — dados são locais; limpar cache do navegador apaga tudo.</li><li><strong>PWA não instala</strong> — use HTTPS; tente Chrome/Edge; iOS: Compartilhar → Adicionar à Tela de Início.</li><li><strong>Idioma misturado</strong> — separe idioma da plataforma vs idioma das questões em Ajustes.</li><li><strong>Olhos não aparecem</strong> — ative "Permitir revelar resposta" em Ajustes; no modo prova sem essa opção, olhos ficam ocultos.</li><li><strong>Estudar agora diz sem histórico</strong> — faça uma sessão curta via Personalizar primeiro; depois lacunas serão priorizadas.</li></ul>',
+          '<ul><li>Empty bank — reload page; DPO seeder runs on first visit.</li><li>Lost progress — local data; clearing browser cache removes it.</li><li>PWA won\'t install — HTTPS required; iOS: Share → Add to Home Screen.</li><li>Mixed language — separate platform vs question language in Settings.</li><li>Eyes missing — enable "Allow manual reveal" in Settings.</li><li>Study now needs history — run one short session via Customize first.</li></ul>'
+        )}
     ];
   },
   search(q, section){
@@ -1414,7 +1568,8 @@ class StorageManager {
       defaultTimer:60, randomOrder:false, randomAlternatives:false, language:'pt-BR',
       uiLocale:'pt-BR',
       bilingualMode:'dual',
-      showAnswerAfterSelect:true, allowRevealAnswer:true, allowFinishAnytime:true
+      showAnswerAfterSelect:true, allowRevealAnswer:true, allowFinishAnytime:true,
+      historyLimit:10
     };
     // mescla os padrões com o que já estiver salvo, garantindo que chaves novas existam
     return {...defaults, ...this._get(this.KEYS.SETTINGS, {})};
@@ -2358,6 +2513,7 @@ const Icons = {
   more:`<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>`,
   eye:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
   eyeOff:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`,
+  layers:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>`,
   menu:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>`,
   star:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 3.1 6.3 7 1-5 4.9 1.2 7L12 18l-6.3 3.2 1.2-7-5-4.9 7-1Z"/></svg>`,
   starFilled:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 7 1-5 4.9 1.2 7L12 18l-6.3 3.2 1.2-7-5-4.9 7-1Z"/></svg>`,
@@ -2998,28 +3154,53 @@ class QuestionEditorController {
 class HistoryView {
   get title(){ return 'Histórico'; }
   get crumb(){ return ''; }
-  render(el, compact=false){
+  static _limitOptions(){
+    return [
+      {v:5, l:'5'},
+      {v:10, l:'10'},
+      {v:20, l:'20'},
+      {v:50, l:'50'},
+      {v:0, l:I18n.t('progress.historyAll')}
+    ];
+  }
+  render(el, opts={}){
     const history = StorageManager.getHistory();
-    const list = compact ? history.slice(0, 8) : history;
+    const limit = opts.limit ?? StorageManager.getSettings().historyLimit ?? 10;
+    const list = !limit ? history : history.slice(0, limit);
+    const optsHtml = this.constructor._limitOptions().map(o=>
+      `<option value="${o.v}" ${Number(limit)===o.v?'selected':''}>${o.l}</option>`).join('');
     el.innerHTML = `
-      ${!compact && history.length ? `<div class="row between" style="margin-bottom:12px"><span class="hub-stat">${history.length} tentativa(s)</span><button class="btn btn-danger btn-sm" id="h-clear">${Icons.trash}</button></div>` : ''}
-      <div id="h-list">${list.length ? list.map((h,i)=>this._row(h,i)).join('') : DashboardView._empty('Sem histórico', 'Faça um simulado para ver resultados.')}</div>
-      ${compact && history.length > 8 ? `<button class="btn btn-ghost btn-sm" id="h-more" style="margin-top:10px">Ver tudo (${history.length})</button>` : ''}`;
+      ${history.length ? `<div class="progress-history-head">
+        <span class="hub-stat">${I18n.t('progress.historyAttempts', {n: history.length})}</span>
+        <div class="progress-history-controls">
+          <label class="sr-only" for="h-limit">${I18n.t('progress.showHistory')}</label>
+          <select class="select select-sm" id="h-limit" title="${I18n.t('settings.historyLimitHint')}">${optsHtml}</select>
+          <button class="btn btn-danger btn-sm" id="h-clear" type="button" aria-label="${I18n.isEn()?'Clear history':'Limpar histórico'}">${Icons.trash}</button>
+        </div>
+      </div>` : ''}
+      <div id="h-list">${list.length ? list.map(h=>this._row(h)).join('') : DashboardView._empty('Sem histórico', 'Faça uma sessão para ver resultados aqui.')}</div>
+      ${limit && history.length > limit ? `<p class="hint" style="margin-top:8px">${I18n.isEn() ? `Showing ${limit} of ${history.length}. Change the dropdown or pick All in Settings.` : `Mostrando ${limit} de ${history.length}. Altere o menu ou escolha Todas em Ajustes.`}</p>` : ''}`;
+    el.querySelector('#h-limit')?.addEventListener('change', (e)=>{
+      const v = Number(e.target.value);
+      const merged = {...StorageManager.getSettings(), historyLimit: v};
+      StorageManager.saveSettings(merged);
+      this.render(el, {limit: v});
+    });
     el.querySelector('#h-clear')?.addEventListener('click', async ()=>{
-      const ok = await Modal.confirm({title:'Limpar histórico', message:'Apagar todas as tentativas?', confirmLabel:'Limpar', danger:true});
+      const ok = await Modal.confirm({title:I18n.isEn()?'Clear history':'Limpar histórico', message:I18n.isEn()?'Delete all attempts?':'Apagar todas as tentativas?', confirmLabel:I18n.isEn()?'Clear':'Limpar', danger:true});
       if(ok){
         StorageManager.clearHistory();
-        Toast.show('Histórico limpo.', 'success');
+        Toast.show(I18n.isEn()?'History cleared.':'Histórico limpo.', 'success');
         if(App.instance?.router?.current==='progress') App.instance.router.go('progress');
-        else this.render(el, compact);
+        else this.render(el, opts);
       }
     });
-    el.querySelector('#h-more')?.addEventListener('click', ()=> this.render(el, false));
-    el.querySelectorAll('[data-review]').forEach(b=>b.addEventListener('click', ()=>{
-      ReviewController.showFromHistory(history[Number(b.dataset.review)]);
+    el.querySelectorAll('[data-review-id]').forEach(b=>b.addEventListener('click', ()=>{
+      const entry = history.find(h=>h.id===b.dataset.reviewId);
+      if(entry) ReviewController.showFromHistory(entry);
     }));
   }
-  _row(h,i){
+  _row(h){
     const cls = DashboardView._badgeClass(h.percentage);
     return `<div class="list-row list-row-compact">
       <div class="meta">
@@ -3027,7 +3208,7 @@ class HistoryView {
         <div class="desc">${Util.formatDate(h.date)} · ${h.correctCount}/${h.totalCount}</div>
       </div>
       <span class="badge ${cls}">${h.percentage}%</span>
-      <button class="btn btn-sm btn-ghost" data-review="${i}">Ver</button>
+      <button class="btn btn-sm btn-ghost" type="button" data-review-id="${Util.escapeHtml(h.id)}">${I18n.isEn()?'Review':'Revisar'}</button>
     </div>`;
   }
 }
@@ -3262,22 +3443,19 @@ class ProgressHubView {
         </div>
         ${gauge}
       </div>
-      <div class="progress-kpi-grid">
+      <div class="progress-kpi-grid compact-4">
         <div class="progress-kpi accent"><strong>${mastery.seen ? mastery.score+'%' : '—'}</strong><span>${I18n.t('progress.mastery')}</span></div>
         <div class="progress-kpi ${gapN?'warn':''}"><strong>${hasData ? gapN : '—'}</strong><span>${I18n.t('progress.gaps')}</span></div>
         <div class="progress-kpi"><strong>${qt.seen || '—'}</strong><span>${I18n.t('progress.questions')}</span></div>
-        <div class="progress-kpi"><strong>${g.bestStreak || '—'}</strong><span>Melhor sequência (dias)</span></div>
         <div class="progress-kpi"><strong>${attempts || '—'}</strong><span>${I18n.t('progress.sessions')}</span></div>
-        <div class="progress-kpi good"><strong>${passed || '—'}</strong><span>Sessões ≥70%</span></div>
       </div>
       <div class="progress-section">
         <div class="progress-section-head">
           <div>
             <h3>Domínios — pontos fortes e lacunas</h3>
-            <p>Baseado nas questões que você já respondeu (simulado e treino).</p>
+            <p>Baseado nas questões que você já respondeu.</p>
           </div>
         </div>
-        <div class="chart-radar-wrap">${radar}</div>
         <div class="progress-insights">
           <div class="progress-insight good"><strong>Pontos fortes</strong>${ProgressHubView._insightList(strong, 'Ainda sem áreas dominadas (≥65%).')}</div>
           <div class="progress-insight weak"><strong>Lacunas</strong>${ProgressHubView._insightList(weak, 'Nenhuma lacuna crítica identificada.')}</div>
@@ -3286,13 +3464,24 @@ class ProgressHubView {
           <button class="btn btn-primary btn-sm" type="button" id="prog-smart">Estudar lacunas</button>
           <button class="btn btn-sm" type="button" id="prog-home">Ir para trilhas</button>
         </div>
+        ${hasData ? `<details class="progress-details">
+          <summary>${I18n.t('progress.domainsChart')}</summary>
+          <div class="chart-radar-wrap" style="margin-top:10px">${radar}</div>
+        </details>` : ''}
       </div>
-      <div class="progress-section">
-        <div class="progress-section-head"><h3>Evolução recente</h3></div>
-        ${spark}
-      </div>
+      ${hasData ? `<details class="progress-details">
+        <summary>${I18n.t('progress.moreStats')}</summary>
+        <div class="progress-kpi-grid" style="margin-top:10px">
+          <div class="progress-kpi"><strong>${g.bestStreak || '—'}</strong><span>Melhor sequência (dias)</span></div>
+          <div class="progress-kpi good"><strong>${passed || '—'}</strong><span>Sessões ≥70%</span></div>
+        </div>
+      </details>` : ''}
       ${attempts ? `<details class="progress-details">
-        <summary>Distribuição de resultados</summary>
+        <summary>${I18n.t('progress.recentTrend')}</summary>
+        <div style="padding-top:8px">${spark}</div>
+      </details>` : ''}
+      ${attempts ? `<details class="progress-details">
+        <summary>${I18n.t('progress.resultDist')}</summary>
         <div class="progress-details-grid">
           <div class="chart-card">${pie}</div>
           <div class="chart-card"><h4>Por certificação</h4>${ChartHelpers.radar(
@@ -3301,11 +3490,11 @@ class ProgressHubView {
           )}</div>
         </div>
       </details>` : ''}
-      <div class="progress-history-title">Histórico de sessões</div>
+      <h3 class="progress-history-title">${I18n.t('progress.historyTitle')}</h3>
       <div id="prog-hist"></div>`;
     el.querySelector('#prog-smart')?.addEventListener('click', ()=> PlayerController.startStudyNow());
     el.querySelector('#prog-home')?.addEventListener('click', ()=> App.instance.router.go('home'));
-    this.history.render(el.querySelector('#prog-hist'), false);
+    this.history.render(el.querySelector('#prog-hist'));
   }
   onLeave(){
     const el = document.getElementById('view-progress');
@@ -3505,6 +3694,16 @@ class SettingsView {
         <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-feedback" ${s.showAnswerAfterSelect?'checked':''}> ${I18n.t('settings.feedback')}</label>
         <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-reveal" ${s.allowRevealAnswer?'checked':''}> ${I18n.t('settings.reveal')}</label>
         <label class="checkbox-row"><input type="checkbox" id="s-finish-anytime" ${s.allowFinishAnytime?'checked':''}> ${I18n.t('settings.finishAnytime')}</label>
+        <div class="field" style="margin-top:10px"><label for="s-history-limit">${I18n.t('settings.historyLimit')}</label>
+          <select class="select" id="s-history-limit">
+            <option value="5" ${Number(s.historyLimit)===5?'selected':''}>5</option>
+            <option value="10" ${Number(s.historyLimit||10)===10?'selected':''}>10</option>
+            <option value="20" ${Number(s.historyLimit)===20?'selected':''}>20</option>
+            <option value="50" ${Number(s.historyLimit)===50?'selected':''}>50</option>
+            <option value="0" ${Number(s.historyLimit)===0?'selected':''}>${I18n.t('progress.historyAll')}</option>
+          </select>
+          <p class="hint" style="margin:4px 0 0">${I18n.t('settings.historyLimitHint')}</p>
+        </div>
       </div>
       <div class="card card-compact" style="margin-bottom:10px" id="s-demo-card">
         <div style="font-weight:600;font-size:13.5px;margin-bottom:6px">${I18n.t('settings.demoTitle')}</div>
@@ -3572,7 +3771,8 @@ class SettingsView {
         bilingualMode: el.querySelector('#s-bilingual')?.value || 'dual',
         showAnswerAfterSelect: el.querySelector('#s-feedback').checked,
         allowRevealAnswer: el.querySelector('#s-reveal').checked,
-        allowFinishAnytime: el.querySelector('#s-finish-anytime').checked
+        allowFinishAnytime: el.querySelector('#s-finish-anytime').checked,
+        historyLimit: Number(el.querySelector('#s-history-limit')?.value ?? 10)
       };
       StorageManager.saveSettings(newSettings);
       App.instance.applySettings(newSettings);
@@ -3714,18 +3914,18 @@ class ExportController {
 class ExamConfigModal {
   static CANDIDATE_KEY = 'ef_last_candidate';
 
-  static open(preselectedExamId=null){
-    this._openInternal(preselectedExamId, null);
+  static open(preselectedExamId=null, options={}){
+    this._openInternal(preselectedExamId, null, options);
   }
 
   static openWithPreset(preset){
     const exams = StorageManager.getExams().filter(e=>e.questionIds?.length);
     const examId = exams[0]?.id;
     if(!examId){ Toast.show('Nenhum simulado disponível.', 'warn'); return; }
-    this._openInternal(examId, preset);
+    this._openInternal(examId, preset, {});
   }
 
-  static _openInternal(preselectedExamId=null, preset=null){
+  static _openInternal(preselectedExamId=null, preset=null, options={}){
     const exams = StorageManager.getExams().filter(e=>e.questionIds?.length);
     if(!exams.length){ Toast.show(I18n.isEn() ? 'No session available.' : 'Nenhuma sessão disponível.', 'warn'); return; }
     const settings = StorageManager.getSettings();
@@ -3742,7 +3942,7 @@ class ExamConfigModal {
       footerHtml: `
         <button class="btn" data-cancel type="button">${I18n.t('common.cancel')}</button>
         <button class="btn btn-primary" data-ok type="button">${I18n.t('session.start')}</button>`,
-      onMount: (modalEl, closeFn)=> this._bind(modalEl, closeFn, exams, preset)
+      onMount: (modalEl, closeFn)=> this._bind(modalEl, closeFn, exams, preset, options)
     });
   }
 
@@ -3878,20 +4078,29 @@ class ExamConfigModal {
         <div class="ec-config">
           <div class="ec-basic-block">
             <div class="field">
+              <span class="field-label" id="ec-product-label">${I18n.t('session.studyHow')}</span>
+              <div class="ec-product-segment" role="group" aria-labelledby="ec-product-label">
+                <button type="button" class="ec-product-btn active" data-product="learn" title="${I18n.t('session.trainHint')}">${I18n.t('session.trainMode')}</button>
+                <button type="button" class="ec-product-btn" data-product="flashcards" title="${I18n.t('session.fcHint')}">${I18n.t('lib.flashcards')}</button>
+                <button type="button" class="ec-product-btn" data-product="exam" title="${I18n.t('session.examHint')}">${I18n.t('session.examMode')}</button>
+              </div>
+              <p class="ec-seg-hint" id="ec-product-hint">${I18n.t('session.trainHint')}</p>
+            </div>
+            <div class="field">
               <label for="ec-exam-global">Prova</label>
               <select class="select" id="ec-exam-global">${opts}</select>
             </div>
-            <div class="field">
+            <div class="field hidden" id="ec-session-field" aria-hidden="true">
               <span class="field-label" id="ec-session-label">Tipo de sessão</span>
               <div class="ec-segment" role="group" aria-labelledby="ec-session-label">
-                <button type="button" class="ec-seg-btn active" data-session="simulado" title="${I18n.t('session.examHint')}">${I18n.t('session.examMode')}</button>
-                <button type="button" class="ec-seg-btn" data-session="treino" title="${I18n.t('session.trainHint')}">${I18n.t('session.trainMode')}</button>
+                <button type="button" class="ec-seg-btn" data-session="simulado" title="${I18n.t('session.examHint')}">${I18n.t('session.examMode')}</button>
+                <button type="button" class="ec-seg-btn active" data-session="treino" title="${I18n.t('session.trainHint')}">${I18n.t('session.trainMode')}</button>
               </div>
-              <p class="ec-seg-hint" id="ec-session-hint">${I18n.t('session.examHint')}</p>
-              <input type="checkbox" id="ec-training" class="visually-hidden" hidden aria-hidden="true">
+              <p class="ec-seg-hint" id="ec-session-hint">${I18n.t('session.trainHint')}</p>
+              <input type="checkbox" id="ec-training" class="visually-hidden" hidden aria-hidden="true" checked>
             </div>
             <div class="field">
-              <label for="ec-basic-qty">${I18n.isEn() ? 'Questions' : 'Quantidade'}</label>
+              <label for="ec-basic-qty" id="ec-qty-label">${I18n.isEn() ? 'Questions' : 'Quantidade'}</label>
               <div class="ec-qty-presets">
                 <button type="button" class="btn btn-sm" id="ec-qty-10">${I18n.t('session.qty10')}</button>
                 <button type="button" class="btn btn-sm" id="ec-qty-20">${I18n.t('session.qty20')}</button>
@@ -3900,8 +4109,8 @@ class ExamConfigModal {
               <input class="input" id="ec-basic-qty" type="number" min="1" max="${total}" value="${Math.min(10, total)}" aria-label="Quantidade">
             </div>
             <div class="ec-options" style="margin-top:0;padding-top:0;border-top:none">
-              <label class="checkbox-row"><input type="checkbox" id="ec-shuffle-q" checked> ${I18n.isEn() ? 'Shuffle questions' : 'Embaralhar questões'}</label>
-              <div class="ec-timer-row-wrap" id="ec-timer-row-wrap">
+              <label class="checkbox-row" id="ec-shuffle-wrap"><input type="checkbox" id="ec-shuffle-q" checked> ${I18n.isEn() ? 'Shuffle questions' : 'Embaralhar questões'}</label>
+              <div class="ec-timer-row-wrap hidden" id="ec-timer-row-wrap">
                 <div class="ec-timer-row">
                   <label class="checkbox-row"><input type="checkbox" id="ec-timer-on" checked> ${I18n.isEn() ? 'Timer on' : 'Cronômetro ativo'}</label>
                   <div class="field ec-timer-min"><label for="ec-time">${I18n.isEn() ? 'Time limit (min)' : 'Tempo limite (min)'}</label><input class="input" id="ec-time" type="number" min="1" max="600" value="${examTime}"></div>
@@ -3909,7 +4118,9 @@ class ExamConfigModal {
               </div>
             </div>
           </div>
+          <div id="ec-adv-toggle-wrap">
           <button type="button" class="ec-advanced-toggle" id="ec-adv-toggle" aria-expanded="false">⚙ ${I18n.isEn() ? 'More options (strategy, filters, import…)' : 'Mais opções (estratégia, filtros, importar…)'}</button>
+          </div>
           <div class="ec-advanced hidden" id="ec-advanced">
             <div class="ec-adv-extra">
               <div class="field">
@@ -4089,9 +4300,51 @@ class ExamConfigModal {
     });
     const hint = modalEl.querySelector('#ec-session-hint');
     if(hint) hint.textContent = treino ? I18n.t('session.trainHint') : I18n.t('session.examHint');
-    modalEl.querySelector('#ec-timer-row-wrap')?.classList.toggle('hidden', !!treino);
-    const timerOn = modalEl.querySelector('#ec-timer-on');
-    if(timerOn) timerOn.checked = !treino;
+    const product = this._getStudyProduct(modalEl);
+    if(product === 'exam'){
+      modalEl.querySelector('#ec-timer-row-wrap')?.classList.remove('hidden');
+      const timerOn = modalEl.querySelector('#ec-timer-on');
+      if(timerOn) timerOn.checked = true;
+    } else if(product === 'learn'){
+      modalEl.querySelector('#ec-timer-row-wrap')?.classList.add('hidden');
+      const timerOn = modalEl.querySelector('#ec-timer-on');
+      if(timerOn) timerOn.checked = false;
+    }
+  }
+
+  static _getStudyProduct(modalEl){
+    return modalEl.querySelector('.ec-product-btn.active')?.dataset.product || 'learn';
+  }
+
+  static _setStudyProduct(modalEl, product){
+    const valid = ['learn', 'flashcards', 'exam'];
+    if(!valid.includes(product)) product = 'learn';
+    modalEl.querySelectorAll('[data-product]').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.product === product);
+    });
+    const hints = {
+      learn: I18n.t('session.trainHint'),
+      flashcards: I18n.t('session.fcHint'),
+      exam: I18n.t('session.examHint')
+    };
+    const hintEl = modalEl.querySelector('#ec-product-hint');
+    if(hintEl) hintEl.textContent = hints[product] || hints.learn;
+    this._setSessionType(modalEl, product === 'learn');
+    modalEl.querySelector('#ec-shuffle-wrap')?.classList.toggle('hidden', product === 'flashcards');
+    modalEl.querySelector('#ec-adv-toggle-wrap')?.classList.toggle('hidden', product === 'flashcards');
+    if(product === 'flashcards'){
+      modalEl.querySelector('#ec-advanced')?.classList.add('hidden');
+      modalEl.querySelector('#ec-adv-toggle')?.setAttribute('aria-expanded', 'false');
+    }
+    const qtyLabel = modalEl.querySelector('#ec-qty-label');
+    if(qtyLabel){
+      qtyLabel.textContent = product === 'flashcards'
+        ? I18n.t('session.qtyCards')
+        : (I18n.isEn() ? 'Questions' : 'Quantidade');
+    }
+    const qtyPresets = modalEl.querySelector('.ec-qty-presets');
+    if(qtyPresets) qtyPresets.style.display = product === 'flashcards' ? 'none' : '';
+    this._updatePreview(modalEl);
   }
 
   static _syncBasicToMode(modalEl){
@@ -4200,12 +4453,33 @@ class ExamConfigModal {
       modalEl._basicSynced = true;
     }
     const state = this._peekQuestionIds(modalEl);
-    const trainingMode = this._trainingMode(modalEl);
-    const timerOn = !!modalEl.querySelector('#ec-timer-on')?.checked;
+    const product = this._getStudyProduct(modalEl);
+    const trainingMode = product === 'learn' || this._trainingMode(modalEl);
+    const timerOn = product === 'exam' && !!modalEl.querySelector('#ec-timer-on')?.checked;
     const timeMinutes = Math.max(1, parseInt(modalEl.querySelector('#ec-time')?.value, 10) || 60);
-    const count = state.displayCount || 0;
+    const count = product === 'flashcards'
+      ? Math.min(parseInt(modalEl.querySelector('#ec-basic-qty')?.value, 10) || 20, state.exam?.questionIds?.length || 20)
+      : (state.displayCount || 0);
     const exam = state.exam;
-    if(!exam || !count){
+    if(!exam){
+      el.innerHTML = `<div class="ec-preview-title">${product === 'flashcards' ? I18n.t('session.previewFc') : 'Resumo do simulado'}</div><p class="ec-preview-empty">Selecione uma prova.</p>`;
+      return;
+    }
+    if(product === 'flashcards'){
+      const st = FSRS.stats();
+      const pool = (exam.questionIds || []).length;
+      el.innerHTML = `
+        <div class="ec-preview-title">${I18n.t('session.previewFc')}</div>
+        <dl class="ec-preview-dl">
+          <dt>Prova</dt><dd>${Util.escapeHtml(exam.materia || exam.title || '—')}</dd>
+          <dt>Cards</dt><dd>${count} de ${pool}</dd>
+          <dt>Para revisar</dt><dd>${st.due} no baralho</dd>
+          <dt>Algoritmo</dt><dd>FSRS</dd>
+        </dl>
+        <p class="hint">${I18n.t('session.fcHint')}</p>`;
+      return;
+    }
+    if(!count){
       el.innerHTML = `<div class="ec-preview-title">Resumo do simulado</div><p class="ec-preview-empty">Selecione uma prova e ao menos uma questão para ver o resumo.</p>`;
       return;
     }
@@ -4334,8 +4608,13 @@ class ExamConfigModal {
     }
   }
 
-  static _bind(modalEl, closeFn, exams, preset=null){
-    this._setSessionType(modalEl, false);
+  static _bind(modalEl, closeFn, exams, preset=null, options={}){
+    const initialProduct = options?.product || (preset === 'full' || preset === 'sprint' || preset === 'marathon' ? 'exam' : 'learn');
+    this._setStudyProduct(modalEl, initialProduct);
+
+    modalEl.querySelectorAll('[data-product]').forEach(btn=>{
+      btn.addEventListener('click', ()=> this._setStudyProduct(modalEl, btn.dataset.product));
+    });
 
     const syncExam = (examId)=>{
       modalEl.querySelector('#ec-exam-global').value = examId;
@@ -4450,8 +4729,8 @@ class ExamConfigModal {
     });
     modalEl.querySelector('#ec-restore-defaults')?.addEventListener('click', ()=>{
       modalEl.querySelector('[name="ec-mode"][value="full"]')?.click();
-      this._setSessionType(modalEl, false);
-      modalEl.querySelector('#ec-timer-on').checked = true;
+      this._setStudyProduct(modalEl, 'learn');
+      modalEl.querySelector('#ec-timer-on').checked = false;
       modalEl.querySelector('#ec-strategy').value = 'normal';
       modalEl._timeEdited = false;
       modalEl._countEdited = false;
@@ -4585,6 +4864,15 @@ class ExamConfigModal {
 
     modalEl.querySelector('[data-cancel]')?.addEventListener('click', closeFn);
     modalEl.querySelector('[data-ok]')?.addEventListener('click', ()=>{
+      const product = this._getStudyProduct(modalEl);
+      if(product === 'flashcards'){
+        const examId = modalEl.querySelector('#ec-exam-global')?.value;
+        const limit = Math.max(1, parseInt(modalEl.querySelector('#ec-basic-qty')?.value, 10) || 20);
+        if(!examId){ Toast.show(I18n.isEn() ? 'Pick a certification.' : 'Escolha uma prova.', 'warn'); return; }
+        closeFn();
+        FlashcardController.start(limit, {examId});
+        return;
+      }
       if(modalEl.querySelector('#ec-strategy')?.value === 'cat'){
         closeFn();
         PlayerController.startSmartReview();
@@ -4603,8 +4891,9 @@ class ExamConfigModal {
   static _collectConfig(modalEl){
     const candidateName = modalEl.querySelector('#ec-candidate')?.value.trim() || '';
     const mode = modalEl.querySelector('[name="ec-mode"]:checked')?.value || 'full';
-    const trainingMode = this._trainingMode(modalEl);
-    const timerOn = !!modalEl.querySelector('#ec-timer-on')?.checked;
+    const product = this._getStudyProduct(modalEl);
+    const trainingMode = product === 'learn';
+    const timerOn = product === 'exam' && !!modalEl.querySelector('#ec-timer-on')?.checked;
     const timeMinutes = Math.max(1, parseInt(modalEl.querySelector('#ec-time')?.value, 10) || 60);
     const shuffleQuestions = modalEl.querySelector('#ec-shuffle-q')?.checked !== false;
     const shuffleAlternatives = !!modalEl.querySelector('#ec-shuffle-alt')?.checked;
@@ -4923,8 +5212,8 @@ class PlayerController {
           <div class="timer-pill" id="p-timer" role="timer" aria-live="off">--:--</div>
         </div>
         <div class="player-reveal-grp hidden" id="p-reveal-wrap" role="group" aria-label="Revelar respostas">
-          <button class="btn btn-sm btn-ghost btn-icon" id="p-reveal-q" type="button" title="${I18n.t('player.revealQuestion')}" aria-pressed="false" aria-label="${I18n.t('player.revealQuestion')}">${Icons.eyeOff}</button>
-          <button class="btn btn-sm btn-ghost btn-icon" id="p-reveal-all" type="button" title="${I18n.t('player.revealAll')}" aria-pressed="false" aria-label="${I18n.t('player.revealAll')}">${Icons.eyeOff}</button>
+          <button class="btn btn-sm player-reveal-btn" id="p-reveal-q" type="button" aria-pressed="false" aria-label="${I18n.t('player.revealQuestion')}">${Icons.eyeOff}<span>${I18n.t('player.revealThis')}</span></button>
+          <button class="btn btn-sm player-reveal-btn" id="p-reveal-all" type="button" aria-pressed="false" aria-label="${I18n.t('player.revealAll')}">${Icons.layers}<span>${I18n.t('player.revealEvery')}</span></button>
         </div>
         <div class="player-more" id="p-more-wrap">
           <button class="btn btn-icon btn-ghost" id="p-more-btn" type="button" aria-label="Mais opções" aria-haspopup="true" aria-expanded="false">${Icons.more}</button>
@@ -4968,6 +5257,9 @@ class PlayerController {
     this._updateFooterButtons();
     this._updateRevealControls();
     this._updateMarkButton();
+    if(window.matchMedia('(max-width:639px)').matches){
+      root.querySelector('#p-nav')?.classList.add('collapsed');
+    }
 
     // Navegação por teclado (acessibilidade / eficiência no desktop)
     this._keyHandler = (e)=>{
@@ -5189,17 +5481,15 @@ class PlayerController {
     const qOn = !this.state.revealPersistent && this.state.revealed.has(q.id);
     const allOn = !!this.state.revealPersistent;
     if(btnQ){
-      btnQ.classList.toggle('active', qOn || allOn);
+      btnQ.classList.toggle('active', qOn);
       btnQ.disabled = allOn;
       btnQ.setAttribute('aria-pressed', String(qOn));
-      btnQ.innerHTML = (qOn || allOn) ? Icons.eye : Icons.eyeOff;
-      btnQ.title = qOn ? (I18n.isEn() ? 'Hide this answer' : 'Ocultar esta resposta') : I18n.t('player.revealQuestion');
+      const ico = btnQ.querySelector('svg');
+      if(ico) ico.outerHTML = (qOn ? Icons.eye : Icons.eyeOff);
     }
     if(btnAll){
       btnAll.classList.toggle('active', allOn);
       btnAll.setAttribute('aria-pressed', String(allOn));
-      btnAll.innerHTML = allOn ? Icons.eye : Icons.eyeOff;
-      btnAll.title = allOn ? (I18n.isEn() ? 'Turn off reveal all' : 'Desligar revelar todas') : I18n.t('player.revealAll');
     }
   }
 
@@ -6108,12 +6398,30 @@ class FlashcardController {
       .slice(0, limit)
       .map(x=>x.q);
   }
-  static start(limit=20){
-    this._queue = this._dueDeck(limit);
+  static _dueDeckForExam(examId, limit=20){
+    const exam = StorageManager.getExam(examId);
+    const ids = new Set(exam?.questionIds || []);
+    if(!ids.size) return [];
+    const now = Date.now();
+    const pool = FSRS.questions().filter(q=>ids.has(q.id));
+    let queue = pool
+      .map(q=>({ q, p: FSRS.priority(q), c: FSRS.card(q) }))
+      .filter(x=>!x.c.reps || x.c.due<=now || x.c.state==='new')
+      .sort((a,b)=>b.p-a.p)
+      .slice(0, limit)
+      .map(x=>x.q);
+    if(!queue.length) queue = pool.slice(0, Math.min(limit, pool.length));
+    return queue;
+  }
+  static start(limit=20, opts={}){
+    const examId = opts.examId || null;
+    this._queue = examId ? this._dueDeckForExam(examId, limit) : this._dueDeck(limit);
     if(!this._queue.length){
-      this._queue = FSRS.questions().slice(0, Math.min(limit, FSRS.questions().length));
+      this._queue = examId
+        ? FSRS.questions().filter(q=>(StorageManager.getExam(examId)?.questionIds||[]).includes(q.id)).slice(0, Math.min(limit, 999))
+        : FSRS.questions().slice(0, Math.min(limit, FSRS.questions().length));
     }
-    if(!this._queue.length){ Toast.show('Crie questões na aba Questões — cada uma vira um flashcard.', 'warn'); return; }
+    if(!this._queue.length){ Toast.show(I18n.isEn() ? 'No flashcards for this certification.' : 'Nenhum flashcard nesta certificação.', 'warn'); return; }
     this._idx = 0;
     this._revealed = false;
     try{ this._revealAll = localStorage.getItem(this._REVEAL_ALL_KEY) === '1'; }catch(e){ this._revealAll = false; }
