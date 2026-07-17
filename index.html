@@ -1112,6 +1112,46 @@ body[data-network="offline"] .network-pill.is-offline::before{
   .main{margin-left:var(--sidebar-width);padding-bottom:0}
   .topbar-brand .topbar-logo{display:none}
 }
+
+/* --- Knowledge Forge workspace --- */
+.view-forge{padding:16px 16px 32px;max-width:920px;margin:0 auto;width:100%}
+.forge-hero{margin-bottom:16px}
+.forge-hero h2{font-size:18px;font-weight:650;margin:0 0 4px}
+.forge-hero p{font-size:13px;color:var(--text-2);margin:0;line-height:1.5}
+.forge-cmd-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.forge-cmd{
+  width:100%;min-height:88px;padding:14px 16px;border-radius:var(--radius-md);
+  border:1px solid var(--border);background:var(--bg-1);color:var(--text-0);
+  font-size:14px;line-height:1.5;resize:vertical;font-family:inherit;
+}
+.forge-cmd:focus{outline:none;border-color:var(--accent);box-shadow:var(--accent-glow)}
+.forge-cmd-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.forge-filters{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+@media(min-width:640px){.forge-filters{grid-template-columns:repeat(4,1fr)}}
+.forge-filters .field{margin:0}
+.forge-filters label{font-size:11px;color:var(--text-2)}
+.forge-preview{margin-top:16px}
+.forge-preview-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.forge-intent-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.forge-pill{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--border)}
+.forge-json{
+  max-height:280px;overflow:auto;padding:12px;border-radius:var(--radius-md);
+  background:var(--bg-0);border:1px solid var(--border);font-size:11.5px;
+  font-family:var(--mono);line-height:1.45;white-space:pre-wrap;word-break:break-word;
+}
+.forge-history{margin-top:24px}
+.forge-history-item{
+  padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-md);
+  background:var(--bg-1);margin-bottom:8px;font-size:12.5px;
+}
+.forge-history-item .meta{color:var(--text-2);font-size:11px;margin-top:4px}
+.forge-config details{margin-top:16px}
+.forge-config summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--text-1)}
+.forge-examples{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.forge-examples button{font-size:11px;padding:6px 10px}
+.home-os-badge{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.home-os-badge:focus{outline:2px solid var(--accent);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
 </style>
 
 </head>
@@ -1143,6 +1183,7 @@ body[data-network="offline"] .network-pill.is-offline::before{
 <div id="modal-region"></div>
 
 <script src="data/dpo-global-bank.js"></script>
+<script src="forge/knowledge-forge.js"></script>
 <script>
 'use strict';
 /* =========================================================================
@@ -1250,7 +1291,7 @@ const I18n = {
       'progress.historyAll':'Todas','progress.historyAttempts':'{n} tentativa(s)',
       'home.viewProgress':'Ver progresso','home.faq':'FAQ','home.howto':'Como usar',
       'lib.certs':'Trilhas','lib.questions':'Questões','lib.flashcards':'Flashcards',
-      'lib.newExam':'Novo exame','lib.import':'Importar','lib.select':'Selecionar','lib.smartReview':'Revisão inteligente',
+      'lib.newExam':'Novo exame','lib.import':'Importar','lib.select':'Selecionar','lib.smartReview':'Revisão inteligente','lib.forge':'Forja IA',
       'settings.title':'Ajustes','settings.back':'← Voltar','settings.darkTheme':'Tema escuro','settings.lightTheme':'Tema claro',
       'settings.font':'Fonte','settings.fontSans':'Normal','settings.fontMono':'Mono','settings.fontSize':'Tamanho',
       'settings.uiLocale':'Idioma da plataforma','settings.uiPt':'Português (BR)','settings.uiEn':'English (US)',
@@ -1266,7 +1307,12 @@ const I18n = {
       'settings.historyLimit':'Histórico em Progresso','settings.historyLimitHint':'Quantas sessões listar',
       'help.title':'FAQ & Como usar','help.search':'Buscar tema…','help.faqTab':'FAQ','help.howTab':'Como usar','help.noResults':'Nenhum tema encontrado.',
       'common.save':'Salvar','common.cancel':'Cancelar','common.confirm':'Confirmar','common.back':'Voltar',
-      'progress.title':'Progresso','builder.title':'Criador de Exames'
+      'progress.title':'Progresso','builder.title':'Criador de Exames',
+      'forge.title':'Forja','forge.subtitle':'Motor de geração estruturada — não é chat. Comando → JSON → validação → banco.',
+      'forge.command':'Comando','forge.commandPh':'Ex.: Gere 20 flashcards sobre História do Brasil…',
+      'forge.generate':'Gerar prévia','forge.save':'Salvar no banco','forge.voice':'Falar','forge.config':'Configurações da IA',
+      'forge.apiKey':'Chave API (OpenAI-compatible)','forge.apiUrl':'URL da API','forge.model':'Modelo','forge.mockHint':'Sem chave: modo demo (JSON válido de exemplo).',
+      'forge.history':'Histórico de gerações','forge.examples':'Exemplos','forge.regenerate':'Regenerar','forge.duplicate':'Duplicar','forge.export':'Exportar','forge.template':'Salvar modelo','forge.uploadDoc':'Enviar documento (texto)'
     },
     'en-US': {
       'nav.home':'Home','nav.library':'Library','nav.progress':'Progress','nav.settings':'Settings','nav.help':'Help',
@@ -1298,7 +1344,7 @@ const I18n = {
       'progress.historyAll':'All','progress.historyAttempts':'{n} attempt(s)',
       'home.viewProgress':'View progress','home.faq':'FAQ','home.howto':'How to use',
       'lib.certs':'Tracks','lib.questions':'Questions','lib.flashcards':'Flashcards',
-      'lib.newExam':'New exam','lib.import':'Import','lib.select':'Select','lib.smartReview':'Smart review',
+      'lib.newExam':'New exam','lib.import':'Import','lib.select':'Select','lib.smartReview':'Smart review','lib.forge':'AI Forge',
       'settings.title':'Settings','settings.back':'← Back','settings.darkTheme':'Dark theme','settings.lightTheme':'Light theme',
       'settings.font':'Font','settings.fontSans':'Sans','settings.fontMono':'Mono','settings.fontSize':'Size',
       'settings.uiLocale':'Platform language','settings.uiPt':'Português (BR)','settings.uiEn':'English (US)',
@@ -1314,7 +1360,12 @@ const I18n = {
       'settings.historyLimit':'History in Progress','settings.historyLimitHint':'How many sessions to list',
       'help.title':'FAQ & How to','help.search':'Search topic…','help.faqTab':'FAQ','help.howTab':'How to','help.noResults':'No topics found.',
       'common.save':'Save','common.cancel':'Cancel','common.confirm':'Confirm','common.back':'Back',
-      'progress.title':'Progress','builder.title':'Exam builder'
+      'progress.title':'Progress','builder.title':'Exam builder',
+      'forge.title':'Forge','forge.subtitle':'Structured generation engine — not a chat. Command → JSON → validate → persist.',
+      'forge.command':'Command','forge.commandPh':'E.g. Generate 20 flashcards about World History…',
+      'forge.generate':'Generate preview','forge.save':'Save to database','forge.voice':'Speak','forge.config':'AI settings',
+      'forge.apiKey':'API key (OpenAI-compatible)','forge.apiUrl':'API URL','forge.model':'Model','forge.mockHint':'No key: demo mode (valid sample JSON).',
+      'forge.history':'Generation history','forge.examples':'Examples','forge.regenerate':'Regenerate','forge.duplicate':'Duplicate','forge.export':'Export','forge.template':'Save template','forge.uploadDoc':'Upload document (text)'
     }
   },
   locale(){ return this._locale; },
@@ -2569,7 +2620,7 @@ class Router {
     document.getElementById('topbar-title').textContent = view.title || name;
     document.getElementById('topbar-crumb').textContent = view.crumb ? `/ ${view.crumb}` : '';
     this._updateRail(name);
-    if(['home','content','progress','help'].includes(name)) try{ location.hash = name + (params.tab ? '/'+params.tab : ''); }catch(_){}
+    if(['home','content','progress','help','forge'].includes(name)) try{ location.hash = name + (params.tab ? '/'+params.tab : ''); }catch(_){}
     view.render(el, params);
   }
   _updateRail(name){
@@ -2605,6 +2656,7 @@ const Icons = {
   menu:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>`,
   star:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 3.1 6.3 7 1-5 4.9 1.2 7L12 18l-6.3 3.2 1.2-7-5-4.9 7-1Z"/></svg>`,
   starFilled:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 7 1-5 4.9 1.2 7L12 18l-6.3 3.2 1.2-7-5-4.9 7-1Z"/></svg>`,
+  sparkles:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M5 19l1 3 1-3 3-1-3-1-1-3-1 3-3 1 3 1z"/><path d="M19 5l.75 2.25L22 8l-2.25.75L19 11l-.75-2.25L16 8l2.25-.75L19 5z"/></svg>`,
 };
 
 /* ---------- Dashboard ---------- */
@@ -2670,7 +2722,7 @@ class DashboardView {
     return `<div class="home-welcome">
       <p class="home-kicker">${I18n.t('home.welcome')}</p>
       <h1 class="home-greet">${I18n.t('home.ready')}</h1>
-      <span class="home-os-badge">${I18n.t('home.osBadge')}</span>
+      <span class="home-os-badge" id="home-forge-badge" role="button" tabindex="0" title="${I18n.t('forge.title')}">${Icons.sparkles} ${I18n.t('home.osBadge')}</span>
       <p class="home-mission">${I18n.t('home.mission')}</p>
       <details class="home-story-details">
         <summary>${I18n.t('home.aboutVelora')}</summary>
@@ -2764,6 +2816,8 @@ class DashboardView {
     el.querySelector('#home-faq')?.addEventListener('click', ()=> App.instance.router.go('help', {tab:'faq'}));
     el.querySelector('#home-howto')?.addEventListener('click', ()=> App.instance.router.go('help', {tab:'howto'}));
     el.querySelector('#home-progress')?.addEventListener('click', ()=> App.instance.router.go('progress'));
+    el.querySelector('#home-forge-badge')?.addEventListener('click', ()=> App.instance.router.go('forge'));
+    el.querySelector('#home-forge-badge')?.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') App.instance.router.go('forge'); });
     el.querySelector('#home-study-now')?.addEventListener('click', ()=> PlayerController.startStudyNow());
     el.querySelector('#home-customize')?.addEventListener('click', ()=> ExamConfigModal.open());
     el.querySelectorAll('[data-quick-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.quickExam)));
@@ -6760,6 +6814,7 @@ class ContentHubView {
         <button class="btn btn-sm btn-ghost" id="ch-cancel-sel" type="button">Cancelar</button>
       </div>` : `
       <div class="hub-actions-bar">
+        <button class="btn btn-sm" id="ch-forge" type="button">${Icons.sparkles} ${I18n.t('lib.forge')}</button>
         <button class="btn btn-sm" id="ch-new" type="button">${Icons.plus} ${I18n.t('lib.newExam')}</button>
         <button class="btn btn-sm" id="ch-import" type="button">${Icons.upload} ${I18n.t('lib.import')}</button>
         <span class="spacer"></span>
@@ -6767,6 +6822,7 @@ class ContentHubView {
       </div>`;
     const footer = this._selectMode ? '' : `<div class="hub-footer"><button class="btn btn-ghost btn-sm" id="ch-smart" type="button">${I18n.t('lib.smartReview')}</button></div>`;
     panel.innerHTML = `${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma trilha','Recarregue a página para carregar o conteúdo inicial.')}</div>${footer}`;
+    panel.querySelector('#ch-forge')?.addEventListener('click', ()=> App.instance.router.go('forge'));
     panel.querySelector('#ch-new')?.addEventListener('click', ()=> App.instance.router.go('builder', {}));
     panel.querySelector('#ch-import')?.addEventListener('click', ()=> ImportController.openModal());
     panel.querySelector('#ch-select')?.addEventListener('click', ()=>{ this._selectMode = true; this._selected.clear(); this._renderCertificacoes(); });
@@ -6822,6 +6878,301 @@ class ContentHubView {
   }
 }
 
+class ForgeView {
+  constructor(){
+    this._entry = null;
+    this._busy = false;
+    this._recognition = null;
+  }
+  get title(){ return I18n.t('forge.title'); }
+  get crumb(){ return ''; }
+
+  static _typeOptions(){
+    return Object.keys(ForgeSchemas.types).map(k=>{
+      const lbl = ForgeSchemas.types[k].label;
+      const text = I18n.isEn() ? lbl.en : lbl.pt;
+      return `<option value="${k}">${Util.escapeHtml(text)}</option>`;
+    }).join('');
+  }
+
+  static _examples(){
+    const pt = I18n.isEn();
+    return pt ? [
+      'Generate 20 flashcards about World History.',
+      'Create 15 quiz questions about Python basics.',
+      'Create an AWS Solutions Architect practice exam.',
+      'Write a summary about the French Revolution.',
+      'Build a timeline of World War II.',
+      'Create a PMP certification study plan.'
+    ] : [
+      'Gere 50 flashcards sobre História do Brasil.',
+      'Gere 30 questões sobre História do Flamengo.',
+      'Crie um simulado da certificação AWS Solutions Architect.',
+      'Crie um resumo sobre a Revolução Francesa.',
+      'Gere uma linha do tempo da Segunda Guerra Mundial.',
+      'Crie um plano de estudos para a certificação PMP.'
+    ];
+  }
+
+  render(el){
+    el.classList.add('view-forge');
+    const cfg = ForgeStorage.getConfig();
+    const filters = this._readFilters(el);
+    el.innerHTML = `
+      <div class="forge-hero">
+        <h2>${Icons.sparkles} ${I18n.t('forge.title')}</h2>
+        <p>${I18n.t('forge.subtitle')}</p>
+      </div>
+      <div class="forge-cmd-wrap">
+        <label class="sr-only" for="forge-cmd">${I18n.t('forge.command')}</label>
+        <textarea class="forge-cmd" id="forge-cmd" placeholder="${I18n.t('forge.commandPh')}"></textarea>
+        <div class="forge-cmd-actions">
+          <button class="btn btn-primary" id="forge-run" type="button">${I18n.t('forge.generate')}</button>
+          <button class="btn btn-ghost" id="forge-voice" type="button">${I18n.t('forge.voice')}</button>
+          <span class="hint" id="forge-status" style="font-size:12px"></span>
+        </div>
+        <div class="forge-examples">
+          <span class="hint" style="margin-right:4px">${I18n.t('forge.examples')}:</span>
+          ${ForgeView._examples().slice(0,4).map((ex,i)=>`<button type="button" class="btn btn-ghost btn-sm" data-forge-ex="${i}">${Util.escapeHtml(ex.slice(0,42))}…</button>`).join('')}
+        </div>
+      </div>
+      <div class="forge-filters">
+        <div class="field"><label>${I18n.isEn()?'Type':'Tipo'}</label><select class="select" id="forge-type"><option value="">${I18n.isEn()?'Auto':'Automático'}</option>${ForgeView._typeOptions()}</select></div>
+        <div class="field"><label>${I18n.isEn()?'Quantity':'Quantidade'}</label><input class="input" type="number" id="forge-qty" min="1" max="100" placeholder="20"></div>
+        <div class="field"><label>${I18n.isEn()?'Language':'Idioma'}</label><select class="select" id="forge-lang"><option value="">${I18n.isEn()?'Auto':'Automático'}</option><option value="pt-BR">Português</option><option value="en">English</option></select></div>
+        <div class="field"><label>${I18n.isEn()?'Difficulty':'Dificuldade'}</label><select class="select" id="forge-diff"><option value="">${I18n.isEn()?'Auto':'Automático'}</option><option value="facil">${I18n.isEn()?'Easy':'Fácil'}</option><option value="medio">${I18n.isEn()?'Medium':'Médio'}</option><option value="dificil">${I18n.isEn()?'Hard':'Difícil'}</option></select></div>
+        <div class="field"><label>${I18n.isEn()?'Source':'Fonte'}</label><select class="select" id="forge-source"><option value="model">${I18n.isEn()?'Model knowledge':'Conhecimento do modelo'}</option><option value="library">${I18n.isEn()?'Library only (RAG)':'Apenas biblioteca (RAG)'}</option><option value="document">${I18n.isEn()?'Uploaded document':'Documento enviado'}</option></select></div>
+        <div class="field"><label>${I18n.t('forge.uploadDoc')}</label><input class="input" type="file" id="forge-file" accept=".txt,.md,.csv,.json,text/plain"></div>
+      </div>
+      <div class="forge-config">
+        <details>
+          <summary>${I18n.t('forge.config')}</summary>
+          <div class="form-grid" style="margin-top:10px">
+            <div class="field full"><label>${I18n.t('forge.apiKey')}</label><input class="input" type="password" id="forge-api-key" value="${Util.escapeHtml(cfg.apiKey||'')}" autocomplete="off" placeholder="sk-…"></div>
+            <div class="field"><label>${I18n.t('forge.apiUrl')}</label><input class="input" id="forge-api-url" value="${Util.escapeHtml(cfg.apiUrl||'')}"></div>
+            <div class="field"><label>${I18n.t('forge.model')}</label><input class="input" id="forge-model" value="${Util.escapeHtml(cfg.model||'gpt-4o-mini')}"></div>
+          </div>
+          <p class="hint" style="margin-top:8px">${I18n.t('forge.mockHint')}</p>
+          <button class="btn btn-sm" id="forge-save-cfg" type="button" style="margin-top:8px">${I18n.t('common.save')}</button>
+        </details>
+      </div>
+      <div class="forge-preview hidden" id="forge-preview">
+        <div class="forge-preview-head">
+          <strong>${I18n.isEn()?'Structured preview':'Prévia estruturada'}</strong>
+          <button class="btn btn-primary btn-sm" id="forge-save" type="button" disabled>${I18n.t('forge.save')}</button>
+        </div>
+        <div class="forge-intent-pills" id="forge-pills"></div>
+        <pre class="forge-json" id="forge-json"></pre>
+      </div>
+      <div class="forge-history">
+        <h3 style="font-size:15px;margin:0 0 10px">${I18n.t('forge.history')}</h3>
+        <div id="forge-history-list"></div>
+      </div>`;
+
+    this._bind(el);
+    this._renderHistory(el);
+    if(filters.cmd) el.querySelector('#forge-cmd').value = filters.cmd;
+  }
+
+  _readFilters(el){
+    if(!el) return {};
+    const v = id=> el.querySelector(id)?.value;
+    return {
+      type: v('#forge-type') || undefined,
+      quantity: v('#forge-qty') ? parseInt(v('#forge-qty'),10) : undefined,
+      language: v('#forge-lang') || undefined,
+      difficulty: v('#forge-diff') || undefined,
+      source: v('#forge-source') || undefined,
+      cmd: v('#forge-cmd') || ''
+    };
+  }
+
+  _filtersFromEl(el){
+    const f = this._readFilters(el);
+    ['type','language','difficulty','source'].forEach(k=>{ if(!f[k]) delete f[k]; });
+    if(!f.quantity || Number.isNaN(f.quantity)) delete f.quantity;
+    delete f.cmd;
+    return f;
+  }
+
+  _bind(el){
+    const cmd = el.querySelector('#forge-cmd');
+    const status = el.querySelector('#forge-status');
+    el.querySelector('#forge-run')?.addEventListener('click', ()=> this._run(el));
+    el.querySelector('#forge-save')?.addEventListener('click', ()=> this._save(el));
+    el.querySelector('#forge-save-cfg')?.addEventListener('click', ()=>{
+      const c = ForgeStorage.getConfig();
+      c.apiKey = el.querySelector('#forge-api-key')?.value?.trim() || '';
+      c.apiUrl = el.querySelector('#forge-api-url')?.value?.trim() || c.apiUrl;
+      c.model = el.querySelector('#forge-model')?.value?.trim() || c.model;
+      ForgeStorage.saveConfig(c);
+      Toast.show(I18n.isEn()?'AI settings saved.':'Configurações da IA salvas.', 'success');
+    });
+    el.querySelector('#forge-voice')?.addEventListener('click', ()=> this._startVoice(cmd, status));
+    el.querySelector('#forge-file')?.addEventListener('change', e=> this._ingestFile(e.target.files?.[0]));
+    el.querySelectorAll('[data-forge-ex]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const ex = ForgeView._examples()[parseInt(btn.dataset.forgeEx,10)];
+        if(ex){ cmd.value = ex; cmd.focus(); }
+      });
+    });
+    cmd?.addEventListener('keydown', e=>{
+      if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); this._run(el); }
+    });
+  }
+
+  _startVoice(cmdEl, statusEl){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR){ Toast.show(I18n.isEn()?'Speech not supported in this browser.':'Voz não suportada neste navegador.', 'warn'); return; }
+    if(this._recognition){ try{ this._recognition.stop(); }catch(_){ } this._recognition = null; }
+    const rec = new SR();
+    rec.lang = I18n.locale() === 'en-US' ? 'en-US' : 'pt-BR';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    this._recognition = rec;
+    statusEl.textContent = I18n.isEn()?'Listening…':'Ouvindo…';
+    rec.onresult = (ev)=>{
+      const text = ev.results?.[0]?.[0]?.transcript || '';
+      cmdEl.value = (cmdEl.value ? cmdEl.value + ' ' : '') + text.trim();
+      statusEl.textContent = '';
+    };
+    rec.onerror = ()=>{ statusEl.textContent = ''; Toast.show(I18n.isEn()?'Voice error.':'Erro na transcrição.', 'warn'); };
+    rec.onend = ()=>{ statusEl.textContent = ''; this._recognition = null; };
+    rec.start();
+  }
+
+  async _ingestFile(file){
+    if(!file) return;
+    try{
+      const text = await file.text();
+      const doc = ForgeRAG.ingestTextFile(file.name, text);
+      Toast.show(I18n.isEn()?`Document "${doc.name}" indexed.`:`Documento "${doc.name}" indexado.`, 'success');
+      const src = document.getElementById('forge-source');
+      if(src) src.value = 'document';
+    }catch(e){
+      Toast.show(I18n.isEn()?'Could not read file.':'Não foi possível ler o arquivo.', 'warn');
+    }
+  }
+
+  async _run(el){
+    if(this._busy) return;
+    const command = el.querySelector('#forge-cmd')?.value?.trim();
+    if(!command){ Toast.show(I18n.isEn()?'Enter a command.':'Digite um comando.', 'warn'); return; }
+    const filters = this._filtersFromEl(el);
+    const status = el.querySelector('#forge-status');
+    const preview = el.querySelector('#forge-preview');
+    const saveBtn = el.querySelector('#forge-save');
+    this._busy = true;
+    status.textContent = I18n.isEn()?'Generating…':'Gerando…';
+    saveBtn.disabled = true;
+    try{
+      const result = await ForgeOrchestrator.run(command, filters, (phase, attempt)=>{
+        if(phase==='rag') status.textContent = I18n.isEn()?'Retrieving library…':'Recuperando biblioteca…';
+        else status.textContent = I18n.isEn()?`Generating (attempt ${attempt})…`:`Gerando (tentativa ${attempt})…`;
+      });
+      this._entry = result.entry;
+      preview.classList.remove('hidden');
+      this._renderPreview(el, result);
+      saveBtn.disabled = false;
+      status.textContent = I18n.isEn()?'Preview ready — confirm to save.':'Prévia pronta — confirme para salvar.';
+      this._renderHistory(el);
+    }catch(e){
+      status.textContent = '';
+      Toast.show(e.message || 'Erro', 'warn');
+    }finally{
+      this._busy = false;
+    }
+  }
+
+  _renderPreview(el, result){
+    const {intent, data, entry} = result;
+    const pills = el.querySelector('#forge-pills');
+    const typeLbl = ForgeSchemas.types[intent.type]?.label;
+    const typeName = typeLbl ? (I18n.isEn() ? typeLbl.en : typeLbl.pt) : intent.type;
+    pills.innerHTML = [
+      typeName, intent.topic, `${intent.quantity} ${I18n.isEn()?'items':'itens'}`,
+      intent.language, intent.difficulty, intent.source, entry.provider
+    ].map(x=>`<span class="forge-pill">${Util.escapeHtml(String(x))}</span>`).join('');
+    el.querySelector('#forge-json').textContent = JSON.stringify(data, null, 2);
+  }
+
+  _save(el){
+    if(!this._entry){ return; }
+    try{
+      const result = ForgeOrchestrator.persist(this._entry);
+      Toast.show(result.label || (I18n.isEn()?'Saved.':'Salvo.'), 'success');
+      el.querySelector('#forge-save').disabled = true;
+      el.querySelector('#forge-status').textContent = I18n.isEn()?'Persisted in platform.':'Persistido na plataforma.';
+      this._renderHistory(el);
+    }catch(e){
+      Toast.show(e.message || 'Erro', 'warn');
+    }
+  }
+
+  _renderHistory(el){
+    const box = el.querySelector('#forge-history-list');
+    if(!box) return;
+    const hist = ForgeStorage.getHistory().slice(0, 20);
+    if(!hist.length){
+      box.innerHTML = `<div class="chart-empty">${I18n.isEn()?'No generations yet.':'Nenhuma geração ainda.'}</div>`;
+      return;
+    }
+    box.innerHTML = hist.map(h=>{
+      const lbl = ForgeSchemas.types[h.intent?.type]?.label;
+      const typeName = lbl ? (I18n.isEn()?lbl.en:lbl.pt) : h.intent?.type;
+      const st = h.status === 'saved' ? (I18n.isEn()?'saved':'salvo') : (I18n.isEn()?'preview':'prévia');
+      return `<div class="forge-history-item" data-hist="${h.id}">
+        <div><strong>${Util.escapeHtml(typeName||'?')}</strong> · ${Util.escapeHtml(h.intent?.topic||'')}</div>
+        <div class="meta">${Util.formatDate(h.createdAt)} · ${st}${h.persisted?.label?' · '+Util.escapeHtml(h.persisted.label):''}</div>
+        <div class="hub-actions-bar" style="margin-top:8px;padding:0">
+          <button class="btn btn-sm btn-ghost" data-h-act="dup" type="button">${I18n.t('forge.duplicate')}</button>
+          <button class="btn btn-sm btn-ghost" data-h-act="regen" type="button">${I18n.t('forge.regenerate')}</button>
+          <button class="btn btn-sm btn-ghost" data-h-act="export" type="button">${I18n.t('forge.export')}</button>
+          <button class="btn btn-sm btn-ghost" data-h-act="tpl" type="button">${I18n.t('forge.template')}</button>
+        </div>
+      </div>`;
+    }).join('');
+    box.querySelectorAll('[data-h-act]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const item = btn.closest('[data-hist]');
+        const id = item?.dataset.hist;
+        const entry = ForgeStorage.getHistory().find(x=>x.id===id);
+        if(!entry) return;
+        const act = btn.dataset.hAct;
+        if(act==='dup'){
+          el.querySelector('#forge-cmd').value = entry.command;
+          el.scrollIntoView({behavior:'smooth',block:'start'});
+        } else if(act==='regen'){
+          el.querySelector('#forge-cmd').value = entry.command;
+          this._run(el);
+        } else if(act==='export'){
+          const blob = new Blob([JSON.stringify({command:entry.command,intent:entry.intent,data:entry.data},null,2)], {type:'application/json'});
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = `forge-${entry.id}.json`;
+          a.click();
+          URL.revokeObjectURL(a.href);
+        } else if(act==='tpl'){
+          ForgeStorage.saveTemplate({
+            id: Util.uid('ftpl'),
+            name: entry.intent?.topic || entry.command.slice(0,40),
+            command: entry.command,
+            filters: entry.intent,
+            createdAt: new Date().toISOString()
+          });
+          Toast.show(I18n.isEn()?'Template saved.':'Modelo salvo.', 'success');
+        }
+      });
+    });
+  }
+
+  onLeave(){
+    if(this._recognition){ try{ this._recognition.stop(); }catch(_){ } this._recognition = null; }
+    const el = document.getElementById('view-forge');
+    if(el) el.classList.remove('view-forge');
+  }
+}
+
 function ludicAnalogy(q){ const text=(q?.text||'').toLowerCase(),cat=(q?.category||'').toLowerCase(),tags=(q?.tags||[]).join(' ').toLowerCase(); const base=text+' '+cat+' '+tags; if(/senha|password|mfa|autentica|login|credencial/.test(base))return 'Correlação lúdica: pense nisso como a chave da sua casa — MFA exige provar que é você.'; if(/phishing|email|link|anexo|malware/.test(base))return 'Correlação lúdica: mensagem suspeita — confira quem enviou antes de clicar.'; if(/rede|network|firewall|dns|ip|vpn/.test(base))return 'Correlação lúdica: IP é endereço, DNS agenda, firewall portaria, VPN túnel seguro.'; if(/cloud|azure|aws|storage/.test(base))return 'Correlação lúdica: armário compartilhado — quem tem a chave e o que pode alterar.'; if(/ingl[eê]s|english|vocab|grammar/.test(base))return 'Correlação lúdica: frases úteis numa viagem, não só palavras soltas.'; if(/certifica|exam|sc-|az-|defender|sentinel/.test(base))return 'Correlação lúdica: simulado do dia da prova — elimine alternativas improváveis.'; return 'Correlação lúdica: explique para alguém no café — comparação simples = entendimento.'; }
 function setupLudicComments(){ if(typeof QuestionEditorController==='undefined'||QuestionEditorController._ludicPatched)return; const orig=QuestionEditorController.openModal.bind(QuestionEditorController); QuestionEditorController.openModal=function(q,onSaved){ const result=orig(q,onSaved); setTimeout(()=>{ const ta=document.querySelector('#qe-comments'); const modal=ta?.closest('.modal'); const save=modal?.querySelector('[data-save]'); if(save&&!save._ludicCapture){ save._ludicCapture=true; save.addEventListener('click',()=>{ if(!ta)return; const current={text:modal.querySelector('#qe-text')?.value||'',category:modal.querySelector('#qe-category')?.value||'',tags:(modal.querySelector('#qe-tags')?.value||'').split(',').map(x=>x.trim()).filter(Boolean)}; const a=ludicAnalogy(current); if(!ta.value.includes('Correlação lúdica:'))ta.value=a+(ta.value?'\n\n'+ta.value:''); },true); } },80); return result; }; QuestionEditorController._ludicPatched=true; }
 function parseAppHash(){ const parts=(location.hash||'').replace(/^#/,'').split('/').filter(Boolean); return {route:parts[0]||'home',tab:parts[1]||null}; }
@@ -6843,7 +7194,7 @@ class App {
     this.applySettings(StorageManager.getSettings());
     setupLudicComments();
     const hash = parseAppHash();
-    const valid = ['home','content','progress','builder','settings','result','review','help'];
+    const valid = ['home','content','progress','builder','settings','result','review','help','forge'];
     let route = valid.includes(hash.route) ? hash.route : 'home';
     if(hash.route === 'study') route = 'content';
     const params = hash.tab
@@ -6874,6 +7225,7 @@ class App {
     this.router.register('builder', new BuilderView());
     this.router.register('settings', new SettingsView());
     this.router.register('help', new HelpView());
+    this.router.register('forge', new ForgeView());
     this.router.register('result', new ResultView());
     this.router.register('review', new ReviewView());
   }
