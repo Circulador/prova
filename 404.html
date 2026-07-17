@@ -3382,14 +3382,6 @@ class App {
   }
 }
 
-/* Enhancement layers usam window.* — em strict mode as classes não vinculam ao window automaticamente */
-Object.assign(window, {
-  App, Router, DashboardView, BuilderView, QuestionBankView, HistoryView,
-  ProfileView, SettingsView, ResultView, ReviewView,
-  QuestionEditorController, PlayerController, ImportController, ExportController,
-  StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam
-});
-
 document.addEventListener('DOMContentLoaded', ()=>{
   try{
     new App();
@@ -3636,6 +3628,105 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 </script>
 
 
+<script id="ef-redesign-flashcards-js">
+(function(){
+'use strict';
+function safe(fn){try{return fn()}catch(e){console.warn('[EF redesign flashcards]',e)}}
+function iconFlash(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h5"/></svg>'}
+function getStats(qid){return (StorageManager.getStat?StorageManager.getStat(qid):{seen:0,correct:0,streak:0,due:0})}
+function difficultyOf(q){
+  const s=getStats(q.id); const acc=s.seen?Math.round((s.correct/s.seen)*100):null;
+  const p=(typeof AITutor!=='undefined'&&AITutor.priority)?AITutor.priority(q.id):40;
+  let label='Médio',tone='var(--ef-warning)',reason='prioridade equilibrada';
+  if(q.level==='dificil'||p>=75||(acc!==null&&acc<50)){label='Difícil';tone='var(--ef-danger)';reason=acc!==null?'baixo índice de acerto':'questão difícil'}
+  else if(q.level==='facil'&&p<45&&(acc===null||acc>=75)){label='Fácil';tone='var(--ef-success)';reason=acc!==null?'bom histórico':'questão inicial'}
+  return {label,tone,priority:p,accuracy:acc,reason};
+}
+function buildFlashQueue(){
+  const qs=(StorageManager.getQuestions?StorageManager.getQuestions():[]).map(q=>new Question(q));
+  return qs.map(q=>({q,d:difficultyOf(q)})).sort((a,b)=>b.d.priority-a.d.priority);
+}
+function formatBack(q){
+  let ans='';
+  if(['single','boolean','image'].includes(q.type)) ans=(q.options||[]).find(o=>o.correct)?.text||'';
+  else if(q.type==='multi') ans=(q.options||[]).filter(o=>o.correct).map(o=>o.text).join(', ');
+  else if(q.type==='short') ans=(q.correctShort||[]).join(' / ');
+  else if(q.type==='matching') ans=(q.matchPairs||[]).map(p=>p.left+' → '+p.right).join('\n');
+  else if(q.type==='sequence') ans=(q.sequenceItems||[]).map(s=>s.text).join(' → ');
+  return (ans?('Resposta: '+ans):'Resposta não cadastrada.')+(q.explanation?'\n\nExplicação: '+q.explanation:'');
+}
+class FlashcardsView{
+  get title(){return 'Flashcards'}
+  get crumb(){return 'Revisão espaçada'}
+  render(el){
+    this.queue=buildFlashQueue(); this.index=0; this.revealed=false; this.done=0;
+    this.draw(el);
+  }
+  draw(el){
+    const total=this.queue.length; const current=this.queue[this.index];
+    const hard=this.queue.filter(x=>x.d.label==='Difícil').length;
+    const due=(typeof AITutor!=='undefined'&&AITutor.dueCount)?AITutor.dueCount():0;
+    el.innerHTML='<div class="flash-hero"><div class="card glass"><div class="flash-main-title">Flashcards inteligentes</div><div class="flash-sub">Modelo inspirado no Anki: os cartões são ordenados pelo seu grau de dificuldade, histórico de acertos e repetição espaçada offline. Quanto mais você erra um tema, mais cedo ele aparece.</div><div class="flash-actions"><button class="btn btn-primary" id="fc-start">Iniciar revisão</button><button class="btn" id="fc-hard">Focar difíceis</button><button class="btn btn-ghost" id="fc-bank">Banco de questões</button></div></div><div class="card"><div class="flash-kpis"><div class="flash-kpi"><strong>'+total+'</strong><span>cartões</span></div><div class="flash-kpi"><strong>'+hard+'</strong><span>difíceis</span></div><div class="flash-kpi"><strong>'+due+'</strong><span>vencidos</span></div></div></div></div><div id="flash-work"></div>';
+    el.querySelector('#fc-start').onclick=()=>{this.index=0;this.revealed=false;this.drawWork(el)};
+    el.querySelector('#fc-hard').onclick=()=>{this.queue=buildFlashQueue().filter(x=>x.d.label==='Difícil');if(!this.queue.length)this.queue=buildFlashQueue();this.index=0;this.revealed=false;this.drawWork(el)};
+    el.querySelector('#fc-bank').onclick=()=>App.instance.router.go('bank');
+    this.drawWork(el);
+  }
+  drawWork(el){
+    const work=el.querySelector('#flash-work'); if(!work)return;
+    if(!this.queue.length){work.innerHTML='<div class="empty-state"><h3>Nenhum flashcard disponível</h3><p>Crie ou importe questões para gerar flashcards automaticamente.</p></div>';return;}
+    const item=this.queue[Math.min(this.index,this.queue.length-1)]; const q=item.q,d=item.d;
+    const pct=Math.round((this.done/Math.max(1,this.queue.length))*100);
+    work.innerHTML='<div class="flash-stage"><div class="card flash-card"><div><div class="flash-label-row"><span class="flash-pill" style="color:'+d.tone+';border-color:'+d.tone+'55">'+d.label+'</span><span class="flash-pill">'+esc(q.category||'Sem categoria')+'</span><span class="flash-pill">Prioridade '+Math.round(d.priority)+'</span></div><div class="flash-front">'+esc(q.text||'Sem enunciado')+'</div>'+(this.revealed?'<div class="flash-back">'+esc(formatBack(q))+'</div>':'')+'</div><div><div class="flash-progress"><span style="width:'+pct+'%"></span></div><div class="flash-actions">'+(!this.revealed?'<button class="btn btn-primary" id="fc-reveal">Mostrar resposta</button>':'<button class="btn" id="fc-easy">Fácil</button><button class="btn btn-primary" id="fc-good">Bom</button><button class="btn btn-danger" id="fc-hard-rate">Difícil</button>')+'</div></div></div><div class="flash-side"><div class="card"><div class="profile-chart-title-final">Fila adaptativa</div><div class="profile-chart-sub-final">Ordenada por dificuldade individual.</div><div class="flash-queue">'+this.queue.slice(0,20).map((x,i)=>'<div class="flash-mini"><strong>'+(i+1)+'. '+esc((x.q.text||'').slice(0,54))+'</strong>'+esc(x.d.label)+' · '+esc(x.q.category||'Sem categoria')+'</div>').join('')+'</div></div></div></div>';
+    const rev=work.querySelector('#fc-reveal'); if(rev)rev.onclick=()=>{this.revealed=true;this.drawWork(el)};
+    const easy=work.querySelector('#fc-easy'); if(easy)easy.onclick=()=>this.rate(el,true,2);
+    const good=work.querySelector('#fc-good'); if(good)good.onclick=()=>this.rate(el,true,1);
+    const hardBtn=work.querySelector('#fc-hard-rate'); if(hardBtn)hardBtn.onclick=()=>this.rate(el,false,0);
+  }
+  rate(el,correct,weight){
+    const item=this.queue[this.index]; if(item&&typeof AITutor!=='undefined'&&AITutor.record)AITutor.record(item.q.id,correct);
+    this.done++; this.index++;
+    if(this.index>=this.queue.length){Toast.show('Revisão de flashcards concluída.','success');this.index=0;this.done=0;this.queue=buildFlashQueue();}
+    this.revealed=false; this.drawWork(el);
+  }
+}
+function esc(s){return (typeof Util!=='undefined'&&Util.escapeHtml)?Util.escapeHtml(s||''):String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function ensureFlashRoute(){
+  if(!window.App||!App.instance||!App.instance.router)return;
+  if(!App.instance.router.routes.flashcards)App.instance.router.register('flashcards',new FlashcardsView());
+}
+function ensureFlashRail(){
+  const rail=document.getElementById('rail'); if(!rail)return;
+  let btn=rail.querySelector('.rail-btn[data-route="flashcards"]');
+  if(!btn){
+    btn=document.createElement('button');btn.className='rail-btn';btn.dataset.route='flashcards';btn.dataset.tip='Flashcards';btn.setAttribute('aria-label','Flashcards');btn.innerHTML=iconFlash()+'<span class="rail-label">Cards</span>';btn.onclick=()=>App.instance.router.go('flashcards');
+  }
+  const settings=rail.querySelector('.rail-btn[data-route="settings"]');
+  if(settings)rail.insertBefore(btn,settings);else rail.appendChild(btn);
+}
+function renameMenuAndOrder(){
+  const rail=document.getElementById('rail'); if(!rail)return;
+  const toggle=rail.querySelector('.rail-toggle .rail-label'); if(toggle)toggle.textContent='Diminuir barra';
+  const toggleBtn=rail.querySelector('.rail-toggle'); if(toggleBtn)toggleBtn.setAttribute('aria-label','Diminuir barra');
+  const settings=rail.querySelector('.rail-btn[data-route="settings"]'); if(settings)rail.appendChild(settings);
+  rail.querySelectorAll('.rail-mode-label').forEach(x=>x.remove());
+}
+function patchRouter(){
+  if(!window.Router||Router.prototype._flashRedesignPatched)return;
+  const original=Router.prototype.go;
+  Router.prototype.go=function(name,params){const r=original.call(this,name,params);setTimeout(()=>{ensureFlashRail();renameMenuAndOrder();document.querySelectorAll('.rail-btn').forEach(b=>b.classList.toggle('active',b.dataset.route===this.current));},0);return r};
+  Router.prototype._flashRedesignPatched=true;
+}
+function boot(){
+  safe(ensureFlashRoute);safe(ensureFlashRail);safe(renameMenuAndOrder);safe(patchRouter);
+  if(App.instance&&App.instance.router){safe(()=>App.instance.router.go(App.instance.router.current||'dashboard'))}
+  let n=0;const t=setInterval(()=>{safe(ensureFlashRoute);safe(ensureFlashRail);safe(renameMenuAndOrder);if(++n>8)clearInterval(t)},250);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,120));else setTimeout(boot,120);
+})();
+</script>
+
+
 <script id="ef-learning-platform-js">
 (function(){
 'use strict';
@@ -3659,8 +3750,8 @@ function backText(q){return 'Resposta: '+(correctAnswer(q)||'Não cadastrada.')+
 function speak(text){try{if(!('speechSynthesis'in window))return;const u=new SpeechSynthesisUtterance(text);u.lang=/[a-zA-Z]/.test(text)?'en-US':'pt-BR';speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function makeExamFromQuestions(title,qs){if(!qs.length){Toast.show('Nenhuma questão encontrada para esse filtro.','warn');return}const ex=new Exam({id:Util.uid('exam_filter'),title,description:'Prova gerada por categoria, tema ou matéria.',category:'Filtro inteligente',timeMinutes:Math.max(5,Math.round(qs.length*1.2)),passScore:70,questionIds:qs.map(q=>q.id)});StorageManager.upsertExam(ex);PlayerController.start(ex.id)}
 class StudyView{get title(){return 'Resolver Questões'}get crumb(){return 'Categoria / Tema / Matéria'}render(el){const qs=getAllQuestions();const cats=uniq(qs.map(q=>q.category||'Sem categoria'));const temas=uniq(qs.flatMap(q=>getTemaList(q)));const mats=uniq(qs.map(getMateria));el.innerHTML='<div class="study-mode-grid"><div class="card glass"><div class="flash-main-title">Criar prova por categoria, tema ou matéria</div><div class="flash-sub">Monte provas dinâmicas usando o banco de questões. Você pode estudar por uma categoria inteira, um tema/tag específico, uma matéria ou somente questões com histórico de erro.</div><div class="study-filter-grid"><div class="field"><label>Categoria</label><select class="select" id="st-cat"><option value="">Todas</option>'+cats.map(x=>'<option>'+esc(x)+'</option>').join('')+'</select></div><div class="field"><label>Tema / Tag</label><select class="select" id="st-tema"><option value="">Todos</option>'+temas.map(x=>'<option>'+esc(x)+'</option>').join('')+'</select></div><div class="field"><label>Matéria</label><select class="select" id="st-mat"><option value="">Todas</option>'+mats.map(x=>'<option>'+esc(x)+'</option>').join('')+'</select></div><div class="field"><label>Quantidade</label><select class="select" id="st-qtd"><option>10</option><option>20</option><option>30</option><option>50</option><option value="9999">Todas</option></select></div></div><div class="study-chip-row"><button class="study-chip active" data-mode="all">Todas</button><button class="study-chip" data-mode="wrong">Somente erradas/fracas</button><button class="study-chip" data-mode="due">Revisão vencida</button><button class="study-chip" data-mode="random">Aleatórias</button></div><div class="flash-actions"><button class="btn btn-primary" id="st-start">Iniciar prova</button><button class="btn" id="st-cards">Transformar filtro em Cards</button><button class="btn btn-ghost" id="st-reset">Limpar filtros</button></div></div><div class="card"><div class="profile-chart-title-final">Prévia da prova</div><div class="profile-chart-sub-final" id="st-count"></div><div class="study-preview" id="st-preview"></div></div></div>';let mode='all';const filter=()=>{let out=qs.slice();const cat=el.querySelector('#st-cat').value,tema=el.querySelector('#st-tema').value,mat=el.querySelector('#st-mat').value,qtd=Number(el.querySelector('#st-qtd').value)||10;if(cat)out=out.filter(q=>(q.category||'Sem categoria')===cat);if(tema)out=out.filter(q=>getTemaList(q).includes(tema));if(mat)out=out.filter(q=>getMateria(q)===mat);if(mode==='wrong')out=out.sort((a,b)=>((typeof AITutor!=='undefined'&&AITutor.priority)?AITutor.priority(b.id)-AITutor.priority(a.id):0));if(mode==='due')out=out.filter(q=>fsrsCard(q).due<=Date.now()||((StorageManager.getStat(q.id).due||0)<=Date.now()&&StorageManager.getStat(q.id).seen>0));if(mode==='random')out=Util.shuffle(out);out=out.slice(0,qtd);el.querySelector('#st-count').textContent=out.length+' questão(ões) selecionada(s)';el.querySelector('#st-preview').innerHTML=out.map(q=>'<div class="study-question-mini"><strong>'+esc(q.text.slice(0,92))+'</strong><span>'+esc(q.category||'Sem categoria')+' · '+esc(getMateria(q))+' · '+esc(getTemaList(q).join(', ')||'sem tema')+'</span></div>').join('')||'<div class="empty-state"><h3>Nada encontrado</h3><p>Altere os filtros para montar a prova.</p></div>';return out};el.querySelectorAll('select').forEach(x=>x.onchange=filter);el.querySelectorAll('.study-chip').forEach(b=>b.onclick=()=>{el.querySelectorAll('.study-chip').forEach(c=>c.classList.remove('active'));b.classList.add('active');mode=b.dataset.mode;filter()});el.querySelector('#st-reset').onclick=()=>{el.querySelectorAll('select').forEach(s=>s.selectedIndex=0);mode='all';el.querySelectorAll('.study-chip').forEach(c=>c.classList.toggle('active',c.dataset.mode==='all'));filter()};el.querySelector('#st-start').onclick=()=>makeExamFromQuestions('Prova por filtro',filter());el.querySelector('#st-cards').onclick=()=>{App.instance.router.go('flashcards',{preset:filter().map(q=>q.id)})};filter()}}
-class AnkiProView{get title(){return 'Cards'}get crumb(){return 'Anki Pro Offline'}render(el,params={}){this.all=getAllQuestions();this.queue=params.preset?this.all.filter(q=>params.preset.includes(q.id)):this.all.slice().sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));this.index=0;this.revealed=false;this.done=0;this.draw(el)}draw(el){const s=fsrsStats();el.innerHTML='<div class="anki-dashboard"><div class="card glass"><div class="flash-main-title">Cards estilo Anki Pro</div><div class="flash-sub">Recordação ativa + repetição espaçada com botões Again, Hard, Good e Easy. Os cards mais difíceis, vencidos ou com menor retenção aparecem primeiro.</div><div class="flash-actions"><button class="btn btn-primary" id="ak-due">Revisar vencidos</button><button class="btn" id="ak-all">Todos os cards</button><button class="btn btn-ghost" id="ak-study">Criar prova por filtro</button><button class="btn" id="ak-quick5">5 aleatórios</button></div></div><div class="card"><div class="anki-kpis"><div class="anki-kpi"><strong>'+s.due+'</strong><span>hoje</span></div><div class="anki-kpi"><strong>'+s.newc+'</strong><span>novos</span></div><div class="anki-kpi"><strong>'+s.learning+'</strong><span>aprendendo</span></div><div class="anki-kpi"><strong>'+s.review+'</strong><span>revisão</span></div><div class="anki-kpi"><strong>'+s.retention+'%</strong><span>retenção</span></div></div></div></div><div id="anki-work"></div>';el.querySelector('#ak-due').onclick=()=>{this.queue=this.all.filter(q=>fsrsCard(q).due<=Date.now()).sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));if(!this.queue.length){Toast.show('Nenhum card vencido. Mostrando todos.','success');this.queue=this.all.slice().sort((a,b)=>fsrsPriority(b)-fsrsPriority(a))}this.index=0;this.revealed=false;this.drawWork(el)};el.querySelector('#ak-all').onclick=()=>{this.queue=this.all.slice().sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));this.index=0;this.revealed=false;this.drawWork(el)};el.querySelector('#ak-study').onclick=()=>App.instance.router.go('study');el.querySelector('#ak-quick5').onclick=()=>{this.queue=Util.shuffle(this.all).slice(0,Math.min(5,this.all.length));if(!this.queue.length){Toast.show('Nenhum card disponível.','warn');return}this.index=0;this.revealed=false;this.done=0;this.drawWork(el)};this.drawWork(el)}drawWork(el){const work=el.querySelector('#anki-work');if(!this.queue.length){work.innerHTML='<div class="empty-state"><h3>Nenhum card disponível</h3><p>Crie/importe questões ou gere cards a partir de texto.</p></div>'+this.importer();this.bindImport(el);return}const q=this.queue[Math.min(this.index,this.queue.length-1)],c=fsrsCard(q),pct=Math.round(this.done/Math.max(1,this.queue.length)*100),diff=Math.round((c.difficulty||5)*10);work.innerHTML='<div class="anki-layout"><div class="card anki-card"><div><div class="anki-labels"><span class="anki-pill">'+esc(q.category||'Sem categoria')+'</span><span class="anki-pill">'+esc(getMateria(q))+'</span><span class="anki-pill">Dificuldade '+diff+'%</span><span class="anki-pill">'+esc(c.state||'new')+'</span></div><div class="anki-front">'+esc(q.text||'Sem enunciado')+'</div>'+(this.revealed?'<div class="anki-back">'+esc(backText(q))+'</div>':'')+'</div><div><div class="anki-progress"><span style="width:'+pct+'%"></span></div><div class="flash-actions">'+(!this.revealed?'<button class="btn btn-primary" id="ak-show">Mostrar resposta</button><button class="btn speak-btn" id="ak-speak">🔊</button>':'<div class="anki-rate"><button class="btn btn-danger" id="ak-again">❌ Again</button><button class="btn" id="ak-hard">😓 Hard</button><button class="btn btn-primary" id="ak-good">🙂 Good</button><button class="btn" id="ak-easy">😄 Easy</button></div>')+'</div></div></div><div class="anki-side"><div class="card"><div class="profile-chart-title-final">Fila FSRS-like</div><div class="profile-chart-sub-final">Prioridade: vencidos + difíceis + baixo histórico.</div><div class="anki-queue">'+this.queue.slice(0,22).map((x,i)=>'<div class="anki-mini"><strong>'+(i+1)+'. '+esc((x.text||'').slice(0,58))+'</strong><span>'+esc(x.category||'Sem categoria')+' · prioridade '+Math.round(fsrsPriority(x))+'</span></div>').join('')+'</div></div>'+this.importer()+'</div></div>';const show=work.querySelector('#ak-show');if(show)show.onclick=()=>{this.revealed=true;this.drawWork(el)};const sp=work.querySelector('#ak-speak');if(sp)sp.onclick=()=>speak(q.text);['again','hard','good','easy'].forEach(r=>{const b=work.querySelector('#ak-'+r);if(b)b.onclick=()=>{schedule(q,r);this.done++;this.index++;if(this.index>=this.queue.length){Toast.show('Sessão de cards concluída.','success');this.queue=this.all.slice().sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));this.index=0;this.done=0}this.revealed=false;this.drawWork(el)}});this.bindImport(el)}importer(){return '<div class="card anki-import-box"><div class="profile-chart-title-final">Gerar cards offline</div><div class="profile-chart-sub-final">Cole vocabulário, anotações, resumo de certificação ou conteúdo de estudo. A geração é local, sem internet.</div><textarea class="textarea" id="anki-source" placeholder="Exemplo:\nto improve = melhorar | I want to improve my English.\nDefender XDR = plataforma de defesa integrada da Microsoft"></textarea><div class="field" style="margin-top:10px"><label>Matéria</label><input class="input" id="anki-materia" placeholder="Inglês, SC-200, Cyber Security..."></div><button class="btn btn-primary" id="anki-generate">Gerar cards</button></div>'}bindImport(el){const btn=el.querySelector('#anki-generate');if(!btn||btn._bound)return;btn._bound=true;btn.onclick=()=>{const txt=el.querySelector('#anki-source').value.trim();const mat=el.querySelector('#anki-materia').value.trim()||'Cards gerados';if(!txt){Toast.show('Cole algum conteúdo para gerar cards.','warn');return}const lines=txt.split(/\n+/).map(x=>x.trim()).filter(Boolean);let created=[];lines.forEach(line=>{let front=line,back='';if(line.includes('=')){const parts=line.split('=');front=parts.shift().trim();back=parts.join('=').trim()}else if(line.includes('|')){const parts=line.split('|');front=parts.shift().trim();back=parts.join(' | ').trim()}else{front='Explique: '+line.slice(0,90);back=line}const q=new Question({type:'short',text:front,correctShort:[back],explanation:back,category:mat,tags:['flashcard','gerado-offline'],level:'medio'});StorageManager.upsertQuestion(q);created.push(q)});Toast.show(created.length+' card(s) gerados.','success');this.all=getAllQuestions();this.queue=created.concat(this.all.filter(q=>!created.find(c=>c.id===q.id))).sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));this.index=0;this.done=0;this.revealed=false;this.draw(el)}}}
-function ensureRoutes(){if(typeof App==='undefined'||!App.instance||!App.instance.router)return;App.instance.router.register('flashcards',new AnkiProView());if(!App.instance.router.routes.study)App.instance.router.register('study',new StudyView())}
+class AnkiProView{get title(){return 'Cards'}get crumb(){return 'Anki Pro Offline'}render(el,params={}){this.all=getAllQuestions();this.queue=params.preset?this.all.filter(q=>params.preset.includes(q.id)):this.all.slice().sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));this.index=0;this.revealed=false;this.done=0;this.draw(el)}draw(el){const s=fsrsStats();el.innerHTML='<div class="anki-dashboard"><div class="card glass"><div class="flash-main-title">Cards estilo Anki Pro</div><div class="flash-sub">Recordação ativa + repetição espaçada com botões Again, Hard, Good e Easy. Os cards mais difíceis, vencidos ou com menor retenção aparecem primeiro.</div><div class="flash-actions"><button class="btn btn-primary" id="ak-due">Revisar vencidos</button><button class="btn" id="ak-all">Todos os cards</button><button class="btn btn-ghost" id="ak-study">Criar prova por filtro</button></div></div><div class="card"><div class="anki-kpis"><div class="anki-kpi"><strong>'+s.due+'</strong><span>hoje</span></div><div class="anki-kpi"><strong>'+s.newc+'</strong><span>novos</span></div><div class="anki-kpi"><strong>'+s.learning+'</strong><span>aprendendo</span></div><div class="anki-kpi"><strong>'+s.review+'</strong><span>revisão</span></div><div class="anki-kpi"><strong>'+s.retention+'%</strong><span>retenção</span></div></div></div></div><div id="anki-work"></div>';el.querySelector('#ak-due').onclick=()=>{this.queue=this.all.filter(q=>fsrsCard(q).due<=Date.now()).sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));if(!this.queue.length){Toast.show('Nenhum card vencido. Mostrando todos.','success');this.queue=this.all.slice().sort((a,b)=>fsrsPriority(b)-fsrsPriority(a))}this.index=0;this.revealed=false;this.drawWork(el)};el.querySelector('#ak-all').onclick=()=>{this.queue=this.all.slice().sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));this.index=0;this.revealed=false;this.drawWork(el)};el.querySelector('#ak-study').onclick=()=>App.instance.router.go('study');this.drawWork(el)}drawWork(el){const work=el.querySelector('#anki-work');if(!this.queue.length){work.innerHTML='<div class="empty-state"><h3>Nenhum card disponível</h3><p>Crie/importe questões ou gere cards a partir de texto.</p></div>'+this.importer();this.bindImport(el);return}const q=this.queue[Math.min(this.index,this.queue.length-1)],c=fsrsCard(q),pct=Math.round(this.done/Math.max(1,this.queue.length)*100),diff=Math.round((c.difficulty||5)*10);work.innerHTML='<div class="anki-layout"><div class="card anki-card"><div><div class="anki-labels"><span class="anki-pill">'+esc(q.category||'Sem categoria')+'</span><span class="anki-pill">'+esc(getMateria(q))+'</span><span class="anki-pill">Dificuldade '+diff+'%</span><span class="anki-pill">'+esc(c.state||'new')+'</span></div><div class="anki-front">'+esc(q.text||'Sem enunciado')+'</div>'+(this.revealed?'<div class="anki-back">'+esc(backText(q))+'</div>':'')+'</div><div><div class="anki-progress"><span style="width:'+pct+'%"></span></div><div class="flash-actions">'+(!this.revealed?'<button class="btn btn-primary" id="ak-show">Mostrar resposta</button><button class="btn speak-btn" id="ak-speak">🔊</button>':'<div class="anki-rate"><button class="btn btn-danger" id="ak-again">❌ Again</button><button class="btn" id="ak-hard">😓 Hard</button><button class="btn btn-primary" id="ak-good">🙂 Good</button><button class="btn" id="ak-easy">😄 Easy</button></div>')+'</div></div></div><div class="anki-side"><div class="card"><div class="profile-chart-title-final">Fila FSRS-like</div><div class="profile-chart-sub-final">Prioridade: vencidos + difíceis + baixo histórico.</div><div class="anki-queue">'+this.queue.slice(0,22).map((x,i)=>'<div class="anki-mini"><strong>'+(i+1)+'. '+esc((x.text||'').slice(0,58))+'</strong><span>'+esc(x.category||'Sem categoria')+' · prioridade '+Math.round(fsrsPriority(x))+'</span></div>').join('')+'</div></div>'+this.importer()+'</div></div>';const show=work.querySelector('#ak-show');if(show)show.onclick=()=>{this.revealed=true;this.drawWork(el)};const sp=work.querySelector('#ak-speak');if(sp)sp.onclick=()=>speak(q.text);['again','hard','good','easy'].forEach(r=>{const b=work.querySelector('#ak-'+r);if(b)b.onclick=()=>{schedule(q,r);this.done++;this.index++;if(this.index>=this.queue.length){Toast.show('Sessão de cards concluída.','success');this.queue=this.all.slice().sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));this.index=0;this.done=0}this.revealed=false;this.drawWork(el)}});this.bindImport(el)}importer(){return '<div class="card anki-import-box"><div class="profile-chart-title-final">Gerar cards offline</div><div class="profile-chart-sub-final">Cole vocabulário, anotações, resumo de certificação ou conteúdo de estudo. A geração é local, sem internet.</div><textarea class="textarea" id="anki-source" placeholder="Exemplo:\nto improve = melhorar | I want to improve my English.\nDefender XDR = plataforma de defesa integrada da Microsoft"></textarea><div class="field" style="margin-top:10px"><label>Matéria</label><input class="input" id="anki-materia" placeholder="Inglês, SC-200, Cyber Security..."></div><button class="btn btn-primary" id="anki-generate">Gerar cards</button></div>'}bindImport(el){const btn=el.querySelector('#anki-generate');if(!btn||btn._bound)return;btn._bound=true;btn.onclick=()=>{const txt=el.querySelector('#anki-source').value.trim();const mat=el.querySelector('#anki-materia').value.trim()||'Cards gerados';if(!txt){Toast.show('Cole algum conteúdo para gerar cards.','warn');return}const lines=txt.split(/\n+/).map(x=>x.trim()).filter(Boolean);let created=[];lines.forEach(line=>{let front=line,back='';if(line.includes('=')){const parts=line.split('=');front=parts.shift().trim();back=parts.join('=').trim()}else if(line.includes('|')){const parts=line.split('|');front=parts.shift().trim();back=parts.join(' | ').trim()}else{front='Explique: '+line.slice(0,90);back=line}const q=new Question({type:'short',text:front,correctShort:[back],explanation:back,category:mat,tags:['flashcard','gerado-offline'],level:'medio'});StorageManager.upsertQuestion(q);created.push(q)});Toast.show(created.length+' card(s) gerados.','success');this.all=getAllQuestions();this.queue=created.concat(this.all.filter(q=>!created.find(c=>c.id===q.id))).sort((a,b)=>fsrsPriority(b)-fsrsPriority(a));this.index=0;this.done=0;this.revealed=false;this.draw(el)}}}
+function ensureRoutes(){if(!window.App||!App.instance||!App.instance.router)return;App.instance.router.register('flashcards',new AnkiProView());if(!App.instance.router.routes.study)App.instance.router.register('study',new StudyView())}
 function navBtn(route,label,icon){const rail=document.getElementById('rail');let b=rail.querySelector('.rail-btn[data-route="'+route+'"]');if(!b){b=document.createElement('button');b.className='rail-btn';b.dataset.route=route;b.dataset.tip=label;b.setAttribute('aria-label',label);b.onclick=()=>App.instance.router.go(route)}b.innerHTML=icon+'<span class="rail-label">'+label+'</span>';return b}
 function reorderRail(){const rail=document.getElementById('rail');if(!rail||!App.instance)return;const dash=rail.querySelector('.rail-btn[data-route="dashboard"]');const cards=navBtn('flashcards','Cards',iconCards());const study=navBtn('study','Resolver',iconStudy());const builder=rail.querySelector('.rail-btn[data-route="builder"]');const bank=rail.querySelector('.rail-btn[data-route="bank"]');const hist=rail.querySelector('.rail-btn[data-route="history"]');const profile=rail.querySelector('.rail-btn[data-route="profile"]');const settings=rail.querySelector('.rail-btn[data-route="settings"]');const order=[dash,cards,study,builder,bank,hist,profile,settings].filter(Boolean);order.forEach(x=>rail.appendChild(x));const toggle=rail.querySelector('.rail-toggle .rail-label');if(toggle)toggle.textContent='Diminuir barra';const toggleBtn=rail.querySelector('.rail-toggle');if(toggleBtn){toggleBtn.setAttribute('aria-label','Diminuir barra');const logo=rail.querySelector('.rail-logo');if(logo&&logo.nextSibling!==toggleBtn)rail.insertBefore(toggleBtn,logo.nextSibling)}rail.querySelectorAll('.rail-mode-label,.rail-spacer').forEach(x=>x.remove())}
 function patchRouter(){if(!window.Router||Router.prototype._learningPlatformPatched)return;const orig=Router.prototype.go;Router.prototype.go=function(name,params){const r=orig.call(this,name,params);setTimeout(()=>{ensureRoutes();reorderRail();document.querySelectorAll('.rail-btn').forEach(b=>b.classList.toggle('active',b.dataset.route===this.current))},0);return r};Router.prototype._learningPlatformPatched=true}
@@ -3674,6 +3765,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 (function(){
 'use strict';
 function safe(fn){try{return fn()}catch(e){console.warn('[EF final fix]',e)}}
+function esc(s){return (typeof Util!=='undefined'&&Util.escapeHtml)?Util.escapeHtml(s||''):String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function strip(s){return String(s||'').replace(/<[^>]+>/g,'').trim()}
+function answerOf(q){if(!q)return'';if(['single','boolean','image'].includes(q.type))return (q.options||[]).find(o=>o.correct)?.text||'';if(q.type==='multi')return (q.options||[]).filter(o=>o.correct).map(o=>o.text).join(', ');if(q.type==='short')return (q.correctShort||[]).join(' / ');if(q.type==='matching')return (q.matchPairs||[]).map(p=>p.left+' → '+p.right).join('\n');if(q.type==='sequence')return (q.sequenceItems||[]).map(s=>s.text).join(' → ');return''}
 function ludicAnalogy(q){
   const text=(q?.text||'').toLowerCase(), cat=(q?.category||'').toLowerCase(), tags=(q?.tags||[]).join(' ').toLowerCase();
   const base=text+' '+cat+' '+tags;
@@ -3686,7 +3780,7 @@ function ludicAnalogy(q){
   return 'Correlação lúdica: conecte esta questão a uma situação do cotidiano. Imagine explicar o tema para alguém da família durante um café: se você conseguir transformar o conceito em uma comparação simples, você realmente entendeu.';
 }
 function augmentQuestionEditor(){
-  if(typeof QuestionEditorController==='undefined'||QuestionEditorController._ludicPatched)return;
+  if(!window.QuestionEditorController||QuestionEditorController._ludicPatched)return;
   const original=QuestionEditorController.openModal.bind(QuestionEditorController);
   QuestionEditorController.openModal=function(q,onSaved){
     const result=original(q,onSaved);
@@ -3716,17 +3810,43 @@ function augmentQuestionEditor(){
   };
   QuestionEditorController._ludicPatched=true;
 }
-function patchKeyboard(){
-  if(window._ankiKeys)return;
-  window._ankiKeys=true;
-  document.addEventListener('keydown',e=>{
-    if(!App.instance||App.instance.router.current!=='flashcards')return;
-    if(e.target&&['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;
-    if(e.key==='ArrowLeft'){e.preventDefault();const b=document.querySelector('#ak-again')||document.querySelector('#ak-show');if(b)b.click()}
-    if(e.key==='ArrowRight'){e.preventDefault();const b=document.querySelector('#ak-good')||document.querySelector('#ak-show');if(b)b.click()}
-  });
+function seedQuestions(){return [
+  {text:'How are you?', back:'Como você está?\n\nExemplo: I am good, thanks!', category:'Inglês cotidiano'},
+  {text:'to improve', back:'melhorar\n\nI want to improve my English. = Quero melhorar meu inglês.', category:'Inglês cotidiano'},
+  {text:'O que é MFA?', back:'Autenticação multifator. É como usar chave + biometria para entrar em casa.', category:'Cyber Security'},
+  {text:'O que é phishing?', back:'Tentativa de enganar alguém para clicar, informar senha ou abrir anexo malicioso.', category:'Cyber Security'},
+  {text:'O que significa “Good” no Anki?', back:'Você lembrou bem. O card pode voltar depois de um intervalo maior.', category:'Técnica de estudo'}
+].map(x=>({id:'seed_'+x.text,text:x.text,category:x.category,tags:['anki','aleatorio'],type:'short',correctShort:[x.back],explanation:x.back}))}
+function allCards(){let qs=(StorageManager.getQuestions?StorageManager.getQuestions():[]).map(q=>new Question(q));return qs.concat(seedQuestions()).filter(Boolean)}
+function choose5(){const arr=allCards();return (typeof Util!=='undefined'&&Util.shuffle?Util.shuffle(arr):arr.sort(()=>Math.random()-.5)).slice(0,5)}
+class FiveRandomCardsView{
+  get title(){return 'Cards'} get crumb(){return '5 cartões aleatórios estilo Anki'}
+  render(el){this.cards=choose5();this.i=0;this.revealed=false;this.correct=0;this.wrong=0;this.draw(el)}
+  draw(el){const q=this.cards[this.i];const pct=Math.round((this.i/5)*100);el.innerHTML='<div class="anki-dashboard"><div class="card glass"><div class="flash-main-title">5 Flashcards aleatórios</div><div class="flash-sub">Sessão curta estilo Anki. Use as setas do teclado: <strong>← esquerda = errei</strong> e <strong>→ direita = acertei</strong>. Cada rodada sorteia 5 cartões do banco de questões e, se houver poucos dados, completa com cartões exemplo.</div><div class="flash-actions"><button class="btn btn-primary" id="fc5-new">Sortear 5 novos</button><button class="btn" id="fc5-study">Criar prova por filtro</button></div></div><div class="card"><div class="anki-kpis"><div class="anki-kpi"><strong>'+this.cards.length+'</strong><span>cartões</span></div><div class="anki-kpi"><strong>'+this.correct+'</strong><span>certos</span></div><div class="anki-kpi"><strong>'+this.wrong+'</strong><span>errados</span></div><div class="anki-kpi"><strong>'+(this.i+1)+'</strong><span>atual</span></div><div class="anki-kpi"><strong>'+Math.round((this.correct/Math.max(1,this.i))*100||0)+'%</strong><span>precisão</span></div></div></div></div><div class="anki5-wrap"><div class="card anki5-card"><div><div class="anki-labels"><span class="anki-pill">'+esc(q.category||'Sem categoria')+'</span><span class="anki-pill">Card '+(this.i+1)+' de 5</span><span class="anki-pill">Aleatório</span></div><div class="anki5-title">'+esc(q.text||'Sem enunciado')+'</div>'+(this.revealed?'<div class="anki5-back">'+esc(answerOf(q)||q.explanation||'Sem resposta cadastrada.')+'</div>':'')+'</div><div><div class="anki5-progress"><span style="width:'+pct+'%"></span></div><div class="anki5-actions">'+(!this.revealed?'<button class="btn btn-primary" id="fc5-show">Mostrar resposta</button><button class="btn" id="fc5-speak">🔊 Áudio</button>':'<button class="btn btn-danger" id="fc5-wrong">← Errei</button><button class="btn btn-primary" id="fc5-right">Acertei →</button>')+'</div></div></div><div class="anki5-side"><div class="card"><div class="profile-chart-title-final">Mapa das setas</div><div class="profile-chart-sub-final">Correção solicitada aplicada.</div><div class="kbd-map"><div class="kbd-key"><strong>←</strong>Errado / Again</div><div class="kbd-key"><strong>→</strong>Certo / Good</div></div></div><div class="card"><div class="profile-chart-title-final">Fila atual</div>'+this.cards.map((c,idx)=>'<div class="anki5-mini"><strong>'+(idx+1)+'. '+esc((c.text||'').slice(0,58))+'</strong><span>'+esc(c.category||'Sem categoria')+'</span></div>').join('')+'</div></div></div>';el.querySelector('#fc5-new').onclick=()=>{this.cards=choose5();this.i=0;this.revealed=false;this.correct=0;this.wrong=0;this.draw(el)};el.querySelector('#fc5-study').onclick=()=>App.instance.router.go('study');const show=el.querySelector('#fc5-show');if(show)show.onclick=()=>{this.revealed=true;this.draw(el)};const speak=el.querySelector('#fc5-speak');if(speak)speak.onclick=()=>{try{const u=new SpeechSynthesisUtterance(strip(q.text));u.lang=/[a-zA-Z]/.test(q.text)?'en-US':'pt-BR';speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}};const wrong=el.querySelector('#fc5-wrong');if(wrong)wrong.onclick=()=>this.rate(el,false);const right=el.querySelector('#fc5-right');if(right)right.onclick=()=>this.rate(el,true)}
+  rate(el,ok){const q=this.cards[this.i];if(typeof AITutor!=='undefined'&&AITutor.record)AITutor.record(q.id,!!ok);ok?this.correct++:this.wrong++;this.i++;if(this.i>=5){Toast.show('Rodada de 5 cards concluída.','success');this.cards=choose5();this.i=0;this.revealed=false;this.draw(el);return}this.revealed=false;this.draw(el)}
 }
-function boot(){safe(augmentQuestionEditor);safe(patchKeyboard)}
+function routeAndOrder(){
+  if(!window.App||!App.instance||!App.instance.router)return;
+  App.instance.router.register('flashcards',new FiveRandomCardsView());
+  const rail=document.getElementById('rail');if(!rail)return;
+  const dash=rail.querySelector('.rail-btn[data-route="dashboard"]');
+  let cards=rail.querySelector('.rail-btn[data-route="flashcards"]');
+  if(!cards){cards=document.createElement('button');cards.className='rail-btn';cards.dataset.route='flashcards';cards.dataset.tip='Cards';cards.setAttribute('aria-label','Cards');cards.onclick=()=>App.instance.router.go('flashcards')}
+  cards.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h5"/></svg><span class="rail-label">Cards</span>';
+  const study=rail.querySelector('.rail-btn[data-route="study"]');
+  const builder=rail.querySelector('.rail-btn[data-route="builder"]');
+  const bank=rail.querySelector('.rail-btn[data-route="bank"]');
+  const hist=rail.querySelector('.rail-btn[data-route="history"]');
+  const profile=rail.querySelector('.rail-btn[data-route="profile"]');
+  const settings=rail.querySelector('.rail-btn[data-route="settings"]');
+  [dash,cards,study,builder,bank,hist,profile,settings].filter(Boolean).forEach(x=>rail.appendChild(x));
+  const toggle=rail.querySelector('.rail-toggle .rail-label');if(toggle)toggle.textContent='Diminuir barra';
+  rail.querySelectorAll('.rail-mode-label,.rail-spacer').forEach(x=>x.remove());
+  document.querySelectorAll('.rail-btn').forEach(b=>b.classList.toggle('active',b.dataset.route===App.instance.router.current));
+}
+function patchRouter(){if(!window.Router||Router.prototype._finalFixReallyPatched)return;const orig=Router.prototype.go;Router.prototype.go=function(name,params){const r=orig.call(this,name,params);setTimeout(()=>{routeAndOrder()},0);return r};Router.prototype._finalFixReallyPatched=true}
+function patchKeyboard(){if(window._fc5Keys)return;window._fc5Keys=true;document.addEventListener('keydown',e=>{if(!App.instance||App.instance.router.current!=='flashcards')return;if(e.target&&['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(e.key==='ArrowLeft'){e.preventDefault();const b=document.querySelector('#fc5-wrong')||document.querySelector('#fc5-show');if(b)b.click()}if(e.key==='ArrowRight'){e.preventDefault();const b=document.querySelector('#fc5-right')||document.querySelector('#fc5-show');if(b)b.click()}})}
+function boot(){safe(augmentQuestionEditor);safe(patchRouter);safe(routeAndOrder);safe(patchKeyboard);if(App.instance&&App.instance.router)safe(()=>App.instance.router.go(App.instance.router.current||'dashboard'));let n=0;const t=setInterval(()=>{safe(routeAndOrder);if(++n>10)clearInterval(t)},250)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,160));else setTimeout(boot,160);
 })();
 </script>
