@@ -1637,7 +1637,7 @@ class Router {
   }
   register(name, view){ this.routes[name] = view; }
   go(name, params={}){
-    const tabMap = {study:{route:'study'}, profile:{route:'progress'}, history:{route:'progress'}, bank:{route:'content',tab:'questoes'}, progress:{route:'progress'}, dashboard:{route:'home'}};
+    const tabMap = {study:{route:'content',tab:'certificacoes'}, profile:{route:'progress'}, history:{route:'progress'}, bank:{route:'content',tab:'questoes'}, progress:{route:'progress'}, dashboard:{route:'home'}};
     if(tabMap[name]){ const m=tabMap[name]; if(m.tab) params={...params,tab:m.tab}; name=m.route||name; }
     if(this.current && this.routes[this.current]?.onLeave) this.routes[this.current].onLeave();
     document.querySelectorAll('#views .view').forEach(v=>v.classList.add('hidden'));
@@ -1655,7 +1655,7 @@ class Router {
     document.getElementById('topbar-title').textContent = view.title || name;
     document.getElementById('topbar-crumb').textContent = view.crumb ? `/ ${view.crumb}` : '';
     this._updateRail(name);
-    if(['home','study','content','progress'].includes(name)) try{ location.hash = name + (params.tab ? '/'+params.tab : ''); }catch(_){}
+    if(['home','content','progress'].includes(name)) try{ location.hash = name + (params.tab ? '/'+params.tab : ''); }catch(_){}
     view.render(el, params);
   }
   _updateRail(name){
@@ -4042,33 +4042,6 @@ class StudyFilterView {
   }
 }
 
-class StudyHubView {
-  get title(){ return 'Estudar'; }
-  get crumb(){ return ''; }
-  render(el){
-    el.innerHTML = '<div id="hub-panel"></div>';
-    this._simulado(el.querySelector('#hub-panel'));
-  }
-  _simulado(panel){
-    const exams=StorageManager.getExams().filter(e=>e.questionIds?.length);
-    const groups = {};
-    exams.forEach(e=>{
-      const key = e.trilha || e.serie || e.category || 'Outros';
-      groups[key] = groups[key] || [];
-      groups[key].push(e);
-    });
-    const sortedKeys = Object.keys(groups).sort((a,b)=>a.localeCompare(b,'pt-BR'));
-    const body = sortedKeys.map(k=>{
-      const list = groups[k].sort((a,b)=>(a.code||a.materia||'').localeCompare(b.code||b.materia||'','pt-BR'));
-      return `<div class="study-group"><div class="study-group-title">${Util.escapeHtml(k)}</div>${list.map(e=>DashboardView._examRow(e,{compact:true})).join('')}</div>`;
-    }).join('');
-    panel.innerHTML=`<div>${body||DashboardView._empty('Nenhuma certificação','O banco EXIN DPO será carregado automaticamente.')}</div><div class="hub-footer"><button class="btn btn-ghost btn-sm" id="sh-smart">Revisão inteligente</button></div>`;
-    panel.querySelector('#sh-smart')?.addEventListener('click',()=>PlayerController.startSmartReview());
-    panel.querySelectorAll('[data-play-exam]').forEach(b=>b.addEventListener('click',()=>ExamConfigModal.open(b.dataset.playExam)));
-    panel.querySelectorAll('[data-edit-exam]').forEach(b=>b.addEventListener('click',()=>App.instance.router.go('builder',{examId:b.dataset.editExam})));
-  }
-}
-
 class ContentHubView {
   constructor(){
     this.bank = new QuestionBankView();
@@ -4078,14 +4051,30 @@ class ContentHubView {
   }
   get title(){ return 'Biblioteca'; }
   get crumb(){ return ''; }
+  _normTab(tab){
+    if(tab === 'exames') return 'certificacoes';
+    return tab || 'certificacoes';
+  }
   render(el, params={}){
-    const tab = params.tab || 'exames';
-    const tabs = [{id:'exames', label:'Exames'}, {id:'questoes', label:'Questões'}];
+    const tab = this._normTab(params.tab);
+    const tabs = [{id:'certificacoes', label:'Certificações'}, {id:'questoes', label:'Questões'}];
     el.innerHTML = HubHelpers.tabs(tabs, tab) + '<div id="hub-panel"></div>';
     HubHelpers.bindTabs(el, 'content');
     this._panelEl = el.querySelector('#hub-panel');
     if(tab === 'questoes') this.bank.render(this._panelEl);
-    else this._renderExames();
+    else this._renderCertificacoes();
+  }
+  _studyGroups(exams){
+    const groups = {};
+    exams.filter(e=>e.questionIds?.length).forEach(e=>{
+      const key = e.trilha || e.serie || e.category || 'Outros';
+      groups[key] = groups[key] || [];
+      groups[key].push(e);
+    });
+    return Object.keys(groups).sort((a,b)=>a.localeCompare(b,'pt-BR')).map(k=>({
+      trilha: k,
+      exams: groups[k].sort((a,b)=>(a.code||a.materia||'').localeCompare(b.code||b.materia||'','pt-BR'))
+    }));
   }
   _buildExamTree(exams){
     const tree = {};
@@ -4136,12 +4125,19 @@ class ContentHubView {
         <div class="lib-leaves">${s.exams.map(e=>this._libraryRow(e)).join('')}</div>
       </details>`).join('')}</div>`;
   }
-  _renderExames(){
+  _renderCertificacoes(){
     const panel = this._panelEl;
     if(!panel) return;
     const exams = StorageManager.getExams();
+    const studyExams = exams.filter(e=>e.questionIds?.length);
     const tree = this._buildExamTree(exams);
-    const body = this._renderTree(tree);
+    const body = this._selectMode
+      ? this._renderTree(tree)
+      : this._studyGroups(studyExams).map(g=>`
+          <div class="study-group">
+            <div class="study-group-title">${Util.escapeHtml(g.trilha)}</div>
+            ${g.exams.map(e=>DashboardView._examRow(e,{compact:true})).join('')}
+          </div>`).join('');
     const selCount = this._selected.size;
     const toolbar = this._selectMode ? `
       <div class="hub-actions-bar">
@@ -4160,26 +4156,28 @@ class ContentHubView {
         <span class="spacer"></span>
         <button class="btn btn-sm btn-ghost" id="ch-select" type="button">Selecionar</button>
       </div>`;
-    panel.innerHTML = `${toolbar}<div id="ch-list">${exams.length ? body : DashboardView._empty('Nenhum exame','Crie ou importe um exame.')}</div>`;
+    const footer = this._selectMode ? '' : `<div class="hub-footer"><button class="btn btn-ghost btn-sm" id="ch-smart" type="button">Revisão inteligente</button></div>`;
+    panel.innerHTML = `${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma certificação','O banco EXIN DPO será carregado automaticamente.')}</div>${footer}`;
     panel.querySelector('#ch-new')?.addEventListener('click', ()=> App.instance.router.go('builder', {}));
     panel.querySelector('#ch-import')?.addEventListener('click', ()=> ImportController.openModal());
-    panel.querySelector('#ch-select')?.addEventListener('click', ()=>{ this._selectMode = true; this._selected.clear(); this._renderExames(); });
-    panel.querySelector('#ch-cancel-sel')?.addEventListener('click', ()=>{ this._selectMode = false; this._selected.clear(); this._renderExames(); });
+    panel.querySelector('#ch-select')?.addEventListener('click', ()=>{ this._selectMode = true; this._selected.clear(); this._renderCertificacoes(); });
+    panel.querySelector('#ch-cancel-sel')?.addEventListener('click', ()=>{ this._selectMode = false; this._selected.clear(); this._renderCertificacoes(); });
     panel.querySelector('#ch-sel-all')?.addEventListener('click', ()=>{
       exams.forEach(e=> this._selected.add(e.id));
-      this._renderExames();
+      this._renderCertificacoes();
     });
     panel.querySelector('#ch-desel-all')?.addEventListener('click', ()=>{
       this._selected.clear();
-      this._renderExames();
+      this._renderCertificacoes();
     });
     panel.querySelector('#ch-delete')?.addEventListener('click', ()=> this._deleteSelected());
+    panel.querySelector('#ch-smart')?.addEventListener('click', ()=> PlayerController.startSmartReview());
     panel.querySelectorAll('.lib-grp-cb').forEach(cb=>{
       cb.addEventListener('click', e=> e.stopPropagation());
       cb.addEventListener('change', ()=>{
         const ids = (cb.dataset.grpIds||'').split(',').filter(Boolean);
         ids.forEach(id=>{ if(cb.checked) this._selected.add(id); else this._selected.delete(id); });
-        this._renderExames();
+        this._renderCertificacoes();
       });
       const ids = (cb.dataset.grpIds||'').split(',').filter(Boolean);
       const st = this._chkState(ids);
@@ -4190,12 +4188,11 @@ class ContentHubView {
       cb.addEventListener('change', ()=>{
         const id = cb.dataset.examCb;
         if(cb.checked) this._selected.add(id); else this._selected.delete(id);
-        this._renderExames();
+        this._renderCertificacoes();
       });
     });
     if(!this._selectMode){
       panel.querySelectorAll('[data-play-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.playExam)));
-      panel.querySelectorAll('[data-edit-exam]').forEach(b=> b.addEventListener('click', ()=> App.instance.router.go('builder', {examId:b.dataset.editExam})));
     }
   }
   async _deleteSelected(){
@@ -4212,7 +4209,7 @@ class ContentHubView {
     this._selectMode = false;
     this._selected.clear();
     Toast.show(`${ids.length} exame(s) excluído(s).`, 'success');
-    this._renderExames();
+    this._renderCertificacoes();
   }
 }
 
@@ -4236,15 +4233,15 @@ class App {
     this.applySettings(StorageManager.getSettings());
     setupLudicComments();
     const hash = parseAppHash();
-    const valid = ['home','study','content','progress','builder','settings','result','review'];
-    const route = valid.includes(hash.route) ? hash.route : 'home';
-    const params = hash.tab && hash.tab !== 'cards' ? {tab: hash.tab} : {};
+    const valid = ['home','content','progress','builder','settings','result','review'];
+    let route = valid.includes(hash.route) ? hash.route : 'home';
+    if(hash.route === 'study') route = 'content';
+    const params = hash.tab && hash.tab !== 'cards' ? {tab: hash.tab === 'exames' ? 'certificacoes' : hash.tab} : (hash.route === 'study' ? {tab:'certificacoes'} : {});
     this.router.go(route, params);
     this._setupPWA();
   }
   _registerRoutes(){
     this.router.register('home', new DashboardView());
-    this.router.register('study', new StudyHubView());
     this.router.register('content', new ContentHubView());
     this.router.register('progress', new ProgressHubView());
     this.router.register('builder', new BuilderView());
@@ -4261,7 +4258,6 @@ class App {
     bar.appendChild(logo);
     const items = [
       {route:'home', icon:Icons.dashboard, label:'Início'},
-      {route:'study', icon:Icons.study, label:'Estudar'},
       {route:'content', icon:Icons.content, label:'Biblioteca'},
       {route:'progress', icon:Icons.progress, label:'Progresso'},
     ];
@@ -4355,7 +4351,7 @@ class App {
 
 /* Enhancement layers usam window.* — em strict mode as classes não vinculam ao window automaticamente */
 Object.assign(window, {
-  App, Router, DashboardView, StudyHubView, ContentHubView, ProgressHubView,
+  App, Router, DashboardView, ContentHubView, ProgressHubView,
   BuilderView, QuestionBankView, HistoryView, ProfileView, SettingsView, ResultView, ReviewView,
   QuestionEditorController, PlayerController, ImportController, ExportController, ExamConfigModal,
   StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam
