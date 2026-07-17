@@ -3,45 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0d1117">
+<meta name="theme-color" content="#141210">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ExamForge">
 <meta name="description" content="ExamForge — simulador de exames offline, acessível e gamificado.">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='38' fill='%234f8cff'/%3E%3Ctext x='90' y='120' font-family='Arial' font-size='84' font-weight='bold' fill='white' text-anchor='middle'%3EEF%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='38' fill='%23c17f59'/%3E%3Ctext x='90' y='120' font-family='Arial' font-size='84' font-weight='bold' fill='white' text-anchor='middle'%3EEF%3C/text%3E%3C/svg%3E">
 <title>ExamForge — Simulador de Exames</title>
 <style>
 :root{
-  --bg-0:#0d1117;
-  --bg-1:#11161d;
-  --bg-2:#161c24;
-  --bg-3:#1c232c;
-  --bg-elevated:#20272f;
-  --border:#2a323d;
-  --border-soft:#232a33;
-  --text-0:#e6edf3;
-  --text-1:#adbac7;
-  --text-2:#768390;
-  --accent:#4f8cff;
-  --accent-soft:rgba(79,140,255,.12);
-  --accent-strong:#3f7ae8;
-  --good:#3fb950;
-  --good-soft:rgba(63,185,80,.12);
-  --bad:#f85149;
-  --bad-soft:rgba(248,81,73,.12);
-  --warn:#e3b341;
-  --warn-soft:rgba(227,179,65,.12);
+  --bg-base:#141210;
+  --bg-surface:#1c1916;
+  --bg-elevated:#242019;
+  --bg-0:var(--bg-base);
+  --bg-1:var(--bg-surface);
+  --bg-2:var(--bg-elevated);
+  --bg-3:#2a241f;
+  --border:rgba(154,146,138,.22);
+  --border-soft:rgba(154,146,138,.12);
+  --text-0:#f0ebe3;
+  --text-1:#b8aea4;
+  --text-2:#7a726a;
+  --accent:#c17f59;
+  --accent-soft:rgba(193,127,89,.14);
+  --accent-strong:#a86b47;
+  --good:#6b9e78;
+  --good-soft:rgba(107,158,120,.14);
+  --bad:#c96a62;
+  --bad-soft:rgba(201,106,98,.14);
+  --warn:#c4a24a;
+  --warn-soft:rgba(196,162,74,.14);
   --radius-sm:6px;
   --touch:44px;
   --radius-md:10px;
   --radius-lg:14px;
-  --shadow-1:0 1px 2px rgba(0,0,0,.4);
-  --shadow-2:0 8px 24px rgba(0,0,0,.45);
-  --shadow-3:0 16px 48px rgba(0,0,0,.55);
+  --shadow-1:none;
+  --shadow-2:0 4px 16px rgba(0,0,0,.18);
+  --shadow-3:0 8px 32px rgba(0,0,0,.28);
   --mono:'SF Mono',ui-monospace,'Cascadia Code','Fira Code',Consolas,monospace;
   --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,Helvetica,Arial,sans-serif;
   --font-scale:1;
+  --text-xs:12px;
+  --text-sm:13px;
+  --text-md:15px;
+  --text-lg:18px;
+  --text-xl:22px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;max-width:100%;overflow:hidden}
@@ -59,8 +66,27 @@ body{
 .q-text,.q-option,.fb-line,.fb-explain,.review-item,.review-explain,.list-row .title,.list-row .desc{overflow-wrap:anywhere;word-break:break-word}
 img,svg,video{max-width:100%}
 body.light{
-  --bg-0:#f6f7f9;--bg-1:#ffffff;--bg-2:#f0f2f5;--bg-3:#e9ecef;--bg-elevated:#ffffff;
-  --border:#dde1e6;--border-soft:#e6e9ed;--text-0:#1b1f24;--text-1:#4a535c;--text-2:#7a8590;
+  --bg-base:#faf8f5;
+  --bg-surface:#ffffff;
+  --bg-elevated:#f3f0eb;
+  --bg-0:var(--bg-base);
+  --bg-1:var(--bg-surface);
+  --bg-2:var(--bg-elevated);
+  --bg-3:#ebe6df;
+  --border:rgba(26,22,20,.12);
+  --border-soft:rgba(26,22,20,.07);
+  --text-0:#1a1614;
+  --text-1:#5c554f;
+  --text-2:#8a827a;
+  --accent:#a86b47;
+  --accent-soft:rgba(168,107,71,.12);
+  --accent-strong:#8f5738;
+  --good:#4d8260;
+  --good-soft:rgba(77,130,96,.12);
+  --bad:#b8554e;
+  --bad-soft:rgba(184,85,78,.12);
+  --warn:#9a7f2e;
+  --warn-soft:rgba(154,127,46,.12);
 }
 ::-webkit-scrollbar{width:0;height:0;display:none}
 *{scrollbar-width:none;-ms-overflow-style:none}
@@ -164,32 +190,34 @@ a{color:var(--accent)}
 
 .card{
   background:var(--bg-1);border:1px solid var(--border);border-radius:var(--radius-md);
-  padding:16px 18px;transition:border-color .15s ease;
+  padding:16px 18px;transition:background .15s ease;
 }
-.card.glass{background:var(--bg-2)}
-.card:hover{border-color:var(--text-2)}
+.card:hover{background:var(--bg-2)}
 .stat-card{display:flex;flex-direction:column;gap:6px}
 .stat-card .label{font-size:12px;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .stat-card .value{font-size:28px;font-weight:700;letter-spacing:-.5px}
 .stat-card .sub{font-size:12px;color:var(--text-2)}
 .stat-card .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
 
-.section-title{font-size:13px;font-weight:700;color:var(--text-1);text-transform:uppercase;letter-spacing:.6px;margin:28px 0 12px}
+.section-title{font-size:var(--text-sm);font-weight:600;color:var(--text-2);margin:24px 0 10px}
 .section-title:first-child{margin-top:0}
 
 .list-row{
   display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:var(--radius-md);
-  border:1px solid var(--border-soft);background:var(--bg-1);margin-bottom:8px;
-  transition:border-color .15s ease,background .15s ease;
+  border:none;background:var(--bg-1);margin-bottom:6px;
+  transition:background .15s ease;
 }
-.list-row:hover{border-color:var(--text-2);background:var(--bg-2)}
+.list-row:hover{background:var(--bg-2)}
 .list-row .meta{flex:1;min-width:0}
 .list-row .title{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .list-row .desc{font-size:12px;color:var(--text-2);margin-top:2px}
 .list-row .badge{
-  font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;
-  background:var(--accent-soft);color:var(--accent);white-space:nowrap;
+  font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;
 }
+.badge-good{background:var(--good-soft);color:var(--good)}
+.badge-warn{background:var(--warn-soft);color:var(--warn)}
+.badge-bad{background:var(--bad-soft);color:var(--bad)}
+.badge-accent{background:var(--accent-soft);color:var(--accent)}
 .empty-state{
   text-align:center;padding:60px 20px;color:var(--text-2);
 }
@@ -260,7 +288,14 @@ a{color:var(--accent)}
 .ec-section-item{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:4px 2px;cursor:pointer;color:var(--text-0)}
 .ec-section-item input{accent-color:var(--accent)}
 .ec-section-count{font-size:11.5px;color:var(--text-2);margin-left:auto}
-.ec-options{display:flex;flex-direction:column;gap:10px;padding-top:4px;border-top:1px solid var(--border-soft)}
+.ec-inline-input{width:56px;padding:4px 6px;text-align:center;display:inline-block;vertical-align:middle;margin:0 4px}
+.ec-radio-row .ec-inline-input{margin-top:-2px}
+.ec-options{margin-top:4px;padding-top:12px;border-top:1px solid var(--border-soft)}
+.hub-actions-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.hub-actions-bar .spacer{flex:1}
+.list-row-select{cursor:pointer}
+.list-row-select input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);flex-shrink:0}
+.list-row-select.checked{background:var(--accent-soft)}
 .ec-timer-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px}
 .ec-timer-min{flex:1;min-width:120px;max-width:160px}
 .ec-timer-min .input:disabled{opacity:.45;cursor:not-allowed}
@@ -272,8 +307,8 @@ a{color:var(--accent)}
 .toast{
   display:flex;align-items:center;gap:10px;background:var(--bg-elevated);
   border:1px solid var(--border);border-left:3px solid var(--accent);
-  padding:12px 16px;border-radius:var(--radius-md);box-shadow:var(--shadow-2);
-  font-size:13px;min-width:260px;max-width:360px;
+  padding:12px 16px;border-radius:var(--radius-md);
+  font-size:var(--text-sm);min-width:260px;max-width:360px;
   animation:toastIn .2s ease;
 }
 .toast.success{border-left-color:var(--good)}
@@ -285,7 +320,7 @@ a{color:var(--accent)}
 
 /* ---------- Loading ---------- */
 #loading-overlay{
-  position:fixed;inset:0;background:rgba(13,17,23,.7);z-index:400;
+  position:fixed;inset:0;background:rgba(20,18,16,.75);z-index:400;
   display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;
 }
 #loading-overlay.show{display:flex}
@@ -418,14 +453,6 @@ a{color:var(--accent)}
 .reward-pop .rp-ic{font-size:15px;font-weight:700;width:44px;height:44px;margin:0 auto 8px;border-radius:var(--radius-sm);background:var(--accent-soft);color:var(--accent);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
 .reward-pop .rp-tt{font-weight:800;font-size:15px}
 .reward-pop .rp-sb{font-size:12.5px;color:var(--text-1);margin-top:3px}
-/* coach marks / onboarding */
-.coach-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:360;display:flex;align-items:center;justify-content:center;padding:20px}
-.coach-card{background:var(--bg-1);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:440px;width:100%;padding:24px;box-shadow:var(--shadow-3)}
-.coach-card h3{font-size:17px;margin-bottom:6px}
-.coach-card p{font-size:13.5px;color:var(--text-1);line-height:1.6;margin-bottom:8px}
-.coach-steps{display:flex;gap:6px;margin:14px 0}
-.coach-steps .cs{flex:1;height:4px;border-radius:3px;background:var(--bg-3)}
-.coach-steps .cs.on{background:var(--accent)}
 
 /* --- responsividade em telas médias de desktop (evita corte de conteúdo) --- */
 @media (max-width:1000px){
@@ -511,9 +538,36 @@ a{color:var(--accent)}
 .topbar .btn-icon{min-width:var(--touch);min-height:var(--touch)}
 
 .view{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:16px;animation:fadeIn .2s ease;-webkit-overflow-scrolling:touch}
-.view-home{padding:24px 16px 16px;max-width:440px;margin:0 auto;width:100%;display:flex;flex-direction:column;justify-content:center}
-
-/* Tabbar — mobile bottom */
+.view-home{padding:24px 16px 32px;max-width:480px;margin:0 auto;width:100%}
+.home-kicker{font-size:var(--text-xs);font-weight:600;color:var(--accent);letter-spacing:.06em;margin:0 0 6px;text-transform:uppercase}
+.home-greet{font-size:26px;font-weight:600;letter-spacing:-.03em;margin:0 0 20px;color:var(--text-0);line-height:1.2}
+.home-hero{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;
+  padding:16px 18px;border-radius:var(--radius-md);background:var(--accent-soft);
+  border:1px solid var(--accent);margin-bottom:24px;text-align:left;
+}
+.home-hero-body{flex:1;min-width:0}
+.home-hero-label{font-size:var(--text-xs);color:var(--accent-strong);font-weight:600;margin-bottom:2px}
+.home-hero-title{font-size:var(--text-md);font-weight:600;color:var(--text-0)}
+.home-hero-meta{font-size:var(--text-xs);color:var(--text-2);margin-top:2px}
+.home-hero .btn{flex-shrink:0}
+.home-list{display:flex;flex-direction:column;gap:6px;margin:0 0 24px;padding:0;list-style:none}
+.home-list-item{margin:0;padding:0}
+.home-list-btn{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;
+  padding:14px 16px;border-radius:var(--radius-md);border:1px solid var(--border-soft);
+  background:var(--bg-1);text-align:left;min-height:var(--touch);
+  font-family:inherit;cursor:pointer;color:inherit;transition:background .12s ease;
+}
+.home-list-btn:hover{background:var(--bg-2)}
+.home-list-btn:active{transform:scale(.99)}
+.home-list-text{flex:1;min-width:0}
+.home-list-title{display:block;font-size:var(--text-md);font-weight:600;color:var(--text-0)}
+.home-list-meta{display:block;font-size:var(--text-xs);color:var(--text-2);margin-top:2px}
+.home-list-play{color:var(--accent);flex-shrink:0;display:flex}
+.home-list-play svg{width:22px;height:22px}
+.home-foot{display:flex;justify-content:center;padding-top:4px}
+.home-foot .btn{font-size:var(--text-sm);color:var(--text-2)}
 .tabbar{
   position:fixed;bottom:0;left:0;right:0;z-index:80;
   display:flex;align-items:stretch;
@@ -538,13 +592,7 @@ a{color:var(--accent)}
 body.player-open .tabbar{display:none}
 body.player-open .main{padding-bottom:0!important}
 
-/* Home */
-.home-minimal{display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 12px 20px;gap:12px}
-.home-greet{font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0;color:var(--text-0)}
-.home-hint{font-size:13px;color:var(--text-2);margin:0;max-width:300px;line-height:1.5}
-.home-cta{width:100%;max-width:320px;min-height:var(--touch);justify-content:center;font-size:14px;font-weight:600;border-radius:var(--radius-sm)}
-
-/* Hubs & lists */
+/* Tabbar — mobile bottom */
 .hub-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0}
 .hub-tab{flex-shrink:0;padding:10px 14px;border:none;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:var(--text-2);font-size:13px;font-weight:500;min-height:var(--touch)}
 .hub-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:transparent}
@@ -579,8 +627,8 @@ body.player-open .main{padding-bottom:0!important}
 .bank-sub{margin:4px 8px 6px}
 .bank-sub .list-row-compact{margin:0 8px 6px;border-radius:var(--radius-sm);background:var(--bg-0)}
 .bank-count{font-size:11px;color:var(--text-2);font-weight:500;margin-left:auto}
-.study-group{margin-bottom:20px}
-.study-group-title{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px 2px}
+.study-group{margin-bottom:18px}
+.study-group-title{font-size:var(--text-sm);font-weight:600;color:var(--text-2);margin:0 0 8px 2px}
 .hub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .hub-stat{font-size:13px;color:var(--text-2);margin-bottom:12px}
 .progress-mini{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px}
@@ -599,14 +647,14 @@ body.player-open .main{padding-bottom:0!important}
   font-size:12px;font-weight:600;transition:background .12s,border-color .12s;
 }
 .anki-rate:hover{border-color:var(--text-2)}
-.anki-rate-again{color:var(--bad);border-color:var(--bad-soft);background:var(--bad-soft)}
-.anki-rate-again:hover{background:var(--bad);color:#fff;border-color:var(--bad)}
-.anki-rate-hard{color:var(--warn);border-color:var(--warn-soft);background:var(--warn-soft)}
-.anki-rate-hard:hover{background:var(--warn);color:#1b1f24;border-color:var(--warn)}
-.anki-rate-good{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
-.anki-rate-good:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
-.anki-rate-easy{color:var(--good);border-color:var(--good-soft);background:var(--good-soft)}
-.anki-rate-easy:hover{background:var(--good);color:#fff;border-color:var(--good)}
+.anki-rate-again{color:var(--bad);border-color:var(--bad-soft)}
+.anki-rate-again:hover{border-color:var(--bad);background:var(--bad-soft)}
+.anki-rate-hard{color:var(--warn);border-color:var(--warn-soft)}
+.anki-rate-hard:hover{border-color:var(--warn);background:var(--warn-soft)}
+.anki-rate-good{color:var(--accent);border-color:var(--accent-soft)}
+.anki-rate-good:hover{border-color:var(--accent);background:var(--accent-soft)}
+.anki-rate-easy{color:var(--good);border-color:var(--good-soft)}
+.anki-rate-easy:hover{border-color:var(--good);background:var(--good-soft)}
 
 /* Exam config modal polish */
 .exam-config .ec-fieldset{background:var(--bg-0);border-color:var(--border)}
@@ -620,16 +668,36 @@ body.player-open .main{padding-bottom:0!important}
 /* Progress charts */
 .view-progress{max-width:680px;margin:0 auto;width:100%}
 .progress-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
-.progress-stat{text-align:center;padding:12px 8px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-1)}
+.progress-stat{text-align:center;padding:12px 8px;border-radius:var(--radius-md);background:var(--bg-1)}
 .progress-stat strong{display:block;font-size:20px;font-weight:600;line-height:1.2;color:var(--text-0)}
-.progress-stat span{font-size:11px;color:var(--text-2);margin-top:2px;display:block}
-.progress-charts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
-.chart-card{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-1);padding:12px 10px;text-align:center}
-.chart-card h4{font-size:10px;font-weight:600;color:var(--text-2);margin:0 0 8px;text-transform:uppercase;letter-spacing:.05em}
+.progress-stat span{font-size:var(--text-xs);color:var(--text-2);margin-top:2px;display:block}
+.progress-chart-main{margin-bottom:16px;padding:16px;border-radius:var(--radius-md);background:var(--bg-1)}
+.progress-chart-main h4{font-size:var(--text-sm);font-weight:600;color:var(--text-1);margin:0 0 12px}
+.progress-details{margin-bottom:16px}
+.progress-details summary{
+  font-size:var(--text-sm);font-weight:600;color:var(--text-2);cursor:pointer;padding:10px 0;
+  list-style:none;display:flex;align-items:center;gap:6px;
+}
+.progress-details summary::-webkit-details-marker{display:none}
+.progress-details summary::before{
+  content:'';width:14px;height:14px;opacity:.6;
+  background:currentColor;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E") center/contain no-repeat;
+  transition:transform .15s ease;
+}
+.progress-details[open] summary::before{transform:rotate(90deg)}
+.progress-details-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding-top:8px}
+.chart-bar-good{fill:var(--good)}
+.chart-bar-warn{fill:var(--warn)}
+.chart-bar-bad{fill:var(--bad)}
+.chart-spark{display:block;width:100%;max-width:100%}
+.progress-history-title{font-size:var(--text-sm);font-weight:600;color:var(--text-2);margin:0 0 8px 2px}
+.chart-card{border-radius:var(--radius-md);background:var(--bg-1);padding:12px 10px;text-align:center}
+.chart-card h4{font-size:var(--text-xs);font-weight:600;color:var(--text-2);margin:0 0 8px}
 .chart-svg{display:block;margin:0 auto;max-width:100%}
 .chart-legend{font-size:10px;color:var(--text-2);margin-top:6px;line-height:1.4}
-.chart-empty{font-size:12px;color:var(--text-2);padding:20px 8px}
-.progress-history-title{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px 2px}
+.chart-empty{font-size:var(--text-sm);color:var(--text-2);padding:20px 8px}
 
 /* Touch targets & compact controls */
 .btn{min-height:36px}
@@ -639,9 +707,7 @@ body.player-open .main{padding-bottom:0!important}
   .btn-sm{min-height:36px;padding:6px 12px}
 }
 @media(max-width:640px){
-  .progress-charts{grid-template-columns:1fr 1fr;gap:8px}
-  .progress-charts .chart-card:last-child{grid-column:1/-1;max-width:240px;margin:0 auto;width:100%}
-  .anki-ratings{grid-template-columns:repeat(2,1fr)}
+  .progress-details-grid{grid-template-columns:1fr}
 }
 
 @media(min-width:769px){
@@ -805,13 +871,13 @@ class Modal {
     if(onMount) onMount(backdrop, close);
     return {el: backdrop, close};
   }
-  static confirm({title, message, confirmLabel='Confirmar', danger=false}){
+  static confirm({title, message, confirmLabel='Confirmar', cancelLabel='Cancelar', danger=false}){
     return new Promise(resolve=>{
       const {close} = Modal.open({
         title,
         bodyHtml: `<p style="font-size:13.5px;color:var(--text-1);line-height:1.6">${Util.escapeHtml(message)}</p>`,
         footerHtml: `
-          <button class="btn btn-ghost" data-cancel>Cancelar</button>
+          <button class="btn btn-ghost" data-cancel>${Util.escapeHtml(cancelLabel)}</button>
           <button class="btn ${danger?'btn-danger':'btn-primary'}" data-ok>${Util.escapeHtml(confirmLabel)}</button>`,
         onMount(modalEl){
           modalEl.querySelector('[data-cancel]').addEventListener('click', ()=>{ close(); resolve(false); });
@@ -819,6 +885,11 @@ class Modal {
         }
       });
     });
+  }
+  static async doubleConfirm({title, message, sureMessage='Você tem certeza?', danger=true}){
+    const ok1 = await this.confirm({title, message, confirmLabel:'Sim', cancelLabel:'Não', danger});
+    if(!ok1) return false;
+    return this.confirm({title:'Confirmação', message:sureMessage, confirmLabel:'Sim', cancelLabel:'Não', danger});
   }
 }
 
@@ -857,6 +928,10 @@ class StorageManager {
   }
   static deleteExam(id){
     this.saveExams(this.getExams().filter(e=>e.id!==id));
+  }
+  static deleteExams(ids){
+    const drop = new Set(ids);
+    this.saveExams(this.getExams().filter(e=>!drop.has(e.id)));
   }
 
   static getQuestions(){ return this._get(this.KEYS.QUESTIONS, []); }
@@ -1448,7 +1523,7 @@ class Router {
   }
   register(name, view){ this.routes[name] = view; }
   go(name, params={}){
-    const tabMap = {flashcards:{route:'study',tab:'cards'}, study:{route:'study',tab:'simulado'}, profile:{route:'progress'}, history:{route:'progress'}, bank:{route:'content',tab:'questoes'}, progress:{route:'progress'}, dashboard:{route:'home'}};
+    const tabMap = {study:{route:'study'}, profile:{route:'progress'}, history:{route:'progress'}, bank:{route:'content',tab:'questoes'}, progress:{route:'progress'}, dashboard:{route:'home'}};
     if(tabMap[name]){ const m=tabMap[name]; if(m.tab) params={...params,tab:m.tab}; name=m.route||name; }
     if(this.current && this.routes[this.current]?.onLeave) this.routes[this.current].onLeave();
     document.querySelectorAll('#views .view').forEach(v=>v.classList.add('hidden'));
@@ -1497,33 +1572,65 @@ const Icons = {
   close:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>`,
   more:`<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>`,
   eye:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  menu:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>`,
+  star:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 3.1 6.3 7 1-5 4.9 1.2 7L12 18l-6.3 3.2 1.2-7-5-4.9 7-1Z"/></svg>`,
+  starFilled:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 7 1-5 4.9 1.2 7L12 18l-6.3 3.2 1.2-7-5-4.9 7-1Z"/></svg>`,
 };
 
 /* ---------- Dashboard ---------- */
 class DashboardView {
   get title(){ return 'Início'; }
   get crumb(){ return ''; }
+  static _greeting(){
+    const h = new Date().getHours();
+    if(h < 12) return 'Bom dia';
+    if(h < 18) return 'Boa tarde';
+    return 'Boa noite';
+  }
+  static _badgeClass(pct){
+    return pct >= 70 ? 'badge-good' : pct >= 50 ? 'badge-warn' : 'badge-bad';
+  }
   render(el){
     el.classList.add('view-home');
     const session = StorageManager.getSession();
     const sessionExam = session ? StorageManager.getExam(session.examId) : null;
     const em2 = StorageManager.getExams().filter(e=>e.code?.startsWith('EM2-')||e.serie==='2º Ano EM');
-    const next = sessionExam ? null : (em2[0] || StorageManager.getExams().find(e=>e.questionIds?.length));
+    const answered = session?.answers ? Object.keys(session.answers).filter(k=>session.answers[k]!==undefined&&session.answers[k]!==null).length : 0;
+    const totalQ = sessionExam?.questionIds?.length || 0;
+
+    const resumeBlock = sessionExam ? `
+      <div class="home-hero">
+        <div class="home-hero-body">
+          <div class="home-hero-label">Continuar simulado</div>
+          <div class="home-hero-title">${Util.escapeHtml(sessionExam.materia || sessionExam.title)}</div>
+          <div class="home-hero-meta">${answered} de ${totalQ} respondidas</div>
+        </div>
+        <button class="btn btn-primary" id="home-resume" type="button">${Icons.play}</button>
+      </div>` : '';
+
+    const listItems = em2.map(e=>`
+      <li class="home-list-item">
+        <button class="home-list-btn" type="button" data-quick-exam="${e.id}">
+          <span class="home-list-text">
+            <span class="home-list-title">${Util.escapeHtml(e.materia || e.title)}</span>
+            <span class="home-list-meta">${e.questionIds?.length || 0} questões · ${e.timeMinutes || 75} min</span>
+          </span>
+          <span class="home-list-play">${Icons.play}</span>
+        </button>
+      </li>`).join('');
 
     el.innerHTML = `
-      <div class="home-minimal">
-        <h2 class="home-greet">${sessionExam ? 'Continuar de onde parou' : 'O que fazer agora?'}</h2>
-        <button class="btn btn-primary home-cta" id="home-primary" type="button">
-          ${Icons.play}<span>${sessionExam ? 'Continuar simulado' : next ? 'Iniciar simulado' : 'Ir para Estudar'}</span>
-        </button>
-        ${sessionExam ? `<p class="home-hint">${Util.escapeHtml(sessionExam.title)}</p>` : next ? `<p class="home-hint">${Util.escapeHtml(next.materia||next.title)} · ${next.questionIds?.length||0} questões</p>` : ''}
+      <p class="home-kicker">Simulados</p>
+      <h1 class="home-greet">${DashboardView._greeting()}</h1>
+      ${resumeBlock}
+      ${em2.length ? `<ul class="home-list">${listItems}</ul>` : DashboardView._empty('Nenhum simulado', 'Os simulados aparecem aqui após carregar o banco.')}
+      <div class="home-foot">
+        <button class="btn btn-ghost btn-sm" id="home-progress" type="button">Ver progresso</button>
       </div>`;
 
-    el.querySelector('#home-primary').onclick = ()=>{
-      if(sessionExam) PlayerController.start(session.examId, session);
-      else if(next) ExamConfigModal.open(next.id);
-      else App.instance.router.go('study', {tab:'simulado'});
-    };
+    el.querySelector('#home-resume')?.addEventListener('click', ()=> PlayerController.start(session.examId, session));
+    el.querySelector('#home-progress')?.addEventListener('click', ()=> App.instance.router.go('progress'));
+    el.querySelectorAll('[data-quick-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.quickExam)));
   }
   onLeave(){
     const el = document.getElementById('view-home');
@@ -1545,13 +1652,13 @@ class DashboardView {
   }
   static _historyRow(h){
     const pct = h.percentage;
-    const color = pct>=70 ? 'var(--good)' : pct>=50 ? 'var(--warn)' : 'var(--bad)';
+    const cls = DashboardView._badgeClass(pct);
     return `<div class="list-row">
       <div class="meta">
         <div class="title">${Util.escapeHtml(h.examTitle)}</div>
         <div class="desc">${Util.formatDate(h.date)} · ${Util.formatDuration(h.timeSpentSeconds)}</div>
       </div>
-      <span class="badge" style="background:${color}22;color:${color}">${pct}%</span>
+      <span class="badge ${cls}">${pct}%</span>
     </div>`;
   }
   static _empty(title, desc){
@@ -2012,13 +2119,13 @@ class HistoryView {
     }));
   }
   _row(h,i){
-    const color = h.percentage>=70 ? 'var(--good)' : h.percentage>=50 ? 'var(--warn)' : 'var(--bad)';
+    const cls = DashboardView._badgeClass(h.percentage);
     return `<div class="list-row list-row-compact">
       <div class="meta">
         <div class="title">${Util.escapeHtml(h.examTitle)}</div>
         <div class="desc">${Util.formatDate(h.date)} · ${h.correctCount}/${h.totalCount}</div>
       </div>
-      <span class="badge" style="background:${color}22;color:${color}">${h.percentage}%</span>
+      <span class="badge ${cls}">${h.percentage}%</span>
       <button class="btn btn-sm btn-ghost" data-review="${i}">Ver</button>
     </div>`;
   }
@@ -2121,6 +2228,22 @@ class ChartHelpers {
       <text x="${cx}" y="${cy+16}" text-anchor="middle" font-size="16" font-weight="700" fill="${color}">${pct}%</text>
     </svg><div class="chart-legend">Média geral</div>`;
   }
+  static sparkline(history, width=320, height=72){
+    const recent = history.slice(0, 12).reverse();
+    if(!recent.length) return `<div class="chart-empty">Complete um simulado para ver sua evolução.</div>`;
+    const pad = 4;
+    const barGap = 4;
+    const barW = Math.max(8, (width - pad*2 - (recent.length - 1) * barGap) / recent.length);
+    const maxH = height - 24;
+    const bars = recent.map((h,i)=>{
+      const hgt = Math.max(2, (h.percentage / 100) * maxH);
+      const x = pad + i * (barW + barGap);
+      const y = height - 16 - hgt;
+      const cls = h.percentage >= 70 ? 'good' : h.percentage >= 50 ? 'warn' : 'bad';
+      return `<rect x="${x}" y="${y}" width="${barW}" height="${hgt}" rx="2" class="chart-bar-${cls}"><title>${h.percentage}%</title></rect>`;
+    }).join('');
+    return `<svg class="chart-spark" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">${bars}</svg>`;
+  }
 }
 
 class ProgressHubView {
@@ -2129,27 +2252,28 @@ class ProgressHubView {
   get crumb(){ return ''; }
   render(el){
     el.classList.add('view-progress');
-    const {history, g, p, avg, passed, attempts} = ProgressAnalytics.summary();
-    const buckets = ProgressAnalytics.resultBuckets(history);
+    const {history, avg, passed, attempts} = ProgressAnalytics.summary();
     const materias = ProgressAnalytics.accuracyByMateria();
-    const pie = ChartHelpers.pie([
-      {label:'≥70%', value:buckets.aprovado, color:'var(--good)'},
-      {label:'50–69%', value:buckets.media, color:'var(--warn)'},
-      {label:'<50%', value:buckets.baixo, color:'var(--bad)'}
-    ]);
+    const spark = ChartHelpers.sparkline(history);
     const radar = ChartHelpers.radar(materias.map(m=>m.materia), materias.map(m=>m.acc));
     const gauge = ChartHelpers.gauge(avg);
     el.innerHTML = `
       <div class="progress-summary">
         <div class="progress-stat"><strong>${attempts}</strong><span>Simulados</span></div>
         <div class="progress-stat"><strong>${passed}</strong><span>Aprovados</span></div>
-        <div class="progress-stat"><strong>Nv ${p.level}</strong><span>${g.xp} XP</span></div>
+        <div class="progress-stat"><strong>${avg || '—'}${avg ? '%' : ''}</strong><span>Média</span></div>
       </div>
-      <div class="progress-charts">
-        <div class="chart-card"><h4>Resultados</h4>${pie}</div>
-        <div class="chart-card"><h4>Por matéria</h4>${radar}</div>
-        <div class="chart-card"><h4>Desempenho</h4>${gauge}</div>
+      <div class="progress-chart-main">
+        <h4>Últimos resultados</h4>
+        ${spark}
       </div>
+      <details class="progress-details">
+        <summary>Mais detalhes</summary>
+        <div class="progress-details-grid">
+          <div class="chart-card"><h4>Por matéria</h4>${radar}</div>
+          <div class="chart-card"><h4>Desempenho geral</h4>${gauge}</div>
+        </div>
+      </details>
       <div class="progress-history-title">Histórico</div>
       <div id="prog-hist"></div>`;
     this.history.render(el.querySelector('#prog-hist'), false);
@@ -2223,7 +2347,7 @@ class ProfileView {
     const avg = history.length ? Math.round(history.reduce((s,h)=>s+h.percentage,0)/history.length) : 0;
     const unlocked = g.achievements.length;
     el.innerHTML = `
-      <div class="card glass" style="margin-bottom:16px">
+      <div class="card" style="margin-bottom:16px">
         <div class="row between" style="margin-bottom:10px;flex-wrap:wrap;gap:8px">
           <span class="xp-badge" style="font-size:14px;padding:5px 12px">Nível ${p.level}</span>
           <span class="streak-pill">Sequência: ${g.bestStreak}</span>
@@ -2375,49 +2499,49 @@ class ExamConfigModal {
     const defaultTime = settings.defaultTimer || 60;
     const defaultExam = exams.find(e=>e.id===defaultExamId);
     const examTime = defaultExam?.timeMinutes || defaultTime;
+    const total = defaultExam?.questionIds?.length || 50;
+    const defN = Math.min(15, total);
+    const defTo = Math.min(15, total);
     return `
       <div class="exam-config">
         <div class="field">
           <label for="ec-candidate">Nome do candidato</label>
           <input class="input" id="ec-candidate" type="text" placeholder="Seu nome" value="${Util.escapeHtml(candidate)}" autocomplete="name">
         </div>
+        <div class="field">
+          <label for="ec-exam-global">Prova</label>
+          <select class="select" id="ec-exam-global">${opts}</select>
+        </div>
         <fieldset class="ec-fieldset">
           <legend class="ec-legend">Modo de seleção de questões</legend>
-          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="full" checked> Fazer o exame selecionado</label>
-          <div class="ec-mode-panel" data-panel="full">
-            <div class="field" style="margin-bottom:0"><label for="ec-exam-full">Prova</label><select class="select" id="ec-exam-full">${opts}</select></div>
-          </div>
+          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="full" checked> Fazer o exame selecionado (todas as questões)</label>
+          <div class="ec-mode-panel" data-panel="full"></div>
           <label class="ec-radio-row"><input type="radio" name="ec-mode" value="sections"> Fazer questões das seções selecionadas</label>
           <div class="ec-mode-panel hidden" data-panel="sections">
-            <div class="field" style="margin-bottom:8px"><label for="ec-exam-sections">Prova</label><select class="select" id="ec-exam-sections">${opts}</select></div>
             <div class="ec-section-toolbar">
               <button type="button" class="btn btn-sm" data-select-all>Selecionar tudo</button>
               <button type="button" class="btn btn-sm btn-ghost" data-deselect-all>Desmarcar tudo</button>
             </div>
             <div class="ec-section-tree" id="ec-sections">${sectionsHtml}</div>
           </div>
-          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="count"> Fazer N questões do exame inteiro</label>
-          <div class="ec-mode-panel hidden" data-panel="count">
-            <div class="field" style="margin-bottom:8px"><label for="ec-exam-count">Prova</label><select class="select" id="ec-exam-count">${opts}</select></div>
-            <div class="field" style="margin-bottom:0"><label for="ec-n-count">Quantidade (N)</label><input class="input" id="ec-n-count" type="number" min="1" value="10"><span class="hint" id="ec-count-hint"></span></div>
-          </div>
-          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="range"> Fazer intervalo de questões de X a Y</label>
-          <div class="ec-mode-panel hidden" data-panel="range">
-            <div class="field" style="margin-bottom:8px"><label for="ec-exam-range">Prova</label><select class="select" id="ec-exam-range">${opts}</select></div>
-            <div class="form-grid">
-              <div class="field" style="margin-bottom:0"><label for="ec-range-from">De (X)</label><input class="input" id="ec-range-from" type="number" min="1" value="1"></div>
-              <div class="field" style="margin-bottom:0"><label for="ec-range-to">Até (Y)</label><input class="input" id="ec-range-to" type="number" min="1" value="10"></div>
-            </div>
-            <span class="hint" id="ec-range-hint"></span>
-          </div>
-          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="incorrect"> Fazer questões erradas N+ vezes</label>
-          <div class="ec-mode-panel hidden" data-panel="incorrect">
-            <div class="field" style="margin-bottom:8px"><label for="ec-exam-incorrect">Prova</label><select class="select" id="ec-exam-incorrect">${opts}</select></div>
-            <div class="field" style="margin-bottom:0"><label for="ec-n-incorrect">Mínimo de erros (N)</label><input class="input" id="ec-n-incorrect" type="number" min="1" value="2"><span class="hint" id="ec-incorrect-hint"></span></div>
-          </div>
+          <label class="ec-radio-row">
+            <input type="radio" name="ec-mode" value="count">
+            Sortear <input class="input ec-inline-input" id="ec-n-count" type="number" min="1" value="${defN}"> questões do exame inteiro
+          </label>
+          <div class="ec-mode-panel hidden" data-panel="count"><span class="hint" id="ec-count-hint"></span></div>
+          <label class="ec-radio-row">
+            <input type="radio" name="ec-mode" value="range">
+            Sortear questões de <input class="input ec-inline-input" id="ec-range-from" type="number" min="1" value="1"> até <input class="input ec-inline-input" id="ec-range-to" type="number" min="1" value="${defTo}">
+          </label>
+          <div class="ec-mode-panel hidden" data-panel="range"><span class="hint" id="ec-range-hint"></span></div>
+          <label class="ec-radio-row">
+            <input type="radio" name="ec-mode" value="incorrect">
+            Questões erradas <input class="input ec-inline-input" id="ec-n-incorrect" type="number" min="0" value="0"> ou mais vezes
+          </label>
+          <div class="ec-mode-panel hidden" data-panel="incorrect"><span class="hint" id="ec-incorrect-hint"></span></div>
         </fieldset>
         <div class="ec-options">
-          <label class="checkbox-row"><input type="checkbox" id="ec-training"> Modo treino (feedback imediato)</label>
+          <label class="checkbox-row"><input type="checkbox" id="ec-training"> Modo treino</label>
           <div class="ec-timer-row">
             <label class="checkbox-row"><input type="checkbox" id="ec-timer-on" checked> Cronômetro ativo</label>
             <div class="field ec-timer-min"><label for="ec-time">Tempo limite (min)</label><input class="input" id="ec-time" type="number" min="1" max="600" value="${examTime}"></div>
@@ -2464,14 +2588,13 @@ class ExamConfigModal {
       </div>`).join('');
   }
 
-  static _examIdForMode(modalEl, mode){
-    const map = {full:'ec-exam-full', sections:'ec-exam-sections', count:'ec-exam-count', range:'ec-exam-range', incorrect:'ec-exam-incorrect'};
-    return modalEl.querySelector('#'+(map[mode]||map.full))?.value;
+  static _examIdForMode(modalEl){
+    return modalEl.querySelector('#ec-exam-global')?.value;
   }
 
   static _refreshHints(modalEl){
     const mode = modalEl.querySelector('[name="ec-mode"]:checked')?.value || 'full';
-    const examId = this._examIdForMode(modalEl, mode);
+    const examId = this._examIdForMode(modalEl);
     const exam = StorageManager.getExam(examId);
     const total = exam?.questionIds?.length || 0;
     const countHint = modalEl.querySelector('#ec-count-hint');
@@ -2480,7 +2603,7 @@ class ExamConfigModal {
     if(countHint) countHint.textContent = total ? `Prova com ${total} questão(ões).` : '';
     if(rangeHint) rangeHint.textContent = total ? `Intervalo válido: 1 a ${total}.` : '';
     if(incorrectHint && exam){
-      const n = Math.max(1, parseInt(modalEl.querySelector('#ec-n-incorrect')?.value, 10) || 1);
+      const n = Math.max(0, parseInt(modalEl.querySelector('#ec-n-incorrect')?.value, 10) || 0);
       const match = (exam.questionIds||[]).filter(qid=>{
         const s = StorageManager.getStat(qid);
         return (s.seen - s.correct) >= n;
@@ -2488,7 +2611,7 @@ class ExamConfigModal {
       incorrectHint.textContent = `${match} questão(ões) com ${n}+ erro(s) nesta prova.`;
     }
     const timeInput = modalEl.querySelector('#ec-time');
-    const examSel = modalEl.querySelector('#ec-exam-full');
+    const examSel = modalEl.querySelector('#ec-exam-global');
     if(timeInput && examSel && mode==='full' && !modalEl._timeEdited){
       const ex = StorageManager.getExam(examSel.value);
       if(ex) timeInput.value = ex.timeMinutes;
@@ -2496,35 +2619,43 @@ class ExamConfigModal {
   }
 
   static _bind(modalEl, closeFn){
-    const syncExamDropdowns = (examId)=>{
-      ['ec-exam-full','ec-exam-sections','ec-exam-count','ec-exam-range','ec-exam-incorrect'].forEach(id=>{
-        const sel = modalEl.querySelector('#'+id);
-        if(sel) sel.value = examId;
-      });
+    const syncExam = (examId)=>{
+      modalEl.querySelector('#ec-exam-global').value = examId;
       modalEl.querySelector('#ec-sections').innerHTML = this._sectionsHtml(this._sectionTree(examId));
+      const total = StorageManager.getExam(examId)?.questionIds?.length || 0;
+      const nCount = modalEl.querySelector('#ec-n-count');
+      const rFrom = modalEl.querySelector('#ec-range-from');
+      const rTo = modalEl.querySelector('#ec-range-to');
+      if(nCount && !modalEl._countEdited) nCount.value = Math.min(15, total || 15);
+      if(rFrom && !modalEl._rangeEdited){ rFrom.value = 1; rTo.value = Math.min(15, total || 15); }
       this._refreshHints(modalEl);
     };
 
     modalEl.querySelectorAll('[name="ec-mode"]').forEach(r=>{
       r.addEventListener('change', ()=>{
-        modalEl.querySelectorAll('.ec-mode-panel').forEach(p=>p.classList.add('hidden'));
-        modalEl.querySelector(`[data-panel="${r.value}"]`)?.classList.remove('hidden');
+        modalEl.querySelectorAll('.ec-mode-panel').forEach(p=>{
+          if(p.dataset.panel === 'full') return;
+          p.classList.add('hidden');
+        });
+        const panel = modalEl.querySelector(`[data-panel="${r.value}"]`);
+        if(panel && r.value !== 'full') panel.classList.remove('hidden');
         this._refreshHints(modalEl);
       });
     });
 
-    modalEl.querySelector('#ec-exam-full')?.addEventListener('change', e=>syncExamDropdowns(e.target.value));
-    modalEl.querySelector('#ec-exam-sections')?.addEventListener('change', e=>{
-      modalEl.querySelector('#ec-sections').innerHTML = this._sectionsHtml(this._sectionTree(e.target.value));
-      this._refreshHints(modalEl);
+    modalEl.querySelector('#ec-exam-global')?.addEventListener('change', e=> syncExam(e.target.value));
+    modalEl.querySelector('#ec-n-count')?.addEventListener('input', ()=>{ modalEl._countEdited = true; this._refreshHints(modalEl); });
+    modalEl.querySelector('#ec-range-from')?.addEventListener('input', ()=>{ modalEl._rangeEdited = true; this._refreshHints(modalEl); });
+    modalEl.querySelector('#ec-range-to')?.addEventListener('input', ()=>{ modalEl._rangeEdited = true; this._refreshHints(modalEl); });
+    modalEl.querySelector('#ec-n-incorrect')?.addEventListener('input', ()=> this._refreshHints(modalEl));
+
+    modalEl.querySelectorAll('.ec-inline-input').forEach(inp=>{
+      inp.addEventListener('click', e=> e.stopPropagation());
+      inp.addEventListener('focus', ()=>{
+        const radio = inp.closest('.ec-radio-row')?.querySelector('input[type=radio]');
+        if(radio) radio.checked = true;
+      });
     });
-    ['ec-exam-count','ec-exam-range','ec-exam-incorrect'].forEach(id=>{
-      modalEl.querySelector('#'+id)?.addEventListener('change', ()=>this._refreshHints(modalEl));
-    });
-    modalEl.querySelector('#ec-n-count')?.addEventListener('input', ()=>this._refreshHints(modalEl));
-    modalEl.querySelector('#ec-range-from')?.addEventListener('input', ()=>this._refreshHints(modalEl));
-    modalEl.querySelector('#ec-range-to')?.addEventListener('input', ()=>this._refreshHints(modalEl));
-    modalEl.querySelector('#ec-n-incorrect')?.addEventListener('input', ()=>this._refreshHints(modalEl));
 
     modalEl.querySelector('[data-select-all]')?.addEventListener('click', ()=>{
       modalEl.querySelectorAll('.ec-section-cb').forEach(cb=>{ cb.checked = true; });
@@ -2562,11 +2693,11 @@ class ExamConfigModal {
 
     switch(mode){
       case 'full':
-        examId = modalEl.querySelector('#ec-exam-full').value;
+        examId = modalEl.querySelector('#ec-exam-global').value;
         questionIds = [...(StorageManager.getExam(examId)?.questionIds || [])];
         break;
       case 'sections': {
-        examId = modalEl.querySelector('#ec-exam-sections').value;
+        examId = modalEl.querySelector('#ec-exam-global').value;
         const tree = this._sectionTree(examId);
         const checked = [...modalEl.querySelectorAll('.ec-section-cb:checked')];
         if(!checked.length) return {ok:false, error:'Selecione ao menos uma seção.'};
@@ -2576,7 +2707,7 @@ class ExamConfigModal {
         break;
       }
       case 'count': {
-        examId = modalEl.querySelector('#ec-exam-count').value;
+        examId = modalEl.querySelector('#ec-exam-global').value;
         const pool = StorageManager.getExam(examId)?.questionIds || [];
         const n = parseInt(modalEl.querySelector('#ec-n-count').value, 10);
         if(!n || n < 1) return {ok:false, error:'Informe uma quantidade válida (N ≥ 1).'};
@@ -2585,7 +2716,7 @@ class ExamConfigModal {
         break;
       }
       case 'range': {
-        examId = modalEl.querySelector('#ec-exam-range').value;
+        examId = modalEl.querySelector('#ec-exam-global').value;
         const pool = StorageManager.getExam(examId)?.questionIds || [];
         const x = parseInt(modalEl.querySelector('#ec-range-from').value, 10);
         const y = parseInt(modalEl.querySelector('#ec-range-to').value, 10);
@@ -2595,9 +2726,9 @@ class ExamConfigModal {
         break;
       }
       case 'incorrect': {
-        examId = modalEl.querySelector('#ec-exam-incorrect').value;
+        examId = modalEl.querySelector('#ec-exam-global').value;
         const n = parseInt(modalEl.querySelector('#ec-n-incorrect').value, 10);
-        if(!n || n < 1) return {ok:false, error:'Informe N ≥ 1.'};
+        if(n == null || n < 0 || isNaN(n)) return {ok:false, error:'Informe N ≥ 0.'};
         const pool = StorageManager.getExam(examId)?.questionIds || [];
         questionIds = pool.filter(qid=>{
           const s = StorageManager.getStat(qid);
@@ -2633,7 +2764,7 @@ class PlayerController {
       passScore: 70, questionIds: weak.map(q=>q.id)
     });
     StorageManager.upsertExam(tempExam);
-    this.start(tempExam.id);
+    ExamConfigModal.open(tempExam.id);
   }
 
   static start(configOrExamId, resumeSession=null){
@@ -2756,7 +2887,7 @@ class PlayerController {
     root.innerHTML = `
       <div class="player-top">
         <button class="btn btn-icon btn-ghost" id="p-exit" title="Sair" aria-label="Sair">${Icons.close}</button>
-        <button class="btn btn-icon btn-ghost" id="p-toggle-nav" title="Mostrar/ocultar questões">☰</button>
+        <button class="btn btn-icon btn-ghost" id="p-toggle-nav" title="Mostrar/ocultar questões" aria-label="Mostrar ou ocultar questões">${Icons.menu}</button>
         ${cand}${train}
         <div class="player-progress-wrap"><div class="player-progress-bar" id="p-progress" style="width:0%"></div></div>
         ${this.state.allowRevealAnswer ? `<div class="player-reveal-grp" id="p-reveal-grp">
@@ -2776,7 +2907,7 @@ class PlayerController {
           <button class="btn" id="p-skip">Pular</button>
         </div>
         <div class="grp">
-          <button class="btn" id="p-mark">☆ Marcar</button>
+          <button class="btn" id="p-mark" type="button">${Icons.star} Marcar</button>
           <button class="btn btn-primary" id="p-next">Próxima →</button>
           <button class="btn btn-danger" id="p-finish">Finalizar</button>
         </div>
@@ -3183,7 +3314,7 @@ class PlayerController {
     if(!btn) return;
     const q = this.state.questions[this.state.currentIndex];
     const isMarked = this.state.marked.has(q.id);
-    btn.textContent = isMarked ? '★ Marcada' : '☆ Marcar';
+    btn.innerHTML = isMarked ? `${Icons.starFilled} Marcada` : `${Icons.star} Marcar`;
     btn.classList.toggle('btn-primary', isMarked);
     btn.setAttribute('aria-pressed', String(isMarked));
   }
@@ -3300,7 +3431,7 @@ class ResultView {
     const gaps = AITutor.gapsFromDetail(detail).filter(g=>g.acc<100);
     if(!gaps.length) return '';
     const weak = gaps.slice(0,4);
-    return `<div class="card glass" style="margin:8px 0 4px;border-color:var(--warn)">
+    return `<div class="card" style="margin:8px 0 4px;border-color:var(--warn)">
       <div style="font-weight:600;font-size:13.5px;margin-bottom:8px">Análise de lacunas</div>
       ${weak.map(g=>`<div class="gap-row">
         <span class="gap-cat">${Util.escapeHtml(g.cat)}</span>
@@ -3313,7 +3444,7 @@ class ResultView {
     const p = Gamification.progress();
     const gained = gameResult?.gained || 0;
     const leveled = gameResult?.leveledUp;
-    return `<div class="card glass" style="margin:8px 0 4px">
+    return `<div class="card" style="margin:8px 0 4px">
       <div class="row between" style="margin-bottom:8px">
         <span class="xp-badge">Nível ${p.level}</span>
         <span style="font-size:12.5px;color:var(--good);font-weight:700">+${gained} XP</span>
@@ -4243,43 +4374,28 @@ const FSRS = {
     else if(q.type==='sequence') ans=(q.sequenceItems||[]).map(s=>s.text).join(' → ');
     return 'Resposta: '+(ans||'Não cadastrada.')+(q.explanation?'\n\nExplicação: '+q.explanation:'');
   },
-  makeExam(title,qs){ if(!qs.length){Toast.show('Nenhuma questão encontrada.','warn');return;} const ex=new Exam({id:Util.uid('exam_filter'),title,description:'Prova gerada por filtro.',category:'Revisão',timeMinutes:Math.max(5,Math.round(qs.length*1.2)),passScore:70,questionIds:qs.map(q=>q.id)}); StorageManager.upsertExam(ex); PlayerController.start(ex.id); }
+  makeExam(title,qs){ if(!qs.length){Toast.show('Nenhuma questão encontrada.','warn');return;} const ex=new Exam({id:Util.uid('exam_filter'),title,description:'Prova gerada por filtro.',category:'Revisão',timeMinutes:Math.max(5,Math.round(qs.length*1.2)),passScore:70,questionIds:qs.map(q=>q.id)}); StorageManager.upsertExam(ex); ExamConfigModal.open(ex.id); }
 };
 
 class StudyFilterView {
   render(el){
     const qs=FSRS.questions(); const cats=FSRS.uniq(qs.map(q=>q.category||'Sem categoria')); const temas=FSRS.uniq(qs.flatMap(q=>FSRS.temas(q)));
-    el.innerHTML=`<div class="card card-compact"><div style="font-size:14px;font-weight:650;margin-bottom:6px">Prova por filtro</div><div style="font-size:12.5px;color:var(--text-2);margin-bottom:14px">Escolha categoria ou tema e inicie uma revisão focada.</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Categoria</label><select class="select" id="sf-cat"><option value="">Todas</option>${cats.map(x=>`<option>${Util.escapeHtml(x)}</option>`).join('')}</select></div><div class="field"><label>Tema</label><select class="select" id="sf-tema"><option value="">Todos</option>${temas.map(x=>`<option>${Util.escapeHtml(x)}</option>`).join('')}</select></div><div class="field"><label>Quantidade</label><select class="select" id="sf-qtd"><option>10</option><option>20</option><option>30</option></select></div></div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="sf-start">Iniciar prova</button><button class="btn" id="sf-cards">Abrir como Cards</button><button class="btn btn-ghost" id="sf-smart">Revisão inteligente</button></div><div id="sf-count" style="font-size:12px;color:var(--text-2);margin-top:12px"></div></div>`;
+    el.innerHTML=`<div class="card card-compact"><div style="font-size:14px;font-weight:650;margin-bottom:6px">Prova por filtro</div><div style="font-size:12.5px;color:var(--text-2);margin-bottom:14px">Escolha categoria ou tema e inicie uma revisão focada.</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Categoria</label><select class="select" id="sf-cat"><option value="">Todas</option>${cats.map(x=>`<option>${Util.escapeHtml(x)}</option>`).join('')}</select></div><div class="field"><label>Tema</label><select class="select" id="sf-tema"><option value="">Todos</option>${temas.map(x=>`<option>${Util.escapeHtml(x)}</option>`).join('')}</select></div><div class="field"><label>Quantidade</label><select class="select" id="sf-qtd"><option>10</option><option>20</option><option>30</option></select></div></div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="sf-start">Iniciar prova</button><button class="btn btn-ghost" id="sf-smart">Revisão inteligente</button></div><div id="sf-count" style="font-size:12px;color:var(--text-2);margin-top:12px"></div></div>`;
     const filter=()=>{ let out=qs.slice(); const cat=el.querySelector('#sf-cat').value,tema=el.querySelector('#sf-tema').value,qtd=Number(el.querySelector('#sf-qtd').value)||10; if(cat)out=out.filter(q=>(q.category||'Sem categoria')===cat); if(tema)out=out.filter(q=>FSRS.temas(q).includes(tema)); out=out.slice(0,qtd); el.querySelector('#sf-count').textContent=out.length+' questão(ões) selecionada(s)'; return out; };
     el.querySelectorAll('select').forEach(x=>x.onchange=filter);
     el.querySelector('#sf-start').onclick=()=>FSRS.makeExam('Prova por filtro',filter());
-    el.querySelector('#sf-cards').onclick=()=>{ const ids=filter().map(q=>q.id); if(!ids.length){Toast.show('Nenhuma questão no filtro.','warn');return;} App.instance.router.go('study',{tab:'cards',preset:ids}); };
     el.querySelector('#sf-smart').onclick=()=>PlayerController.startSmartReview();
     filter();
   }
 }
 
-class AnkiCompactView {
-  render(el,params={}){ this.all=FSRS.questions(); this.queue=params.preset?this.all.filter(q=>params.preset.includes(q.id)):this.all.slice().sort((a,b)=>FSRS.priority(b)-FSRS.priority(a)); this.index=0; this.revealed=false; this.done=0; this._draw(el); }
-  _draw(el){
-    el.innerHTML='<div id="ak-work" class="anki-compact"></div>';
-    this._drawWork(el);
-  }
-  _drawWork(el){
-    const work=el.querySelector('#ak-work');
-    if(!this.queue.length){ work.innerHTML=DashboardView._empty('Nenhum card','Crie questões em Conteúdo ou importe um arquivo.'); return; }
-    const q=this.queue[Math.min(this.index,this.queue.length-1)]; const pct=Math.round(this.done/Math.max(1,this.queue.length)*100);
-    work.innerHTML=`<div class="card anki-card card-compact"><div class="anki-front">${Util.escapeHtml(q.text||'Sem enunciado')}</div>${this.revealed?`<div class="anki-back">${Util.escapeHtml(FSRS.backText(q))}</div>`:''}<div class="anki-meta"><span class="anki-meta-count">${this.index+1} / ${this.queue.length}</span>${!this.revealed?'<button class="btn btn-primary" id="ak-show">Mostrar resposta</button>':`<div class="anki-ratings"><button class="anki-rate anki-rate-again" id="ak-again" type="button">Again</button><button class="anki-rate anki-rate-hard" id="ak-hard" type="button">Hard</button><button class="anki-rate anki-rate-good" id="ak-good" type="button">Good</button><button class="anki-rate anki-rate-easy" id="ak-easy" type="button">Easy</button></div>`}</div></div>`;
-    work.querySelector('#ak-show')?.addEventListener('click',()=>{this.revealed=true;this._drawWork(el);});
-    ['again','hard','good','easy'].forEach(r=>{ work.querySelector('#ak-'+r)?.addEventListener('click',()=>{ FSRS.schedule(q,r); this.done++; this.index++; if(this.index>=this.queue.length){Toast.show('Sessão concluída.','success');this.queue=this.all.slice().sort((a,b)=>FSRS.priority(b)-FSRS.priority(a));this.index=0;this.done=0;} this.revealed=false;this._drawWork(el); }); });
-  }
-}
-
 class StudyHubView {
-  constructor(){ this.anki=new AnkiCompactView(); }
   get title(){ return 'Estudar'; }
   get crumb(){ return ''; }
-  render(el,params={}){ const tab=params.tab||'simulado'; const tabs=[{id:'simulado',label:'Simulado'},{id:'cards',label:'Cards'}]; el.innerHTML=HubHelpers.tabs(tabs,tab)+'<div id="hub-panel"></div>'; HubHelpers.bindTabs(el,'study'); const panel=el.querySelector('#hub-panel'); if(tab==='cards')this.anki.render(panel,params); else this._simulado(panel); }
+  render(el){
+    el.innerHTML = '<div id="hub-panel"></div>';
+    this._simulado(el.querySelector('#hub-panel'));
+  }
   _simulado(panel){
     const exams=StorageManager.getExams().filter(e=>e.questionIds?.length);
     const groups = {};
@@ -4305,27 +4421,98 @@ class StudyHubView {
 }
 
 class ContentHubView {
-  constructor(){ this.bank=new QuestionBankView(); }
+  constructor(){
+    this.bank = new QuestionBankView();
+    this._selectMode = false;
+    this._selected = new Set();
+    this._panelEl = null;
+  }
   get title(){ return 'Biblioteca'; }
   get crumb(){ return ''; }
-  render(el,params={}){ const tab=params.tab||'exames'; const tabs=[{id:'exames',label:'Exames'},{id:'questoes',label:'Questões'}]; el.innerHTML=HubHelpers.tabs(tabs,tab)+'<div id="hub-panel"></div>'; HubHelpers.bindTabs(el,'content'); const panel=el.querySelector('#hub-panel'); if(tab==='questoes')this.bank.render(panel); else this._exames(panel); }
-  _exames(panel){
-    const exams=StorageManager.getExams();
+  render(el, params={}){
+    const tab = params.tab || 'exames';
+    const tabs = [{id:'exames', label:'Exames'}, {id:'questoes', label:'Questões'}];
+    el.innerHTML = HubHelpers.tabs(tabs, tab) + '<div id="hub-panel"></div>';
+    HubHelpers.bindTabs(el, 'content');
+    this._panelEl = el.querySelector('#hub-panel');
+    if(tab === 'questoes') this.bank.render(this._panelEl);
+    else this._renderExames();
+  }
+  _libraryRow(e){
+    if(this._selectMode){
+      const on = this._selected.has(e.id);
+      const title = e.title || '(sem título)';
+      const meta = [e.materia||e.serie, e.questionIds?.length+' questões', e.timeMinutes+' min'].filter(Boolean).join(' · ');
+      return `<label class="list-row list-row-compact list-row-select ${on?'checked':''}">
+        <input type="checkbox" data-exam-cb="${e.id}" ${on?'checked':''}>
+        <div class="meta">
+          <div class="title">${Util.escapeHtml(title)}</div>
+          <div class="desc">${Util.escapeHtml(meta)}</div>
+        </div>
+      </label>`;
+    }
+    return DashboardView._examRow(e);
+  }
+  _renderExames(){
+    const panel = this._panelEl;
+    if(!panel) return;
+    const exams = StorageManager.getExams();
     const groups = {};
     exams.forEach(e=>{ const key = e.serie || e.category || 'Outros'; groups[key]=groups[key]||[]; groups[key].push(e); });
     const sortedKeys = Object.keys(groups).sort((a,b)=>{ if(a.includes('2º')) return -1; if(b.includes('2º')) return 1; return a.localeCompare(b,'pt-BR'); });
-    const body = sortedKeys.map(k=>`<div class="study-group"><div class="study-group-title">${Util.escapeHtml(k)}</div>${groups[k].sort((a,b)=>(a.materia||a.title||'').localeCompare(b.materia||b.title||'','pt-BR')).map(DashboardView._examRow).join('')}</div>`).join('');
-    panel.innerHTML=`<div class="hub-actions"><details class="hub-menu"><summary class="btn btn-sm btn-ghost btn-icon" aria-label="Mais opções">${Icons.more}</summary><div class="hub-menu-panel"><button class="btn btn-sm" id="ch-new">${Icons.plus} Novo exame</button><button class="btn btn-sm" id="ch-import">${Icons.upload} Importar</button></div></details></div><div>${exams.length?body:DashboardView._empty('Nenhum exame','Use o menu para criar ou importar.')}</div>`;
-    panel.querySelector('#ch-new').onclick=()=>App.instance.router.go('builder',{});
-    panel.querySelector('#ch-import').onclick=()=>ImportController.openModal();
-    panel.querySelectorAll('[data-play-exam]').forEach(b=>b.addEventListener('click',()=>ExamConfigModal.open(b.dataset.playExam)));
-    panel.querySelectorAll('[data-edit-exam]').forEach(b=>b.addEventListener('click',()=>App.instance.router.go('builder',{examId:b.dataset.editExam})));
+    const body = sortedKeys.map(k=>`<div class="study-group"><div class="study-group-title">${Util.escapeHtml(k)}</div>${groups[k].sort((a,b)=>(a.materia||a.title||'').localeCompare(b.materia||b.title||'','pt-BR')).map(e=>this._libraryRow(e)).join('')}</div>`).join('');
+    const selCount = this._selected.size;
+    const toolbar = this._selectMode ? `
+      <div class="hub-actions-bar">
+        <span class="hub-stat" style="margin:0">${selCount} selecionado(s)</span>
+        <span class="spacer"></span>
+        <button class="btn btn-sm btn-danger" id="ch-delete" type="button" ${selCount?'':'disabled'}>${Icons.trash} Excluir</button>
+        <button class="btn btn-sm btn-ghost" id="ch-cancel-sel" type="button">Cancelar</button>
+      </div>` : `
+      <div class="hub-actions-bar">
+        <button class="btn btn-sm" id="ch-new" type="button">${Icons.plus} Novo exame</button>
+        <button class="btn btn-sm" id="ch-import" type="button">${Icons.upload} Importar</button>
+        <span class="spacer"></span>
+        <button class="btn btn-sm btn-ghost" id="ch-select" type="button">Selecionar</button>
+      </div>`;
+    panel.innerHTML = `${toolbar}<div id="ch-list">${exams.length ? body : DashboardView._empty('Nenhum exame','Crie ou importe um exame.')}</div>`;
+    panel.querySelector('#ch-new')?.addEventListener('click', ()=> App.instance.router.go('builder', {}));
+    panel.querySelector('#ch-import')?.addEventListener('click', ()=> ImportController.openModal());
+    panel.querySelector('#ch-select')?.addEventListener('click', ()=>{ this._selectMode = true; this._selected.clear(); this._renderExames(); });
+    panel.querySelector('#ch-cancel-sel')?.addEventListener('click', ()=>{ this._selectMode = false; this._selected.clear(); this._renderExames(); });
+    panel.querySelector('#ch-delete')?.addEventListener('click', ()=> this._deleteSelected());
+    panel.querySelectorAll('[data-exam-cb]').forEach(cb=>{
+      cb.addEventListener('change', ()=>{
+        const id = cb.dataset.examCb;
+        if(cb.checked) this._selected.add(id); else this._selected.delete(id);
+        this._renderExames();
+      });
+    });
+    if(!this._selectMode){
+      panel.querySelectorAll('[data-play-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.playExam)));
+      panel.querySelectorAll('[data-edit-exam]').forEach(b=> b.addEventListener('click', ()=> App.instance.router.go('builder', {examId:b.dataset.editExam})));
+    }
+  }
+  async _deleteSelected(){
+    const ids = [...this._selected];
+    if(!ids.length) return;
+    const ok = await Modal.doubleConfirm({
+      title:'Excluir',
+      message:`Excluir ${ids.length} exame(s)?`,
+      sureMessage:'Você tem certeza?',
+      danger:true
+    });
+    if(!ok) return;
+    StorageManager.deleteExams(ids);
+    this._selectMode = false;
+    this._selected.clear();
+    Toast.show(`${ids.length} exame(s) excluído(s).`, 'success');
+    this._renderExames();
   }
 }
 
 function ludicAnalogy(q){ const text=(q?.text||'').toLowerCase(),cat=(q?.category||'').toLowerCase(),tags=(q?.tags||[]).join(' ').toLowerCase(); const base=text+' '+cat+' '+tags; if(/senha|password|mfa|autentica|login|credencial/.test(base))return 'Correlação lúdica: pense nisso como a chave da sua casa — MFA exige provar que é você.'; if(/phishing|email|link|anexo|malware/.test(base))return 'Correlação lúdica: mensagem suspeita — confira quem enviou antes de clicar.'; if(/rede|network|firewall|dns|ip|vpn/.test(base))return 'Correlação lúdica: IP é endereço, DNS agenda, firewall portaria, VPN túnel seguro.'; if(/cloud|azure|aws|storage/.test(base))return 'Correlação lúdica: armário compartilhado — quem tem a chave e o que pode alterar.'; if(/ingl[eê]s|english|vocab|grammar/.test(base))return 'Correlação lúdica: frases úteis numa viagem, não só palavras soltas.'; if(/certifica|exam|sc-|az-|defender|sentinel/.test(base))return 'Correlação lúdica: simulado do dia da prova — elimine alternativas improváveis.'; return 'Correlação lúdica: explique para alguém no café — comparação simples = entendimento.'; }
 function setupLudicComments(){ if(typeof QuestionEditorController==='undefined'||QuestionEditorController._ludicPatched)return; const orig=QuestionEditorController.openModal.bind(QuestionEditorController); QuestionEditorController.openModal=function(q,onSaved){ const result=orig(q,onSaved); setTimeout(()=>{ const ta=document.querySelector('#qe-comments'); const modal=ta?.closest('.modal'); const save=modal?.querySelector('[data-save]'); if(save&&!save._ludicCapture){ save._ludicCapture=true; save.addEventListener('click',()=>{ if(!ta)return; const current={text:modal.querySelector('#qe-text')?.value||'',category:modal.querySelector('#qe-category')?.value||'',tags:(modal.querySelector('#qe-tags')?.value||'').split(',').map(x=>x.trim()).filter(Boolean)}; const a=ludicAnalogy(current); if(!ta.value.includes('Correlação lúdica:'))ta.value=a+(ta.value?'\n\n'+ta.value:''); },true); } },80); return result; }; QuestionEditorController._ludicPatched=true; }
-function setupAnkiKeyboard(){ if(window._ankiKeys)return; window._ankiKeys=true; document.addEventListener('keydown',e=>{ if(!App.instance||App.instance.router.current!=='study')return; if(e.target&&['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return; if(e.key==='ArrowLeft'){e.preventDefault();(document.querySelector('#ak-again')||document.querySelector('#ak-show'))?.click();} if(e.key==='ArrowRight'){e.preventDefault();(document.querySelector('#ak-good')||document.querySelector('#ak-show'))?.click();} }); }
 function parseAppHash(){ const parts=(location.hash||'').replace(/^#/,'').split('/').filter(Boolean); return {route:parts[0]||'home',tab:parts[1]||null}; }
 
 /* =========================================================================
@@ -4343,13 +4530,12 @@ class App {
     this._bindTopbar();
     this.applySettings(StorageManager.getSettings());
     setupLudicComments();
-    setupAnkiKeyboard();
     const hash = parseAppHash();
     const valid = ['home','study','content','progress','builder','settings','result','review'];
     const route = valid.includes(hash.route) ? hash.route : 'home';
-    this.router.go(route, hash.tab ? {tab: hash.tab} : {});
+    const params = hash.tab && hash.tab !== 'cards' ? {tab: hash.tab} : {};
+    this.router.go(route, params);
     this._setupPWA();
-    this._maybeOnboard();
   }
   _registerRoutes(){
     this.router.register('home', new DashboardView());
@@ -4395,10 +4581,10 @@ class App {
   _setupPWA(){
     try{
       // Manifest injetado via Blob (funciona quando servido por http/https)
-      const icon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='108' fill='%234f8cff'/%3E%3Ctext x='256' y='340' font-family='Arial' font-size='240' font-weight='bold' fill='white' text-anchor='middle'%3EEF%3C/text%3E%3C/svg%3E";
+      const icon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='108' fill='%23c17f59'/%3E%3Ctext x='256' y='340' font-family='Arial' font-size='240' font-weight='bold' fill='white' text-anchor='middle'%3EEF%3C/text%3E%3C/svg%3E";
       const manifest = {
         name:'ExamForge — Simulador de Exames', short_name:'ExamForge',
-        start_url:'.', display:'standalone', background_color:'#0d1117', theme_color:'#0d1117',
+        start_url:'.', display:'standalone', background_color:'#141210', theme_color:'#141210',
         description:'Simulador de exames offline, acessível e gamificado.',
         icons:[
           {src:icon, sizes:'192x192', type:'image/svg+xml', purpose:'any maskable'},
@@ -4456,36 +4642,6 @@ class App {
     }
   }
 
-  /* ---------- Onboarding (coach marks no primeiro uso) ---------- */
-  _maybeOnboard(){
-    if(StorageManager.isOnboarded()) return;
-    const steps = [
-      {t:'Bem-vindo ao ExamForge', p:'Simulador offline para o 2º ano do ensino médio. Poucos cliques, foco no estudo.'},
-      {t:'Navegação principal', p:'Início, Estudar, Biblioteca e Progresso nas abas fixas. Ajustes no ícone de engrenagem no topo.'},
-      {t:'Simulados por matéria', p:'50 questões por disciplina, organizadas por sub-matéria.'},
-      {t:'Configure antes de iniciar', p:'Escolha seções, quantidade, timer e modo treino no diálogo de prova.'}
-    ];
-    let i = 0;
-    const backdrop = document.createElement('div');
-    backdrop.className = 'coach-backdrop';
-    const render = ()=>{
-      const s = steps[i];
-      backdrop.innerHTML = `<div class="coach-card" role="dialog" aria-modal="true" aria-label="${Util.escapeHtml(s.t)}">
-        <h3>${Util.escapeHtml(s.t)}</h3>
-        <p>${Util.escapeHtml(s.p)}</p>
-        <div class="coach-steps">${steps.map((_,k)=>`<span class="cs ${k<=i?'on':''}"></span>`).join('')}</div>
-        <div class="row between">
-          <button class="btn btn-ghost" data-skip>Pular</button>
-          <button class="btn btn-primary" data-next>${i<steps.length-1?'Próximo':'Começar'}</button>
-        </div>
-      </div>`;
-      backdrop.querySelector('[data-skip]').addEventListener('click', done);
-      backdrop.querySelector('[data-next]').addEventListener('click', ()=>{ if(i<steps.length-1){ i++; render(); } else done(); });
-    };
-    function done(){ StorageManager.setOnboarded(); backdrop.remove(); }
-    document.body.appendChild(backdrop);
-    render();
-  }
 }
 
 /* Enhancement layers usam window.* — em strict mode as classes não vinculam ao window automaticamente */
