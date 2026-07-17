@@ -19,13 +19,11 @@ def sync():
         )
 
     pattern_idx = (
-        rf'(<script src="data/{re.escape(BANK)}"></script>\s*'
-        r'<script src="forge/knowledge-forge\.js"></script>\s*<script>)'
+        r'(<script src="forge/knowledge-forge\.js" defer></script>\s*<script>)'
         r'(.*?)(/\* =+\s*\n   APP BOOTSTRAP)'
     )
     pattern_404 = (
-        rf'(<script src="data/{re.escape(BANK)}"></script>\s*'
-        r'(?:<script src="forge/knowledge-forge\.js"></script>\s*)?<script>)'
+        r'(<script src="forge/knowledge-forge\.js"(?: defer)?></script>\s*<script>)'
         r'(.*?)(/\* =+\s*\n   APP BOOTSTRAP)'
     )
     m_idx = re.search(pattern_idx, idx, re.DOTALL)

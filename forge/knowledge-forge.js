@@ -16,7 +16,7 @@ const ForgeStorage = {
   _set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
   getConfig(){
     return {...{
-      provider:'auto', apiUrl:'https://api.openai.com/v1/chat/completions',
+      provider:'local', apiUrl:'https://api.openai.com/v1/chat/completions',
       model:'gpt-4o-mini', apiKey:'', maxRetries:3, useLibraryRag:true
     }, ...this._get(this.KEYS.CONFIG, {})};
   },
@@ -331,7 +331,7 @@ const ForgeRAG = {
       needle.forEach(w=>{ if(blob.includes(w)) score++; });
       return {q, score, text: (q.text||q.stemPt||'').slice(0, 280)};
     }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0, limit);
-    return scored.map(s=>({id:s.q.id, text:s.text, score:s.score}));
+    return scored.map(s=>({id:s.q.id, text:s.text, score:s.score, q:s.q}));
   },
 
   ingestTextFile(name, text){
@@ -341,9 +341,110 @@ const ForgeRAG = {
   }
 };
 
+const ForgeProviderLocal = {
+  generate(intent, config){
+    const type = intent.type;
+    const topic = intent.topic || 'Conteúdo';
+    const n = Math.min(Math.max(intent.quantity || 10, 1), 50);
+    const rag = ForgeRAG.retrieve(intent, n);
+    const qsFromLib = rag.filter(r=>r.q).map(r=>r.q);
+    const allQs = qsFromLib.length
+      ? qsFromLib
+      : (typeof StorageManager !== 'undefined' ? StorageManager.getQuestions() : []);
+    const needle = String(topic).toLowerCase().split(/\s+/).filter(w=>w.length>2);
+    const matched = allQs.filter(q=>{
+      const blob = [q.text,q.stemPt,q.stemEn,q.explanation,q.category,q.materia,q.submateria,...(q.tags||[])].join(' ').toLowerCase();
+      return !needle.length || needle.some(w=>blob.includes(w));
+    }).slice(0, n);
+
+    if(type === 'flashcards' && matched.length){
+      const items = matched.map(q=>{
+        const ans = (q.options||[]).find(o=>o.correct)?.text || q.explanation || q.explanationPt || '';
+        return {
+          front: q.text || q.stemPt || q.stemEn || topic,
+          back: ans || '—',
+          explanation: q.explanation || q.explanationPt || '',
+          category: q.category || q.submateria || topic,
+          difficulty: q.level || intent.difficulty || 'medio',
+          tags: [...new Set([...(q.tags||[]).slice(0,4), 'forge-local', topic])]
+        };
+      });
+      return Promise.resolve({type:'flashcards', topic, language:intent.language, items});
+    }
+
+    if(['quiz','exam','certification'].includes(type) && matched.length >= 3){
+      const items = matched.map(q=>({
+        stem: q.text || q.stemPt || q.stemEn,
+        options: (q.options||[]).length
+          ? q.options.map(o=>({text:o.text || o.textPt || o.textEn, correct:!!o.correct}))
+          : [{text:'Verdadeiro', correct:true},{text:'Falso', correct:false}],
+        explanation: q.explanation || q.explanationPt || '',
+        level: q.level || intent.difficulty,
+        category: q.category || q.submateria || topic,
+        tags: [...(q.tags||[]), 'forge-local']
+      }));
+      if(type === 'exam' || type === 'certification'){
+        return Promise.resolve({
+          type:'exam',
+          title:`Simulado — ${topic}`,
+          description:'Montado a partir da sua biblioteca Velora (sem API externa)',
+          passScore:70, timeMinutes:60, language:intent.language, items
+        });
+      }
+      return Promise.resolve({type:'quiz', topic, language:intent.language, items});
+    }
+
+    if(rag.length && ['summary','article','lesson'].includes(type)){
+      const body = rag.map(r=>r.text).join('\n\n').slice(0, 4000);
+      if(type === 'summary'){
+        return Promise.resolve({type:'summary', title:`Resumo: ${topic}`, content:body, keywords:[topic], language:intent.language, category:topic});
+      }
+      if(type === 'article'){
+        return Promise.resolve({type:'article', title:`Artigo: ${topic}`, language:intent.language, body, keywords:[topic]});
+      }
+      return Promise.resolve({
+        type:'lesson', title:`Lição — ${topic}`, language:intent.language,
+        sections:[{heading:topic, content:body.slice(0,1200), objectives:['Revisar conceitos da biblioteca']}]
+      });
+    }
+
+    return null;
+  }
+};
+
+const ForgeProviderOllama = {
+  async generate(system, user, config){
+    const url = config.apiUrl || 'http://localhost:11434/api/chat';
+    const model = config.model || 'llama3.2';
+    const res = await fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model,
+        stream:false,
+        format:'json',
+        messages:[{role:'system', content:system},{role:'user', content:user}]
+      })
+    });
+    if(!res.ok){
+      const err = await res.text().catch(()=>res.statusText);
+      throw new Error(`Ollama ${res.status}: ${err.slice(0,200)}`);
+    }
+    const json = await res.json();
+    const content = json.message?.content || json.response || '';
+    return ForgeProvider._parseJson(content);
+  }
+};
+
 const ForgeProvider = {
   async generate(system, user, config, intent){
-    if(!config.apiKey || config.provider === 'mock'){
+    const provider = config.provider || 'local';
+    if(provider === 'ollama'){
+      return ForgeProviderOllama.generate(system, user, config, intent);
+    }
+    if(!config.apiKey || provider === 'local' || provider === 'mock'){
+      const local = await ForgeProviderLocal.generate(intent, config);
+      if(local) return local;
       return ForgeProviderMock.generate(intent, config);
     }
     const res = await fetch(config.apiUrl, {
@@ -552,7 +653,7 @@ const ForgeOrchestrator = {
       intent,
       status: 'preview',
       data,
-      provider: config.apiKey ? config.model : 'mock'
+      provider: config.apiKey ? (config.model || 'openai') : (config.provider || 'local')
     };
     ForgeStorage.addHistory(entry);
     return {entry, intent, data};

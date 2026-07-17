@@ -84,6 +84,10 @@
 html,body{height:100%;max-width:100%;overflow:hidden}
 body{
   font-family:var(--sans);
+}
+body.font-mono{font-family:var(--mono)}
+body.font-sans{font-family:var(--sans)}
+body{
   background:var(--gradient-aurora);
   background-attachment:fixed;
   color:var(--text-0);
@@ -477,9 +481,9 @@ a{color:var(--accent)}
 /* ---------- Loading ---------- */
 #loading-overlay{
   position:fixed;inset:0;background:var(--bg-overlay);backdrop-filter:blur(4px);z-index:400;
-  display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;
 }
-#loading-overlay.show{display:flex}
+#loading-overlay.hidden{display:none}
 .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -1051,11 +1055,10 @@ body[data-network="offline"] .network-pill.is-offline::before{
 
 <div id="player-view"></div>
 <div id="toast-region"></div>
-<div id="loading-overlay"><div class="spinner"></div><div id="loading-msg" style="font-size:13px;color:var(--text-1)">Carregando…</div></div>
+<div id="loading-overlay"><div class="spinner"></div><div id="loading-msg" style="font-size:13px;color:var(--text-1)">Preparando Velora…</div></div>
 <div id="modal-region"></div>
 
-<script src="data/knowledge-os-bank.js"></script>
-<script src="forge/knowledge-forge.js"></script>
+<script src="forge/knowledge-forge.js" defer></script>
 <script>
 'use strict';
 /* =========================================================================
@@ -1183,7 +1186,7 @@ const I18n = {
       'forge.title':'Forja','forge.subtitle':'Motor de geração estruturada — não é chat. Comando → JSON → validação → banco.',
       'forge.command':'Comando','forge.commandPh':'Ex.: Gere 20 flashcards sobre História do Brasil…',
       'forge.generate':'Gerar prévia','forge.save':'Salvar no banco','forge.voice':'Falar','forge.config':'Configurações da IA',
-      'forge.apiKey':'Chave API (OpenAI-compatible)','forge.apiUrl':'URL da API','forge.model':'Modelo','forge.mockHint':'Sem chave: modo demo (JSON válido de exemplo).',
+      'forge.apiKey':'Chave API (opcional — fica só neste dispositivo)','forge.apiUrl':'URL da API','forge.model':'Modelo','forge.provider':'Provedor','forge.providerLocal':'Biblioteca local (sem conta)','forge.providerOllama':'Ollama no seu PC (grátis)','forge.providerOpenai':'OpenAI-compatible (chave opcional)','forge.mockHint':'Padrão: monta conteúdo real a partir da sua biblioteca, sem cadastro. Ollama (localhost) ou chave API são opcionais — nada é enviado aos servidores do Velora.',
       'forge.history':'Histórico de gerações','forge.examples':'Exemplos','forge.regenerate':'Regenerar','forge.duplicate':'Duplicar','forge.export':'Exportar','forge.template':'Salvar modelo','forge.uploadDoc':'Enviar documento (texto)',
       'fc.filterTitle':'Montar sessão','fc.filterHint':'Combine filtros (opcional). Vazio = baralho inteiro.',
       'fc.scopeDue':'Revisão FSRS (vencidos + novos)','fc.scopeAll':'Todos os cards','fc.scopeNew':'Só novos','fc.scopeMarked':'Só marcados ★',
@@ -1250,7 +1253,7 @@ const I18n = {
       'forge.title':'Forge','forge.subtitle':'Structured generation engine — not a chat. Command → JSON → validate → persist.',
       'forge.command':'Command','forge.commandPh':'E.g. Generate 20 flashcards about World History…',
       'forge.generate':'Generate preview','forge.save':'Save to database','forge.voice':'Speak','forge.config':'AI settings',
-      'forge.apiKey':'API key (OpenAI-compatible)','forge.apiUrl':'API URL','forge.model':'Model','forge.mockHint':'No key: demo mode (valid sample JSON).',
+      'forge.apiKey':'API key (optional — stays on this device only)','forge.apiUrl':'API URL','forge.model':'Model','forge.provider':'Provider','forge.providerLocal':'Local library (no account)','forge.providerOllama':'Ollama on your PC (free)','forge.providerOpenai':'OpenAI-compatible (optional key)','forge.mockHint':'Default: builds real content from your library with no signup. Ollama (localhost) or an API key are optional — nothing is sent to Velora servers.',
       'forge.history':'Generation history','forge.examples':'Examples','forge.regenerate':'Regenerate','forge.duplicate':'Duplicate','forge.export':'Export','forge.template':'Save template','forge.uploadDoc':'Upload document (text)',
       'fc.filterTitle':'Build session','fc.filterHint':'Combine filters (optional). Empty = full deck.',
       'fc.scopeDue':'FSRS review (due + new)','fc.scopeAll':'All cards','fc.scopeNew':'New only','fc.scopeMarked':'Marked ★ only',
@@ -1340,6 +1343,18 @@ const HelpCenter = {
           '<p>Em <strong>Ajustes → Dados de demonstração</strong> você pode:</p><ul><li><strong>Gerar dados demo</strong> — simula histórico de sessões, estatísticas por domínio e progresso FSRS para visualizar gráficos sem estudar horas.</li><li><strong>Remover dados demo</strong> — apaga apenas entradas marcadas como demo; seus dados reais são preservados.</li></ul><p>Útil para explorar Progresso (radar, histórico, distribuição) antes de acumular histórico real.</p>',
           '<p>In <strong>Settings → Demo data</strong>:</p><ul><li><strong>Generate demo data</strong> — simulates session history, domain stats and FSRS progress to preview charts.</li><li><strong>Remove demo data</strong> — deletes demo entries only; real data is kept.</li></ul><p>Useful to explore Progress before building real history.</p>'
         )},
+      {id:'forge-ai', section:'faq', kw:['forja','forge','ia','api','ollama','gerar','demo'],
+        title:L('Forja — gerar conteúdo sem expor conta','Forge — generate content without exposing your account'),
+        body:L(
+          '<p>A <strong>Forja</strong> (Início → badge Knowledge OS, ou Biblioteca → <em>Forja IA</em>) gera flashcards, questões e simulados a partir de um comando.</p><p><strong>Sem cadastro (padrão):</strong> provedor <em>Biblioteca local</em> monta conteúdo real a partir das questões já carregadas no Velora — nenhuma chave, nenhum envio ao nosso servidor.</p><p><strong>Ollama (opcional):</strong> IA gratuita no seu PC (<code>localhost:11434</code>) — instale o Ollama, escolha o provedor na Forja e use sem conta na nuvem.</p><p><strong>API externa (opcional):</strong> chave OpenAI-compatible fica <strong>só no localStorage deste navegador</strong>; o Velora não a armazena em servidor. Se não houver chave e a biblioteca não tiver matches, cai em prévia demo rotulada.</p>',
+          '<p><strong>Forge</strong> generates flashcards, questions and exams from a command.</p><p><strong>No signup (default):</strong> <em>Local library</em> provider builds real content from questions already in Velora — no key, nothing sent to our servers.</p><p><strong>Ollama (optional):</strong> free local AI on your PC. <strong>External API (optional):</strong> key stays in this browser only.</p>'
+        )},
+      {id:'progressive-mode', section:'faq', kw:['progressivo','incremental','bloco','fase','aprendizagem'],
+        title:L('Modo progressivo — blocos e revisão cumulativa','Progressive mode — blocks and cumulative review'),
+        body:L(
+          '<p>Em Biblioteca → Trilhas → ▶ numa certificação → <strong>Progressivo</strong>:</p><ul><li>Blocos de 10/20/25/50 questões em ordem fixa</li><li>4 fases: ordem fixa → embaralhar perguntas → embaralhar tudo → validação com meta de acertos</li><li>Ao passar, libera o próximo bloco e revisa automaticamente tudo estudado até ali</li></ul><p>A mesma trilha ativa aparece nas abas Questões e Flashcards (faixa no topo) para continuar ou revisar cards do bloco.</p>',
+          '<p>Library → Tracks → ▶ on a certification → <strong>Progressive</strong>: blocks of 10–50 questions, four phases, cumulative review. The active track strip also appears in Questions and Flashcards tabs.</p>'
+        )},
       {id:'not-velora', section:'faq', kw:['nao e','not','vce','duolingo','anki','dumps'],
         title:L('O que o Velora NÃO é?','What Velora is NOT?'),
         body:L(
@@ -1372,17 +1387,17 @@ const HelpCenter = {
           '<p><strong>Topo:</strong></p><ul><li><strong>✕</strong> — sair (confirma; salva sessão pausada se não enviar)</li><li><strong>☰</strong> — mostrar/ocultar grade de questões (no mobile inicia colapsada)</li><li><strong>Aprendizado</strong> — badge amarelo no modo treino</li><li><strong>Barra de progresso</strong> — questão atual / total</li><li><strong>⏸</strong> — pausar/retomar cronômetro (modo prova)</li><li><strong>Esta</strong> — olho: revela/oculta <em>só esta questão</em></li><li><strong>Todas</strong> — ícone camadas: liga/desliga revelar <em>todas</em> (modo fixo; desabilita "Esta")</li><li><strong>⋯</strong> — Explicar (IA) · Pausar · Sair</li></ul><p><strong>Rodapé:</strong> ← Anterior · ★ Marcar · Próxima → / Enviar sessão</p><p><strong>Modo Aprendizado:</strong> feedback após responder; botão Explicar; olhos ativos.</p><p><strong>Modo Prova completa:</strong> cronômetro; revisão pré-envio; olhos se permitido em Ajustes.</p><p><strong>Atalhos:</strong> ←/→ ou Enter (próxima) · M (marcar) · 1-9 ou A-D (alternativas) · swipe horizontal no mobile.</p>',
           '<p><strong>Top bar:</strong> ✕ exit · ☰ question grid (collapsed on mobile) · Learning badge · progress · ⏸ timer · <strong>This</strong> eye (current Q) · <strong>All</strong> layers icon (all Qs) · ⋯ menu</p><p><strong>Footer:</strong> ← Previous · ★ Mark · Next → / Submit</p><p><strong>Learning mode:</strong> instant feedback · Explain · eye toggles</p><p><strong>Full exam:</strong> timer · pre-submit review · eyes if enabled in Settings</p><p><strong>Shortcuts:</strong> arrows/Enter · M mark · 1-9/A-D · horizontal swipe</p>'
         )},
-      {id:'library-certs', section:'howto', kw:['biblioteca','trilhas','tracks','library','exame','importar'],
+      {id:'library-certs', section:'howto', kw:['biblioteca','trilhas','tracks','library','exame','importar','forja','progressivo'],
         title:L('Biblioteca — Trilhas','Library — Tracks'),
         body:L(
-          '<p>Organiza <strong>pacotes de estudo</strong> (trilhas) — agrupamentos de questões que você estuda de várias formas.</p><ul><li>Toque <strong>▶</strong> — Personalizar (Aprendizado / Flashcards / Prova)</li><li><strong>+ Novo exame</strong> — criar trilha ou sessão personalizada (*)</li><li><strong>Importar</strong> — CSV/JSON de questões e trilhas</li><li><strong>Revisão inteligente</strong> — atalho para lacunas (rodapé)</li></ul><p>Importe ou crie conteúdo na aba Questões; cada questão gera flashcard e estatísticas automaticamente.</p>',
-          '<p>Organizes <strong>study packs</strong> (tracks) — question groups you study in multiple ways.</p><ul><li>Tap <strong>▶</strong> — Customize (Learning / Flashcards / Exam)</li><li><strong>+ New exam</strong> — create custom track (*)</li><li><strong>Import</strong> — CSV/JSON</li><li><strong>Smart review</strong> — gap shortcut (footer)</li></ul><p>Create or import in Questions; each question auto-generates flashcards and stats.</p>'
+          '<p>Organiza <strong>pacotes de estudo</strong> (trilhas/certificações).</p><ul><li><strong>▶</strong> — Personalizar (Aprendizado / Flashcards / Prova / <strong>Progressivo</strong>)</li><li><strong>Forja IA</strong> — gerar conteúdo (barra de ações; sem banner extra)</li><li><strong>+ Novo exame</strong> · <strong>Importar</strong> · <strong>Revisão inteligente</strong></li></ul><p>Modo progressivo conecta Trilhas, Questões e Flashcards pela mesma trilha ativa.</p>',
+          '<p>Study packs (tracks/certifications). ▶ opens Customize (Learning / Flashcards / Exam / <strong>Progressive</strong>). <strong>Forge AI</strong> in the action bar. Progressive mode links Tracks, Questions and Flashcards via one active track strip.</p>'
         )},
-      {id:'library-questions', section:'howto', kw:['questoes','questions','banco','bank','criar','tipos'],
+      {id:'library-questions', section:'howto', kw:['questoes','questions','banco','bank','criar','tipos','forja'],
         title:L('Biblioteca — Questões','Library — Questions'),
         body:L(
-          '<p>Banco hierárquico: <strong>trilha → matéria → sub-tópico → questões</strong>.</p><p><strong>Tipos:</strong> single, multi, boolean, short text, matching, sequence, image.</p><p>Cada questão alimenta estatísticas, domínios no radar (via tags), flashcard FSRS e sessões inteligentes.</p>',
-          '<p>Hierarchical bank: track → subject → sub-topic → questions. Supported types: single, multi, boolean, short, matching, sequence, image. Each question feeds stats, domain radar (via tags), FSRS flashcard and smart sessions.</p>'
+          '<p>Banco hierárquico: <strong>trilha → matéria → sub-tópico → questões</strong>.</p><p>Barra superior: busca · <strong>Forja IA</strong> · <strong>+</strong> nova questão. Tipos: single, multi, boolean, short, matching, sequence, image.</p><p>Cada questão alimenta flashcards FSRS, estatísticas e modo progressivo (quando ativo).</p>',
+          '<p>Hierarchical bank with search, <strong>Forge AI</strong> and + new question. Each question feeds FSRS flashcards, stats and progressive mode when active.</p>'
         )},
       {id:'library-flashcards', section:'howto', kw:['flashcards','cards','fsrs','anki','repeticao','estrela','olho'],
         title:L('Biblioteca — Flashcards (FSRS)','Library — Flashcards (FSRS)'),
@@ -1396,11 +1411,17 @@ const HelpCenter = {
           '<p><strong>Em destaque:</strong> gauge mastery · 4 KPIs · pontos fortes/lacunas · <strong>Estudar lacunas</strong>.</p><p><strong>Colapsado:</strong> radar de domínios · mais stats · evolução · distribuição por trilha.</p><p><strong>Histórico:</strong> dropdown 5–Todas · botão <strong>Revisar</strong> · limpar 🗑.</p>',
           '<p><strong>Visible:</strong> mastery gauge · 4 KPIs · strengths/gaps · Study gaps.</p><p><strong>Collapsed:</strong> domain radar · more stats · trend · distribution by track.</p><p><strong>History:</strong> dropdown 5–All · Review · clear.</p>'
         )},
-      {id:'settings', section:'howto', kw:['ajustes','settings','tema','idioma','pwa','historico','feedback'],
+      {id:'settings', section:'howto', kw:['ajustes','settings','tema','idioma','pwa','historico','feedback','fonte','tamanho'],
         title:L('Ajustes — todas as opções','Settings — all options'),
         body:L(
-          '<ul><li><strong>Tema escuro/claro</strong> — alterna na hora (switch ou Salvar)</li><li><strong>Idioma da plataforma</strong> — PT-BR ou EN-US (menus, FAQ, Progresso)</li><li><strong>Fonte / Tamanho</strong> — Sans, Mono · P, M, G</li><li><strong>Idioma das questões</strong> — Dual EN+PT · English · Português</li><li><strong>Tempo padrão (min)</strong> — default do cronômetro em novos simulados</li><li><strong>Feedback após responder</strong> — mostra correção imediata no treino</li><li><strong>Permitir revelar resposta manualmente</strong> — botões Esta/Todas no player</li><li><strong>Finalizar a qualquer momento</strong> — enviar sessão incompleta</li><li><strong>Histórico em Progresso</strong> — quantas tentativas listar (5/10/20/50/Todas)</li><li><strong>Dados demo</strong> — gerar/remover histórico simulado</li><li><strong>Instalar aplicativo</strong> — PWA offline</li></ul><p>Toque <strong>Salvar</strong> para persistir preferências de estudo. Idioma da plataforma aplica imediatamente ao trocar.</p>',
-          '<ul><li>Dark/light theme · Platform language PT/EN · Font/size · Question language · Default timer · Feedback after answer · Allow manual reveal · Finish anytime · History limit in Progress · Demo data · Install PWA</li></ul><p>Tap <strong>Save</strong> for study prefs. Platform language applies immediately on change.</p>'
+          '<ul><li><strong>Tema escuro/claro</strong> — alterna na hora</li><li><strong>Idioma da plataforma</strong> — PT-BR ou EN-US (aplica imediatamente)</li><li><strong>Fonte / Tamanho</strong> — Sans ou Mono · P, M, G — <em>pré-visualização imediata</em>; toque <strong>Salvar</strong> para persistir</li><li><strong>Idioma das questões</strong> — Dual EN+PT · English · Português</li><li><strong>Tempo padrão · Feedback · Revelar resposta · Finalizar a qualquer momento</strong></li><li><strong>Histórico em Progresso</strong> · <strong>Dados demo</strong> · <strong>Instalar aplicativo (PWA)</strong></li></ul>',
+          '<ul><li>Dark/light theme · Platform language (instant) · Font/size (Sans/Mono, S/M/L — live preview; Save to persist) · Question language · Timer/feedback/reveal/finish · History limit · Demo data · Install PWA</li></ul>'
+        )},
+      {id:'forge-how', section:'howto', kw:['forja','forge','gerar','comando','ollama','biblioteca'],
+        title:L('Forja — gerar e salvar conteúdo','Forge — generate and save content'),
+        body:L(
+          '<ol><li>Abra a Forja (badge na Início ou <strong>Forja IA</strong> na Biblioteca).</li><li>Digite um comando (ex.: <em>Gere 20 flashcards sobre LGPD</em>).</li><li>Fonte recomendada: <strong>Conhecimento do modelo</strong> ou <strong>Biblioteca (RAG)</strong> — usa conteúdo real local.</li><li>Toque <strong>Gerar prévia</strong> → revise o JSON → <strong>Salvar no banco</strong>.</li><li>Opcional: em Configurações, escolha Ollama (PC local) ou chave API (só neste dispositivo).</li></ol>',
+          '<ol><li>Open Forge from Home badge or Library <strong>Forge AI</strong>.</li><li>Enter a command. Prefer library/RAG source for real local content.</li><li>Generate preview → Save to database. Optional: Ollama or API key in settings (device-local only).</li></ol>'
         )},
       {id:'import', section:'howto', kw:['importar','csv','json','exportar','perfil'],
         title:L('Importar e exportar conteúdo','Import and export content'),
@@ -1450,11 +1471,11 @@ const HelpCenter = {
           '<p>O Velora organiza conhecimento em camadas:</p><ul><li><strong>Trilhas</strong> — pacotes de estudo (simulados/sessões) com conjuntos de questões</li><li><strong>Questões</strong> — banco hierárquico por trilha, matéria e sub-tópico</li><li><strong>Flashcards</strong> — gerados automaticamente de cada questão (FSRS)</li></ul><p>Você pode <strong>criar</strong>, <strong>importar</strong> (CSV/JSON) ou usar conteúdo já carregado. Tudo alimenta mastery, lacunas e revisão inteligente da mesma forma.</p><p>Roadmap: Knowledge Nodes persistidos, grafo visual e novas views (Feynman, casos práticos).</p>',
           '<p>Velora organizes knowledge in layers:</p><ul><li><strong>Tracks</strong> — study packs (exam/session configs) with question sets</li><li><strong>Questions</strong> — hierarchical bank by track, subject, sub-topic</li><li><strong>Flashcards</strong> — auto-generated from each question (FSRS)</li></ul><p>Create, import (CSV/JSON) or use preloaded content — all feeds mastery, gaps and smart review the same way.</p><p>Roadmap: persisted Knowledge Nodes, visual graph and new views (Feynman, practical cases).</p>'
         )},
-      {id:'troubleshoot', section:'faq', kw:['problema','erro','nao carrega','reset','limpar','bug'],
+      {id:'troubleshoot', section:'faq', kw:['problema','erro','nao carrega','reset','limpar','bug','lento','fonte'],
         title:L('Problemas comuns','Common issues'),
         body:L(
-          '<ul><li><strong>Sem questões / banco vazio</strong> — recarregue; na primeira visita o app pode carregar conteúdo inicial automaticamente.</li><li><strong>Progresso zerado</strong> — dados locais; limpar cache apaga tudo.</li><li><strong>PWA não instala</strong> — HTTPS; iOS: Compartilhar → Adicionar à Tela de Início.</li><li><strong>Idioma misturado</strong> — separe idioma da plataforma vs questões em Ajustes.</li><li><strong>Olhos não aparecem</strong> — ative "Permitir revelar resposta" em Ajustes.</li><li><strong>Estudar agora sem histórico</strong> — faça uma sessão curta via Personalizar primeiro.</li></ul>',
-          '<ul><li>Empty bank — reload; first visit may auto-load initial content.</li><li>Lost progress — local data; clearing cache removes it.</li><li>PWA won\'t install — HTTPS; iOS: Share → Add to Home Screen.</li><li>Mixed language — separate platform vs question language in Settings.</li><li>Eyes missing — enable "Allow manual reveal" in Settings.</li><li>Study now needs history — run one short session via Customize first.</li></ul>'
+          '<ul><li><strong>Site lento na 1ª visita</strong> — o banco inicial (~4 MB) carrega só uma vez; visitas seguintes usam cache local.</li><li><strong>Sem questões / banco vazio</strong> — recarregue; na primeira visita o app carrega conteúdo automaticamente.</li><li><strong>Fonte/tamanho não mudam</strong> — altere em Ajustes (prévia imediata) e toque <strong>Salvar</strong>.</li><li><strong>Forja só demo</strong> — use provedor Biblioteca local ou importe conteúdo; para IA real local instale Ollama.</li><li><strong>Progresso zerado</strong> — dados locais; limpar cache apaga tudo.</li><li><strong>PWA não instala</strong> — HTTPS; iOS: Compartilhar → Adicionar à Tela de Início.</li></ul>',
+          '<ul><li><strong>Slow first visit</strong> — initial bank loads once; later visits use local cache.</li><li>Empty bank — reload. Font/size — change in Settings and Save. Forge demo only — use Local library provider or Ollama. Lost progress — clearing cache removes local data.</li></ul>'
         )}
     ];
   },
@@ -1489,10 +1510,15 @@ class Toast {
 
 class Loading {
   static show(msg='Carregando…'){
-    document.getElementById('loading-msg').textContent = msg;
-    document.getElementById('loading-overlay').classList.add('show');
+    const overlay = document.getElementById('loading-overlay');
+    const label = document.getElementById('loading-msg');
+    if(label) label.textContent = msg;
+    if(overlay) overlay.classList.remove('hidden');
   }
-  static hide(){ document.getElementById('loading-overlay').classList.remove('show'); }
+  static hide(){
+    const overlay = document.getElementById('loading-overlay');
+    if(overlay) overlay.classList.add('hidden');
+  }
 }
 
 class Modal {
@@ -1556,13 +1582,18 @@ class StorageManager {
     ONBOARDED: 'ef_onboarded_v1',
     STATS: 'ef_qstats'
   };
+  static _mem = {};
   static _get(key, fallback){
+    if(Object.prototype.hasOwnProperty.call(this._mem, key)) return this._mem[key];
     try{
       const raw = localStorage.getItem(key);
-      return raw ? JSON.parse(raw) : fallback;
+      const val = raw ? JSON.parse(raw) : fallback;
+      this._mem[key] = val;
+      return val;
     }catch(e){ console.error('Storage read error', key, e); return fallback; }
   }
   static _set(key, value){
+    this._mem[key] = value;
     try{ localStorage.setItem(key, JSON.stringify(value)); return true; }
     catch(e){ console.error('Storage write error', key, e); Toast.show('Erro ao salvar dados localmente.', 'error'); return false; }
   }
@@ -1585,12 +1616,17 @@ class StorageManager {
 
   static getQuestions(){ return this._get(this.KEYS.QUESTIONS, []); }
   static saveQuestions(qs){ return this._set(this.KEYS.QUESTIONS, qs); }
-  static upsertQuestion(q){
+  static upsertQuestionsBatch(items){
+    if(!items?.length) return;
     const qs = this.getQuestions();
-    const idx = qs.findIndex(x=>x.id===q.id);
-    if(idx>=0) qs[idx]=q; else qs.push(q);
+    const idx = new Map(qs.map((q,i)=>[q.id,i]));
+    items.forEach(q=>{
+      const at = idx.get(q.id);
+      if(at >= 0) qs[at] = q; else { idx.set(q.id, qs.length); qs.push(q); }
+    });
     this.saveQuestions(qs);
   }
+  static upsertQuestion(q){ this.upsertQuestionsBatch([q]); }
   static deleteQuestion(id){ this.saveQuestions(this.getQuestions().filter(q=>q.id!==id)); }
 
   static getHistory(){ return this._get(this.KEYS.HISTORY, []); }
@@ -2933,11 +2969,10 @@ class QuestionBankView {
       : '';
     this.el.innerHTML = `
       ${incStrip}
-      <p class="lib-connect-strip">${I18n.t('lib.forgeHintQuestions')} <button type="button" class="btn-link" id="qb-forge-link">${Icons.sparkles} ${I18n.t('lib.forgeGenerate')}</button></p>
       <div class="row between" style="margin-bottom:12px;gap:8px">
         <input class="input" id="qb-search" placeholder="${I18n.isEn() ? 'Search track, subject or text…' : 'Buscar por prova, matéria ou texto…'}" value="${Util.escapeHtml(filter)}">
         <div style="display:flex;gap:6px;flex-shrink:0">
-          <button class="btn btn-sm btn-ghost" id="qb-forge" type="button" title="${I18n.t('lib.forgeGenerate')}">${Icons.sparkles}</button>
+          <button class="btn btn-sm" id="qb-forge" type="button">${Icons.sparkles} ${I18n.t('lib.forge')}</button>
           <button class="btn btn-sm btn-primary" id="qb-new" type="button">${Icons.plus}</button>
         </div>
       </div>
@@ -2945,7 +2980,6 @@ class QuestionBankView {
     `;
     this.el.querySelector('#qb-new').addEventListener('click', ()=>QuestionEditorController.openModal(null, ()=>this._renderList(this.el.querySelector('#qb-search').value)));
     this.el.querySelector('#qb-forge')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.questionParams()));
-    this.el.querySelector('#qb-forge-link')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.questionParams()));
     IncrementalLearningController.bindStrip(this.el);
     this.el.querySelector('#qb-search').addEventListener('input', e=>this._renderList(e.target.value));
     this._bindActions(all);
@@ -3815,8 +3849,8 @@ class SettingsView {
         </div>
         <div class="form-grid">
           <div class="field field-required"><label>${I18n.t('settings.uiLocale')}</label><select class="select" id="s-ui-locale"><option value="pt-BR" ${uiLoc==='pt-BR'?'selected':''}>${I18n.t('settings.uiPt')}</option><option value="en-US" ${uiLoc==='en-US'?'selected':''}>${I18n.t('settings.uiEn')}</option></select></div>
-          <div class="field"><label>${I18n.t('settings.font')}</label><select class="select" id="s-font"><option value="sans" ${s.font==='sans'?'selected':''}>${I18n.t('settings.fontSans')}</option><option value="mono" ${s.font==='mono'?'selected':''}>${I18n.t('settings.fontMono')}</option></select></div>
-          <div class="field"><label>${I18n.t('settings.fontSize')}</label><select class="select" id="s-fontsize"><option value="0.9" ${s.fontSize==0.9?'selected':''}>P</option><option value="1" ${s.fontSize==1?'selected':''}>M</option><option value="1.15" ${s.fontSize==1.15?'selected':''}>G</option></select></div>
+          <div class="field"><label>${I18n.t('settings.font')}</label><select class="select" id="s-font"><option value="sans" ${s.font!=='mono'?'selected':''}>${I18n.t('settings.fontSans')}</option><option value="mono" ${s.font==='mono'?'selected':''}>${I18n.t('settings.fontMono')}</option></select></div>
+          <div class="field"><label>${I18n.t('settings.fontSize')}</label><select class="select" id="s-fontsize"><option value="0.9" ${Number(s.fontSize)===0.9?'selected':''}>P</option><option value="1" ${Number(s.fontSize||1)===1?'selected':''}>M</option><option value="1.15" ${Number(s.fontSize)===1.15?'selected':''}>G</option></select></div>
           <div class="field"><label>${I18n.t('settings.qLang')}</label><select class="select" id="s-bilingual"><option value="dual" ${(s.bilingualMode||'dual')==='dual'?'selected':''}>${I18n.t('settings.qDual')}</option><option value="en" ${s.bilingualMode==='en'?'selected':''}>${I18n.t('settings.qEn')}</option><option value="pt" ${s.bilingualMode==='pt'?'selected':''}>${I18n.t('settings.qPt')}</option></select></div>
         </div>
       </div>
@@ -3868,6 +3902,16 @@ class SettingsView {
       App.instance.applySettings(merged);
       App.instance.router.go('settings');
     });
+    const previewTypography = ()=>{
+      const merged = {
+        ...StorageManager.getSettings(),
+        font: el.querySelector('#s-font')?.value || 'sans',
+        fontSize: Number(el.querySelector('#s-fontsize')?.value || 1)
+      };
+      App.instance.applySettings(merged);
+    };
+    el.querySelector('#s-font')?.addEventListener('change', previewTypography);
+    el.querySelector('#s-fontsize')?.addEventListener('change', previewTypography);
     const installBtn = el.querySelector('#s-install');
     if(installBtn) installBtn.onclick = ()=> App.instance._promptInstall();
     el.querySelector('#s-demo-gen')?.addEventListener('click', async ()=>{
@@ -6682,7 +6726,11 @@ class BankHierarchy {
 class KnowledgeOSSeeder {
   static FLAG_KEY = 'ef_knowledge_os_seeded_v3';
   static get BANK(){ return typeof KNOWLEDGE_OS_BANK !== 'undefined' ? KNOWLEDGE_OS_BANK : null; }
-  static get TRACKS(){ return this.BANK?.tracks || []; }
+  static get TRACKS(){
+    const bank = this.BANK;
+    if(bank?.tracks?.length) return bank.tracks;
+    try{ return JSON.parse(localStorage.getItem('ef_knowledge_os_tracks_v1')||'[]'); }catch(e){ return []; }
+  }
   static TRILHA_DESC = "Velora Knowledge OS — Privacy, Data Protection, Information Security & Security Management.";
   static NODE_META_SCALAR_KEYS = [
     'primaryLaw', 'secondaryLaw', 'bloomLevel', 'estimatedMinutes', 'cognitiveLevel',
@@ -6819,6 +6867,8 @@ class KnowledgeOSSeeder {
       return;
     }
     DataCleanup.run();
+    const allQuestions = [];
+    const allExams = [];
     bank.certifications.forEach(cert=>{
       const domains = cert.domains || cert.submaterias || {};
       const qs = [];
@@ -6827,9 +6877,9 @@ class KnowledgeOSSeeder {
           qs.push(new Question(this._normalizeQuestion(raw, cert, submateria)));
         });
       });
-      qs.forEach(q => StorageManager.upsertQuestion(q));
+      allQuestions.push(...qs);
       const trilha = this.trilhaLabel(cert);
-      const exam = new Exam({
+      allExams.push(new Exam({
         title: cert.title,
         description: cert.description || '',
         category: trilha,
@@ -6848,9 +6898,11 @@ class KnowledgeOSSeeder {
         tags: [trilha, cert.materia, 'certificação', cert.org || '', cert.trackId || 'global'],
         questionIds: [...new Set(qs.map(q => q.id))],
         stub: !!cert.stub
-      });
-      StorageManager.upsertExam(exam);
+      }));
     });
+    StorageManager.saveQuestions(allQuestions);
+    StorageManager.saveExams(allExams);
+    try{ localStorage.setItem('ef_knowledge_os_tracks_v1', JSON.stringify(this.TRACKS)); }catch(e){}
     localStorage.setItem(this.FLAG_KEY, '1');
   }
 
@@ -7391,7 +7443,6 @@ class ContentHubView {
         <button class="btn btn-sm btn-danger" id="ch-delete" type="button" ${selCount?'':'disabled'}>${Icons.trash} Excluir</button>
         <button class="btn btn-sm btn-ghost" id="ch-cancel-sel" type="button">Cancelar</button>
       </div>` : `
-      <p class="lib-connect-strip">${I18n.t('lib.forgeHintTracks')} <button type="button" class="btn-link" id="ch-forge-link">${Icons.sparkles} ${I18n.t('lib.forgeGenerate')}</button></p>
       <div class="hub-actions-bar">
         <button class="btn btn-sm" id="ch-forge" type="button">${Icons.sparkles} ${I18n.t('lib.forge')}</button>
         <button class="btn btn-sm" id="ch-new" type="button">${Icons.plus} ${I18n.t('lib.newExam')}</button>
@@ -7406,7 +7457,6 @@ class ContentHubView {
     const footer = this._selectMode ? '' : `<div class="hub-footer"><button class="btn btn-ghost btn-sm" id="ch-smart" type="button">${I18n.t('lib.smartReview')}</button></div>`;
     panel.innerHTML = `${activeStrip}${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma trilha','Recarregue a página para carregar o conteúdo inicial.')}</div>${footer}`;
     panel.querySelector('#ch-forge')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.trackParams()));
-    panel.querySelector('#ch-forge-link')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.trackParams()));
     panel.querySelector('#ch-new')?.addEventListener('click', ()=> App.instance.router.go('builder', {}));
     panel.querySelector('#ch-import')?.addEventListener('click', ()=> ImportController.openModal());
     panel.querySelector('#ch-select')?.addEventListener('click', ()=>{ this._selectMode = true; this._selected.clear(); this._renderCertificacoes(); });
@@ -7550,6 +7600,11 @@ class ForgeView {
         <details>
           <summary>${I18n.t('forge.config')}</summary>
           <div class="form-grid" style="margin-top:10px">
+            <div class="field full"><label>${I18n.t('forge.provider')}</label><select class="select" id="forge-provider">
+              <option value="local">${I18n.t('forge.providerLocal')}</option>
+              <option value="ollama">${I18n.t('forge.providerOllama')}</option>
+              <option value="openai">${I18n.t('forge.providerOpenai')}</option>
+            </select></div>
             <div class="field full"><label>${I18n.t('forge.apiKey')}</label><input class="input" type="password" id="forge-api-key" autocomplete="off" placeholder="sk-…"></div>
             <div class="field"><label>${I18n.t('forge.apiUrl')}</label><input class="input" id="forge-api-url"></div>
             <div class="field"><label>${I18n.t('forge.model')}</label><input class="input" id="forge-model"></div>
@@ -7572,8 +7627,9 @@ class ForgeView {
       </div>`;
 
     el.querySelector('#forge-api-key').value = cfg.apiKey || '';
-    el.querySelector('#forge-api-url').value = cfg.apiUrl || 'https://api.openai.com/v1/chat/completions';
-    el.querySelector('#forge-model').value = cfg.model || 'gpt-4o-mini';
+    el.querySelector('#forge-provider').value = cfg.provider || 'local';
+    el.querySelector('#forge-api-url').value = cfg.apiUrl || (cfg.provider === 'ollama' ? 'http://localhost:11434/api/chat' : 'https://api.openai.com/v1/chat/completions');
+    el.querySelector('#forge-model').value = cfg.model || (cfg.provider === 'ollama' ? 'llama3.2' : 'gpt-4o-mini');
     if(savedCmd) el.querySelector('#forge-cmd').value = savedCmd;
 
     this._bind(el);
@@ -7617,11 +7673,24 @@ class ForgeView {
     el.querySelector('#forge-save')?.addEventListener('click', ()=> this._save(el));
     el.querySelector('#forge-save-cfg')?.addEventListener('click', ()=>{
       const c = ForgeStorage.getConfig();
+      c.provider = el.querySelector('#forge-provider')?.value || 'local';
       c.apiKey = el.querySelector('#forge-api-key')?.value?.trim() || '';
       c.apiUrl = el.querySelector('#forge-api-url')?.value?.trim() || c.apiUrl;
       c.model = el.querySelector('#forge-model')?.value?.trim() || c.model;
       ForgeStorage.saveConfig(c);
       Toast.show(I18n.isEn()?'AI settings saved.':'Configurações da IA salvas.', 'success');
+    });
+    el.querySelector('#forge-provider')?.addEventListener('change', ()=>{
+      const p = el.querySelector('#forge-provider')?.value;
+      const url = el.querySelector('#forge-api-url');
+      const model = el.querySelector('#forge-model');
+      if(p === 'ollama'){
+        if(url && (!url.value || url.value.includes('openai.com'))) url.value = 'http://localhost:11434/api/chat';
+        if(model && model.value === 'gpt-4o-mini') model.value = 'llama3.2';
+      } else if(p === 'openai'){
+        if(url && url.value.includes('11434')) url.value = 'https://api.openai.com/v1/chat/completions';
+        if(model && model.value === 'llama3.2') model.value = 'gpt-4o-mini';
+      }
     });
     el.querySelector('#forge-voice')?.addEventListener('click', ()=> this._startVoice(cmd, status));
     el.querySelector('#forge-file')?.addEventListener('change', e=> this._ingestFile(e.target.files?.[0]));
