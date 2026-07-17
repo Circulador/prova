@@ -13,6 +13,7 @@ Velora é um **Knowledge OS** para formação em privacidade e DPO: questões, f
 | Arquitetura | [`docs/MANIFESTO-ARQUITETURA.md`](docs/MANIFESTO-ARQUITETURA.md) |
 | Privacy Knowledge OS | [`docs/PRIVACY-KNOWLEDGE-OS.md`](docs/PRIVACY-KNOWLEDGE-OS.md) |
 | Brief para IAs | [`docs/PLATFORM-BRIEF.md`](docs/PLATFORM-BRIEF.md) |
+| Benchmark estratégico | [`docs/BENCHMARK-STRATEGIC.md`](docs/BENCHMARK-STRATEGIC.md) |
 | Trilhas DPO global | [`docs/DPO-GLOBAL-TRACKS.md`](docs/DPO-GLOBAL-TRACKS.md) |
 | Design system | [`branding/design-system/design-system.md`](branding/design-system/design-system.md) |
 | Agentes Cursor | [`AGENTS.md`](AGENTS.md) |

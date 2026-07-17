@@ -1133,8 +1133,16 @@ const I18n = {
       'home.story':'O Velora nasceu para ajudar pessoas com objetivos, ritmos e sonhos diferentes. Foi criado inicialmente para minha esposa e minha filha, cada uma em uma fase distinta da vida, mas com algo em comum: a vontade de aprender e evoluir todos os dias.',
       'home.family':'Feito com ❤️ para minha família.',
       'home.student':'Estudante','home.tracks':'Trilhas DPO Global',
-      'home.continue':'Continuar simulado','home.answered':'respondidas','home.smartSession':'Sessão inteligente',
+      'home.continue':'Continuar de onde parei','home.answered':'respondidas','home.smartSession':'Sessão inteligente',
+      'home.studyNow':'Estudar agora','home.customize':'Personalizar','home.mastery':'Domínio consolidado','home.gapHint':'Lacuna: {area}',
+      'home.tracksExpand':'Ver trilhas e certificações','home.studyHint':'~10 min · lacunas e revisão',
       'home.presetFull':'Completo','home.presetQuick':'Rápido','home.presetErrors':'Só erros','home.presetSprint':'Sprint','home.presetMarathon':'Maratona',
+      'session.configure':'Configurar sessão','session.start':'Começar','session.examMode':'Prova completa','session.trainMode':'Aprendizado',
+      'session.examHint':'Como na prova — feedback no final.','session.trainHint':'Veja respostas, explique e revise no fluxo.',
+      'player.revealQuestion':'Revelar esta questão','player.revealAll':'Revelar todas (fixo)','player.mark':'Marcar','player.marked':'Marcada',
+      'player.submit':'Enviar sessão','player.next':'Próxima →','player.prev':'← Anterior','player.exitTitle':'Sair da sessão',
+      'player.exitMsg':'Seu progresso será perdido. Deseja realmente sair?',
+      'progress.mastery':'Domínio','progress.sessions':'Sessões','progress.gaps':'Lacunas','progress.questions':'Questões vistas',
       'home.viewProgress':'Ver progresso','home.faq':'FAQ','home.howto':'Como usar',
       'lib.certs':'Certificações','lib.questions':'Questões','lib.flashcards':'Flashcards',
       'lib.newExam':'Novo exame','lib.import':'Importar','lib.select':'Selecionar','lib.smartReview':'Revisão inteligente',
@@ -1163,8 +1171,16 @@ const I18n = {
       'home.story':'Velora was born to help people with different goals, rhythms and dreams. It was first created for my wife and my daughter — each at a different stage of life, but sharing the same desire to learn and grow every day.',
       'home.family':'Made with ❤️ for my family.',
       'home.student':'Learner','home.tracks':'Global DPO Tracks',
-      'home.continue':'Continue exam','home.answered':'answered','home.smartSession':'Smart session',
+      'home.continue':'Continue where you left off','home.answered':'answered','home.smartSession':'Smart session',
+      'home.studyNow':'Study now','home.customize':'Customize','home.mastery':'Consolidated mastery','home.gapHint':'Gap: {area}',
+      'home.tracksExpand':'View tracks and certifications','home.studyHint':'~10 min · gaps and review',
       'home.presetFull':'Full','home.presetQuick':'Quick','home.presetErrors':'Errors only','home.presetSprint':'Sprint','home.presetMarathon':'Marathon',
+      'session.configure':'Configure session','session.start':'Start','session.examMode':'Full exam','session.trainMode':'Learning',
+      'session.examHint':'Exam-like — feedback at the end.','session.trainHint':'See answers, explain and review in flow.',
+      'player.revealQuestion':'Reveal this question','player.revealAll':'Reveal all (fixed)','player.mark':'Mark','player.marked':'Marked',
+      'player.submit':'Submit session','player.next':'Next →','player.prev':'← Previous','player.exitTitle':'Leave session',
+      'player.exitMsg':'Your progress will be lost. Leave anyway?',
+      'progress.mastery':'Mastery','progress.sessions':'Sessions','progress.gaps':'Gaps','progress.questions':'Questions seen',
       'home.viewProgress':'View progress','home.faq':'FAQ','home.howto':'How to use',
       'lib.certs':'Certifications','lib.questions':'Questions','lib.flashcards':'Flashcards',
       'lib.newExam':'New exam','lib.import':'Import','lib.select':'Select','lib.smartReview':'Smart review',
@@ -1222,7 +1238,7 @@ const HelpCenter = {
         body:L('Exclusões: dominadas, respondidas hoje, nunca vistas. Embaralhar questões/alternativas. Estratégias Sprint/Maratona. Filtros por dificuldade e tags. Export/import JSON de perfil.','Exclusions: mastered, answered today, unseen. Shuffle questions/options. Sprint/Marathon strategies. Difficulty and tag filters. JSON profile export/import.')},
       {id:'player', section:'howto', kw:['player','treino','simulado','pausar','explicar'],
         title:L('Player de estudo','Study player'),
-        body:L('Treino: feedback imediato, Explicar (IA), revelar resposta. Simulado: cronômetro, revisão pré-envio, menu ⋯ (marcar, pausar). Footer: Anterior · Marcar · Próxima/Enviar.','Training: instant feedback, Explain (AI), reveal answer. Exam mode: timer, pre-submit review, ⋯ menu (mark, pause). Footer: Previous · Mark · Next/Submit.')},
+        body:L('Treino: feedback imediato, Explicar (IA), olhinho no topo (esta questão ou todas). Simulado: cronômetro, revisão pré-envio. Footer: Anterior · Marcar · Próxima/Enviar.','Training: instant feedback, Explain (AI), eye toggles in top bar (this question or all). Exam mode: timer, pre-submit review. Footer: Previous · Mark · Next/Submit.')},
       {id:'progress', section:'howto', kw:['progresso','radar','kpi','grafico','lacunas'],
         title:L('Progresso e radar','Progress and radar'),
         body:L('KPIs locais: simulados, acertos, sequência, XP. Gráfico de aranha por domínio (Legal, Governança, Técnico…). Pontos fortes e lacunas com botão <strong>Estudar lacunas</strong>.','Local KPIs: exams, accuracy, streak, XP. Spider chart by domain (Legal, Governance, Technical…). Strengths and gaps with <strong>Study gaps</strong> button.')},
@@ -2335,6 +2351,7 @@ const Icons = {
   close:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>`,
   more:`<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>`,
   eye:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  eyeOff:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`,
   menu:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>`,
   star:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 3.1 6.3 7 1-5 4.9 1.2 7L12 18l-6.3 3.2 1.2-7-5-4.9 7-1Z"/></svg>`,
   starFilled:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 7 1-5 4.9 1.2 7L12 18l-6.3 3.2 1.2-7-5-4.9 7-1Z"/></svg>`,
@@ -2379,15 +2396,25 @@ class DashboardView {
   static _homeProgressSummary(){
     const {history, avg, passed, attempts} = ProgressAnalytics.summary();
     const qt = ProgressAnalytics.questionTotals();
+    const m = ProgressAnalytics.masteryScore();
     const g = StorageManager.getGame();
     if(!attempts && !qt.seen) return '';
     const parts = [];
-    if(attempts) parts.push(`<span><strong>${attempts}</strong> simulados</span>`);
-    if(passed) parts.push(`<span><strong>${passed}</strong> aprovados</span>`);
-    if(avg) parts.push(`<span>Média <strong>${avg}%</strong></span>`);
+    if(m.seen) parts.push(`<span><strong>${m.score}%</strong> ${I18n.t('home.mastery').toLowerCase()}</span>`);
     if(qt.seen) parts.push(`<span><strong>${qt.accuracy}%</strong> acertos</span>`);
     if(g.bestStreak) parts.push(`<span>Sequência <strong>${g.bestStreak}d</strong></span>`);
+    if(attempts) parts.push(`<span><strong>${attempts}</strong> ${I18n.t('progress.sessions').toLowerCase()}</span>`);
     return `<div class="home-progress-summary">${parts.join('')}</div>`;
+  }
+  static _masteryStrip(){
+    const m = ProgressAnalytics.masteryScore();
+    const gap = ProgressAnalytics.topGap();
+    if(!m.seen) return '';
+    const gapLine = gap ? `<div class="home-mastery-gap">${I18n.t('home.gapHint', {area: gap.label})} · ${gap.acc}%</div>` : '';
+    return `<div class="home-mastery">
+      <div class="home-mastery-score"><strong>${m.score}%</strong><span>${I18n.t('home.mastery')}</span></div>
+      ${gapLine}
+    </div>`;
   }
   static _welcomeBlock(){
     return `<div class="home-welcome">
@@ -2421,15 +2448,13 @@ class DashboardView {
       </div>` : '';
 
     const actionBar = `
-      <div class="home-actions">
-        <button class="btn btn-primary" id="home-smart" type="button">${I18n.t('home.smartSession')}</button>
-        <div class="home-presets" role="group" aria-label="Presets">
-          <button class="btn btn-sm" type="button" data-preset="full" title="">${I18n.t('home.presetFull')}</button>
-          <button class="btn btn-sm" type="button" data-preset="quick" title="">${I18n.t('home.presetQuick')}</button>
-          <button class="btn btn-sm" type="button" data-preset="errors" title="">${I18n.t('home.presetErrors')}</button>
-          <button class="btn btn-sm" type="button" data-preset="sprint" title="">${I18n.t('home.presetSprint')}</button>
-          <button class="btn btn-sm" type="button" data-preset="marathon" title="">${I18n.t('home.presetMarathon')}</button>
+      <div class="home-study-block">
+        ${DashboardView._masteryStrip()}
+        <div class="home-study-actions">
+          <button class="btn btn-primary btn-lg" id="home-study-now" type="button">${I18n.t('home.studyNow')}</button>
+          <button class="btn btn-ghost" id="home-customize" type="button">${I18n.t('home.customize')}</button>
         </div>
+        <p class="hint" style="margin:8px 0 0;font-size:12px">${I18n.t('home.studyHint')}</p>
       </div>`;
 
     const listSections = grouped.map(([trackName, certs])=>{
@@ -2450,12 +2475,19 @@ class DashboardView {
       return `<div class="home-track"><h2 class="home-track-title">${Util.escapeHtml(trackName)}</h2><ul class="home-list">${items}</ul></div>`;
     }).join('');
 
+    const tracksBlock = allCerts.length
+      ? `<details class="home-tracks-details">
+          <summary>${I18n.t('home.tracksExpand')} (${allCerts.length})</summary>
+          ${listSections}
+        </details>`
+      : DashboardView._empty('Nenhum conteúdo', 'Recarregue a página para carregar o banco DPO global.');
+
     el.innerHTML = `
       ${DashboardView._welcomeBlock()}
       ${progressSummary}
       ${resumeBlock}
       ${allCerts.length ? actionBar : ''}
-      ${allCerts.length ? listSections : DashboardView._empty('Nenhuma certificação', 'Recarregue a página para carregar o banco DPO global.')}
+      ${tracksBlock}
       <div class="home-foot">
         <button class="btn btn-ghost btn-sm" id="home-faq" type="button">${I18n.t('home.faq')}</button>
         <button class="btn btn-ghost btn-sm" id="home-howto" type="button">${I18n.t('home.howto')}</button>
@@ -2466,9 +2498,9 @@ class DashboardView {
     el.querySelector('#home-faq')?.addEventListener('click', ()=> App.instance.router.go('help', {tab:'faq'}));
     el.querySelector('#home-howto')?.addEventListener('click', ()=> App.instance.router.go('help', {tab:'howto'}));
     el.querySelector('#home-progress')?.addEventListener('click', ()=> App.instance.router.go('progress'));
-    el.querySelector('#home-smart')?.addEventListener('click', ()=> PlayerController.startSmartReview());
+    el.querySelector('#home-study-now')?.addEventListener('click', ()=> PlayerController.startStudyNow());
+    el.querySelector('#home-customize')?.addEventListener('click', ()=> ExamConfigModal.open());
     el.querySelectorAll('[data-quick-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.quickExam)));
-    el.querySelectorAll('[data-preset]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.openWithPreset(b.dataset.preset)));
   }
   onLeave(){
     const el = document.getElementById('view-home');
@@ -3001,6 +3033,28 @@ class ProgressAnalytics {
     Object.values(stats).forEach(s=>{ seen += s.seen||0; correct += s.correct||0; });
     return { seen, correct, accuracy: seen ? Math.round(correct/seen*100) : 0 };
   }
+  static masteryScore(){
+    const stats = StorageManager.getStats();
+    const ids = Object.keys(stats).filter(id => (stats[id].seen||0) > 0);
+    if(!ids.length) return { score: 0, seen: 0 };
+    let sum = 0;
+    ids.forEach(id=>{
+      const s = stats[id];
+      const acc = (s.correct||0) / s.seen;
+      const streakPart = Math.min(s.streak||0, 5) / 5;
+      sum += acc * 70 + streakPart * 30;
+    });
+    return { score: Math.round(sum / ids.length), seen: ids.length };
+  }
+  static topGap(){
+    const areas = this.accuracyByKnowledgeArea().filter(a => a.seen >= 3);
+    if(!areas.length) return null;
+    const weak = [...areas].sort((a,b)=>a.acc-b.acc)[0];
+    return weak.acc < 65 ? weak : null;
+  }
+  static gapCount(){
+    return this.accuracyByKnowledgeArea().filter(a => a.seen >= 3 && a.acc < 65).length;
+  }
   static _classifyQuestion(q){
     const blob = `${q.submateria||''} ${q.category||''} ${(q.tags||[]).join(' ')} ${q.materia||''}`.toLowerCase();
     for(const area of this.KNOWLEDGE_AREAS){
@@ -3162,10 +3216,12 @@ class ProgressHubView {
     el.classList.add('view-progress');
     const {history, avg, passed, attempts, g, p} = ProgressAnalytics.summary();
     const qt = ProgressAnalytics.questionTotals();
+    const mastery = ProgressAnalytics.masteryScore();
+    const gapN = ProgressAnalytics.gapCount();
     const areas = ProgressAnalytics.radarAxes();
     const {strong, weak} = ProgressAnalytics.strongWeak(ProgressAnalytics.accuracyByKnowledgeArea());
     const radar = ChartHelpers.radar(areas.map(a=>a.label), areas.map(a=>a.acc));
-    const gauge = ChartHelpers.gauge(avg || qt.accuracy);
+    const gauge = ChartHelpers.gauge(mastery.seen ? mastery.score : (avg || qt.accuracy));
     const spark = ChartHelpers.sparkline(history);
     const buckets = ProgressAnalytics.resultBuckets(history);
     const pie = ChartHelpers.pie([
@@ -3179,17 +3235,17 @@ class ProgressHubView {
       <div class="progress-hero">
         <div class="progress-hero-copy">
           <h2>Seu mapa de conhecimento</h2>
-          <p>${hasData ? 'Acompanhe domínios, lacunas e evolução nas certificações DPO.' : 'Complete simulados ou treinos para desbloquear KPIs e o gráfico de domínios.'}</p>
+          <p>${hasData ? 'Domínio consolidado, lacunas acionáveis e evolução contínua.' : 'Estude alguns minutos para desbloquear mastery e o radar de domínios.'}</p>
         </div>
         ${gauge}
       </div>
       <div class="progress-kpi-grid">
-        <div class="progress-kpi"><strong>${attempts || '—'}</strong><span>Simulados</span></div>
-        <div class="progress-kpi good"><strong>${passed || '—'}</strong><span>Aprovados (≥70%)</span></div>
-        <div class="progress-kpi accent"><strong>${avg || qt.accuracy || '—'}${(avg||qt.accuracy)?'%':''}</strong><span>Média / acertos</span></div>
-        <div class="progress-kpi"><strong>${qt.seen || '—'}</strong><span>Questões vistas</span></div>
+        <div class="progress-kpi accent"><strong>${mastery.seen ? mastery.score+'%' : '—'}</strong><span>${I18n.t('progress.mastery')}</span></div>
+        <div class="progress-kpi ${gapN?'warn':''}"><strong>${hasData ? gapN : '—'}</strong><span>${I18n.t('progress.gaps')}</span></div>
+        <div class="progress-kpi"><strong>${qt.seen || '—'}</strong><span>${I18n.t('progress.questions')}</span></div>
         <div class="progress-kpi"><strong>${g.bestStreak || '—'}</strong><span>Melhor sequência (dias)</span></div>
-        <div class="progress-kpi"><strong>Nv ${p.level}</strong><span>${g.xp} XP · ${g.totalCorrect} acertos</span></div>
+        <div class="progress-kpi"><strong>${attempts || '—'}</strong><span>${I18n.t('progress.sessions')}</span></div>
+        <div class="progress-kpi good"><strong>${passed || '—'}</strong><span>Sessões ≥70%</span></div>
       </div>
       <div class="progress-section">
         <div class="progress-section-head">
@@ -3224,7 +3280,7 @@ class ProgressHubView {
       </details>` : ''}
       <div class="progress-history-title">Histórico de sessões</div>
       <div id="prog-hist"></div>`;
-    el.querySelector('#prog-smart')?.addEventListener('click', ()=> PlayerController.startSmartReview());
+    el.querySelector('#prog-smart')?.addEventListener('click', ()=> PlayerController.startStudyNow());
     el.querySelector('#prog-home')?.addEventListener('click', ()=> App.instance.router.go('home'));
     this.history.render(el.querySelector('#prog-hist'), false);
   }
@@ -3648,7 +3704,7 @@ class ExamConfigModal {
 
   static _openInternal(preselectedExamId=null, preset=null){
     const exams = StorageManager.getExams().filter(e=>e.questionIds?.length);
-    if(!exams.length){ Toast.show('Nenhum simulado disponível.', 'warn'); return; }
+    if(!exams.length){ Toast.show(I18n.isEn() ? 'No session available.' : 'Nenhuma sessão disponível.', 'warn'); return; }
     const settings = StorageManager.getSettings();
     const defaultExamId = preselectedExamId && exams.some(e=>e.id===preselectedExamId)
       ? preselectedExamId : exams[0].id;
@@ -3656,13 +3712,13 @@ class ExamConfigModal {
     try{ lastCandidate = localStorage.getItem(this.CANDIDATE_KEY) || ''; }catch(e){}
 
     Modal.open({
-      title: 'Configurar simulado',
+      title: I18n.t('session.configure'),
       wide: true,
       modalClass: 'modal-ec',
       bodyHtml: this._bodyHtml(exams, defaultExamId, lastCandidate, settings),
       footerHtml: `
-        <button class="btn" data-cancel type="button">Cancelar</button>
-        <button class="btn btn-primary" data-ok type="button">Iniciar Simulado</button>`,
+        <button class="btn" data-cancel type="button">${I18n.t('common.cancel')}</button>
+        <button class="btn btn-primary" data-ok type="button">${I18n.t('session.start')}</button>`,
       onMount: (modalEl, closeFn)=> this._bind(modalEl, closeFn, exams, preset)
     });
   }
@@ -3805,10 +3861,10 @@ class ExamConfigModal {
             <div class="field">
               <span class="field-label" id="ec-session-label">Tipo de sessão</span>
               <div class="ec-segment" role="group" aria-labelledby="ec-session-label">
-                <button type="button" class="ec-seg-btn active" data-session="simulado" title="Como na prova real">Simulado</button>
-                <button type="button" class="ec-seg-btn" data-session="treino" title="Veja respostas e explicações na hora">Treino</button>
+                <button type="button" class="ec-seg-btn active" data-session="simulado" title="${I18n.t('session.examHint')}">${I18n.t('session.examMode')}</button>
+                <button type="button" class="ec-seg-btn" data-session="treino" title="${I18n.t('session.trainHint')}">${I18n.t('session.trainMode')}</button>
               </div>
-              <p class="ec-seg-hint" id="ec-session-hint">Como na prova real — feedback só no final.</p>
+              <p class="ec-seg-hint" id="ec-session-hint">${I18n.t('session.examHint')}</p>
               <input type="checkbox" id="ec-training" class="visually-hidden" hidden aria-hidden="true">
             </div>
             <div class="field">
@@ -4003,9 +4059,7 @@ class ExamConfigModal {
       btn.classList.toggle('active', on);
     });
     const hint = modalEl.querySelector('#ec-session-hint');
-    if(hint) hint.textContent = treino
-      ? 'Veja respostas e explicações na hora.'
-      : 'Como na prova real — feedback só no final.';
+    if(hint) hint.textContent = treino ? I18n.t('session.trainHint') : I18n.t('session.examHint');
   }
 
   static _syncBasicToMode(modalEl){
@@ -4653,19 +4707,33 @@ class ExamConfigModal {
 class PlayerController {
   static state = null;
 
-  /* IA offline: monta um simulado dinâmico com as questões mais fracas/atrasadas. */
+  /* IA offline: monta sessão dinâmica com as questões mais fracas/atrasadas. */
   static startSmartReview(limit=15){
-    const weak = AITutor.pickWeak(limit);
-    if(!weak.length){ Toast.show('Ainda não há questões suficientes. Faça um simulado primeiro.', 'warn'); return; }
+    this.startStudyNow(limit);
+  }
+
+  static startStudyNow(count=10){
+    const weak = AITutor.pickWeak(count);
+    if(!weak.length){
+      Toast.show(I18n.isEn() ? 'Not enough history yet. Start a short session from Customize.' : 'Ainda não há histórico suficiente. Use Personalizar para uma sessão curta.', 'warn');
+      return;
+    }
     const tempExam = new Exam({
       id: Util.uid('exam_smart'),
-      title: 'Revisão inteligente (IA)',
-      description: 'Questões priorizadas pelo seu histórico de acertos e repetição espaçada.',
-      category: 'Revisão', timeMinutes: Math.max(5, Math.round(weak.length*1.2)),
-      passScore: 70, questionIds: weak.map(q=>q.id)
+      title: I18n.isEn() ? 'Smart study session' : 'Sessão de estudo inteligente',
+      description: I18n.isEn() ? 'Weak areas prioritized by your history.' : 'Lacunas priorizadas pelo seu histórico.',
+      category: 'Revisão', timeMinutes: Math.max(5, Math.round(weak.length * 1.2)),
+      passScore: 70, questionIds: weak.map(q => q.id)
     });
     StorageManager.upsertExam(tempExam);
-    ExamConfigModal.open(tempExam.id);
+    this.start({
+      examId: tempExam.id,
+      questionIds: weak.map(q => q.id),
+      trainingMode: true,
+      timerOn: false,
+      shuffleQuestions: true,
+      preSubmitReview: false
+    });
   }
 
   static start(configOrExamId, resumeSession=null){
@@ -4801,7 +4869,7 @@ class PlayerController {
   static _mountShell(){
     const root = document.getElementById('player-view');
     const cand = this.state.candidateName ? `<span class="player-candidate" title="${Util.escapeHtml(this.state.candidateName)}">${Util.escapeHtml(this.state.candidateName)}</span>` : '';
-    const train = this.state.trainingMode ? `<span class="player-training-badge">Treino</span>` : '';
+    const train = this.state.trainingMode ? `<span class="player-training-badge">${I18n.t('session.trainMode')}</span>` : '';
     root.innerHTML = `
       <div class="player-top">
         <button class="btn btn-icon btn-ghost" id="p-exit" title="Sair" aria-label="Sair">${Icons.close}</button>
@@ -4811,6 +4879,10 @@ class PlayerController {
         <div class="player-timer-grp">
           <button class="btn btn-sm" id="p-pause" type="button" title="Pausar cronômetro" aria-label="Pausar">⏸</button>
           <div class="timer-pill" id="p-timer" role="timer" aria-live="off">--:--</div>
+        </div>
+        <div class="player-reveal-grp hidden" id="p-reveal-wrap" role="group" aria-label="Revelar respostas">
+          <button class="btn btn-sm btn-ghost btn-icon" id="p-reveal-q" type="button" title="${I18n.t('player.revealQuestion')}" aria-pressed="false" aria-label="${I18n.t('player.revealQuestion')}">${Icons.eyeOff}</button>
+          <button class="btn btn-sm btn-ghost btn-icon" id="p-reveal-all" type="button" title="${I18n.t('player.revealAll')}" aria-pressed="false" aria-label="${I18n.t('player.revealAll')}">${Icons.eyeOff}</button>
         </div>
         <div class="player-more" id="p-more-wrap">
           <button class="btn btn-icon btn-ghost" id="p-more-btn" type="button" aria-label="Mais opções" aria-haspopup="true" aria-expanded="false">${Icons.more}</button>
@@ -4823,13 +4895,13 @@ class PlayerController {
       </div>
       <div id="p-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
       <div class="player-footer">
-        <button class="btn" id="p-prev" type="button">← Anterior</button>
-        <button class="btn" id="p-mark" type="button">${Icons.star} Marcar</button>
-        <button class="btn btn-primary" id="p-primary" type="button">Próxima →</button>
+        <button class="btn" id="p-prev" type="button">${I18n.t('player.prev')}</button>
+        <button class="btn" id="p-mark" type="button">${Icons.star} ${I18n.t('player.mark')}</button>
+        <button class="btn btn-primary" id="p-primary" type="button">${I18n.t('player.next')}</button>
       </div>
     `;
     root.querySelector('#p-exit').addEventListener('click', async ()=>{
-      const ok = await Modal.confirm({title:'Sair do exame', message:'Seu progresso será perdido. Deseja realmente sair?', confirmLabel:'Sair', danger:true});
+      const ok = await Modal.confirm({title: I18n.t('player.exitTitle'), message: I18n.t('player.exitMsg'), confirmLabel: I18n.isEn() ? 'Leave' : 'Sair', danger:true});
       if(ok) this._exitWithoutSaving();
     });
     root.querySelector('#p-prev').addEventListener('click', ()=>this._move(-1));
@@ -4839,6 +4911,8 @@ class PlayerController {
       root.querySelector('#p-nav').classList.toggle('collapsed');
     });
     root.querySelector('#p-pause')?.addEventListener('click', ()=>this._togglePause());
+    root.querySelector('#p-reveal-q')?.addEventListener('click', ()=>this._toggleRevealCurrent());
+    root.querySelector('#p-reveal-all')?.addEventListener('click', ()=>this._toggleRevealAll());
     root.querySelector('#p-more-btn')?.addEventListener('click', (e)=>{
       e.stopPropagation();
       this._togglePlayerMenu();
@@ -4850,6 +4924,8 @@ class PlayerController {
     document.addEventListener('click', this._menuOutsideClick);
     this._renderPlayerMenu();
     this._updateFooterButtons();
+    this._updateRevealControls();
+    this._updateMarkButton();
 
     // Navegação por teclado (acessibilidade / eficiência no desktop)
     this._keyHandler = (e)=>{
@@ -4908,11 +4984,11 @@ class PlayerController {
     const {questions, currentIndex, trainingMode} = this.state;
     prev.disabled = currentIndex <= 0;
     if(this._shouldShowSubmit()){
-      primary.textContent = 'Enviar simulado';
+      primary.textContent = I18n.t('player.submit');
       primary.className = 'btn btn-primary';
       primary.disabled = false;
     } else {
-      primary.textContent = 'Próxima →';
+      primary.textContent = I18n.t('player.next');
       primary.className = 'btn btn-primary';
       primary.disabled = trainingMode && currentIndex >= questions.length - 1;
     }
@@ -4947,26 +5023,14 @@ class PlayerController {
     const menu = document.getElementById('p-more-menu');
     if(!menu || !this.state) return;
     const s = this.state;
-    const q = s.questions[s.currentIndex];
-    const isMarked = s.marked.has(q.id);
     const items = [];
     const add = (action, label, extra='') => items.push(
       `<button type="button" class="player-more-item${extra}" data-action="${action}" role="menuitem">${label}</button>`
     );
-    add('mark', isMarked ? `${Icons.starFilled} Desmarcar` : `${Icons.star} Marcar questão`);
-    if(s.trainingMode){
-      add('explain', 'Explicar');
-      if(s.allowRevealAnswer){
-        const curRevealed = s.revealPersistent || s.revealed.has(q.id);
-        add('reveal-q', `${Icons.eye} ${curRevealed ? 'Ocultar resposta' : 'Revelar questão'}`, curRevealed ? ' active' : '');
-        add('reveal-all', s.revealPersistent ? 'Desativar modo revisão' : 'Modo revisão', s.revealPersistent ? ' active' : '');
-      }
-    }
-    add('pause', s.paused ? 'Retomar' : 'Pausar');
-    add('exit', 'Sair');
+    if(s.trainingMode) add('explain', 'Explicar');
+    add('pause', s.paused ? (I18n.isEn() ? 'Resume' : 'Retomar') : (I18n.isEn() ? 'Pause' : 'Pausar'));
+    add('exit', I18n.isEn() ? 'Leave' : 'Sair');
     menu.innerHTML = items.join('');
-    const revealQ = menu.querySelector('[data-action="reveal-q"]');
-    if(revealQ) revealQ.disabled = s.revealPersistent;
     menu.querySelectorAll('[data-action]').forEach(el=>{
       el.addEventListener('click', (e)=>{
         e.stopPropagation();
@@ -4978,13 +5042,10 @@ class PlayerController {
 
   static _onMenuAction(action){
     switch(action){
-      case 'mark': this._toggleMark(); break;
       case 'explain': this._showExplain(); break;
-      case 'reveal-q': this._toggleRevealCurrent(); break;
-      case 'reveal-all': this._toggleRevealAll(); break;
       case 'pause': this._togglePause(); break;
       case 'exit':
-        Modal.confirm({title:'Sair do exame', message:'Seu progresso será perdido. Deseja realmente sair?', confirmLabel:'Sair', danger:true})
+        Modal.confirm({title: I18n.t('player.exitTitle'), message: I18n.t('player.exitMsg'), confirmLabel: I18n.isEn() ? 'Leave' : 'Sair', danger:true})
           .then(ok=>{ if(ok) this._exitWithoutSaving(); });
         break;
     }
@@ -5076,20 +5137,27 @@ class PlayerController {
   }
 
   static _updateRevealControls(){
-    const menu = document.getElementById('p-more-menu');
-    if(!this.state || !menu) return;
+    if(!this.state) return;
     const q = this.state.questions[this.state.currentIndex];
-    const curRevealed = this.state.revealPersistent || this.state.revealed.has(q.id);
-    const btnQ = menu.querySelector('[data-action="reveal-q"]');
-    const btnAll = menu.querySelector('[data-action="reveal-all"]');
+    const wrap = document.getElementById('p-reveal-wrap');
+    const show = !!this.state.allowRevealAnswer;
+    if(wrap) wrap.classList.toggle('hidden', !show);
+    const btnQ = document.getElementById('p-reveal-q');
+    const btnAll = document.getElementById('p-reveal-all');
+    const qOn = !this.state.revealPersistent && this.state.revealed.has(q.id);
+    const allOn = !!this.state.revealPersistent;
     if(btnQ){
-      btnQ.classList.toggle('active', curRevealed);
-      btnQ.disabled = this.state.revealPersistent;
-      btnQ.innerHTML = `${Icons.eye} ${curRevealed ? 'Ocultar resposta' : 'Revelar questão'}`;
+      btnQ.classList.toggle('active', qOn || allOn);
+      btnQ.disabled = allOn;
+      btnQ.setAttribute('aria-pressed', String(qOn));
+      btnQ.innerHTML = (qOn || allOn) ? Icons.eye : Icons.eyeOff;
+      btnQ.title = qOn ? (I18n.isEn() ? 'Hide this answer' : 'Ocultar esta resposta') : I18n.t('player.revealQuestion');
     }
     if(btnAll){
-      btnAll.classList.toggle('active', this.state.revealPersistent);
-      btnAll.textContent = this.state.revealPersistent ? 'Desativar modo revisão' : 'Modo revisão';
+      btnAll.classList.toggle('active', allOn);
+      btnAll.setAttribute('aria-pressed', String(allOn));
+      btnAll.innerHTML = allOn ? Icons.eye : Icons.eyeOff;
+      btnAll.title = allOn ? (I18n.isEn() ? 'Turn off reveal all' : 'Desligar revelar todas') : I18n.t('player.revealAll');
     }
   }
 
@@ -5348,6 +5416,8 @@ class PlayerController {
     this._persistSession();
     this._renderQuestion(); this._renderNav();
     this._updateFooterButtons();
+    this._updateRevealControls();
+    this._updateMarkButton();
   }
   static _checkMilestone(){
     const total = this.state.questions.length;
@@ -5365,14 +5435,13 @@ class PlayerController {
     this._persistSession();
     this._renderNav();
     this._updateMarkButton();
-    this._renderPlayerMenu();
   }
   static _updateMarkButton(){
     const btn = document.getElementById('p-mark');
     if(!btn) return;
     const q = this.state.questions[this.state.currentIndex];
     const isMarked = this.state.marked.has(q.id);
-    btn.innerHTML = isMarked ? `${Icons.starFilled} Marcada` : `${Icons.star} Marcar`;
+    btn.innerHTML = isMarked ? `${Icons.starFilled} ${I18n.t('player.marked')}` : `${Icons.star} ${I18n.t('player.mark')}`;
     btn.classList.toggle('btn-primary', isMarked);
     btn.setAttribute('aria-pressed', String(isMarked));
   }
@@ -5422,7 +5491,7 @@ class PlayerController {
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">${rows}</div>`,
         footerHtml: `
           <button class="btn btn-ghost" data-back type="button">Voltar ao simulado</button>
-          <button class="btn btn-primary" data-submit type="button">Enviar simulado</button>`,
+          <button class="btn btn-primary" data-submit type="button">${I18n.t('player.submit')}</button>`,
         onMount: (el, close)=>{
           el.querySelector('[data-back]')?.addEventListener('click', ()=>{ close(); resolve(false); });
           el.querySelector('[data-submit]')?.addEventListener('click', ()=>{ close(); this.finish(false); resolve(true); });
