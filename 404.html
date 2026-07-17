@@ -1153,7 +1153,9 @@ const I18n = {
       'home.student':'Estudante','home.tracks':'Trilhas de estudo',
       'home.continue':'Continuar de onde parei','home.answered':'respondidas','home.smartSession':'Sessão inteligente',
       'home.studyNow':'Estudar agora','home.customize':'Personalizar','home.mastery':'Domínio consolidado','home.gapHint':'Lacuna: {area}',
-      'home.tracksExpand':'Ver trilhas e conteúdos','home.studyHint':'~10 min · lacunas e revisão',
+      'home.tracksExpand':'Ver trilhas e conteúdos','home.studyHint':'~10 min · rota personalizada pelo GPS',
+      'gps.title':'GPS do Conhecimento','gps.startRoute':'Iniciar rota','gps.simOnly':'Simulação','gps.readinessTitle':'Prontidão por trilha',
+      'gps.readinessEta':'ETA ~{n} dias','gps.confidence':'Quão seguro você estava?','gps.illusionHint':'Ilusão de domínio detectada em {n} conceitos',
       'home.recent':'Recentes','home.aboutVelora':'Sobre o Velora',
       'session.qty10':'10 questões','session.qty20':'20 questões','session.qtyAll':'Todas',
       'fc.revealAll':'Revelar resposta sempre','fc.markCard':'Marcar card',
@@ -1235,7 +1237,9 @@ const I18n = {
       'home.student':'Learner','home.tracks':'Study tracks',
       'home.continue':'Continue where you left off','home.answered':'answered','home.smartSession':'Smart session',
       'home.studyNow':'Study now','home.customize':'Customize','home.mastery':'Consolidated mastery','home.gapHint':'Gap: {area}',
-      'home.tracksExpand':'View tracks and content','home.studyHint':'~10 min · gaps and review',
+      'home.tracksExpand':'View tracks and content','home.studyHint':'~10 min · personalized GPS route',
+      'gps.title':'Knowledge GPS','gps.startRoute':'Start route','gps.simOnly':'Simulation','gps.readinessTitle':'Track readiness',
+      'gps.readinessEta':'ETA ~{n} days','gps.confidence':'How confident were you?','gps.illusionHint':'Illusion of mastery in {n} concepts',
       'home.recent':'Recent','home.aboutVelora':'About Velora',
       'session.qty10':'10 questions','session.qty20':'20 questions','session.qtyAll':'All',
       'fc.revealAll':'Always reveal answer','fc.markCard':'Mark card',
@@ -2690,6 +2694,23 @@ class DashboardView {
       ${gapLine}
     </div>`;
   }
+  static _gpsCard(){
+    if(typeof RouteOptimizer === 'undefined') return '';
+    const plan = RouteOptimizer.buildPlan(10);
+    if(!plan.steps.length) return '';
+    const steps = plan.steps.map(s=>`<li>${Util.escapeHtml(s.label)}</li>`).join('');
+    const simBtn = plan.simulationId && typeof SimulationEngine !== 'undefined'
+      ? `<button class="btn btn-sm btn-ghost" type="button" id="home-gps-sim">${I18n.t('gps.simOnly')}</button>` : '';
+    return `<div class="gps-card" id="home-gps">
+      <div class="gps-card-head"><strong>${I18n.t('gps.title')}</strong><span class="badge badge-good">~${plan.minutes} min</span></div>
+      <p class="gps-reason">${Util.escapeHtml(plan.reason)}</p>
+      <ul class="gps-steps">${steps}</ul>
+      <div class="gps-actions">
+        <button class="btn btn-primary btn-sm" type="button" id="home-gps-go">${I18n.t('gps.startRoute')}</button>
+        ${simBtn}
+      </div>
+    </div>`;
+  }
   static _welcomeBlock(){
     return `<div class="home-welcome">
       <p class="home-kicker">${I18n.t('home.welcome')}</p>
@@ -2740,6 +2761,7 @@ class DashboardView {
     const actionBar = `
       <div class="home-study-block">
         ${DashboardView._masteryStrip()}
+        ${DashboardView._gpsCard()}
         <div class="home-study-actions">
           <button class="btn btn-primary btn-lg" id="home-study-now" type="button">${I18n.t('home.studyNow')}</button>
           <button class="btn btn-ghost" id="home-customize" type="button">${I18n.t('home.customize')}</button>
@@ -2790,7 +2812,17 @@ class DashboardView {
     el.querySelector('#home-progress')?.addEventListener('click', ()=> App.instance.router.go('progress'));
     el.querySelector('#home-forge-badge')?.addEventListener('click', ()=> App.instance.router.go('forge'));
     el.querySelector('#home-forge-badge')?.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') App.instance.router.go('forge'); });
-    el.querySelector('#home-study-now')?.addEventListener('click', ()=> PlayerController.startStudyNow());
+    el.querySelector('#home-study-now')?.addEventListener('click', ()=>{
+      if(typeof RouteOptimizer !== 'undefined') RouteOptimizer.execute(RouteOptimizer.buildPlan(10));
+      else PlayerController.startStudyNow();
+    });
+    el.querySelector('#home-gps-go')?.addEventListener('click', ()=>{
+      if(typeof RouteOptimizer !== 'undefined') RouteOptimizer.execute(RouteOptimizer.buildPlan(10));
+    });
+    el.querySelector('#home-gps-sim')?.addEventListener('click', ()=>{
+      const plan = RouteOptimizer.buildPlan(10);
+      if(plan.simulationId && typeof SimulationEngine !== 'undefined') SimulationEngine.start(plan.simulationId);
+    });
     el.querySelector('#home-customize')?.addEventListener('click', ()=> ExamConfigModal.open());
     el.querySelectorAll('[data-quick-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.quickExam)));
     el.querySelectorAll('[data-recent-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.recentExam)));
@@ -3703,6 +3735,8 @@ class ProgressHubView {
     ], 96);
     const materias = ProgressAnalytics.accuracyByMateria().slice(0,6);
     const trackBars = ChartHelpers.bars(materias.map(m=>({label:m.materia, value:m.acc})));
+    const readinessRows = typeof ReadinessEngine !== 'undefined' ? ReadinessEngine.topTracks(5) : [];
+    const metacog = typeof LearnerModel !== 'undefined' ? LearnerModel.aggregateMetacog() : null;
     const hasData = attempts || qt.seen;
     const en = I18n.isEn();
     el.innerHTML = `
@@ -3771,9 +3805,27 @@ class ProgressHubView {
           ${trackBars}
         </div>` : ''}
       </div>` : ''}
+      ${readinessRows.length ? `<div class="progress-section">
+        <div class="progress-section-head"><div><h3>${I18n.t('gps.readinessTitle')}</h3>
+          <p>${en ? 'Mastery-based readiness and estimated days to certification-ready.' : 'Prontidão por domínio consolidado e ETA estimado para a prova.'}</p></div></div>
+        ${readinessRows.map(r=>{
+          const cls = r.readiness >= 70 ? 'badge-good' : r.readiness >= 45 ? 'badge-warn' : 'badge-bad';
+          return `<div class="readiness-row">
+            <div class="readiness-meta">
+              <div class="title">${Util.escapeHtml(r.materia || r.title)}</div>
+              <div class="desc">${r.mastered}/${r.total} ${en?'mastered':'dominados'} · ${en?'seen':'vistas'} ${r.seenPct}% · ${I18n.t('gps.readinessEta', {n: r.etaDays})}</div>
+            </div>
+            <span class="badge ${cls}">${r.readiness}%</span>
+          </div>`;
+        }).join('')}
+        ${metacog?.highConfWrong ? `<p class="hint" style="margin-top:8px">${I18n.t('gps.illusionHint', {n: metacog.highConfWrong})}</p>` : ''}
+      </div>` : ''}
       <h3 class="progress-history-title">${I18n.t('progress.historyTitle')}</h3>
       <div id="prog-hist"></div>`;
-    el.querySelector('#prog-smart')?.addEventListener('click', ()=> PlayerController.startStudyNow());
+    el.querySelector('#prog-smart')?.addEventListener('click', ()=>{
+      if(typeof RouteOptimizer !== 'undefined') RouteOptimizer.execute(RouteOptimizer.buildPlan(10));
+      else PlayerController.startStudyNow();
+    });
     el.querySelector('#prog-home')?.addEventListener('click', ()=> App.instance.router.go('home'));
     this.history.render(el.querySelector('#prog-hist'));
   }
@@ -5664,6 +5716,13 @@ class PlayerController {
   }
 
   static startStudyNow(count=10){
+    if(typeof RouteOptimizer !== 'undefined'){
+      const plan = RouteOptimizer.buildPlan(Math.max(8, count));
+      if(plan.dueCards?.length || plan.questionIds?.length){
+        RouteOptimizer.execute(plan);
+        return;
+      }
+    }
     const weak = AITutor.pickWeak(count);
     if(!weak.length){
       Toast.show(I18n.isEn() ? 'Not enough history yet. Start a short session from Customize.' : 'Ainda não há histórico suficiente. Use Personalizar para uma sessão curta.', 'warn');
@@ -5684,6 +5743,31 @@ class PlayerController {
       timerOn: false,
       shuffleQuestions: true,
       preSubmitReview: false
+    });
+  }
+
+  static startStudyRoute(questionIds, reason=''){
+    const ids = (questionIds||[]).filter(Boolean);
+    if(!ids.length) return this.startStudyNow(10);
+    const byId = new Map(StorageManager.getQuestions().map(q=>[q.id, q]));
+    const ordered = ids.map(id=>byId.get(id)).filter(Boolean);
+    if(!ordered.length) return this.startStudyNow(10);
+    const tempExam = new Exam({
+      id: Util.uid('exam_gps'),
+      title: I18n.isEn() ? 'GPS study route' : 'Rota GPS de estudo',
+      description: reason || (I18n.isEn() ? 'Optimized by Knowledge GPS.' : 'Otimizada pelo GPS do Conhecimento.'),
+      category: 'GPS', timeMinutes: Math.max(5, Math.round(ordered.length * 1.2)),
+      passScore: 70, questionIds: ordered.map(q => q.id)
+    });
+    StorageManager.upsertExam(tempExam);
+    this.start({
+      examId: tempExam.id,
+      questionIds: ordered.map(q => q.id),
+      trainingMode: true,
+      timerOn: false,
+      shuffleQuestions: true,
+      preSubmitReview: false,
+      gpsRoute: true
     });
   }
 
@@ -5770,6 +5854,7 @@ class PlayerController {
       allowFinishAnytime: settings.allowFinishAnytime !== false,
       preSubmitReview: config.preSubmitReview !== false && !trainingMode,
       paused: false,
+      confidence: resumeSession?.confidence || {},
       settings: StorageManager.getSettings()
     };
 
@@ -5815,6 +5900,7 @@ class PlayerController {
         elapsedSeconds: Math.round((Date.now()-this.state.startedAt)/1000),
         candidateName: this.state.candidateName || '',
         trainingMode: !!this.state.trainingMode,
+        confidence: {...(this.state.confidence||{})},
         savedAt: new Date().toISOString()
       });
     }catch(e){}
@@ -5942,6 +6028,11 @@ class PlayerController {
     const primary = document.getElementById('p-primary');
     if(!prev || !primary || !this.state) return;
     const {questions, currentIndex, trainingMode} = this.state;
+    const q = questions[currentIndex];
+    const answered = q && this._isAnswered(q);
+    const needsConf = trainingMode && answered && this.state.showAnswerAfterSelect
+      && !this.state.revealPersistent && !this.state.revealed.has(q.id)
+      && !(this.state.confidence && this.state.confidence[q.id]);
     prev.disabled = currentIndex <= 0;
     if(this._shouldShowSubmit()){
       primary.textContent = I18n.t('player.submit');
@@ -5950,7 +6041,7 @@ class PlayerController {
     } else {
       primary.textContent = I18n.t('player.next');
       primary.className = 'btn btn-primary';
-      primary.disabled = trainingMode && currentIndex >= questions.length - 1;
+      primary.disabled = needsConf || (trainingMode && currentIndex >= questions.length - 1);
     }
   }
 
@@ -6138,6 +6229,35 @@ class PlayerController {
       ${q.explanation?`<div class="fb-explain">${Util.escapeHtml(QuestionDisplay.explanation(q, this.state?.settings))}</div>`:''}
     </div>`;
   }
+
+  static _confidenceBlock(q, answered, showFeedback){
+    if(!this.state.trainingMode || !answered || !showFeedback) return '';
+    const level = this.state.confidence?.[q.id];
+    if(level){
+      return `<div class="gps-confidence"><span class="gps-confidence-label">${I18n.t('gps.confidence')}: <strong>${level}/5</strong></span></div>`;
+    }
+    return `<div class="gps-confidence" id="p-confidence">
+      <span class="gps-confidence-label">${I18n.t('gps.confidence')}</span>
+      <div class="gps-conf-row">
+        ${[1,2,3,4,5].map(n=>`<button type="button" class="btn btn-sm btn-ghost gps-conf-btn" data-conf="${n}">${n}</button>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  static _bindConfidence(q, answered, showFeedback){
+    if(!this.state.trainingMode || !answered || !showFeedback || this.state.confidence?.[q.id]) return;
+    document.getElementById('p-question')?.querySelectorAll('[data-conf]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const level = Number(btn.dataset.conf);
+        const correct = q.isCorrect(this.state.answers[q.id]);
+        if(typeof LearnerModel !== 'undefined') LearnerModel.recordConfidence(q.id, level, correct);
+        this.state.confidence = this.state.confidence || {};
+        this.state.confidence[q.id] = level;
+        this._renderQuestion();
+        this._updateFooterButtons();
+      });
+    });
+  }
   static _fmtAnswer(q, ans){
     if(ans===undefined || ans===null) return '';
     switch(q.type){
@@ -6285,6 +6405,7 @@ class PlayerController {
       <div class="q-text">${stemHtml}</div>
       <div id="q-options" ${q.type==='multi'?'role="group"':(['single','boolean','image'].includes(q.type)?'role="radiogroup"':'')} aria-label="Alternativas">${bodyHtml}</div>
       ${showFeedback ? this._feedbackBox(q, userAnswer, answered) : ''}
+      ${showFeedback ? this._confidenceBlock(q, answered, showFeedback) : ''}
     `;
 
     // anúncio para leitores de tela ao renderizar feedback
@@ -6336,10 +6457,9 @@ class PlayerController {
     }
     this._updateMarkButton();
     this._updateRevealControls();
+    this._bindConfidence(q, answered, showFeedback);
     this._updateFooterButtons();
   }
-
-  static _bindSequenceDrag(area, q){
     const wrap = area.querySelector('#seq-sortable');
     let dragEl = null;
     wrap.querySelectorAll('[draggable]').forEach(item=>{
@@ -8312,19 +8432,20 @@ class App {
 
 /* Enhancement layers usam window.* — em strict mode as classes não vinculam ao window automaticamente */
 Object.assign(window, {
-  App, Router, DashboardView, ContentHubView, ProgressHubView,
+  App, Router, DashboardView, ContentHubView, ProgressHubView, HelpView,
   BuilderView, QuestionBankView, HistoryView, ProfileView, SettingsView, ResultView, ReviewView,
   QuestionEditorController, PlayerController, ImportController, ExportController, ExamConfigModal,
-  StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam
+  StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam,
+  KnowledgeNormalizer, KnowledgeRepository, IncrementalLearningController, FSRS,
+  I18n, ProgressAnalytics, FlashcardController
 });
+</script>
+<script src="gps/velora-gps.js"></script>
+<script>
+Object.assign(window, { LearnerModel, ReadinessEngine, RouteOptimizer, SimulationEngine });
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  try{
-    new App();
-  }catch(err){
-    console.error('Erro ao iniciar Velora', err);
-    document.body.innerHTML = `<div style="padding:40px;color:#f85149;font-family:sans-serif">Erro ao iniciar a aplicação: ${err.message}</div>`;
-  }
+  bootstrapVelora();
 });
 </script>
 
