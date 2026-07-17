@@ -1185,7 +1185,7 @@ const I18n = {
       'common.save':'Salvar','common.cancel':'Cancelar','common.confirm':'Confirmar','common.back':'Voltar',
       'progress.title':'Progresso','builder.title':'Criador de Exames',
       'forge.title':'Forja','forge.subtitle':'Motor de geração estruturada — não é chat. Comando → JSON → validação → banco.',
-      'forge.command':'Comando','forge.commandPh':'Ex.: Gere 20 flashcards sobre História do Brasil…',
+      'forge.command':'Comando','forge.commandPh':'Ex.: Gere 20 flashcards sobre LGPD e bases legais…',
       'forge.generate':'Gerar prévia','forge.save':'Salvar no banco','forge.voice':'Falar','forge.config':'Configurações da IA',
       'forge.apiKey':'Chave API (opcional — fica só neste dispositivo)','forge.apiUrl':'URL da API','forge.model':'Modelo','forge.provider':'Provedor','forge.providerLocal':'① Biblioteca local (celular · tablet · PC)','forge.providerOllama':'② Ollama (PC com app instalado)','forge.providerOllamaMobile':'② Ollama (só no PC — indisponível no celular)','forge.providerOpenai':'③ OpenAI-compatible (sua chave neste aparelho)','forge.mockHint':'Padrão no celular: biblioteca local, sem conta. Ollama exige software no PC. Chave API fica só neste navegador — o Velora não tem servidor.',
       'forge.platformMobile':'No celular/tablet use <strong>Biblioteca local</strong>. Ollama não roda no aparelho.',
@@ -1256,7 +1256,7 @@ const I18n = {
       'common.save':'Save','common.cancel':'Cancel','common.confirm':'Confirm','common.back':'Back',
       'progress.title':'Progress','builder.title':'Exam builder',
       'forge.title':'Forge','forge.subtitle':'Structured generation engine — not a chat. Command → JSON → validate → persist.',
-      'forge.command':'Command','forge.commandPh':'E.g. Generate 20 flashcards about World History…',
+      'forge.command':'Command','forge.commandPh':'E.g. Generate 20 flashcards on LGPD and legal bases…',
       'forge.generate':'Generate preview','forge.save':'Save to database','forge.voice':'Speak','forge.config':'AI settings',
       'forge.apiKey':'API key (optional — stays on this device only)','forge.apiUrl':'API URL','forge.model':'Model','forge.provider':'Provider','forge.providerLocal':'① Local library (phone · tablet · PC)','forge.providerOllama':'② Ollama (PC with app installed)','forge.providerOllamaMobile':'② Ollama (PC only — unavailable on phone)','forge.providerOpenai':'③ OpenAI-compatible (your key on this device)','forge.mockHint':'Default on mobile: local library, no account. Ollama needs desktop software. API keys stay in this browser only — Velora has no backend.',
       'forge.platformMobile':'On phone/tablet use <strong>Local library</strong>. Ollama does not run on the device.',
@@ -1429,8 +1429,8 @@ const HelpCenter = {
       {id:'forge-how', section:'howto', kw:['forja','forge','gerar','comando','ollama','biblioteca'],
         title:L('Forja — gerar e salvar conteúdo','Forge — generate and save content'),
         body:L(
-          '<ol><li>Abra a Forja (badge na Início ou <strong>Forja IA</strong> na Biblioteca).</li><li>Digite um comando (ex.: <em>Gere 20 flashcards sobre LGPD</em>).</li><li>Fonte recomendada: <strong>Conhecimento do modelo</strong> ou <strong>Biblioteca (RAG)</strong> — usa conteúdo real local.</li><li>Toque <strong>Gerar prévia</strong> → revise o JSON → <strong>Salvar no banco</strong>.</li><li>Opcional: em Configurações, escolha Ollama (PC local) ou chave API (só neste dispositivo).</li></ol>',
-          '<ol><li>Open Forge from Home badge or Library <strong>Forge AI</strong>.</li><li>Enter a command. Prefer library/RAG source for real local content.</li><li>Generate preview → Save to database. Optional: Ollama or API key in settings (device-local only).</li></ol>'
+          '<ol><li>Abra a Forja (badge na Início ou <strong>Forja IA</strong> na Biblioteca).</li><li>Digite um comando (ex.: <em>Gere 20 flashcards sobre LGPD e bases legais</em> ou <em>Simulado CIPP/E — transferências internacionais</em>).</li><li>Fonte recomendada: <strong>Biblioteca (RAG)</strong> — usa questões reais das trilhas de certificação.</li><li>Toque <strong>Gerar prévia</strong> → revise o JSON → <strong>Salvar no banco</strong>.</li><li>Opcional: conecte <strong>Engine 1</strong> (OpenRouter) para IA na nuvem sem expor credencial ao Velora.</li></ol>',
+          '<ol><li>Open Forge from Home or Library <strong>Forge AI</strong>.</li><li>Try: <em>Generate 20 flashcards on LGPD and legal bases</em> or <em>CIPP/E practice exam on cross-border transfers</em>.</li><li>Prefer <strong>Library (RAG)</strong> source for real certification content.</li><li>Generate preview → Save to database. Optional: connect Engine 1 (OpenRouter).</li></ol>'
         )},
       {id:'import', section:'howto', kw:['importar','csv','json','exportar','perfil'],
         title:L('Importar e exportar conteúdo','Import and export content'),
@@ -6994,14 +6994,14 @@ const LibraryForge = {
     const en = I18n.isEn();
     const cmd = topic
       ? (en ? `Generate ${n} flashcards about ${topic}.` : `Gere ${n} flashcards sobre ${topic}.`)
-      : (en ? `Generate ${n} flashcards.` : `Gere ${n} flashcards.`);
+      : (en ? `Generate ${n} flashcards on LGPD and data subject rights.` : `Gere ${n} flashcards sobre LGPD e direitos do titular.`);
     return { type:'flashcards', cmd, quantity:n, returnTab:'flashcards', source:'library', difficulty:'medio' };
   },
   questionParams(){
     const en = I18n.isEn();
     return {
       type:'quiz',
-      cmd: en ? 'Generate 20 quiz questions from my library topics.' : 'Gere 20 questões de múltipla escolha a partir da biblioteca.',
+      cmd: en ? 'Generate 20 quiz questions on CISSP Security and Risk Management.' : 'Gere 20 questões sobre CISSP — Security and Risk Management.',
       quantity:20,
       returnTab:'questoes',
       source:'library',
@@ -7012,7 +7012,7 @@ const LibraryForge = {
     const en = I18n.isEn();
     return {
       type:'exam',
-      cmd: en ? 'Create a practice exam with 30 questions from certification tracks.' : 'Crie um simulado com 30 questões das trilhas de certificação.',
+      cmd: en ? 'Create a CIPP/E practice exam with 30 questions on privacy compliance.' : 'Crie um simulado CIPP/E com 30 questões sobre conformidade em privacidade.',
       quantity:30,
       returnTab:'certificacoes',
       source:'library',
@@ -7562,19 +7562,19 @@ class ForgeView {
   static _examples(){
     const pt = I18n.isEn();
     return pt ? [
-      'Generate 20 flashcards about World History.',
-      'Create 15 quiz questions about Python basics.',
-      'Create an AWS Solutions Architect practice exam.',
-      'Write a summary about the French Revolution.',
-      'Build a timeline of World War II.',
-      'Create a PMP certification study plan.'
+      'Generate 20 flashcards on LGPD, GDPR and legal bases.',
+      'Create 25 quiz questions for CISSP Security and Risk Management.',
+      'Build a CIPP/E practice exam on cross-border transfers.',
+      'Write a summary on NIST Privacy Framework for DPO tracks.',
+      'Generate flashcards on DSAR and data subject rights (CIPM).',
+      'Create a study plan for EXIN PDPF certification.'
     ] : [
-      'Gere 50 flashcards sobre História do Brasil.',
-      'Gere 30 questões sobre História do Flamengo.',
-      'Crie um simulado da certificação AWS Solutions Architect.',
-      'Crie um resumo sobre a Revolução Francesa.',
-      'Gere uma linha do tempo da Segunda Guerra Mundial.',
-      'Crie um plano de estudos para a certificação PMP.'
+      'Gere 20 flashcards sobre LGPD, GDPR e bases legais.',
+      'Gere 25 questões de múltipla escolha para CISSP — Security and Risk Management.',
+      'Crie um simulado CIPP/E sobre transferências internacionais de dados.',
+      'Crie um resumo sobre NIST Privacy Framework para trilhas DPO.',
+      'Gere flashcards sobre DSAR e direitos do titular (CIPM).',
+      'Crie um plano de estudos para certificação EXIN PDPF.'
     ];
   }
 
