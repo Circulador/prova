@@ -6422,7 +6422,9 @@ class PlayerController {
     this._bindConfidence(q, answered, showFeedback);
     this._updateFooterButtons();
   }
+  static _bindSequenceDrag(area, q){
     const wrap = area.querySelector('#seq-sortable');
+    if(!wrap) return;
     let dragEl = null;
     wrap.querySelectorAll('[draggable]').forEach(item=>{
       item.addEventListener('dragstart', ()=>{ dragEl = item; item.style.opacity='.4'; });
