@@ -1,0 +1,33 @@
+---
+description: Velora UX — Mobile First, 3 cliques, One Page, Home, scroll (obrigatório)
+alwaysApply: true
+---
+
+# UX Architecture (obrigatório)
+
+## Mobile First
+Ordem: **smartphone → tablet → desktop**. Nunca desktop-first.
+- `< 640px`: uma tarefa, bottom nav, bottom sheets, modal fullscreen
+- `640–1023px`: master-detail quando couber; bottom nav mantida
+- `≥ 1024px`: sidebar, split view, command palette, atalhos
+
+## Regra dos 3 Cliques
+Ações importantes (continuar, explicar, revisar erro, criar simulado) → **≤ 3 interações**. Cascata ou telas extras → redesenhar.
+
+## One Page First
+Antes de nova rota/página: modal, drawer, painel lateral, tabs, acordeão, popover, inline edit, split view. Nova página = **última opção**.
+
+## Scroll Inteligente
+Scroll para **conteúdo** (biblioteca, histórico, stats). **Nunca** para descobrir features. Above-the-fold: onde parei, continuar, próxima ação, progresso.
+
+## Home = Workspace (4 perguntas)
+1. Onde parei? 2. O que fazer agora? 3. Progresso? 4. O que está disponível?
+Componente que não responde nenhuma → remover.
+
+## Progressive Disclosure + 80/20
+80%: estudar, revisar, questões, importar, progresso — ultra simples. 20%: menus contextuais / avançado.
+
+## UI de referência
+Inspirar: Linear, Raycast, Notion, GitHub, Obsidian, Anki. Evitar: Duolingo-style gamificação, dashboards poluídos, dezenas de cards.
+
+Visual tokens: `branding/design-system/design-system.md`

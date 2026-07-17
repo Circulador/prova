@@ -1,0 +1,24 @@
+---
+description: Velora — Knowledge Node, grafo e adaptadores (obrigatório)
+alwaysApply: true
+---
+
+# Data Architecture
+
+## Fonte da verdade
+Modelo interno **Knowledge Node** — nunca VCE/PDF/CSV/JSON como banco de dados.
+
+Formatos externos (VCE, PDF, DOCX, APKG, CSV, JSON, Moodle XML, QTI, GIFT, Markdown) = **adaptadores** que importam/exportam para o modelo interno.
+
+## Knowledge Node (único)
+Cada conceito existe **uma vez**. Questões, flashcards, explicações, mídia, tags, stats, progresso, links → referenciam o nó; **não duplicar** conteúdo semântico.
+
+## Grafo de conhecimento
+Conteúdo conectado hierarquicamente (tema → subtema → conceito → questões/cards/resumos/simulado/revisão). IA e trilhas navegam o grafo — não listas planas isoladas.
+
+## Implementação incremental (app atual)
+- Migrar seeders/importadores para normalizar em nós + referências
+- IDs estáveis, links entre entidades, metadata compartilhada
+- Evitar cópias de enunciado/resposta em múltiplos stores
+
+Referência: `docs/MANIFESTO-ARQUITETURA.md` § Conhecimento Conectado, Knowledge Node, Grafo

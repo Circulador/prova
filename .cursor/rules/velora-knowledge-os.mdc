@@ -1,0 +1,26 @@
+---
+description: Velora Knowledge OS — visão, missão e regra suprema (obrigatório)
+alwaysApply: true
+---
+
+# Velora = Knowledge Operating System
+
+Velora **não** é banco de questões, flashcards, simulador ou leitor PDF. É um **Knowledge OS**: conhecimento conectado com múltiplas visualizações (questões, cards, resumos, PDFs, stats, IA).
+
+## Regra Suprema
+
+Nova funcionalidade **nunca** aumenta complexidade percebida. Deve:
+- aumentar inteligência interna;
+- reduzir esforço do usuário;
+- reutilizar componentes existentes;
+- manter interface limpa.
+
+Violação → **reprojetar antes de implementar**.
+
+## Missão
+
+Melhor plataforma de estudos do mundo. Complexidade só na arquitetura interna; UX sempre simples.
+
+## Referência completa
+
+`docs/MANIFESTO-ARQUITETURA.md`

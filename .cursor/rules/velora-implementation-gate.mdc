@@ -1,0 +1,30 @@
+---
+description: Velora — gate de implementação (15 perguntas obrigatórias)
+alwaysApply: true
+---
+
+# Implementation Gate
+
+Antes de codar **qualquer** feature, responder sim/não:
+
+1. Forma mais simples existe?
+2. Posso eliminar uma tela?
+3. Posso eliminar um clique?
+4. Reutilizo componente existente?
+5. Resolvo na mesma página?
+6. Resolvo com painel lateral/drawer/modal?
+7. Respeita ≤ 3 cliques?
+8. Home permanece limpa (4 perguntas)?
+9. Reduz carga cognitiva?
+10. Usa/reutiliza Knowledge Node?
+11. Melhora smartphone?
+12. Consistente mobile/tablet/desktop?
+13. Largura reduz scroll vertical?
+14. Inteligência ↑ sem complexidade ↑?
+15. Preserva Knowledge OS?
+
+**Qualquer "não" problemático ou complexidade desproporcional → parar e reprojetar.**
+
+Documentar trade-offs brevemente se exceção for inevitável (raro).
+
+Referência: `docs/MANIFESTO-ARQUITETURA.md`

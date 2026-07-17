@@ -1,0 +1,23 @@
+---
+description: Velora — IA invisível e contextual (obrigatório)
+alwaysApply: true
+---
+
+# IA Invisível
+
+## Proibido
+- Menu ou aba dedicada "IA" / "Assistente"
+- Fluxos que exigem escolher modelo ou prompt antes da ação
+- IA como feature separada da tarefa do usuário
+
+## Obrigatório
+IA embutida **no contexto** da ação atual, com rótulos de ação (✨):
+- Explicar · Simplificar · Traduzir · Criar flashcards · Gerar questões
+- Resumo · Mapa mental · Plano de estudos · Revisão espaçada · Lacunas
+
+Aparece quando relevante (questão aberta, seleção de texto, erro, importação). Default: offline/local quando possível.
+
+## Princípio
+Usuário sente que **o app inteiro é inteligente**, não que "ligou a IA".
+
+Referência: `docs/MANIFESTO-ARQUITETURA.md` § IA Invisível

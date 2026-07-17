@@ -1,6 +1,9 @@
 # Velora Design System
 
 Identidade visual oficial extraída do conceito **Velora — Estude. Evolua. Conquiste.**
+
+> **Arquitetura e produto:** requisitos obrigatórios em [`docs/MANIFESTO-ARQUITETURA.md`](../../docs/MANIFESTO-ARQUITETURA.md) (Knowledge OS, Mobile First, 3 cliques, One Page First). Este documento cobre **apenas** tokens visuais e componentes.
+
 Unifica princípios de **Material Design 3**, **Apple Human Interface Guidelines** e **Fluent UI**.
 
 ---
@@ -78,9 +81,9 @@ Touch target mínimo: **44×44px** (Apple HIG + Material).
 
 ## 5. Grid
 
-- Mobile: 4 colunas, gutter 16px
+- **Mobile first:** 4 colunas, gutter 16px (experiência principal)
 - Tablet: 8 colunas
-- Desktop: 12 colunas, max-width 1280px
+- Desktop (≥ 1024px): 12 colunas, max-width 1280px, split view / sidebar
 
 ---
 
@@ -195,3 +198,4 @@ branding/
 3. Manter contraste WCAG AA mínimo.
 4. Um gradiente brand por tela (CTA ou hero — não everywhere).
 5. Consistência cross-platform: Android, iOS, Web, Desktop.
+6. Seguir [`docs/MANIFESTO-ARQUITETURA.md`](../../docs/MANIFESTO-ARQUITETURA.md) para UX e arquitetura — design system não substitui o manifesto.
