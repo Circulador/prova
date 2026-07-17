@@ -1116,7 +1116,8 @@ body[data-network="offline"] .network-pill.is-offline::before{
 /* --- Knowledge Forge workspace --- */
 .view-forge{padding:16px 16px 32px;max-width:920px;margin:0 auto;width:100%}
 .forge-hero{margin-bottom:16px}
-.forge-hero h2{font-size:18px;font-weight:650;margin:0 0 4px}
+.forge-hero h2{font-size:18px;font-weight:650;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.forge-hero h2 svg,.forge-icon svg{width:20px;height:20px;flex-shrink:0}
 .forge-hero p{font-size:13px;color:var(--text-2);margin:0;line-height:1.5}
 .forge-cmd-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
 .forge-cmd{
@@ -1149,7 +1150,18 @@ body[data-network="offline"] .network-pill.is-offline::before{
 .forge-config summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--text-1)}
 .forge-examples{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .forge-examples button{font-size:11px;padding:6px 10px}
+.progress-charts-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
+.progress-chart-card{padding:14px;border-radius:var(--radius-md);background:var(--bg-2);border:1px solid var(--border-soft)}
+.progress-chart-card h4{font-size:12px;font-weight:650;color:var(--text-1);margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em}
+.progress-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:11px}
+.progress-bar-row:last-child{margin-bottom:0}
+.progress-bar-row .lbl{flex:0 0 88px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.progress-bar-track{flex:1;height:8px;border-radius:4px;background:var(--bg-0);overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:4px;min-width:2px}
+.progress-bar-row .val{flex:0 0 36px;text-align:right;font-weight:650;color:var(--text-0)}
+@media(min-width:640px){.progress-charts-grid{grid-template-columns:1fr 1fr}}
 .home-os-badge{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.home-os-badge svg{width:14px;height:14px;flex-shrink:0}
 .home-os-badge:focus{outline:2px solid var(--accent);outline-offset:2px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
 </style>
@@ -3547,6 +3559,36 @@ class ChartHelpers {
       return `<rect x="${x}" y="${y}" width="${barW}" height="${hgt}" rx="2" class="chart-bar-${cls}"><title>${h.percentage}%</title></rect>`;
     }).join('');
     return `<svg class="chart-spark" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">${bars}</svg>`;
+  },
+  static bars(rows, maxLabel=12){
+    if(!rows.length) return `<div class="chart-empty">Sem dados ainda</div>`;
+    return rows.map(r=>{
+      const pct = Math.max(0, Math.min(100, r.value||0));
+      const color = pct>=70?'var(--good)':pct>=50?'var(--warn)':'var(--bad)';
+      const lbl = Util.escapeHtml(String(r.label||'').slice(0,maxLabel));
+      return `<div class="progress-bar-row"><span class="lbl" title="${lbl}">${lbl}</span><div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="val">${pct}%</span></div>`;
+    }).join('');
+  },
+  static weekActivity(history){
+    const days = Array.from({length:7},(_,i)=>{
+      const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - (6-i));
+      return { key:d.toISOString().slice(0,10), label:d.toLocaleDateString(I18n.locale(), {weekday:'short'}), count:0 };
+    });
+    history.forEach(h=>{
+      const key = (h.date||'').slice(0,10);
+      const slot = days.find(d=>d.key===key);
+      if(slot) slot.count++;
+    });
+    const max = Math.max(1, ...days.map(d=>d.count));
+    const w = 280, h = 72, pad = 8;
+    const barW = (w - pad*2) / 7 - 4;
+    const bars = days.map((d,i)=>{
+      const bh = Math.max(2, (d.count / max) * (h - 24));
+      const x = pad + i * (barW + 4);
+      const y = h - 16 - bh;
+      return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" rx="2" fill="var(--accent)" opacity="${d.count?1:.25}"><title>${d.label}: ${d.count}</title></rect><text x="${x+barW/2}" y="${h-4}" text-anchor="middle" font-size="9" fill="var(--text-2)">${Util.escapeHtml(d.label.slice(0,3))}</text>`;
+    }).join('');
+    return `<svg class="chart-spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${bars}</svg>`;
   }
 }
 
@@ -3560,28 +3602,33 @@ class ProgressHubView {
   }
   render(el){
     el.classList.add('view-progress');
-    const {history, avg, passed, attempts, g, p} = ProgressAnalytics.summary();
+    const {history, avg, passed, attempts, g} = ProgressAnalytics.summary();
     const qt = ProgressAnalytics.questionTotals();
     const mastery = ProgressAnalytics.masteryScore();
     const gapN = ProgressAnalytics.gapCount();
+    const areaRows = ProgressAnalytics.accuracyByKnowledgeArea().filter(a=>a.seen>=3);
     const areas = ProgressAnalytics.radarAxes();
     const {strong, weak} = ProgressAnalytics.strongWeak(ProgressAnalytics.accuracyByKnowledgeArea());
     const radar = ChartHelpers.radar(areas.map(a=>a.label), areas.map(a=>a.acc));
+    const domainBars = ChartHelpers.bars(areaRows.map(a=>({label:a.label, value:a.acc})));
     const gauge = ChartHelpers.gauge(mastery.seen ? mastery.score : (avg || qt.accuracy));
     const spark = ChartHelpers.sparkline(history);
+    const week = ChartHelpers.weekActivity(history);
     const buckets = ProgressAnalytics.resultBuckets(history);
     const pie = ChartHelpers.pie([
       {label:'≥70%', value:buckets.aprovado, color:'var(--good)'},
       {label:'50–69%', value:buckets.media, color:'var(--warn)'},
       {label:'<50%', value:buckets.baixo, color:'var(--bad)'}
     ], 96);
+    const materias = ProgressAnalytics.accuracyByMateria().slice(0,6);
+    const trackBars = ChartHelpers.bars(materias.map(m=>({label:m.materia, value:m.acc})));
     const hasData = attempts || qt.seen;
-    const materias = ProgressAnalytics.accuracyByMateria().slice(0,5);
+    const en = I18n.isEn();
     el.innerHTML = `
       <div class="progress-hero">
         <div class="progress-hero-copy">
-          <h2>Seu mapa de conhecimento</h2>
-          <p>${hasData ? 'Domínio consolidado, lacunas acionáveis e evolução contínua.' : 'Estude alguns minutos para desbloquear mastery e o radar de domínios.'}</p>
+          <h2>${en ? 'Your knowledge map' : 'Seu mapa de conhecimento'}</h2>
+          <p>${hasData ? (en ? 'Mastery, gaps and recent activity at a glance.' : 'Domínio, lacunas e atividade recente de forma direta.') : (en ? 'Study a few minutes to unlock charts and insights.' : 'Estude alguns minutos para desbloquear gráficos e insights.')}</p>
         </div>
         ${gauge}
       </div>
@@ -3589,49 +3636,60 @@ class ProgressHubView {
         <div class="progress-kpi accent"><strong>${mastery.seen ? mastery.score+'%' : '—'}</strong><span>${I18n.t('progress.mastery')}</span></div>
         <div class="progress-kpi ${gapN?'warn':''}"><strong>${hasData ? gapN : '—'}</strong><span>${I18n.t('progress.gaps')}</span></div>
         <div class="progress-kpi"><strong>${qt.seen || '—'}</strong><span>${I18n.t('progress.questions')}</span></div>
-        <div class="progress-kpi"><strong>${attempts || '—'}</strong><span>${I18n.t('progress.sessions')}</span></div>
+        <div class="progress-kpi good"><strong>${attempts || '—'}</strong><span>${I18n.t('progress.sessions')}</span></div>
       </div>
+      ${hasData ? `<div class="progress-kpi-grid compact-4" style="margin-top:-8px">
+        <div class="progress-kpi"><strong>${g.bestStreak || '—'}</strong><span>${en ? 'Best streak (days)' : 'Melhor sequência (dias)'}</span></div>
+        <div class="progress-kpi good"><strong>${passed || '—'}</strong><span>${en ? 'Sessions ≥70%' : 'Sessões ≥70%'}</span></div>
+        <div class="progress-kpi"><strong>${qt.accuracy ? qt.accuracy+'%' : '—'}</strong><span>${en ? 'Question accuracy' : 'Acerto em questões'}</span></div>
+        <div class="progress-kpi"><strong>${avg ? avg+'%' : '—'}</strong><span>${en ? 'Session average' : 'Média das sessões'}</span></div>
+      </div>` : ''}
       <div class="progress-section">
         <div class="progress-section-head">
           <div>
-            <h3>Domínios — pontos fortes e lacunas</h3>
-            <p>Baseado nas questões que você já respondeu.</p>
+            <h3>${en ? 'Strengths and gaps' : 'Pontos fortes e lacunas'}</h3>
+            <p>${en ? 'Based on questions you already answered.' : 'Baseado nas questões que você já respondeu.'}</p>
           </div>
         </div>
         <div class="progress-insights">
-          <div class="progress-insight good"><strong>Pontos fortes</strong>${ProgressHubView._insightList(strong, 'Ainda sem áreas dominadas (≥65%).')}</div>
-          <div class="progress-insight weak"><strong>Lacunas</strong>${ProgressHubView._insightList(weak, 'Nenhuma lacuna crítica identificada.')}</div>
+          <div class="progress-insight good"><strong>${en ? 'Strengths' : 'Pontos fortes'}</strong>${ProgressHubView._insightList(strong, en ? 'No mastered areas yet (≥65%).' : 'Ainda sem áreas dominadas (≥65%).')}</div>
+          <div class="progress-insight weak"><strong>${en ? 'Gaps' : 'Lacunas'}</strong>${ProgressHubView._insightList(weak, en ? 'No critical gaps identified.' : 'Nenhuma lacuna crítica identificada.')}</div>
         </div>
         <div class="progress-actions">
-          <button class="btn btn-primary btn-sm" type="button" id="prog-smart">Estudar lacunas</button>
-          <button class="btn btn-sm" type="button" id="prog-home">Ir para trilhas</button>
+          <button class="btn btn-primary btn-sm" type="button" id="prog-smart">${en ? 'Study gaps' : 'Estudar lacunas'}</button>
+          <button class="btn btn-sm" type="button" id="prog-home">${en ? 'Go to tracks' : 'Ir para trilhas'}</button>
         </div>
-        ${hasData ? `<details class="progress-details">
-          <summary>${I18n.t('progress.domainsChart')}</summary>
-          <div class="chart-radar-wrap" style="margin-top:10px">${radar}</div>
-        </details>` : ''}
       </div>
-      ${hasData ? `<details class="progress-details">
-        <summary>${I18n.t('progress.moreStats')}</summary>
-        <div class="progress-kpi-grid" style="margin-top:10px">
-          <div class="progress-kpi"><strong>${g.bestStreak || '—'}</strong><span>Melhor sequência (dias)</span></div>
-          <div class="progress-kpi good"><strong>${passed || '—'}</strong><span>Sessões ≥70%</span></div>
+      ${hasData ? `<div class="progress-charts-grid">
+        <div class="progress-chart-card">
+          <h4>${I18n.t('progress.domainsChart')}</h4>
+          <div class="chart-radar-wrap">${radar}</div>
         </div>
-      </details>` : ''}
-      ${attempts ? `<details class="progress-details">
-        <summary>${I18n.t('progress.recentTrend')}</summary>
-        <div style="padding-top:8px">${spark}</div>
-      </details>` : ''}
-      ${attempts ? `<details class="progress-details">
-        <summary>${I18n.t('progress.resultDist')}</summary>
-        <div class="progress-details-grid">
-          <div class="chart-card">${pie}</div>
-          <div class="chart-card"><h4>Por certificação</h4>${ChartHelpers.radar(
-            materias.map(m=>m.materia),
-            materias.map(m=>m.acc), 140
-          )}</div>
+        <div class="progress-chart-card">
+          <h4>${en ? 'Accuracy by domain' : 'Acerto por domínio'}</h4>
+          ${domainBars}
         </div>
-      </details>` : ''}
+      </div>` : ''}
+      ${attempts ? `<div class="progress-charts-grid">
+        <div class="progress-chart-card">
+          <h4>${I18n.t('progress.recentTrend')}</h4>
+          ${spark}
+        </div>
+        <div class="progress-chart-card">
+          <h4>${en ? 'Last 7 days' : 'Últimos 7 dias'}</h4>
+          ${week}
+        </div>
+      </div>` : ''}
+      ${attempts ? `<div class="progress-charts-grid">
+        <div class="progress-chart-card">
+          <h4>${I18n.t('progress.resultDist')}</h4>
+          ${pie}
+        </div>
+        ${materias.length ? `<div class="progress-chart-card">
+          <h4>${en ? 'By track / subject' : 'Por trilha / matéria'}</h4>
+          ${trackBars}
+        </div>` : ''}
+      </div>` : ''}
       <h3 class="progress-history-title">${I18n.t('progress.historyTitle')}</h3>
       <div id="prog-hist"></div>`;
     el.querySelector('#prog-smart')?.addEventListener('click', ()=> PlayerController.startStudyNow());
@@ -6916,11 +6974,24 @@ class ForgeView {
 
   render(el){
     el.classList.add('view-forge');
+    if(typeof ForgeStorage === 'undefined' || typeof ForgeOrchestrator === 'undefined'){
+      el.innerHTML = `<div class="empty-state">${Icons.sparkles}<h3>${I18n.t('forge.title')}</h3><p>${I18n.isEn() ? 'Forge module failed to load. Reload the page or check your connection.' : 'Módulo Forja não carregou. Recarregue a página ou verifique a conexão.'}</p><button class="btn btn-sm" type="button" id="forge-reload">${I18n.isEn() ? 'Reload' : 'Recarregar'}</button></div>`;
+      el.querySelector('#forge-reload')?.addEventListener('click', ()=> location.reload());
+      return;
+    }
+    try{
+      this._renderWorkspace(el);
+    }catch(err){
+      el.innerHTML = `<div class="empty-state">${Icons.sparkles}<h3>${I18n.t('forge.title')}</h3><p>${Util.escapeHtml(err.message || 'Erro ao abrir a Forja')}</p></div>`;
+    }
+  }
+
+  _renderWorkspace(el){
     const cfg = ForgeStorage.getConfig();
-    const filters = this._readFilters(el);
+    const savedCmd = el.querySelector('#forge-cmd')?.value || '';
     el.innerHTML = `
       <div class="forge-hero">
-        <h2>${Icons.sparkles} ${I18n.t('forge.title')}</h2>
+        <h2><span class="forge-icon">${Icons.sparkles}</span> ${I18n.t('forge.title')}</h2>
         <p>${I18n.t('forge.subtitle')}</p>
       </div>
       <div class="forge-cmd-wrap">
@@ -6948,9 +7019,9 @@ class ForgeView {
         <details>
           <summary>${I18n.t('forge.config')}</summary>
           <div class="form-grid" style="margin-top:10px">
-            <div class="field full"><label>${I18n.t('forge.apiKey')}</label><input class="input" type="password" id="forge-api-key" value="${Util.escapeHtml(cfg.apiKey||'')}" autocomplete="off" placeholder="sk-…"></div>
-            <div class="field"><label>${I18n.t('forge.apiUrl')}</label><input class="input" id="forge-api-url" value="${Util.escapeHtml(cfg.apiUrl||'')}"></div>
-            <div class="field"><label>${I18n.t('forge.model')}</label><input class="input" id="forge-model" value="${Util.escapeHtml(cfg.model||'gpt-4o-mini')}"></div>
+            <div class="field full"><label>${I18n.t('forge.apiKey')}</label><input class="input" type="password" id="forge-api-key" autocomplete="off" placeholder="sk-…"></div>
+            <div class="field"><label>${I18n.t('forge.apiUrl')}</label><input class="input" id="forge-api-url"></div>
+            <div class="field"><label>${I18n.t('forge.model')}</label><input class="input" id="forge-model"></div>
           </div>
           <p class="hint" style="margin-top:8px">${I18n.t('forge.mockHint')}</p>
           <button class="btn btn-sm" id="forge-save-cfg" type="button" style="margin-top:8px">${I18n.t('common.save')}</button>
@@ -6969,9 +7040,13 @@ class ForgeView {
         <div id="forge-history-list"></div>
       </div>`;
 
+    el.querySelector('#forge-api-key').value = cfg.apiKey || '';
+    el.querySelector('#forge-api-url').value = cfg.apiUrl || 'https://api.openai.com/v1/chat/completions';
+    el.querySelector('#forge-model').value = cfg.model || 'gpt-4o-mini';
+    if(savedCmd) el.querySelector('#forge-cmd').value = savedCmd;
+
     this._bind(el);
     this._renderHistory(el);
-    if(filters.cmd) el.querySelector('#forge-cmd').value = filters.cmd;
   }
 
   _readFilters(el){
