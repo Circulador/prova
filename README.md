@@ -1,78 +1,79 @@
 # Velora — Knowledge Operating System
 
-**Acesse o app:** [https://circulador.github.io/prova/](https://circulador.github.io/prova/)
+**Live app:** [https://circulador.github.io/prova/](https://circulador.github.io/prova/)
 
-Velora é um **Sistema Operacional de Conhecimento** para formação em privacidade e DPO: questões, flashcards, simulados, importações e IA são **visualizações do mesmo conhecimento conectado** — não módulos isolados.
+> *Bem-vindo ao Velora — pronto para evoluir hoje?*  
+> O lugar onde **conhecimento, prática e certificações** se unem numa jornada contínua de aprendizado.  
+> Feito com ❤️ para quem aprende todos os dias.
 
-**Arquitetura (obrigatória):** [`docs/MANIFESTO-ARQUITETURA.md`](docs/MANIFESTO-ARQUITETURA.md)  
-**Privacy Knowledge OS:** [`docs/PRIVACY-KNOWLEDGE-OS.md`](docs/PRIVACY-KNOWLEDGE-OS.md)  
-**Brief para outras IAs:** [`docs/PLATFORM-BRIEF.md`](docs/PLATFORM-BRIEF.md)  
-**Trilhas DPO global:** [`docs/DPO-GLOBAL-TRACKS.md`](docs/DPO-GLOBAL-TRACKS.md)  
-**Design visual:** [`branding/design-system/design-system.md`](branding/design-system/design-system.md)  
-**Agentes Cursor:** [`AGENTS.md`](AGENTS.md)
+Velora é um **Knowledge OS** para formação em privacidade e DPO: questões, flashcards, simulados e IA são **visualizações do mesmo conhecimento conectado** — não módulos isolados.
 
-Tudo roda em HTML estático (GitHub Pages) — offline-first, mobile-first, com PWA.
+| Doc | Link |
+|-----|------|
+| Arquitetura | [`docs/MANIFESTO-ARQUITETURA.md`](docs/MANIFESTO-ARQUITETURA.md) |
+| Privacy Knowledge OS | [`docs/PRIVACY-KNOWLEDGE-OS.md`](docs/PRIVACY-KNOWLEDGE-OS.md) |
+| Brief para IAs | [`docs/PLATFORM-BRIEF.md`](docs/PLATFORM-BRIEF.md) |
+| Trilhas DPO global | [`docs/DPO-GLOBAL-TRACKS.md`](docs/DPO-GLOBAL-TRACKS.md) |
+| Design system | [`branding/design-system/design-system.md`](branding/design-system/design-system.md) |
+| Agentes Cursor | [`AGENTS.md`](AGENTS.md) |
+
+Stack: monolito HTML/CSS/JS · GitHub Pages · **offline-first** · **PWA** · mobile-first.
+
+---
+
+## O que o app faz hoje
+
+| Área | Funcionalidades |
+|------|-----------------|
+| **Início** | Boas-vindas, sessão inteligente, presets (Completo / Rápido / Só erros / Sprint / Maratona), trilhas por continente, FAQ e Como usar |
+| **Biblioteca** | Certificações · Questões · **Flashcards** (FSRS) · criar exame · importar |
+| **Progresso** | KPIs locais, gráfico de aranha por domínio, pontos fortes/lacunas, histórico |
+| **Player** | Treino e simulado · pausar · explicar · menu ⋯ · footer 3 botões |
+| **Ajustes** | Tema escuro/claro · **idioma da plataforma PT/EN** · idioma das questões · PWA · dados demo |
 
 ---
 
 ## Missão
 
-Criar a melhor plataforma de estudos do mundo. O usuário nunca deve sentir complexidade; toda a profundidade fica na arquitetura interna.
-
 Três objetivos simultâneos:
 
 1. **Passar na prova** — simulados, presets, revisão inteligente  
-2. **Reter por anos** — repetição espaçada, analogias, storytelling  
+2. **Reter por anos** — repetição espaçada (FSRS), analogias, storytelling  
 3. **Aplicar no trabalho** — casos práticos, comparativo multi-país (roadmap)
 
 ---
 
 ## Conteúdo DPO global (v2)
 
-Banco autoral alinhado a outlines públicos de certificações — **não copia provas oficiais**.
+Banco autoral alinhado a outlines públicos — **não copia provas oficiais**.
 
 | Métrica | Valor |
 |---------|-------|
 | Questões | ~301 |
 | Certificações | 19 (+ 2 stubs) |
 | Trilhas | Global · Brasil · Europa · Américas · Ásia |
-| Idioma | Bilingue **EN/PT** (modo dual no app) |
-| Estilo | Cenários lúdicos do dia a dia (WhatsApp, academia, encomendas…) |
+| Idioma das questões | Bilingue **EN/PT** (dual, en ou pt) |
+| Idioma da UI | **Português (BR)** ou **English (US)** |
+| Estilo | Cenários lúdicos do dia a dia |
 
-Certificações incluídas: EXIN (ISFS, PDPF, PDPP, CDPO, LGPD), IAPP (CIPP/E, CIPM, CIPT, CDPO/BR, CDPO/FR, CIPP/US), PECB, ISACA CDPSE, ISO 27701, CNIL, TÜV DE, UK GDPR e mais.
+Certificações: EXIN, IAPP, PECB, ISACA CDPSE, ISO 27701, CNIL, TÜV, UK GDPR e mais — ver [`docs/DPO-GLOBAL-TRACKS.md`](docs/DPO-GLOBAL-TRACKS.md).
 
-Dados em [`data/dpo-global-bank.js`](data/dpo-global-bank.js) · inventário completo em [`docs/DPO-GLOBAL-TRACKS.md`](docs/DPO-GLOBAL-TRACKS.md).
-
----
-
-## Pilares do produto
-
-| Pilar | Descrição |
-|-------|-----------|
-| **Knowledge Graph** | Conteúdo em nós únicos — schema v2 em [`docs/KNOWLEDGE-MODEL.md`](docs/KNOWLEDGE-MODEL.md) |
-| **Estudo** | Simulado, treino, sessão inteligente, presets (Completo / Rápido / Só erros) |
-| **Cards** | Flashcards com repetição espaçada (FSRS) |
-| **Biblioteca** | Certificações por continente, importação via adaptadores |
-| **Progresso** | Estatísticas, histórico, evolução |
-| **IA invisível** | ✨ Explicar — contextual, sem menu "IA" |
-| **PWA** | Instalável, cache offline do shell + banco (`sw.js`) |
+Dados: [`data/dpo-global-bank.js`](data/dpo-global-bank.js)
 
 ---
 
 ## Como usar
 
-1. Abra [circulador.github.io/prova](https://circulador.github.io/prova/) no navegador (mobile first).
-2. **Início** — Continuar, Sessão inteligente, presets, certificações por trilha.
-3. **Biblioteca** — certificações, questões, importar.
-4. **Progresso** — estatísticas e histórico.
-5. **Configurar simulado** — exclusões (já acertadas, hoje, nunca vistas), embaralhar, cronômetro.
-6. **Player** — Pausar, Explicar, revisão pré-envio (simulado).
-7. **Ajustes → Instalar aplicativo** — PWA offline (card dedicado com status e instruções iOS/Android).
-8. Idioma das questões em **Ajustes** — `dual` (EN+PT), `en` ou `pt`.
+1. Abra [circulador.github.io/prova](https://circulador.github.io/prova/) (mobile first).
+2. **Início** — leia o manifesto de boas-vindas; use Sessão inteligente ou escolha uma trilha.
+3. **Início → FAQ / Como usar** — busca por tema (flashcards, radar, offline, player…).
+4. **Biblioteca** — Certificações (▶ simulado) · Questões (+ criar) · Flashcards (estudar FSRS).
+5. **+ Novo exame** — campos obrigatórios: **Título\***, **Categoria/trilha\***, ≥1 questão vinculada.
+6. **Progresso** — radar de domínios, KPIs, botão *Estudar lacunas*.
+7. **Ajustes** — idioma da plataforma, tema, instalar PWA, gerar **dados demo** para testar gráficos.
+8. **Player** — treino (feedback + Explicar) ou simulado (cronômetro + revisão pré-envio).
 
-### Atualizar conteúdo após deploy
-
-Se ainda vir banco antigo, no console do navegador:
+### Reset após deploy
 
 ```javascript
 localStorage.removeItem('ef_global_dpo_seeded_v2');
@@ -80,7 +81,7 @@ localStorage.removeItem('ef_cleanup_global_dpo_v2');
 location.reload();
 ```
 
-Reset total (histórico + stats):
+Reset total:
 
 ```javascript
 ['ef_questions','ef_exams','ef_qstats','ef_history','ef_session','ef_global_dpo_seeded_v2','ef_cleanup_global_dpo_v2']
@@ -90,65 +91,39 @@ location.reload();
 
 ---
 
-## Formatos suportados (importação)
+## Importação
 
-PDF · DOCX · PPTX · EPUB · HTML · Markdown · TXT · CSV · JSON · imagens · áudio · vídeo
-
-> Importação direta no app: **JSON, CSV, TXT e HTML**. Outros formatos passam por adaptadores ou conversão prévia.
+Formatos no app: **JSON, CSV, TXT, HTML**. Roadmap: PDF, DOCX, EPUB, APKG — ver manifesto.
 
 ---
 
 ## Desenvolvimento
 
-Princípios inegociáveis antes de qualquer PR:
-
-- Mobile First (smartphone → tablet → desktop ≥ 1024px)
-- Regra dos 3 cliques
-- One Page First (modal/drawer antes de nova página)
-- Gate de 15 perguntas — ver manifesto
-
-### Scripts úteis
+Princípios: mobile-first · offline-first · regra dos 3 cliques · diff mínimo no monolito.
 
 ```bash
-# Regenerar banco DPO global
-python generate_dpo_global_bank.py
-
-# Sincronizar index.html → 404.html (seeder + modal)
-python sync_dpo_global.py
-python sync_exam_modal.py
+python generate_dpo_global_bank.py   # Regenerar banco DPO
+python sync_dpo_global.py            # Sync index.html → 404.html
 ```
 
-### Roadmap Privacy Knowledge OS (Fases 1–6)
-
-Ver [`docs/PRIVACY-KNOWLEDGE-OS.md`](docs/PRIVACY-KNOWLEDGE-OS.md). Próximo: dual-write `ef_knowledge_nodes_v1`, learning views no player (Feynman, analogia, mnemônico).
+Roadmap Knowledge OS (Fases 2–6): [`docs/PRIVACY-KNOWLEDGE-OS.md`](docs/PRIVACY-KNOWLEDGE-OS.md)
 
 ---
 
-## Estrutura do repositório
+## Estrutura
 
 ```
-docs/
-  MANIFESTO-ARQUITETURA.md      # Requisitos arquiteturais
-  PRIVACY-KNOWLEDGE-OS.md       # Spec certificações privacidade
-  KNOWLEDGE-MODEL.md            # Schema Knowledge Node v1 + v2
-  DPO-GLOBAL-TRACKS.md          # Inventário do banco
-  UI-REDESIGN-MODEL.md          # Shell offline-first
-  PWA-ARCHITECTURE.md           # Service Worker, manifest
-data/
-  dpo-global-bank.js            # Banco DPO global (offline)
-  knowledge-taxonomy.json       # Taxonomia continente → lei/cert
-  node-schema.example.json      # Nó v2 de referência
-AGENTS.md                       # Guia para agentes Cursor
-.cursor/rules/velora-*.mdc      # Regras automáticas
-index.html / 404.html           # App monolítico
-branding/                       # Identidade Velora, PWA
-sw.js / manifest.webmanifest    # PWA offline
-generate_dpo_global_bank.py     # Gerador do banco
-sync_dpo_global.py              # Sync index → 404
+index.html / 404.html     # App monolítico (~6k linhas)
+data/dpo-global-bank.js   # Banco DPO offline
+sw.js                     # Service Worker
+manifest.webmanifest      # PWA
+docs/                     # Specs canônicas
+branding/                 # Logo, favicon, design tokens
+sync_dpo_global.py        # Sync index → 404
 ```
 
 ---
 
-## Licença e créditos
+## Licença
 
-Ver histórico de commits e contribuições no repositório [Circulador/prova](https://github.com/Circulador/prova).
+Ver histórico e contribuições em [Circulador/prova](https://github.com/Circulador/prova).

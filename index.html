@@ -715,7 +715,17 @@ a{color:var(--accent)}
 .view{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:16px;animation:fadeIn .2s ease;-webkit-overflow-scrolling:touch}
 .view-home{padding:24px 16px 32px;max-width:480px;margin:0 auto;width:100%}
 .home-kicker{font-size:var(--text-xs);font-weight:600;color:var(--accent);letter-spacing:.06em;margin:0 0 6px;text-transform:uppercase}
-.home-greet{font-size:26px;font-weight:600;letter-spacing:-.03em;margin:0 0 20px;color:var(--text-0);line-height:1.2}
+.home-welcome{margin:0 0 20px;padding:18px 16px;border-radius:var(--radius-lg);background:var(--bg-glass);border:1px solid var(--border)}
+.home-welcome .home-kicker{margin-bottom:8px}
+.home-greet{font-size:26px;font-weight:600;letter-spacing:-.03em;margin:0 0 10px;color:var(--text-0);line-height:1.2}
+.home-os-badge{
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--teal);background:var(--teal-soft);border:1px solid rgba(0,212,255,.25);
+  padding:4px 10px;border-radius:999px;margin:0 0 12px;
+}
+.home-mission{font-size:var(--text-sm);color:var(--text-1);line-height:1.65;margin:0 0 12px}
+.home-story{font-size:var(--text-sm);color:var(--text-2);line-height:1.65;margin:0 0 10px}
+.home-family{font-size:var(--text-xs);color:var(--text-2);margin:0;font-style:italic;opacity:.9}
 .home-hero{
   display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;
   padding:16px 18px;border-radius:var(--radius-md);background:var(--accent-soft);
@@ -1164,7 +1174,11 @@ const I18n = {
       'nav.home':'Início','nav.library':'Biblioteca','nav.progress':'Progresso','nav.settings':'Ajustes','nav.help':'Ajuda',
       'nav.homeTitle':'Página inicial','nav.libraryTitle':'Certificações, questões e flashcards','nav.progressTitle':'Estatísticas e histórico',
       'home.greetMorning':'Bom dia','home.greetAfternoon':'Boa tarde','home.greetEvening':'Boa noite',
-      'home.ready':'Pronto para evoluir hoje?','home.student':'Estudante','home.tracks':'Trilhas DPO Global',
+      'home.welcome':'Bem-vindo ao Velora','home.ready':'Pronto para evoluir hoje?','home.osBadge':'Knowledge OS',
+      'home.mission':'O lugar onde conhecimento, prática e certificações se unem em uma única jornada de aprendizado e evolução contínua.',
+      'home.story':'O Velora nasceu para ajudar pessoas com objetivos, ritmos e sonhos diferentes. Foi criado inicialmente para minha esposa e minha filha, cada uma em uma fase distinta da vida, mas com algo em comum: a vontade de aprender e evoluir todos os dias.',
+      'home.family':'Feito com ❤️ para minha família.',
+      'home.student':'Estudante','home.tracks':'Trilhas DPO Global',
       'home.continue':'Continuar simulado','home.answered':'respondidas','home.smartSession':'Sessão inteligente',
       'home.presetFull':'Completo','home.presetQuick':'Rápido','home.presetErrors':'Só erros','home.presetSprint':'Sprint','home.presetMarathon':'Maratona',
       'home.viewProgress':'Ver progresso','home.faq':'FAQ','home.howto':'Como usar',
@@ -1190,7 +1204,11 @@ const I18n = {
       'nav.home':'Home','nav.library':'Library','nav.progress':'Progress','nav.settings':'Settings','nav.help':'Help',
       'nav.homeTitle':'Home page','nav.libraryTitle':'Certifications, questions and flashcards','nav.progressTitle':'Stats and history',
       'home.greetMorning':'Good morning','home.greetAfternoon':'Good afternoon','home.greetEvening':'Good evening',
-      'home.ready':'Ready to grow today?','home.student':'Learner','home.tracks':'Global DPO Tracks',
+      'home.welcome':'Welcome to Velora','home.ready':'Ready to grow today?','home.osBadge':'Knowledge OS',
+      'home.mission':'Where knowledge, practice and certifications come together in one continuous learning journey.',
+      'home.story':'Velora was born to help people with different goals, rhythms and dreams. It was first created for my wife and my daughter — each at a different stage of life, but sharing the same desire to learn and grow every day.',
+      'home.family':'Made with ❤️ for my family.',
+      'home.student':'Learner','home.tracks':'Global DPO Tracks',
       'home.continue':'Continue exam','home.answered':'answered','home.smartSession':'Smart session',
       'home.presetFull':'Full','home.presetQuick':'Quick','home.presetErrors':'Errors only','home.presetSprint':'Sprint','home.presetMarathon':'Marathon',
       'home.viewProgress':'View progress','home.faq':'FAQ','home.howto':'How to use',
@@ -2417,6 +2435,16 @@ class DashboardView {
     if(g.bestStreak) parts.push(`<span>Sequência <strong>${g.bestStreak}d</strong></span>`);
     return `<div class="home-progress-summary">${parts.join('')}</div>`;
   }
+  static _welcomeBlock(){
+    return `<div class="home-welcome">
+      <p class="home-kicker">${I18n.t('home.welcome')}</p>
+      <h1 class="home-greet">${I18n.t('home.ready')}</h1>
+      <span class="home-os-badge">${I18n.t('home.osBadge')}</span>
+      <p class="home-mission">${I18n.t('home.mission')}</p>
+      <p class="home-story">${I18n.t('home.story')}</p>
+      <p class="home-family">${I18n.t('home.family')}</p>
+    </div>`;
+  }
   render(el){
     el.classList.add('view-home');
     const session = StorageManager.getSession();
@@ -2426,7 +2454,6 @@ class DashboardView {
     const grouped = DashboardView._groupCertsByTrack(allCerts);
     const answered = session?.answers ? Object.keys(session.answers).filter(k=>session.answers[k]!==undefined&&session.answers[k]!==null).length : 0;
     const totalQ = sessionExam?.questionIds?.length || 0;
-    const name = DashboardView._studentName() || I18n.t('home.student');
     const progressSummary = DashboardView._homeProgressSummary();
 
     const resumeBlock = sessionExam ? `
@@ -2470,9 +2497,7 @@ class DashboardView {
     }).join('');
 
     el.innerHTML = `
-      <p class="home-kicker">${I18n.t('home.tracks')}</p>
-      <h1 class="home-greet">${DashboardView._greeting()}, ${Util.escapeHtml(name)}<span class="home-greet-name">${I18n.t('home.ready')}</span></h1>
-      ${allCerts.length ? `<p class="home-greet-name" style="margin:-12px 0 12px">${Util.escapeHtml(GlobalDPOSeeder.TRILHA_DESC||'')}</p>` : ''}
+      ${DashboardView._welcomeBlock()}
       ${progressSummary}
       ${resumeBlock}
       ${allCerts.length ? actionBar : ''}
