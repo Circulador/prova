@@ -918,6 +918,12 @@ body.player-paused #p-pause.active{background:var(--warn-soft);border-color:var(
 .fc-filter-group .checkbox-row{font-size:12px;margin:4px 0;display:flex}
 .fc-filter-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 8px}
 .fc-filter-preview{font-size:12px;color:var(--text-2);margin-top:6px}
+.fc-create-split{display:flex;flex-wrap:wrap;gap:8px}
+.lib-connect-strip{font-size:12px;color:var(--text-2);margin:0 0 12px;line-height:1.5}
+.lib-connect-strip .btn-link{background:none;border:none;padding:0;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline}
+.lib-forge-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;margin-bottom:12px;border-radius:var(--radius-md);background:var(--accent-soft);border:1px solid var(--border)}
+.lib-forge-banner p{margin:0;font-size:12px;color:var(--text-1);line-height:1.45;flex:1;min-width:140px}
+.q-fsrs-badge{font-size:10px;font-weight:600;color:var(--accent)}
 @media(max-width:640px){.fc-stats{grid-template-columns:repeat(2,1fr)}}
 .progress-mini{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px}
 .progress-mini .xp-bar{flex:1;height:6px}
@@ -1341,7 +1347,10 @@ const I18n = {
       'fc.filterTitle':'Montar sessão','fc.filterHint':'Combine filtros (opcional). Vazio = baralho inteiro.',
       'fc.scopeDue':'Revisão FSRS (vencidos + novos)','fc.scopeAll':'Todos os cards','fc.scopeNew':'Só novos','fc.scopeMarked':'Só marcados ★',
       'fc.filterTrilha':'Trilha','fc.filterMateria':'Matéria / assunto','fc.filterCategory':'Categoria','fc.filterTheme':'Tema / tags',
-      'fc.filterQty':'Quantidade','fc.filterPreview':'{n} card(s) na sessão','fc.filterClear':'Limpar filtros','fc.filterSelectAll':'Marcar grupo'
+      'fc.filterQty':'Quantidade','fc.filterPreview':'{n} card(s) na sessão','fc.filterClear':'Limpar filtros','fc.filterSelectAll':'Marcar grupo',
+      'fc.createManual':'Criar manualmente','fc.createAi':'Gerar com IA','fc.newCardTitle':'Nova questão → flashcard',
+      'fc.newCardSave':'Salvar no baralho','fc.forgeBanner':'Gerar vários flashcards de uma vez com a Forja (comando → JSON → banco).',
+      'lib.forgeGenerate':'Gerar com IA','lib.forgeHintQuestions':'Importar em lote ou gerar questões, flashcards e simulados na Forja.','lib.forgeHintTracks':'Gerar trilhas, simulados ou pacotes de estudo com IA.'
     },
     'en-US': {
       'nav.home':'Home','nav.library':'Library','nav.progress':'Progress','nav.settings':'Settings','nav.help':'Help',
@@ -1398,7 +1407,10 @@ const I18n = {
       'fc.filterTitle':'Build session','fc.filterHint':'Combine filters (optional). Empty = full deck.',
       'fc.scopeDue':'FSRS review (due + new)','fc.scopeAll':'All cards','fc.scopeNew':'New only','fc.scopeMarked':'Marked ★ only',
       'fc.filterTrilha':'Track','fc.filterMateria':'Subject','fc.filterCategory':'Category','fc.filterTheme':'Theme / tags',
-      'fc.filterQty':'Quantity','fc.filterPreview':'{n} card(s) in session','fc.filterClear':'Clear filters','fc.filterSelectAll':'Select group'
+      'fc.filterQty':'Quantity','fc.filterPreview':'{n} card(s) in session','fc.filterClear':'Clear filters','fc.filterSelectAll':'Select group',
+      'fc.createManual':'Create manually','fc.createAi':'Generate with AI','fc.newCardTitle':'New question → flashcard',
+      'fc.newCardSave':'Save to deck','fc.forgeBanner':'Generate many flashcards at once with Forge (command → JSON → database).',
+      'lib.forgeGenerate':'Generate with AI','lib.forgeHintQuestions':'Bulk import or generate questions, flashcards and exams in Forge.','lib.forgeHintTracks':'Generate tracks, practice exams or study packs with AI.'
     }
   },
   locale(){ return this._locale; },
@@ -3056,13 +3068,19 @@ class QuestionBankView {
       ? (all.filter(match).length ? all.filter(match).map(q=>this._row(q)).join('') : DashboardView._empty('Nenhuma questão', 'Ajuste a busca.'))
       : this._renderTree(BankHierarchy.groupByExam());
     this.el.innerHTML = `
+      <p class="lib-connect-strip">${I18n.t('lib.forgeHintQuestions')} <button type="button" class="btn-link" id="qb-forge-link">${Icons.sparkles} ${I18n.t('lib.forgeGenerate')}</button></p>
       <div class="row between" style="margin-bottom:12px;gap:8px">
-        <input class="input" id="qb-search" placeholder="Buscar por prova, matéria ou texto..." value="${Util.escapeHtml(filter)}">
-        <button class="btn btn-sm btn-primary" id="qb-new">${Icons.plus}</button>
+        <input class="input" id="qb-search" placeholder="${I18n.isEn() ? 'Search track, subject or text…' : 'Buscar por prova, matéria ou texto…'}" value="${Util.escapeHtml(filter)}">
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button class="btn btn-sm btn-ghost" id="qb-forge" type="button" title="${I18n.t('lib.forgeGenerate')}">${Icons.sparkles}</button>
+          <button class="btn btn-sm btn-primary" id="qb-new" type="button">${Icons.plus}</button>
+        </div>
       </div>
       <div id="qb-list" class="${f?'':'bank-tree'}">${content}</div>
     `;
     this.el.querySelector('#qb-new').addEventListener('click', ()=>QuestionEditorController.openModal(null, ()=>this._renderList(this.el.querySelector('#qb-search').value)));
+    this.el.querySelector('#qb-forge')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.questionParams()));
+    this.el.querySelector('#qb-forge-link')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.questionParams()));
     this.el.querySelector('#qb-search').addEventListener('input', e=>this._renderList(e.target.value));
     this._bindActions(all);
   }
@@ -3090,6 +3108,11 @@ class QuestionBankView {
     }).join('');
   }
   _bindActions(all){
+    this.el.querySelectorAll('[data-fc-q]').forEach(b=>b.addEventListener('click', ()=>{
+      const q = all.find(x=>x.id===b.dataset.fcQ);
+      if(!q) return;
+      FlashcardController.start(1, { scope:'all', questionIds:[q.id] });
+    }));
     this.el.querySelectorAll('[data-edit-q]').forEach(b=>b.addEventListener('click', ()=>{
       const q = all.find(x=>x.id===b.dataset.editQ);
       QuestionEditorController.openModal(q, ()=>this._renderList(this.el.querySelector('#qb-search')?.value||''));
@@ -3101,11 +3124,18 @@ class QuestionBankView {
   }
   _row(q){
     const desc = [q.materia, q.submateria||q.category].filter(Boolean).join(' · ') || 'geral';
+    const fc = FSRS.card(q);
+    const now = Date.now();
+    let fsrsLbl = '';
+    if(!fc.reps) fsrsLbl = I18n.isEn() ? 'new' : 'novo';
+    else if(fc.due <= now) fsrsLbl = I18n.isEn() ? 'review' : 'revisar';
+    const fsrsBadge = fsrsLbl ? `<span class="q-fsrs-badge"> · ${fsrsLbl}</span>` : '';
     return `<div class="list-row list-row-compact">
       <div class="meta">
-        <div class="title">${Util.escapeHtml(q.text.slice(0,80)||'(sem enunciado)')}</div>
+        <div class="title">${Util.escapeHtml(q.text.slice(0,80)||'(sem enunciado)')}${fsrsBadge}</div>
         <div class="desc">${Util.escapeHtml(desc)}</div>
       </div>
+      <button class="btn btn-icon btn-ghost btn-sm" data-fc-q="${q.id}" title="${I18n.isEn() ? 'Study as card' : 'Estudar como card'}">${Icons.play}</button>
       <button class="btn btn-icon btn-ghost btn-sm" data-edit-q="${q.id}">${Icons.edit}</button>
       <button class="btn btn-icon btn-danger btn-sm" data-del-q="${q.id}">${Icons.trash}</button>
     </div>`;
@@ -3114,9 +3144,17 @@ class QuestionBankView {
 
 /* ---------- Question Editor (modal, shared by Bank & Builder) ---------- */
 class QuestionEditorController {
-  static openModal(existing, onSaved){
+  static openModal(existing, onSaved, opts={}){
     const q = existing ? new Question(existing) : new Question();
+    const ctx = opts.context || 'question';
+    const forgeParams = opts.forgeParams || null;
+    const forgeBanner = (!existing && ctx === 'flashcard') ? `
+      <div class="lib-forge-banner">
+        <p>${I18n.t('fc.forgeBanner')}</p>
+        <button type="button" class="btn btn-sm" id="qe-forge">${Icons.sparkles} ${I18n.t('fc.createAi')}</button>
+      </div>` : '';
     const bodyHtml = `
+      ${forgeBanner}
       <div class="qtype-grid" id="qtype-grid">
         ${Object.entries(QUESTION_TYPES).map(([key,def])=>`
           <button type="button" class="qtype-btn ${q.type===key?'active':''}" data-type="${key}">${def.icon} ${def.label}</button>
@@ -3145,11 +3183,15 @@ class QuestionEditorController {
       </div>
     `;
     const {el, close} = Modal.open({
-      title: existing ? 'Editar questão' : 'Nova questão',
+      title: existing ? (I18n.isEn() ? 'Edit question' : 'Editar questão') : (ctx === 'flashcard' ? I18n.t('fc.newCardTitle') : (I18n.isEn() ? 'New question' : 'Nova questão')),
       wide:true,
       bodyHtml,
-      footerHtml: `<button class="btn btn-ghost" data-cancel>Cancelar</button><button class="btn btn-primary" data-save>Salvar questão</button>`,
+      footerHtml: `<button class="btn btn-ghost" data-cancel>${I18n.t('common.cancel')}</button><button class="btn btn-primary" data-save>${ctx === 'flashcard' ? I18n.t('fc.newCardSave') : (I18n.isEn() ? 'Save question' : 'Salvar questão')}</button>`,
       onMount:(modalEl, closeFn)=>{
+        modalEl.querySelector('#qe-forge')?.addEventListener('click', ()=>{
+          closeFn();
+          LibraryForge.open(forgeParams || LibraryForge.flashcardParams());
+        });
         const renderTypeBody = () => this._renderTypeBody(modalEl, q);
         modalEl.querySelectorAll('[data-type]').forEach(btn=>{
           btn.addEventListener('click', ()=>{
@@ -6595,6 +6637,39 @@ const FSRS = {
   makeExam(title,qs){ if(!qs.length){Toast.show('Nenhuma questão encontrada.','warn');return;} const ex=new Exam({id:Util.uid('exam_filter'),title,description:'Prova gerada por filtro.',category:'Revisão',timeMinutes:Math.max(5,Math.round(qs.length*1.2)),passScore:70,questionIds:qs.map(q=>q.id)}); StorageManager.upsertExam(ex); ExamConfigModal.open(ex.id); }
 };
 
+const LibraryForge = {
+  open(params={}){
+    App.instance.router.go('forge', params);
+  },
+  flashcardParams(filters={}, qty=20){
+    const topic = filters.materias?.[0] || filters.trilhas?.[0] || filters.categories?.[0] || filters.tags?.[0] || '';
+    const n = filters.limit || qty || 20;
+    const en = I18n.isEn();
+    const cmd = topic
+      ? (en ? `Generate ${n} flashcards about ${topic}.` : `Gere ${n} flashcards sobre ${topic}.`)
+      : (en ? `Generate ${n} flashcards.` : `Gere ${n} flashcards.`);
+    return { type:'flashcards', cmd, quantity:n, returnTab:'flashcards' };
+  },
+  questionParams(){
+    const en = I18n.isEn();
+    return {
+      type:'quiz',
+      cmd: en ? 'Generate 20 quiz questions.' : 'Gere 20 questões de múltipla escolha.',
+      quantity:20,
+      returnTab:'questoes'
+    };
+  },
+  trackParams(){
+    const en = I18n.isEn();
+    return {
+      type:'exam',
+      cmd: en ? 'Create a practice exam with 30 questions.' : 'Crie um simulado com 30 questões.',
+      quantity:30,
+      returnTab:'certificacoes'
+    };
+  }
+};
+
 class FlashcardController {
   static _queue = [];
   static _idx = 0;
@@ -6657,6 +6732,10 @@ class FlashcardController {
     }
     if(opts.tags?.length){
       qs = qs.filter(q=>opts.tags.some(t=>FSRS.temas(q).includes(t)));
+    }
+    if(opts.questionIds?.length){
+      const ids = new Set(opts.questionIds);
+      qs = qs.filter(q=>ids.has(q.id));
     }
     return qs;
   }
@@ -6851,7 +6930,10 @@ class FlashcardsHubView {
       </div>
       <div class="hub-actions-bar">
         <button class="btn btn-sm btn-primary" type="button" id="fc-study">${Icons.play} ${I18n.isEn() ? 'Study flashcards' : 'Estudar flashcards'}</button>
-        <button class="btn btn-sm" type="button" id="fc-new">${Icons.plus} ${I18n.isEn() ? 'Create flashcard' : 'Criar flashcard'}</button>
+        <div class="fc-create-split">
+          <button class="btn btn-sm" type="button" id="fc-new">${Icons.plus} ${I18n.t('fc.createManual')}</button>
+          <button class="btn btn-sm" type="button" id="fc-forge">${Icons.sparkles} ${I18n.t('fc.createAi')}</button>
+        </div>
         <button class="btn btn-sm btn-ghost" type="button" id="fc-questions">${I18n.isEn() ? 'View questions' : 'Ver questões'}</button>
       </div>
       <div class="card card-compact" style="margin-top:14px">
@@ -6888,7 +6970,10 @@ class FlashcardsHubView {
       QuestionEditorController.openModal(null, ()=>{
         Toast.show(I18n.isEn() ? 'Question saved — card added to deck.' : 'Questão salva — flashcard disponível no baralho.', 'success');
         this.render(el);
-      });
+      }, { context:'flashcard', forgeParams: LibraryForge.flashcardParams(FlashcardsHubView._collectFilters(el)) });
+    });
+    el.querySelector('#fc-forge')?.addEventListener('click', ()=>{
+      LibraryForge.open(LibraryForge.flashcardParams(FlashcardsHubView._collectFilters(el)));
     });
     el.querySelector('#fc-questions')?.addEventListener('click', ()=> App.instance.router.go('content', {tab:'questoes'}));
     update();
@@ -7022,6 +7107,7 @@ class ContentHubView {
         <button class="btn btn-sm btn-danger" id="ch-delete" type="button" ${selCount?'':'disabled'}>${Icons.trash} Excluir</button>
         <button class="btn btn-sm btn-ghost" id="ch-cancel-sel" type="button">Cancelar</button>
       </div>` : `
+      <p class="lib-connect-strip">${I18n.t('lib.forgeHintTracks')} <button type="button" class="btn-link" id="ch-forge-link">${Icons.sparkles} ${I18n.t('lib.forgeGenerate')}</button></p>
       <div class="hub-actions-bar">
         <button class="btn btn-sm" id="ch-forge" type="button">${Icons.sparkles} ${I18n.t('lib.forge')}</button>
         <button class="btn btn-sm" id="ch-new" type="button">${Icons.plus} ${I18n.t('lib.newExam')}</button>
@@ -7031,7 +7117,8 @@ class ContentHubView {
       </div>`;
     const footer = this._selectMode ? '' : `<div class="hub-footer"><button class="btn btn-ghost btn-sm" id="ch-smart" type="button">${I18n.t('lib.smartReview')}</button></div>`;
     panel.innerHTML = `${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma trilha','Recarregue a página para carregar o conteúdo inicial.')}</div>${footer}`;
-    panel.querySelector('#ch-forge')?.addEventListener('click', ()=> App.instance.router.go('forge'));
+    panel.querySelector('#ch-forge')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.trackParams()));
+    panel.querySelector('#ch-forge-link')?.addEventListener('click', ()=> LibraryForge.open(LibraryForge.trackParams()));
     panel.querySelector('#ch-new')?.addEventListener('click', ()=> App.instance.router.go('builder', {}));
     panel.querySelector('#ch-import')?.addEventListener('click', ()=> ImportController.openModal());
     panel.querySelector('#ch-select')?.addEventListener('click', ()=>{ this._selectMode = true; this._selected.clear(); this._renderCertificacoes(); });
@@ -7123,15 +7210,18 @@ class ForgeView {
     ];
   }
 
-  render(el){
+  render(el, params={}){
     el.classList.add('view-forge');
+    this._launchParams = null;
     if(typeof ForgeStorage === 'undefined' || typeof ForgeOrchestrator === 'undefined'){
       el.innerHTML = `<div class="empty-state">${Icons.sparkles}<h3>${I18n.t('forge.title')}</h3><p>${I18n.isEn() ? 'Forge module failed to load. Reload the page or check your connection.' : 'Módulo Forja não carregou. Recarregue a página ou verifique a conexão.'}</p><button class="btn btn-sm" type="button" id="forge-reload">${I18n.isEn() ? 'Reload' : 'Recarregar'}</button></div>`;
       el.querySelector('#forge-reload')?.addEventListener('click', ()=> location.reload());
       return;
     }
     try{
+      this._launchParams = params || {};
       this._renderWorkspace(el);
+      this._applyLaunchParams(el, this._launchParams);
     }catch(err){
       el.innerHTML = `<div class="empty-state">${Icons.sparkles}<h3>${I18n.t('forge.title')}</h3><p>${Util.escapeHtml(err.message || 'Erro ao abrir a Forja')}</p></div>`;
     }
@@ -7198,6 +7288,15 @@ class ForgeView {
 
     this._bind(el);
     this._renderHistory(el);
+  }
+
+  _applyLaunchParams(el, params={}){
+    if(!params || !Object.keys(params).length) return;
+    if(params.type) el.querySelector('#forge-type').value = params.type;
+    if(params.quantity) el.querySelector('#forge-qty').value = params.quantity;
+    if(params.cmd) el.querySelector('#forge-cmd').value = params.cmd;
+    if(params.language) el.querySelector('#forge-lang').value = params.language;
+    if(params.difficulty) el.querySelector('#forge-diff').value = params.difficulty;
   }
 
   _readFilters(el){
@@ -7330,6 +7429,10 @@ class ForgeView {
       el.querySelector('#forge-save').disabled = true;
       el.querySelector('#forge-status').textContent = I18n.isEn()?'Persisted in platform.':'Persistido na plataforma.';
       this._renderHistory(el);
+      const back = this._launchParams?.returnTab;
+      if(back){
+        setTimeout(()=> App.instance.router.go('content', {tab: back}), 600);
+      }
     }catch(e){
       Toast.show(e.message || 'Erro', 'warn');
     }
