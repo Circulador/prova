@@ -1352,7 +1352,10 @@ const I18n = {
       'forge.title':'Forja','forge.subtitle':'Motor de geração estruturada — não é chat. Comando → JSON → validação → banco.',
       'forge.command':'Comando','forge.commandPh':'Ex.: Gere 20 flashcards sobre História do Brasil…',
       'forge.generate':'Gerar prévia','forge.save':'Salvar no banco','forge.voice':'Falar','forge.config':'Configurações da IA',
-      'forge.apiKey':'Chave API (opcional — fica só neste dispositivo)','forge.apiUrl':'URL da API','forge.model':'Modelo','forge.provider':'Provedor','forge.providerLocal':'Biblioteca local (sem conta)','forge.providerOllama':'Ollama no seu PC (grátis)','forge.providerOpenai':'OpenAI-compatible (chave opcional)','forge.mockHint':'Padrão: monta conteúdo real a partir da sua biblioteca, sem cadastro. Ollama (localhost) ou chave API são opcionais — nada é enviado aos servidores do Velora.',
+      'forge.apiKey':'Chave API (opcional — fica só neste dispositivo)','forge.apiUrl':'URL da API','forge.model':'Modelo','forge.provider':'Provedor','forge.providerLocal':'① Biblioteca local (celular · tablet · PC)','forge.providerOllama':'② Ollama (PC com app instalado)','forge.providerOllamaMobile':'② Ollama (só no PC — indisponível no celular)','forge.providerOpenai':'③ OpenAI-compatible (sua chave neste aparelho)','forge.mockHint':'Padrão no celular: biblioteca local, sem conta. Ollama exige software no PC. Chave API fica só neste navegador — o Velora não tem servidor.',
+      'forge.platformMobile':'No celular/tablet use <strong>Biblioteca local</strong>. Ollama não roda no aparelho.',
+      'forge.platformDesktop':'No PC: biblioteca local (padrão), Ollama local ou chave API opcional. Nada passa pelos servidores do Velora.',
+      'forge.apiKeyPrivacy':'A chave fica só neste navegador e vai direto à URL que você configurou. Não há login OAuth no app — use a chave da sua conta ou um gateway seu (LM Studio, OpenRouter, etc.).',
       'forge.history':'Histórico de gerações','forge.examples':'Exemplos','forge.regenerate':'Regenerar','forge.duplicate':'Duplicar','forge.export':'Exportar','forge.template':'Salvar modelo','forge.uploadDoc':'Enviar documento (texto)',
       'fc.filterTitle':'Montar sessão','fc.filterHint':'Combine filtros (opcional). Vazio = baralho inteiro.',
       'fc.scopeDue':'Revisão FSRS (vencidos + novos)','fc.scopeAll':'Todos os cards','fc.scopeNew':'Só novos','fc.scopeMarked':'Só marcados ★',
@@ -1419,7 +1422,10 @@ const I18n = {
       'forge.title':'Forge','forge.subtitle':'Structured generation engine — not a chat. Command → JSON → validate → persist.',
       'forge.command':'Command','forge.commandPh':'E.g. Generate 20 flashcards about World History…',
       'forge.generate':'Generate preview','forge.save':'Save to database','forge.voice':'Speak','forge.config':'AI settings',
-      'forge.apiKey':'API key (optional — stays on this device only)','forge.apiUrl':'API URL','forge.model':'Model','forge.provider':'Provider','forge.providerLocal':'Local library (no account)','forge.providerOllama':'Ollama on your PC (free)','forge.providerOpenai':'OpenAI-compatible (optional key)','forge.mockHint':'Default: builds real content from your library with no signup. Ollama (localhost) or an API key are optional — nothing is sent to Velora servers.',
+      'forge.apiKey':'API key (optional — stays on this device only)','forge.apiUrl':'API URL','forge.model':'Model','forge.provider':'Provider','forge.providerLocal':'① Local library (phone · tablet · PC)','forge.providerOllama':'② Ollama (PC with app installed)','forge.providerOllamaMobile':'② Ollama (PC only — unavailable on phone)','forge.providerOpenai':'③ OpenAI-compatible (your key on this device)','forge.mockHint':'Default on mobile: local library, no account. Ollama needs desktop software. API keys stay in this browser only — Velora has no backend.',
+      'forge.platformMobile':'On phone/tablet use <strong>Local library</strong>. Ollama does not run on the device.',
+      'forge.platformDesktop':'On PC: local library (default), local Ollama or optional API key. Nothing goes through Velora servers.',
+      'forge.apiKeyPrivacy':'The key stays in this browser and goes directly to your configured URL. No OAuth login in the app — use your account key or your own gateway (LM Studio, OpenRouter, etc.).',
       'forge.history':'Generation history','forge.examples':'Examples','forge.regenerate':'Regenerate','forge.duplicate':'Duplicate','forge.export':'Export','forge.template':'Save template','forge.uploadDoc':'Upload document (text)',
       'fc.filterTitle':'Build session','fc.filterHint':'Combine filters (optional). Empty = full deck.',
       'fc.scopeDue':'FSRS review (due + new)','fc.scopeAll':'All cards','fc.scopeNew':'New only','fc.scopeMarked':'Marked ★ only',
@@ -1512,8 +1518,8 @@ const HelpCenter = {
       {id:'forge-ai', section:'faq', kw:['forja','forge','ia','api','ollama','gerar','demo'],
         title:L('Forja — gerar conteúdo sem expor conta','Forge — generate content without exposing your account'),
         body:L(
-          '<p>A <strong>Forja</strong> (Início → badge Knowledge OS, ou Biblioteca → <em>Forja IA</em>) gera flashcards, questões e simulados a partir de um comando.</p><p><strong>Sem cadastro (padrão):</strong> provedor <em>Biblioteca local</em> monta conteúdo real a partir das questões já carregadas no Velora — nenhuma chave, nenhum envio ao nosso servidor.</p><p><strong>Ollama (opcional):</strong> IA gratuita no seu PC (<code>localhost:11434</code>) — instale o Ollama, escolha o provedor na Forja e use sem conta na nuvem.</p><p><strong>API externa (opcional):</strong> chave OpenAI-compatible fica <strong>só no localStorage deste navegador</strong>; o Velora não a armazena em servidor. Se não houver chave e a biblioteca não tiver matches, cai em prévia demo rotulada.</p>',
-          '<p><strong>Forge</strong> generates flashcards, questions and exams from a command.</p><p><strong>No signup (default):</strong> <em>Local library</em> provider builds real content from questions already in Velora — no key, nothing sent to our servers.</p><p><strong>Ollama (optional):</strong> free local AI on your PC. <strong>External API (optional):</strong> key stays in this browser only.</p>'
+          '<p>A <strong>Forja</strong> tem três camadas, por dispositivo:</p><ol><li><strong>Celular / tablet (recomendado):</strong> <em>Biblioteca local</em> — monta flashcards e questões reais do banco já carregado (certificações). Sem instalar nada, sem conta, offline.</li><li><strong>Computador (opcional):</strong> <em>Ollama</em> — só funciona se o Ollama estiver <strong>instalado e rodando nesse PC</strong> (<code>localhost:11434</code>). O celular <strong>não alcança</strong> o Ollama do PC por padrão.</li><li><strong>Sua API (opcional):</strong> chave OpenAI-compatible colada por você. Fica <strong>só no localStorage deste navegador</strong>; chamadas vão direto da URL que você configurou. O Velora <strong>não tem servidor</strong> — não existe “login OAuth” embutido; você usa a chave da sua própria conta OpenAI (ou gateway/LM Studio/OpenRouter) sem expor ao app Velora.</li></ol><p><strong>Privacidade:</strong> progresso, questões e chaves ficam locais. Não há conta Velora nem backend que receba credenciais.</p>',
+          '<p>Three tiers by device: (1) <strong>Phone/tablet:</strong> local library — real content, no install. (2) <strong>PC only:</strong> Ollama must run on that machine — phones cannot reach PC Ollama by default. (3) <strong>Your API key</strong> — stored in this browser only, direct calls to your configured URL; no Velora backend or OAuth login.</p>'
         )},
       {id:'progressive-mode', section:'faq', kw:['progressivo','incremental','bloco','fase','aprendizagem'],
         title:L('Modo progressivo — blocos e revisão cumulativa','Progressive mode — blocks and cumulative review'),
@@ -7765,6 +7771,7 @@ class ForgeView {
       <div class="forge-config">
         <details>
           <summary>${I18n.t('forge.config')}</summary>
+          <p class="hint forge-platform-notice" id="forge-platform-notice" style="margin:0 0 10px;line-height:1.55"></p>
           <div class="form-grid" style="margin-top:10px">
             <div class="field full"><label>${I18n.t('forge.provider')}</label><select class="select" id="forge-provider">
               <option value="local">${I18n.t('forge.providerLocal')}</option>
@@ -7776,6 +7783,7 @@ class ForgeView {
             <div class="field"><label>${I18n.t('forge.model')}</label><input class="input" id="forge-model"></div>
           </div>
           <p class="hint" style="margin-top:8px">${I18n.t('forge.mockHint')}</p>
+          <p class="hint" style="margin-top:6px">${I18n.t('forge.apiKeyPrivacy')}</p>
           <button class="btn btn-sm" id="forge-save-cfg" type="button" style="margin-top:8px">${I18n.t('common.save')}</button>
         </details>
       </div>
@@ -7800,6 +7808,32 @@ class ForgeView {
 
     this._bind(el);
     this._renderHistory(el);
+    this._applyForgePlatformRules(el, cfg);
+  }
+
+  static _isMobileForge(){
+    return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+      || (navigator.maxTouchPoints > 1 && window.matchMedia('(max-width: 1023px)').matches);
+  }
+
+  _applyForgePlatformRules(el, cfg){
+    const mobile = ForgeView._isMobileForge();
+    const sel = el.querySelector('#forge-provider');
+    const optOllama = sel?.querySelector('option[value="ollama"]');
+    const notice = el.querySelector('#forge-platform-notice');
+    if(notice) notice.innerHTML = mobile ? I18n.t('forge.platformMobile') : I18n.t('forge.platformDesktop');
+    if(optOllama){
+      optOllama.textContent = mobile ? I18n.t('forge.providerOllamaMobile') : I18n.t('forge.providerOllama');
+      if(mobile){
+        optOllama.disabled = true;
+        if(sel.value === 'ollama'){
+          sel.value = 'local';
+          Toast.show(I18n.isEn() ? 'Ollama is desktop-only. Using local library.' : 'Ollama é só no PC. Usando biblioteca local.', 'warn');
+        }
+      } else {
+        optOllama.disabled = false;
+      }
+    }
   }
 
   _applyLaunchParams(el, params={}){
@@ -7848,6 +7882,11 @@ class ForgeView {
     });
     el.querySelector('#forge-provider')?.addEventListener('change', ()=>{
       const p = el.querySelector('#forge-provider')?.value;
+      if(ForgeView._isMobileForge() && p === 'ollama'){
+        el.querySelector('#forge-provider').value = 'local';
+        Toast.show(I18n.isEn() ? 'Ollama requires a desktop with Ollama installed.' : 'Ollama exige um PC com o app instalado.', 'warn');
+        return;
+      }
       const url = el.querySelector('#forge-api-url');
       const model = el.querySelector('#forge-model');
       if(p === 'ollama'){
