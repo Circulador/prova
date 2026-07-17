@@ -438,11 +438,17 @@ const ForgeProviderOllama = {
 
 const ForgeProvider = {
   async generate(system, user, config, intent){
-    if(typeof ForgeEngines !== 'undefined' && ForgeEngines.hasActiveEngine()){
+    const engineActive = typeof ForgeEngines !== 'undefined' && ForgeEngines.hasActiveEngine();
+    if(engineActive){
       try{
         return await ForgeEngines.callAI(system, user);
       }catch(e){
-        console.warn('[ForgeProvider] Engine fallback:', e.message);
+        console.warn('[ForgeProvider] Engine error:', e.message);
+        throw new Error(
+          (typeof I18n !== 'undefined' && I18n.isEn?.())
+            ? `AI engine failed: ${e.message}. Check connection or try another model.`
+            : `Engine de IA falhou: ${e.message}. Verifique a conexão ou troque o modelo.`
+        );
       }
     }
     const provider = config.provider || 'local';
@@ -654,6 +660,11 @@ const ForgeOrchestrator = {
     }
     if(lastError) throw new Error(lastError);
 
+    const demoPayload = JSON.stringify(data || '').includes('forge-demo');
+    const engineOn = typeof ForgeEngines !== 'undefined' && ForgeEngines.hasActiveEngine();
+    let providerLabel = config.apiKey ? (config.model || 'openai') : (config.provider || 'local');
+    if(demoPayload) providerLabel = 'demo';
+    else if(engineOn) providerLabel = ForgeEngines.getEngine(1)?.provider || ForgeEngines.getEngine(2)?.provider || 'engine';
     const entry = {
       id: Util.uid('fhist'),
       createdAt: new Date().toISOString(),
@@ -661,9 +672,7 @@ const ForgeOrchestrator = {
       intent,
       status: 'preview',
       data,
-      provider: (typeof ForgeEngines !== 'undefined' && ForgeEngines.hasActiveEngine())
-        ? (ForgeEngines.getEngine(1)?.provider || ForgeEngines.getEngine(2)?.provider || 'engine')
-        : (config.apiKey ? (config.model || 'openai') : (config.provider || 'local'))
+      provider: providerLabel
     };
     ForgeStorage.addHistory(entry);
     return {entry, intent, data};

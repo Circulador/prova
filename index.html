@@ -602,6 +602,11 @@ a{color:var(--accent)}
 .progress-history-head h3{margin:0;font-size:var(--text-md)}
 .progress-history-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .select-sm{padding:6px 10px;font-size:12px;min-height:34px;width:auto;max-width:140px}
+.select-sort{max-width:168px}
+.progress-history-item .hist-bar{display:flex;gap:2px;margin-top:6px;height:4px;border-radius:2px;overflow:hidden;background:var(--bg-3)}
+.progress-history-item .hist-bar span{flex:1;min-width:3px;border-radius:1px}
+.progress-history-item .hist-bar span.ok{background:var(--good)}
+.progress-history-item .hist-bar span.bad{background:var(--bad)}
 .progress-kpi-grid.compact-4{grid-template-columns:repeat(4,1fr)}
 @media(max-width:639px){.progress-kpi-grid.compact-4{grid-template-columns:repeat(2,1fr)}}
 
@@ -1331,6 +1336,13 @@ const I18n = {
       'progress.domainsChart':'Gráfico de domínios','progress.moreStats':'Mais estatísticas','progress.recentTrend':'Evolução recente',
       'progress.resultDist':'Distribuição de resultados','progress.historyTitle':'Histórico de sessões','progress.showHistory':'Mostrar',
       'progress.historyAll':'Todas','progress.historyAttempts':'{n} tentativa(s)',
+      'progress.sortLabel':'Ordenar','progress.filterLabel':'Filtrar',
+      'progress.sortDateDesc':'Data (mais recente)','progress.sortDateAsc':'Data (mais antiga)',
+      'progress.sortScoreDesc':'Nota (maior)','progress.sortScoreAsc':'Nota (menor)',
+      'progress.sortTimeAsc':'Tempo (menor)','progress.sortTimeDesc':'Tempo (maior)',
+      'progress.sortNameAsc':'Nome (A → Z)','progress.filterAll':'Todas as sessões',
+      'progress.filterTests':'Simulados e treinos','progress.filterFlashcards':'Flashcards',
+      'progress.kindExam':'Simulado','progress.kindLearn':'Treino','progress.kindFlashcards':'Flashcards','progress.kindProgressive':'Progressivo',
       'home.viewProgress':'Ver progresso','home.faq':'FAQ','home.howto':'Como usar',
       'lib.certs':'Trilhas','lib.questions':'Questões','lib.flashcards':'Flashcards',
       'lib.newExam':'Novo exame','lib.import':'Importar','lib.select':'Selecionar','lib.smartReview':'Revisão inteligente','lib.forge':'Forja IA',
@@ -1359,6 +1371,10 @@ const I18n = {
       'forge.apiKeyPrivacy':'A chave fica só neste navegador e vai direto à URL que você configurou. Não há login OAuth no app — use a chave da sua conta ou um gateway seu (LM Studio, OpenRouter, etc.).',
       'forge.engine1':'Engine 1','forge.engine2':'Engine 2 (fallback)','forge.engineNone':'Nenhuma','forge.engineOpenRouter':'OpenRouter','forge.engineGemini':'Google Gemini','forge.engineGeminiOff':'Google Gemini (indisponível neste site)','forge.geminiUnavailable':'Login Google Gemini não funciona no Velora publicado (GitHub Pages): o cliente OAuth não aceita este endereço. Use OpenRouter — funciona no celular e inclui modelos Gemini gratuitos.','forge.geminiHintOpenRouter':'Google Gemini direto só funciona em localhost. Neste site use OpenRouter → modelo google/gemini-flash-1.5:free.','forge.connect':'Conectar','forge.disconnect':'Desconectar','forge.enginesTitle':'Engines de IA (OAuth — só neste dispositivo)','forge.libraryLink':'Abrir Forja IA com contexto desta aba',
       'forge.history':'Histórico de gerações','forge.examples':'Exemplos','forge.regenerate':'Regenerar','forge.duplicate':'Duplicar','forge.export':'Exportar','forge.template':'Salvar modelo','forge.uploadDoc':'Enviar documento (texto)',
+      'forge.sortLabel':'Ordenar','forge.sortDateDesc':'Data (mais recente)','forge.sortDateAsc':'Data (mais antiga)',
+      'forge.sortTypeAsc':'Tipo (A → Z)','forge.sortNameAsc':'Tópico (A → Z)','forge.filterAll':'Todos os tipos',
+      'forge.filterFlashcards':'Só flashcards','forge.filterQuestions':'Só questões','forge.filterExams':'Só simulados',
+      'forge.demoWarning':'Conteúdo demo — conecte a Engine 1 (OpenRouter) ou use Biblioteca (RAG) com tópicos do banco.',
       'fc.filterTitle':'Montar sessão','fc.filterHint':'Combine filtros (opcional). Vazio = baralho inteiro.',
       'fc.scopeDue':'Revisão FSRS (vencidos + novos)','fc.scopeAll':'Todos os cards','fc.scopeNew':'Só novos','fc.scopeMarked':'Só marcados ★',
       'fc.filterTrilha':'Trilha','fc.filterMateria':'Matéria / assunto','fc.filterCategory':'Categoria','fc.filterTheme':'Tema / tags',
@@ -1402,6 +1418,17 @@ const I18n = {
       'progress.domainsChart':'Domain chart','progress.moreStats':'More stats','progress.recentTrend':'Recent trend',
       'progress.resultDist':'Results distribution','progress.historyTitle':'Session history','progress.showHistory':'Show',
       'progress.historyAll':'All','progress.historyAttempts':'{n} attempt(s)',
+      'progress.sortLabel':'Sort','progress.filterLabel':'Filter',
+      'progress.sortDateDesc':'Date (latest first)','progress.sortDateAsc':'Date (oldest first)',
+      'progress.sortScoreDesc':'Score (highest first)','progress.sortScoreAsc':'Score (lowest first)',
+      'progress.sortTimeAsc':'Time (shortest first)','progress.sortTimeDesc':'Time (longest first)',
+      'progress.sortNameAsc':'Name (A → Z)','progress.filterAll':'All sessions',
+      'progress.filterTests':'Exams & practice','progress.filterFlashcards':'Flashcards',
+      'progress.kindExam':'Exam','progress.kindLearn':'Practice','progress.kindFlashcards':'Flashcards','progress.kindProgressive':'Progressive',
+      'forge.sortLabel':'Sort','forge.sortDateDesc':'Date (latest)','forge.sortDateAsc':'Date (oldest)',
+      'forge.sortTypeAsc':'Type (A → Z)','forge.sortNameAsc':'Topic (A → Z)','forge.filterAll':'All types',
+      'forge.filterFlashcards':'Flashcards only','forge.filterQuestions':'Questions only','forge.filterExams':'Exams only',
+      'forge.demoWarning':'Demo content — connect Engine 1 (OpenRouter) or use Library (RAG) with matching topics.',
       'home.viewProgress':'View progress','home.faq':'FAQ','home.howto':'How to use',
       'lib.certs':'Tracks','lib.questions':'Questions','lib.flashcards':'Flashcards',
       'lib.newExam':'New exam','lib.import':'Import','lib.select':'Select','lib.smartReview':'Smart review','lib.forge':'AI Forge',
@@ -1819,7 +1846,7 @@ class StorageManager {
       uiLocale:'pt-BR',
       bilingualMode:'dual',
       showAnswerAfterSelect:true, allowRevealAnswer:true, allowFinishAnytime:true,
-      historyLimit:10
+      historyLimit:10, historySort:'date_desc', historyFilter:'all', forgeHistorySort:'date_desc', forgeHistoryFilter:'all'
     };
     // mescla os padrões com o que já estiver salvo, garantindo que chaves novas existam
     return {...defaults, ...this._get(this.KEYS.SETTINGS, {})};
@@ -3455,28 +3482,103 @@ class HistoryView {
       {v:0, l:I18n.t('progress.historyAll')}
     ];
   }
+  static _sortOptions(){
+    return [
+      {v:'date_desc', l:I18n.t('progress.sortDateDesc')},
+      {v:'date_asc', l:I18n.t('progress.sortDateAsc')},
+      {v:'score_desc', l:I18n.t('progress.sortScoreDesc')},
+      {v:'score_asc', l:I18n.t('progress.sortScoreAsc')},
+      {v:'time_asc', l:I18n.t('progress.sortTimeAsc')},
+      {v:'time_desc', l:I18n.t('progress.sortTimeDesc')},
+      {v:'name_asc', l:I18n.t('progress.sortNameAsc')}
+    ];
+  }
+  static _filterOptions(){
+    return [
+      {v:'all', l:I18n.t('progress.filterAll')},
+      {v:'tests', l:I18n.t('progress.filterTests')},
+      {v:'flashcards', l:I18n.t('progress.filterFlashcards')}
+    ];
+  }
+  static _sessionKind(h){
+    if(h.sessionKind) return h.sessionKind;
+    return h.trainingMode === false ? 'exam' : 'learn';
+  }
+  static _kindLabel(kind){
+    const map = {
+      exam: I18n.t('progress.kindExam'),
+      learn: I18n.t('progress.kindLearn'),
+      flashcards: I18n.t('progress.kindFlashcards'),
+      progressive: I18n.t('progress.kindProgressive')
+    };
+    return map[kind] || kind;
+  }
+  static _filterHistory(history, filterKey){
+    if(filterKey === 'tests') return history.filter(h=>this._sessionKind(h) !== 'flashcards');
+    if(filterKey === 'flashcards') return history.filter(h=>this._sessionKind(h) === 'flashcards');
+    return history;
+  }
+  static _sortHistory(history, sortKey){
+    const arr = [...history];
+    const byDate = (a,b)=> new Date(a.date||0) - new Date(b.date||0);
+    switch(sortKey){
+      case 'date_asc': return arr.sort(byDate);
+      case 'score_desc': return arr.sort((a,b)=>(b.percentage||0)-(a.percentage||0));
+      case 'score_asc': return arr.sort((a,b)=>(a.percentage||0)-(b.percentage||0));
+      case 'time_asc': return arr.sort((a,b)=>(a.timeSpentSeconds||0)-(b.timeSpentSeconds||0));
+      case 'time_desc': return arr.sort((a,b)=>(b.timeSpentSeconds||0)-(a.timeSpentSeconds||0));
+      case 'name_asc': return arr.sort((a,b)=>(a.examTitle||'').localeCompare(b.examTitle||'', undefined, {sensitivity:'base'}));
+      default: return arr.sort((a,b)=>byDate(b)-byDate(a));
+    }
+  }
+  static _resultBar(h){
+    if(!h.totalCount || h.sessionKind === 'flashcards') return '';
+    const ok = Math.max(0, h.correctCount||0);
+    const bad = Math.max(0, (h.totalCount||0) - ok);
+    const parts = [];
+    for(let i=0;i<ok;i++) parts.push('<span class="ok"></span>');
+    for(let i=0;i<bad;i++) parts.push('<span class="bad"></span>');
+    return parts.length ? `<div class="hist-bar">${parts.join('')}</div>` : '';
+  }
   render(el, opts={}){
-    const history = StorageManager.getHistory();
-    const limit = opts.limit ?? StorageManager.getSettings().historyLimit ?? 10;
-    const list = !limit ? history : history.slice(0, limit);
-    const optsHtml = this.constructor._limitOptions().map(o=>
+    const settings = StorageManager.getSettings();
+    const sortKey = opts.sort ?? settings.historySort ?? 'date_desc';
+    const filterKey = opts.filter ?? settings.historyFilter ?? 'all';
+    const limit = opts.limit ?? settings.historyLimit ?? 10;
+    const raw = StorageManager.getHistory();
+    const filtered = this.constructor._filterHistory(raw, filterKey);
+    const sorted = this.constructor._sortHistory(filtered, sortKey);
+    const list = !limit ? sorted : sorted.slice(0, limit);
+    const limitOpts = this.constructor._limitOptions().map(o=>
       `<option value="${o.v}" ${Number(limit)===o.v?'selected':''}>${o.l}</option>`).join('');
+    const sortOpts = this.constructor._sortOptions().map(o=>
+      `<option value="${o.v}" ${sortKey===o.v?'selected':''}>${o.l}</option>`).join('');
+    const filterOpts = this.constructor._filterOptions().map(o=>
+      `<option value="${o.v}" ${filterKey===o.v?'selected':''}>${o.l}</option>`).join('');
     el.innerHTML = `
-      ${history.length ? `<div class="progress-history-head">
-        <span class="hub-stat">${I18n.t('progress.historyAttempts', {n: history.length})}</span>
+      ${raw.length ? `<div class="progress-history-head">
+        <span class="hub-stat">${I18n.t('progress.historyAttempts', {n: filtered.length})}</span>
         <div class="progress-history-controls">
+          <label class="sr-only" for="h-filter">${I18n.t('progress.filterLabel')}</label>
+          <select class="select select-sm select-sort" id="h-filter" title="${I18n.t('progress.filterLabel')}">${filterOpts}</select>
+          <label class="sr-only" for="h-sort">${I18n.t('progress.sortLabel')}</label>
+          <select class="select select-sm select-sort" id="h-sort" title="${I18n.t('progress.sortLabel')}">${sortOpts}</select>
           <label class="sr-only" for="h-limit">${I18n.t('progress.showHistory')}</label>
-          <select class="select select-sm" id="h-limit" title="${I18n.t('settings.historyLimitHint')}">${optsHtml}</select>
+          <select class="select select-sm" id="h-limit" title="${I18n.t('settings.historyLimitHint')}">${limitOpts}</select>
           <button class="btn btn-danger btn-sm" id="h-clear" type="button" aria-label="${I18n.isEn()?'Clear history':'Limpar histórico'}">${Icons.trash}</button>
         </div>
       </div>` : ''}
-      <div id="h-list">${list.length ? list.map(h=>this._row(h)).join('') : DashboardView._empty('Sem histórico', 'Faça uma sessão para ver resultados aqui.')}</div>
-      ${limit && history.length > limit ? `<p class="hint" style="margin-top:8px">${I18n.isEn() ? `Showing ${limit} of ${history.length}. Change the dropdown or pick All in Settings.` : `Mostrando ${limit} de ${history.length}. Altere o menu ou escolha Todas em Ajustes.`}</p>` : ''}`;
-    el.querySelector('#h-limit')?.addEventListener('change', (e)=>{
-      const v = Number(e.target.value);
-      const merged = {...StorageManager.getSettings(), historyLimit: v};
+      <div id="h-list">${list.length ? list.map(h=>this._row(h)).join('') : DashboardView._empty(filterKey==='flashcards' ? (I18n.isEn()?'No flashcard sessions yet':'Nenhuma sessão de flashcards ainda') : (I18n.isEn()?'No sessions yet':'Sem histórico — faça uma sessão para ver resultados aqui.'))}</div>
+      ${limit && filtered.length > limit ? `<p class="hint" style="margin-top:8px">${I18n.isEn() ? `Showing ${limit} of ${filtered.length}. Change filters or pick All.` : `Mostrando ${limit} de ${filtered.length}. Altere filtros ou escolha Todas.`}</p>` : ''}`;
+    const rerender = (patch={})=>{
+      const merged = {...StorageManager.getSettings(), historySort: sortKey, historyFilter: filterKey, historyLimit: limit, ...patch};
       StorageManager.saveSettings(merged);
-      this.render(el, {limit: v});
+      this.render(el, {sort: merged.historySort, filter: merged.historyFilter, limit: merged.historyLimit});
+    };
+    el.querySelector('#h-filter')?.addEventListener('change', (e)=> rerender({historyFilter: e.target.value}));
+    el.querySelector('#h-sort')?.addEventListener('change', (e)=> rerender({historySort: e.target.value}));
+    el.querySelector('#h-limit')?.addEventListener('change', (e)=>{
+      rerender({historyLimit: Number(e.target.value)});
     });
     el.querySelector('#h-clear')?.addEventListener('click', async ()=>{
       const ok = await Modal.confirm({title:I18n.isEn()?'Clear history':'Limpar histórico', message:I18n.isEn()?'Delete all attempts?':'Apagar todas as tentativas?', confirmLabel:I18n.isEn()?'Clear':'Limpar', danger:true});
@@ -3488,19 +3590,24 @@ class HistoryView {
       }
     });
     el.querySelectorAll('[data-review-id]').forEach(b=>b.addEventListener('click', ()=>{
-      const entry = history.find(h=>h.id===b.dataset.reviewId);
+      const entry = raw.find(h=>h.id===b.dataset.reviewId);
       if(entry) ReviewController.showFromHistory(entry);
     }));
   }
   _row(h){
     const cls = DashboardView._badgeClass(h.percentage);
-    return `<div class="list-row list-row-compact">
+    const kind = HistoryView._sessionKind(h);
+    const kindLbl = HistoryView._kindLabel(kind);
+    const timeLbl = h.timeSpentSeconds ? ` · ${Util.formatDuration(h.timeSpentSeconds)}` : '';
+    const reviewBtn = kind === 'flashcards' ? '' : `<button class="btn btn-sm btn-ghost" type="button" data-review-id="${Util.escapeHtml(h.id)}">${I18n.isEn()?'Review':'Revisar'}</button>`;
+    return `<div class="list-row list-row-compact progress-history-item">
       <div class="meta">
         <div class="title">${Util.escapeHtml(h.examTitle)}</div>
-        <div class="desc">${Util.formatDate(h.date)} · ${h.correctCount}/${h.totalCount}</div>
+        <div class="desc">${Util.formatDate(h.date)} · ${kindLbl} · ${h.correctCount}/${h.totalCount}${timeLbl}</div>
+        ${HistoryView._resultBar(h)}
       </div>
       <span class="badge ${cls}">${h.percentage}%</span>
-      <button class="btn btn-sm btn-ghost" type="button" data-review-id="${Util.escapeHtml(h.id)}">${I18n.isEn()?'Review':'Revisar'}</button>
+      ${reviewBtn}
     </div>`;
   }
 }
@@ -6545,6 +6652,8 @@ class PlayerController {
       examId: exam.id,
       examTitle: exam.title,
       date: new Date().toISOString(),
+      sessionKind: this.state.incrementalMode ? 'progressive' : (this.state.trainingMode ? 'learn' : 'exam'),
+      trainingMode: !!this.state.trainingMode,
       correctCount, totalCount: questions.length, percentage,
       timeSpentSeconds,
       passed: percentage >= exam.passScore,
@@ -7193,6 +7302,7 @@ class FlashcardController {
   static _revealed = false;
   static _revealAll = false;
   static _close = null;
+  static _session = null;
   static _MARKED_KEY = 'ef_fc_marked_v1';
   static _REVEAL_ALL_KEY = 'ef_fc_reveal_all_v1';
   static _FILTERS_KEY = 'ef_fc_filters_v1';
@@ -7293,15 +7403,46 @@ class FlashcardController {
       Toast.show(I18n.isEn() ? 'No flashcards match these filters.' : 'Nenhum flashcard com esses filtros.', 'warn');
       return;
     }
+    const exam = filters.examId ? StorageManager.getExam(filters.examId) : null;
+    this._session = {
+      startedAt: Date.now(),
+      examId: filters.examId || '',
+      examTitle: exam?.title || (I18n.isEn() ? 'Flashcards' : 'Flashcards'),
+      cards: 0,
+      good: 0
+    };
     if(!filters.examId) this._saveFilters({ scope:filters.scope||'due', trilhas:filters.trilhas||[], materias:filters.materias||[], categories:filters.categories||[], tags:filters.tags||[], limit });
     this._idx = 0;
     this._revealed = false;
     try{ this._revealAll = localStorage.getItem(this._REVEAL_ALL_KEY) === '1'; }catch(e){ this._revealAll = false; }
     this._render();
   }
+  static _finishSession(){
+    const s = this._session;
+    if(s && s.cards > 0){
+      const timeSpentSeconds = Math.max(1, Math.round((Date.now() - s.startedAt) / 1000));
+      const percentage = Math.round((s.good / s.cards) * 100);
+      StorageManager.addHistory({
+        id: Util.uid('hist'),
+        examId: s.examId || '',
+        examTitle: s.examTitle,
+        date: new Date().toISOString(),
+        sessionKind: 'flashcards',
+        correctCount: s.good,
+        totalCount: s.cards,
+        percentage,
+        timeSpentSeconds,
+        passed: percentage >= 70,
+        markedCount: 0,
+        detail: []
+      });
+    }
+    this._session = null;
+  }
   static _render(){
     if(this._idx >= this._queue.length){
-      Toast.show('Sessão de flashcards concluída.', 'success');
+      this._finishSession();
+      Toast.show(I18n.isEn() ? 'Flashcard session complete.' : 'Sessão de flashcards concluída.', 'success');
       this._close?.();
       return;
     }
@@ -7368,6 +7509,10 @@ class FlashcardController {
           btn.addEventListener('click', ()=>{
             FSRS.schedule(q, btn.dataset.rate);
             AITutor.record(q.id, btn.dataset.rate !== 'again');
+            if(this._session){
+              this._session.cards++;
+              if(btn.dataset.rate === 'good' || btn.dataset.rate === 'easy') this._session.good++;
+            }
             this._idx++;
             this._revealed = false;
             this._render();
@@ -7826,7 +7971,10 @@ class ForgeView {
         <pre class="forge-json" id="forge-json"></pre>
       </div>
       <div class="forge-history">
-        <h3 style="font-size:15px;margin:0 0 10px">${I18n.t('forge.history')}</h3>
+        <div class="progress-history-head" style="margin-top:16px">
+          <h3 style="font-size:15px;margin:0">${I18n.t('forge.history')}</h3>
+          <div class="progress-history-controls" id="forge-hist-controls"></div>
+        </div>
         <div id="forge-history-list"></div>
       </div>`;
 
@@ -8019,10 +8167,12 @@ class ForgeView {
     const pills = el.querySelector('#forge-pills');
     const typeLbl = ForgeSchemas.types[intent.type]?.label;
     const typeName = typeLbl ? (I18n.isEn() ? typeLbl.en : typeLbl.pt) : intent.type;
+    const isDemo = JSON.stringify(data || '').includes('forge-demo');
     pills.innerHTML = [
       typeName, intent.topic, `${intent.quantity} ${I18n.isEn()?'items':'itens'}`,
       intent.language, intent.difficulty, intent.source, entry.provider
-    ].map(x=>`<span class="forge-pill">${Util.escapeHtml(String(x))}</span>`).join('');
+    ].map(x=>`<span class="forge-pill">${Util.escapeHtml(String(x))}</span>`).join('')
+      + (isDemo ? `<span class="forge-pill" style="border-color:var(--warn);color:var(--warn)">${I18n.t('forge.demoWarning')}</span>` : '');
     el.querySelector('#forge-json').textContent = JSON.stringify(data, null, 2);
   }
 
@@ -8046,8 +8196,46 @@ class ForgeView {
 
   _renderHistory(el){
     const box = el.querySelector('#forge-history-list');
+    const controls = el.querySelector('#forge-hist-controls');
     if(!box) return;
-    const hist = ForgeStorage.getHistory().slice(0, 20);
+    const settings = StorageManager.getSettings();
+    const sortKey = settings.forgeHistorySort || 'date_desc';
+    const filterKey = settings.forgeHistoryFilter || 'all';
+    const sortOpts = [
+      {v:'date_desc', l:I18n.t('forge.sortDateDesc')},
+      {v:'date_asc', l:I18n.t('forge.sortDateAsc')},
+      {v:'type_asc', l:I18n.t('forge.sortTypeAsc')},
+      {v:'name_asc', l:I18n.t('forge.sortNameAsc')}
+    ];
+    const filterOpts = [
+      {v:'all', l:I18n.t('forge.filterAll')},
+      {v:'flashcards', l:I18n.t('forge.filterFlashcards')},
+      {v:'quiz', l:I18n.t('forge.filterQuestions')},
+      {v:'exam', l:I18n.t('forge.filterExams')}
+    ];
+    if(controls){
+      controls.innerHTML = `
+        <select class="select select-sm select-sort" id="forge-h-filter" title="${I18n.t('progress.filterLabel')}">${filterOpts.map(o=>`<option value="${o.v}" ${filterKey===o.v?'selected':''}>${o.l}</option>`).join('')}</select>
+        <select class="select select-sm select-sort" id="forge-h-sort" title="${I18n.t('forge.sortLabel')}">${sortOpts.map(o=>`<option value="${o.v}" ${sortKey===o.v?'selected':''}>${o.l}</option>`).join('')}</select>`;
+      controls.querySelector('#forge-h-filter')?.addEventListener('change', (e)=>{
+        StorageManager.saveSettings({...settings, forgeHistoryFilter: e.target.value});
+        this._renderHistory(el);
+      });
+      controls.querySelector('#forge-h-sort')?.addEventListener('change', (e)=>{
+        StorageManager.saveSettings({...settings, forgeHistorySort: e.target.value});
+        this._renderHistory(el);
+      });
+    }
+    let hist = ForgeStorage.getHistory();
+    if(filterKey === 'flashcards') hist = hist.filter(h=>h.intent?.type === 'flashcards');
+    else if(filterKey === 'quiz') hist = hist.filter(h=>['quiz','exercise'].includes(h.intent?.type));
+    else if(filterKey === 'exam') hist = hist.filter(h=>['exam','certification','quiz'].includes(h.intent?.type));
+    const byDate = (a,b)=> new Date(a.createdAt||0) - new Date(b.createdAt||0);
+    if(sortKey === 'date_asc') hist = [...hist].sort(byDate);
+    else if(sortKey === 'type_asc') hist = [...hist].sort((a,b)=>(a.intent?.type||'').localeCompare(b.intent?.type||''));
+    else if(sortKey === 'name_asc') hist = [...hist].sort((a,b)=>(a.intent?.topic||'').localeCompare(b.intent?.topic||'', undefined, {sensitivity:'base'}));
+    else hist = [...hist].sort((a,b)=>byDate(b)-byDate(a));
+    hist = hist.slice(0, 30);
     if(!hist.length){
       box.innerHTML = `<div class="chart-empty">${I18n.isEn()?'No generations yet.':'Nenhuma geração ainda.'}</div>`;
       return;
