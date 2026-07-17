@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0A0A0E">
+<meta name="theme-color" content="#081021">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,28 +14,30 @@
 <link rel="apple-touch-icon" href="branding/icons/app-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<title>Velora — Knowledge Operating System</title>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+<title>Velora — Knowledge OS</title>
 <style>
 :root{
-  --velora-purple:#7B5CFF;
-  --velora-purple-dark:#6344E8;
-  --velora-teal:#00D4FF;
+  --velora-purple:#6E3AF2;
+  --velora-purple-light:#9D58FF;
+  --velora-purple-dark:#5A2ECC;
+  --velora-teal:#00D4C9;
   --velora-success:#00E5A8;
   --velora-gold:#FFD700;
-  --bg-base:#0A0A0E;
-  --bg-surface:#1A1A2B;
-  --bg-elevated:#22223B;
-  --bg-glass:rgba(26,26,43,.72);
-  --bg-overlay:rgba(10,10,14,.78);
+  --bg-base:#081021;
+  --bg-surface:#1C2233;
+  --bg-elevated:#252D42;
+  --bg-glass:rgba(28,34,51,.88);
+  --bg-overlay:rgba(8,16,33,.82);
   --bg-0:var(--bg-base);
   --bg-1:var(--bg-surface);
   --bg-2:var(--bg-elevated);
-  --bg-3:#2A2A45;
-  --border:rgba(123,92,255,.16);
+  --bg-3:#2E3650;
+  --border:rgba(110,58,242,.18);
   --border-soft:rgba(148,163,184,.1);
-  --border-strong:rgba(123,92,255,.28);
-  --text-primary:#F8FAFC;
+  --border-strong:rgba(110,58,242,.32);
+  --text-primary:#F2F4F7;
   --text-secondary:#94A3B8;
   --text-tertiary:#64748B;
   --text-0:var(--text-primary);
@@ -43,19 +45,19 @@
   --text-2:var(--text-tertiary);
   --text-muted:var(--text-secondary);
   --accent:var(--velora-purple);
-  --accent-soft:rgba(123,92,255,.16);
+  --accent-soft:rgba(110,58,242,.16);
   --accent-strong:var(--velora-purple-dark);
-  --accent-glow:0 0 20px rgba(123,92,255,.35),0 4px 24px rgba(123,92,255,.18);
+  --accent-glow:0 0 20px rgba(110,58,242,.35),0 4px 24px rgba(0,212,201,.12);
   --teal:var(--velora-teal);
-  --teal-soft:rgba(0,212,255,.14);
+  --teal-soft:rgba(0,212,201,.14);
   --good:var(--velora-success);
   --good-soft:rgba(0,229,168,.14);
   --bad:#EF4444;
   --bad-soft:rgba(239,68,68,.14);
   --warn:var(--velora-gold);
   --warn-soft:rgba(255,215,0,.14);
-  --gradient-brand:linear-gradient(135deg,#7B5CFF 0%,#2563EB 48%,#00D4FF 100%);
-  --gradient-aurora:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(123,92,255,.24),transparent 60%),radial-gradient(ellipse 70% 50% at 85% 90%,rgba(0,212,255,.14),transparent 55%),var(--bg-base);
+  --gradient-brand:linear-gradient(135deg,#6E3AF2 0%,#9D58FF 48%,#00D4C9 100%);
+  --gradient-aurora:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(110,58,242,.22),transparent 60%),radial-gradient(ellipse 70% 50% at 85% 90%,rgba(0,212,201,.12),transparent 55%),var(--bg-base);
   --radius-sm:10px;
   --radius-md:14px;
   --radius-lg:16px;
@@ -64,9 +66,9 @@
   --shadow-1:none;
   --shadow-2:0 4px 16px rgba(0,0,0,.32);
   --shadow-3:0 8px 32px rgba(0,0,0,.42);
-  --shadow-glow:0 0 0 1px rgba(123,92,255,.22),0 8px 32px rgba(123,92,255,.18);
+  --shadow-glow:0 0 0 1px rgba(110,58,242,.22),0 8px 32px rgba(110,58,242,.18);
   --mono:'SF Mono',ui-monospace,'Cascadia Code','Fira Code',Consolas,monospace;
-  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --sans:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
   --font-scale:1;
   --text-xs:12px;
   --text-sm:13px;
@@ -89,7 +91,7 @@ body.font-mono{font-family:var(--mono)}
 body.font-sans{font-family:var(--sans)}
 body{
   background:var(--gradient-aurora);
-  background-attachment:fixed;
+  background-attachment:scroll;
   color:var(--text-0);
   font-size:calc(14px * var(--font-scale));
   line-height:1.5;
@@ -120,9 +122,9 @@ body.light{
   --text-primary:var(--text-0);
   --text-secondary:var(--text-1);
   --text-tertiary:var(--text-2);
-  --accent:#7B5CFF;
-  --accent-soft:rgba(123,92,255,.12);
-  --accent-strong:#6344E8;
+  --accent:#6E3AF2;
+  --accent-soft:rgba(110,58,242,.12);
+  --accent-strong:#5A2ECC;
   --good:#4d8260;
   --good-soft:rgba(77,130,96,.12);
   --bad:#b8554e;
@@ -148,36 +150,6 @@ a{color:var(--accent)}
 
 /* ---------- Shell ---------- */
 #app{display:flex;min-height:100vh;min-height:100dvh;width:100%;max-width:100%}
-
-.rail{
-  width:84px;flex-shrink:0;background:var(--bg-1);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;align-items:center;
-  padding:14px 8px;gap:4px;
-}
-.rail-logo{
-  width:36px;height:36px;border-radius:var(--radius-sm);
-  background:var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:14px;color:#fff;margin-bottom:18px;
-}
-.rail-btn{
-  width:100%;min-height:52px;border-radius:var(--radius-md);
-  background:transparent;border:none;color:var(--text-2);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  padding:6px 2px;
-  transition:background .15s ease,color .15s ease,transform .15s ease;
-  position:relative;
-}
-.rail-btn svg{width:19px;height:19px;flex-shrink:0}
-.rail-btn .rail-label{font-size:10.5px;font-weight:600;letter-spacing:.2px;line-height:1.1}
-.rail-btn:hover{background:var(--bg-3);color:var(--text-0)}
-.rail-btn.active{background:var(--accent-soft);color:var(--accent)}
-.rail-btn.active::before{
-  content:'';position:absolute;left:-8px;top:50%;transform:translateY(-50%);
-  width:3px;height:22px;background:var(--accent);border-radius:2px;
-}
-.rail-spacer{flex:1}
 
 .main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg-0)}
 .topbar{
@@ -215,8 +187,8 @@ a{color:var(--accent)}
 .btn:hover{background:var(--bg-3);border-color:var(--text-2)}
 .btn:active{transform:scale(.97)}
 .btn svg{width:15px;height:15px}
-.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:var(--accent-glow)}
-.btn-primary:hover{background:var(--accent-strong);box-shadow:0 0 28px rgba(123,92,255,.45)}
+.btn-primary{background:var(--gradient-brand);border-color:transparent;color:#fff;box-shadow:var(--accent-glow);font-weight:600}
+.btn-primary:hover{filter:brightness(1.06);box-shadow:0 0 28px rgba(110,58,242,.4),0 4px 20px rgba(0,212,201,.15)}
 .btn-success{background:var(--good);border-color:var(--good);color:#0A0A0E;font-weight:600}
 .btn-success:hover{background:#00c994;border-color:#00c994}
 .btn-danger{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
@@ -480,11 +452,11 @@ a{color:var(--accent)}
 
 /* ---------- Loading ---------- */
 #loading-overlay{
-  position:fixed;inset:0;background:var(--bg-overlay);backdrop-filter:blur(4px);z-index:400;
+  position:fixed;inset:0;background:var(--bg-overlay);z-index:400;
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;
 }
 #loading-overlay.hidden{display:none}
-.spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+.spinner{width:36px;height:36px;border:3px solid rgba(110,58,242,.2);border-top-color:var(--velora-teal);border-right-color:var(--velora-purple);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ---------- Question bank / editor ---------- */
@@ -509,7 +481,7 @@ a{color:var(--accent)}
   padding:0 22px;border-bottom:1px solid var(--border);background:var(--bg-1);
 }
 .player-progress-wrap{flex:1;height:6px;background:var(--bg-3);border-radius:4px;overflow:hidden}
-.player-progress-bar{height:100%;background:var(--accent);transition:width .25s ease;border-radius:4px}
+.player-progress-bar{height:100%;background:var(--gradient-brand);transition:width .25s ease;border-radius:4px}
 .timer-pill{
   font-family:var(--mono);font-size:14px;font-weight:700;padding:6px 12px;border-radius:20px;
   background:var(--bg-3);border:1px solid var(--border);transition:.25s;
@@ -655,12 +627,6 @@ a{color:var(--accent)}
 /* --- responsividade mobile do player --- */
 @media (max-width:760px){
   #app{flex-direction:column-reverse}
-  .rail{width:100%;height:60px;flex-direction:row;justify-content:space-around;padding:4px 4px;border-right:none;border-top:1px solid var(--border)}
-  .rail-logo{display:none}
-  .rail-spacer{display:none}
-  .rail-btn{width:auto;flex:1;min-height:unset;max-width:84px}
-  .rail-btn .rail-label{font-size:9.5px}
-  .rail-btn.active::before{left:50%;top:auto;bottom:-4px;transform:translateX(-50%);width:20px;height:3px}
   .main{min-height:0}
   .view{padding:16px 14px 40px}
   .topbar{padding:0 12px;gap:8px}
@@ -719,7 +685,6 @@ a{color:var(--accent)}
 <style id="ef-onepage-css">
 /* OnePage shell */
 #app{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;height:100dvh;width:100%;overflow:hidden}
-.rail{display:none!important}
 .main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;width:100%;overflow:hidden;padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
 #views{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 
@@ -732,14 +697,17 @@ a{color:var(--accent)}
 .view{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:16px;animation:fadeIn .2s ease;-webkit-overflow-scrolling:touch}
 .view-home{padding:24px 16px 32px;max-width:480px;margin:0 auto;width:100%}
 .home-kicker{font-size:var(--text-xs);font-weight:600;color:var(--accent);letter-spacing:.06em;margin:0 0 6px;text-transform:uppercase}
-.home-welcome{margin:0 0 20px;padding:18px 16px;border-radius:var(--radius-lg);background:var(--bg-glass);border:1px solid var(--border)}
-.home-welcome .home-kicker{margin-bottom:8px}
-.home-greet{font-size:26px;font-weight:600;letter-spacing:-.03em;margin:0 0 10px;color:var(--text-0);line-height:1.2}
+.home-welcome{margin:0 0 20px;padding:18px 16px;border-radius:var(--radius-lg);background:linear-gradient(145deg,rgba(110,58,242,.12),rgba(0,212,201,.06));border:1px solid var(--border)}
+.home-welcome-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.home-welcome-logo{width:48px;height:48px;flex-shrink:0;border-radius:12px}
+.home-tagline{font-size:12px;font-weight:500;color:var(--text-2);margin:0 0 12px;line-height:1.5;letter-spacing:.02em}
 .home-os-badge{
-  display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--teal);background:var(--teal-soft);border:1px solid rgba(0,212,255,.25);
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--velora-teal);background:var(--teal-soft);border:1px solid rgba(0,212,201,.28);
   padding:4px 10px;border-radius:999px;margin:0 0 12px;
 }
+.home-welcome .home-kicker{margin-bottom:4px}
+.home-greet{font-size:24px;font-weight:700;letter-spacing:-.03em;margin:0;color:var(--text-0);line-height:1.2}
 .home-mission{font-size:var(--text-sm);color:var(--text-1);line-height:1.65;margin:0 0 12px}
 .home-story{font-size:var(--text-sm);color:var(--text-2);line-height:1.65;margin:0 0 10px}
 .home-family{font-size:var(--text-xs);color:var(--text-2);margin:0;font-style:italic;opacity:.9}
@@ -768,13 +736,8 @@ a{color:var(--accent)}
 .home-list-meta{display:block;font-size:var(--text-xs);color:var(--text-2);margin-top:2px}
 .home-list-play{color:var(--accent);flex-shrink:0;display:flex}
 .home-list-play svg{width:22px;height:22px}
-.home-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
-.home-presets{display:flex;gap:6px;flex-wrap:wrap}
-.home-presets .btn{border:1px solid var(--border);background:var(--bg-2)}
 .home-track{margin-bottom:20px}
 .home-track-title{font-size:var(--text-sm);font-weight:650;color:var(--text-2);margin:0 0 8px;text-transform:uppercase;letter-spacing:.04em}
-.home-progress-summary{display:flex;flex-wrap:wrap;gap:12px 18px;font-size:var(--text-xs);color:var(--text-2);margin-bottom:16px;padding:10px 12px;background:var(--bg-2);border-radius:var(--radius-md);border:1px solid var(--border-soft)}
-.home-progress-summary strong{color:var(--text-0);font-weight:650}
 .home-foot{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 12px;padding-top:4px}
 .home-foot .btn{font-size:var(--text-sm);color:var(--text-2)}
 .home-study-block{margin-bottom:20px}
@@ -789,7 +752,6 @@ a{color:var(--accent)}
 .gps-steps{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px}
 .gps-steps li{font-size:12px;color:var(--text-2);padding-left:14px;position:relative}
 .gps-steps li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
-.gps-actions{display:flex;gap:8px;flex-wrap:wrap}
 .gps-confidence{margin-top:12px;padding-top:10px;border-top:1px dashed var(--border)}
 .gps-confidence-label{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:8px}
 .gps-conf-row{display:flex;gap:6px;flex-wrap:wrap}
@@ -882,11 +844,9 @@ a{color:var(--accent)}
 }
 .tabbar-btn svg{width:20px;height:20px;flex-shrink:0}
 .tabbar-btn span{font-size:11px;line-height:1.15;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis}
-.tabbar-btn.active{color:var(--accent);font-weight:600}
-.tabbar-btn.active::after{
-  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:20px;height:2px;background:var(--accent);border-radius:1px;
-}
+.tabbar-btn.active{color:#fff;background:var(--accent);font-weight:600}
+.tabbar-btn.active::after{display:none}
+.tabbar-btn.active svg{color:#fff}
 body.player-open .tabbar{display:none}
 body.player-open .main{padding-bottom:0!important}
 body.player-paused .player-question-area{opacity:.55;pointer-events:none}
@@ -906,7 +866,10 @@ body.player-paused #p-pause.active{background:var(--warn-soft);border-color:var(
   color:var(--text-1);font-size:12px;font-weight:600;cursor:pointer;transition:background .12s,color .12s;
 }
 .ec-product-btn.active{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-@media(max-width:480px){.ec-product-btn{font-size:11px;padding:8px 4px}}
+@media(max-width:768px){
+  .card,.list-row,.modal{background:var(--bg-1);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .card:hover{box-shadow:none}
+}
 .hub-menu{position:relative;display:inline-block}
 .hub-menu>summary{list-style:none;cursor:pointer}
 .hub-menu>summary::-webkit-details-marker{display:none}
@@ -1126,7 +1089,7 @@ body.player-paused #p-pause.active{background:var(--warn-soft);border-color:var(
 .home-kicker{color:var(--teal);letter-spacing:.08em;margin-bottom:8px}
 .home-greet{font-weight:700;margin-bottom:6px}
 .home-greet-name{display:block;font-size:var(--text-md);font-weight:500;color:var(--text-1);margin-top:4px}
-.home-hero{background:linear-gradient(135deg,rgba(123,92,255,.22),rgba(123,92,255,.08));border:1px solid rgba(123,92,255,.35);border-radius:var(--radius-lg);box-shadow:0 0 24px rgba(123,92,255,.12)}
+.home-hero{background:linear-gradient(135deg,rgba(110,58,242,.22),rgba(0,212,201,.08));border:1px solid rgba(110,58,242,.35);border-radius:var(--radius-lg);box-shadow:0 0 24px rgba(110,58,242,.12)}
 .home-hero-label{color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .home-hero .btn-primary{width:44px;height:44px;padding:0;border-radius:50%;justify-content:center}
 .home-list{gap:8px}
@@ -1139,10 +1102,10 @@ body.player-paused #p-pause.active{background:var(--warn-soft);border-color:var(
 .home-progress-ring .ring-bg{fill:none;stroke:var(--bg-3);stroke-width:3}
 .home-progress-ring .ring-fg{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round}
 .home-progress-ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent)}
-.tabbar{height:calc(60px + env(safe-area-inset-bottom,0px));padding:6px 8px env(safe-area-inset-bottom,0px);background:rgba(10,10,14,.92);backdrop-filter:blur(16px)}
+.tabbar{height:calc(60px + env(safe-area-inset-bottom,0px));padding:6px 8px env(safe-area-inset-bottom,0px);background:rgba(8,16,33,.94);backdrop-filter:blur(12px)}
 .tabbar-logo-wrap{display:none}
 .tabbar-btn svg{padding:4px;border-radius:10px;transition:background .15s ease,color .15s ease}
-.tabbar-btn.active svg{background:var(--accent-soft);color:var(--accent)}
+.tabbar-btn.active svg{background:transparent;color:#fff}
 .tabbar-btn.active::after{display:none}
 .list-row-compact{border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--bg-glass)}
 .list-row-compact:hover{border-color:var(--border-strong);box-shadow:var(--shadow-glow)}
@@ -1241,9 +1204,9 @@ body[data-network="offline"] .network-pill.is-offline::before{
   <div class="main">
     <div class="topbar">
       <div class="topbar-brand">
-        <img class="topbar-logo" src="branding/logo/symbol-white.svg" width="28" height="28" alt="">
+        <img class="topbar-logo" src="branding/logo/symbol-color.svg" width="28" height="28" alt="">
         <div class="topbar-titles">
-          <span class="topbar-app-name">Velora</span>
+          <span class="topbar-app-name">KNOWLEDGE OS</span>
           <h1 id="topbar-title">Início</h1>
         </div>
       </div>
@@ -2361,8 +2324,8 @@ class KnowledgeRepository {
 
     Object.entries(byTrack).forEach(([trackKey, exinExams])=>{
     const trilhaId = 'track-' + trackKey;
-    const trackMeta = (typeof GlobalDPOSeeder !== 'undefined' && GlobalDPOSeeder.TRACKS)
-      ? GlobalDPOSeeder.TRACKS.find(t=>t.id===trackKey || t.region===trackKey) : null;
+    const trackMeta = (typeof KnowledgeOSSeeder !== 'undefined' && KnowledgeOSSeeder.TRACKS)
+      ? KnowledgeOSSeeder.TRACKS.find(t=>t.id===trackKey || t.region===trackKey) : null;
     const trilhaLabel = trackMeta ? `${trackMeta.name} — DPO` : (exinExams[0]?.trilha || 'DPO Global');
 
     const now = new Date().toISOString();
@@ -2874,26 +2837,13 @@ class DashboardView {
     const groups = {};
     exams.forEach(e=>{
       const key = e.trackId || e.region || 'global';
-      const track = (typeof GlobalDPOSeeder !== 'undefined' && GlobalDPOSeeder.TRACKS)
-        ? GlobalDPOSeeder.TRACKS.find(t=>t.id===key || t.region===key) : null;
+      const track = (typeof KnowledgeOSSeeder !== 'undefined' && KnowledgeOSSeeder.TRACKS)
+        ? KnowledgeOSSeeder.TRACKS.find(t=>t.id===key || t.region===key) : null;
       const label = track ? track.name : (e.trilha || 'Outros');
       groups[label] = groups[label] || [];
       groups[label].push(e);
     });
     return Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0],'pt-BR'));
-  }
-  static _homeProgressSummary(){
-    const {history, avg, passed, attempts} = ProgressAnalytics.summary();
-    const qt = ProgressAnalytics.questionTotals();
-    const m = ProgressAnalytics.masteryScore();
-    const g = StorageManager.getGame();
-    if(!attempts && !qt.seen) return '';
-    const parts = [];
-    if(m.seen) parts.push(`<span><strong>${m.score}%</strong> ${I18n.t('home.mastery').toLowerCase()}</span>`);
-    if(qt.seen) parts.push(`<span><strong>${qt.accuracy}%</strong> acertos</span>`);
-    if(g.bestStreak) parts.push(`<span>Sequência <strong>${g.bestStreak}d</strong></span>`);
-    if(attempts) parts.push(`<span><strong>${attempts}</strong> ${I18n.t('progress.sessions').toLowerCase()}</span>`);
-    return `<div class="home-progress-summary">${parts.join('')}</div>`;
   }
   static _masteryStrip(){
     const m = ProgressAnalytics.masteryScore();
@@ -2931,9 +2881,16 @@ class DashboardView {
     </div>`;
   }
   static _welcomeBlock(){
+    const en = I18n.isEn();
     return `<div class="home-welcome">
-      <p class="home-kicker">${I18n.t('home.welcome')}</p>
-      <h1 class="home-greet">${I18n.t('home.ready')}</h1>
+      <div class="home-welcome-head">
+        <img class="home-welcome-logo" src="branding/logo/symbol-color.svg" width="48" height="48" alt="Velora">
+        <div>
+          <p class="home-kicker">${I18n.t('home.welcome')}</p>
+          <h1 class="home-greet">${I18n.t('home.ready')}</h1>
+        </div>
+      </div>
+      <p class="home-tagline">${en ? 'Knowledge that moves. Evolution that transforms.' : 'Conhecimento que move. Evolução que transforma.'}</p>
       <span class="home-os-badge" id="home-forge-badge" role="button" tabindex="0" title="${I18n.t('forge.title')}">${Icons.sparkles} ${I18n.t('home.osBadge')}</span>
       <p class="home-mission">${I18n.t('home.mission')}</p>
       <details class="home-story-details">
@@ -4374,53 +4331,6 @@ class SettingsView {
   }
 }
 
-/* ---------- Profile & Achievements View ---------- */
-class ProfileView {
-  get title(){ return 'Perfil & Conquistas'; }
-  get crumb(){ return ''; }
-  render(el){
-    const g = StorageManager.getGame();
-    const p = Gamification.progress();
-    const history = StorageManager.getHistory();
-    const avg = history.length ? Math.round(history.reduce((s,h)=>s+h.percentage,0)/history.length) : 0;
-    const unlocked = g.achievements.length;
-    el.innerHTML = `
-      <div class="card" style="margin-bottom:16px">
-        <div class="row between" style="margin-bottom:10px;flex-wrap:wrap;gap:8px">
-          <span class="xp-badge" style="font-size:14px;padding:5px 12px">Nível ${p.level}</span>
-          <span class="streak-pill">Sequência: ${g.bestStreak}</span>
-        </div>
-        <div class="xp-wrap"><div class="xp-bar"><span style="width:${p.pct}%"></span></div><span>${p.pct}%</span></div>
-        <div style="font-size:12px;color:var(--text-2);margin-top:6px">${g.xp} XP · faltam ${p.toNext} XP para o nível ${p.level+1}</div>
-      </div>
-
-      <div class="grid grid-4">
-        <div class="card stat-card"><span class="label">Simulados</span><span class="value">${g.examsCompleted}</span></div>
-        <div class="card stat-card"><span class="label">Acertos totais</span><span class="value" style="color:var(--good)">${g.totalCorrect}</span></div>
-        <div class="card stat-card"><span class="label">Notas 100%</span><span class="value" style="color:var(--accent)">${g.perfectExams}</span></div>
-        <div class="card stat-card"><span class="label">Média geral</span><span class="value">${avg}%</span></div>
-      </div>
-
-      <div class="section-title">Conquistas (${unlocked}/${ACHIEVEMENTS.length})</div>
-      <div class="achv-grid">
-        ${ACHIEVEMENTS.map(a=>{
-          const has = g.achievements.includes(a.id);
-          return `<div class="achv ${has?'':'locked'}">
-            <div class="ic">${has?a.ic:'—'}</div>
-            <div class="nm">${Util.escapeHtml(a.nm)}</div>
-            <div class="ds">${Util.escapeHtml(a.ds)}</div>
-          </div>`;
-        }).join('')}
-      </div>
-
-      <div class="row" style="margin-top:20px;gap:10px">
-        <button class="btn btn-ghost" id="pf-back">← Voltar ao Dashboard</button>
-      </div>
-    `;
-    el.querySelector('#pf-back').addEventListener('click', ()=> App.instance.router.go('home'));
-  }
-}
-
 /* ---------- Import Controller ---------- */
 class ImportController {
   static openModal(){
@@ -4509,13 +4419,6 @@ class ExamConfigModal {
 
   static open(preselectedExamId=null, options={}){
     this._openInternal(preselectedExamId, null, options);
-  }
-
-  static openWithPreset(preset){
-    const exams = StorageManager.getExams().filter(e=>e.questionIds?.length);
-    const examId = exams[0]?.id;
-    if(!examId){ Toast.show('Nenhum simulado disponível.', 'warn'); return; }
-    this._openInternal(examId, preset, {});
   }
 
   static _openInternal(preselectedExamId=null, preset=null, options={}){
@@ -7410,7 +7313,7 @@ class KnowledgeOSSeeder {
   /** Dev helper: localStorage.removeItem('ef_knowledge_os_seeded_v3') then reload */
   static resetFlag(){ localStorage.removeItem(this.FLAG_KEY); }
 }
-const GlobalDPOSeeder = KnowledgeOSSeeder;
+const GlobalDPOSeeder = KnowledgeOSSeeder; /* compat alias — prefer KnowledgeOSSeeder */
 /* =========================================================================
    HUB NAVIGATION + FSRS (OnePage — máx. 3 cliques)
    ========================================================================= */
@@ -8539,9 +8442,9 @@ async function loadKnowledgeBankIfNeeded(){
 async function bootstrapVelora(){
   try{
     if(typeof ForgeEngines !== 'undefined') await ForgeEngines.handleOAuthCallback();
-    Loading.show(I18n?.t?.('common.loading') || 'Carregando conteúdo…');
+    const needsBank = !localStorage.getItem('ef_knowledge_os_seeded_v3');
+    if(needsBank) Loading.show(I18n?.t?.('common.loading') || 'Carregando conteúdo…');
     await loadKnowledgeBankIfNeeded();
-    Loading.show('Inicializando…');
     if(typeof ChartHelpers === 'undefined' || typeof App === 'undefined'){
       throw new Error('Script principal incompleto — recarregue com Ctrl+Shift+R');
     }
@@ -8566,7 +8469,6 @@ class App {
     this._buildTabbar();
     this._bindTopbar();
     this.applySettings(StorageManager.getSettings());
-    setupLudicComments();
     const hash = parseAppHash();
     const valid = ['home','content','progress','builder','settings','result','review','help','forge'];
     let route = valid.includes(hash.route) ? hash.route : 'home';
@@ -8575,7 +8477,12 @@ class App {
       ? {tab: hash.tab === 'exames' ? 'certificacoes' : (hash.tab === 'cards' ? 'flashcards' : hash.tab)}
       : (hash.route === 'study' ? {tab:'certificacoes'} : {});
     this.router.go(route, params);
-    this._setupPWA();
+    this._setupNetworkStatus();
+    const defer = window.requestIdleCallback || ((fn)=> setTimeout(fn, 1));
+    defer(()=>{
+      setupLudicComments();
+      this._registerServiceWorker();
+    });
   }
   _setupNetworkStatus(){
     const pill = document.getElementById('network-pill');
@@ -8591,6 +8498,26 @@ class App {
     apply();
     window.addEventListener('online', apply);
     window.addEventListener('offline', apply);
+  }
+  _registerServiceWorker(){
+    try{
+      window.addEventListener('beforeinstallprompt', (e)=>{
+        e.preventDefault();
+        this._deferredInstall = e;
+      });
+      if(!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) return;
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).then((reg)=>{
+        reg.addEventListener('updatefound', ()=>{
+          const nw = reg.installing;
+          if(!nw) return;
+          nw.addEventListener('statechange', ()=>{
+            if(nw.state === 'installed' && navigator.serviceWorker.controller){
+              Toast.show('Nova versão disponível. Atualize quando terminar o simulado.', 'warn');
+            }
+          });
+        });
+      }).catch(()=>{});
+    }catch(err){ /* PWA opcional; não bloqueia o app */ }
   }
   _registerRoutes(){
     this.router.register('home', new DashboardView());
@@ -8609,7 +8536,7 @@ class App {
     bar.innerHTML = '';
     const logo = document.createElement('div');
     logo.className = 'tabbar-logo-wrap';
-    logo.innerHTML = '<img src="branding/logo/symbol-white.svg" width="32" height="32" alt=""><span>Velora</span>';
+    logo.innerHTML = '<img src="branding/logo/symbol-color.svg" width="32" height="32" alt=""><span>velora</span>';
     bar.appendChild(logo);
     const items = [
       {route:'home', icon:Icons.dashboard, labelKey:'nav.home', titleKey:'nav.homeTitle'},
@@ -8649,7 +8576,7 @@ class App {
     document.documentElement.lang = I18n.locale() === 'en-US' ? 'en' : 'pt-BR';
     document.documentElement.style.colorScheme = s.darkMode ? 'dark' : 'light';
     const meta = document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.content = s.darkMode ? '#0A0A0E' : '#faf8f5';
+    if(meta) meta.content = s.darkMode ? '#081021' : '#faf8f5';
     const scale = Number(s.fontSize) || 1;
     document.documentElement.style.setProperty('--font-scale', scale);
     [[12,'xs'],[13,'sm'],[15,'md'],[18,'lg'],[22,'xl']].forEach(([base, key])=>{
@@ -8667,26 +8594,7 @@ class App {
   /* ---------- PWA: manifest estático + service worker + instalação ---------- */
   _setupPWA(){
     this._setupNetworkStatus();
-    try{
-      window.addEventListener('beforeinstallprompt', (e)=>{
-        e.preventDefault();
-        this._deferredInstall = e;
-      });
-
-      if(!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) return;
-
-      navigator.serviceWorker.register('./sw.js', { scope: './' }).then((reg)=>{
-        reg.addEventListener('updatefound', ()=>{
-          const nw = reg.installing;
-          if(!nw) return;
-          nw.addEventListener('statechange', ()=>{
-            if(nw.state === 'installed' && navigator.serviceWorker.controller){
-              Toast.show('Nova versão disponível. Atualize quando terminar o simulado.', 'warn');
-            }
-          });
-        });
-      }).catch(()=>{});
-    }catch(err){ /* PWA opcional; não bloqueia o app */ }
+    this._registerServiceWorker();
   }
 
   _isAppInstalled(){
@@ -8762,7 +8670,7 @@ class App {
 /* Enhancement layers usam window.* — em strict mode as classes não vinculam ao window automaticamente */
 Object.assign(window, {
   App, Router, DashboardView, ContentHubView, ProgressHubView, HelpView,
-  BuilderView, QuestionBankView, HistoryView, ProfileView, SettingsView, ResultView, ReviewView,
+  BuilderView, QuestionBankView, HistoryView, SettingsView, ResultView, ReviewView,
   QuestionEditorController, PlayerController, ImportController, ExportController, ExamConfigModal,
   StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam,
   KnowledgeNormalizer, KnowledgeRepository, IncrementalLearningController, FSRS,
