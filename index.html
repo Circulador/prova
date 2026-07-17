@@ -296,6 +296,25 @@ a{color:var(--accent)}
 .list-row-select{cursor:pointer}
 .list-row-select input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);flex-shrink:0}
 .list-row-select.checked{background:var(--accent-soft)}
+.lib-tree{display:flex;flex-direction:column;gap:6px}
+.lib-serie,.lib-materia{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-1)}
+.lib-serie>summary,.lib-materia>summary{cursor:pointer;padding:0;list-style:none;display:flex;align-items:center;min-height:var(--touch)}
+.lib-serie>summary::-webkit-details-marker,.lib-materia>summary::-webkit-details-marker{display:none}
+.lib-serie>summary::before,.lib-materia>summary::before{
+  content:'';width:16px;height:16px;flex-shrink:0;margin-left:12px;
+  background:currentColor;opacity:.45;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E") center/contain no-repeat;
+  transition:transform .15s ease;
+}
+.lib-serie[open]>summary::before,.lib-materia[open]>summary::before{transform:rotate(90deg)}
+.lib-grp-head{flex:1;display:flex;align-items:center;gap:10px;padding:10px 12px 10px 4px;min-width:0}
+.lib-grp-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);flex-shrink:0}
+.lib-grp-title{flex:1;font-weight:600;font-size:13px;color:var(--text-0);min-width:0}
+.lib-materia{margin:4px 8px 6px}
+.lib-leaves{padding:0 8px 8px;display:flex;flex-direction:column;gap:4px}
+.lib-leaves .list-row-compact{margin-bottom:0}
+.hub-select-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .ec-timer-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px}
 .ec-timer-min{flex:1;min-width:120px;max-width:160px}
 .ec-timer-min .input:disabled{opacity:.45;cursor:not-allowed}
@@ -4438,32 +4457,91 @@ class ContentHubView {
     if(tab === 'questoes') this.bank.render(this._panelEl);
     else this._renderExames();
   }
+  _buildExamTree(exams){
+    const tree = {};
+    exams.forEach(e=>{
+      const serie = e.serie || e.category || 'Outros';
+      const materia = e.materia || 'Sem matéria';
+      if(!tree[serie]) tree[serie] = {};
+      if(!tree[serie][materia]) tree[serie][materia] = [];
+      tree[serie][materia].push(e);
+    });
+    return Object.keys(tree).sort((a,b)=>{
+      if(a.includes('2º')) return -1;
+      if(b.includes('2º')) return 1;
+      return a.localeCompare(b,'pt-BR');
+    }).map(serie=>{
+      const materias = Object.keys(tree[serie]).sort((a,b)=>a.localeCompare(b,'pt-BR'));
+      return {
+        serie,
+        materias: materias.map(materia=>{
+          const items = tree[serie][materia].sort((a,b)=>(a.title||'').localeCompare(b.title||'','pt-BR'));
+          return {materia, exams: items, ids: items.map(x=>x.id)};
+        }),
+        ids: materias.flatMap(m=>tree[serie][m].map(x=>x.id))
+      };
+    });
+  }
+  _chkState(ids){
+    const total = ids.length;
+    if(!total) return {all:false, some:false, none:true};
+    const n = ids.filter(id=>this._selected.has(id)).length;
+    return {all:n===total, some:n>0&&n<total, none:n===0};
+  }
+  _grpCheckbox(ids){
+    const st = this._chkState(ids);
+    return `<input type="checkbox" class="lib-grp-cb" data-grp-ids="${ids.join(',')}" ${st.all?'checked':''} aria-label="Selecionar grupo">`;
+  }
   _libraryRow(e){
-    if(this._selectMode){
-      const on = this._selected.has(e.id);
-      const title = e.title || '(sem título)';
-      const meta = [e.materia||e.serie, e.questionIds?.length+' questões', e.timeMinutes+' min'].filter(Boolean).join(' · ');
-      return `<label class="list-row list-row-compact list-row-select ${on?'checked':''}">
-        <input type="checkbox" data-exam-cb="${e.id}" ${on?'checked':''}>
-        <div class="meta">
-          <div class="title">${Util.escapeHtml(title)}</div>
-          <div class="desc">${Util.escapeHtml(meta)}</div>
-        </div>
-      </label>`;
-    }
-    return DashboardView._examRow(e);
+    if(!this._selectMode) return DashboardView._examRow(e);
+    const on = this._selected.has(e.id);
+    const title = e.title || e.materia || '(sem título)';
+    const meta = `${e.questionIds?.length||0} questões · ${e.timeMinutes||0} min`;
+    return `<label class="list-row list-row-compact list-row-select ${on?'checked':''}">
+      <input type="checkbox" data-exam-cb="${e.id}" ${on?'checked':''}>
+      <div class="meta">
+        <div class="title">${Util.escapeHtml(title)}</div>
+        <div class="desc">${Util.escapeHtml(meta)}</div>
+      </div>
+    </label>`;
+  }
+  _renderTree(tree){
+    if(!tree.length) return '';
+    return `<div class="lib-tree">${tree.map(s=>`
+      <details class="lib-serie" open>
+        <summary>
+          <div class="lib-grp-head">
+            ${this._selectMode ? this._grpCheckbox(s.ids) : ''}
+            <span class="lib-grp-title">${Util.escapeHtml(s.serie)}</span>
+            <span class="bank-count">${s.ids.length} exame(s)</span>
+          </div>
+        </summary>
+        ${s.materias.map(m=>`
+          <details class="lib-materia" open>
+            <summary>
+              <div class="lib-grp-head">
+                ${this._selectMode ? this._grpCheckbox(m.ids) : ''}
+                <span class="lib-grp-title">${Util.escapeHtml(m.materia)}</span>
+                <span class="bank-count">${m.exams.length}</span>
+              </div>
+            </summary>
+            <div class="lib-leaves">${m.exams.map(e=>this._libraryRow(e)).join('')}</div>
+          </details>`).join('')}
+      </details>`).join('')}</div>`;
   }
   _renderExames(){
     const panel = this._panelEl;
     if(!panel) return;
     const exams = StorageManager.getExams();
-    const groups = {};
-    exams.forEach(e=>{ const key = e.serie || e.category || 'Outros'; groups[key]=groups[key]||[]; groups[key].push(e); });
-    const sortedKeys = Object.keys(groups).sort((a,b)=>{ if(a.includes('2º')) return -1; if(b.includes('2º')) return 1; return a.localeCompare(b,'pt-BR'); });
-    const body = sortedKeys.map(k=>`<div class="study-group"><div class="study-group-title">${Util.escapeHtml(k)}</div>${groups[k].sort((a,b)=>(a.materia||a.title||'').localeCompare(b.materia||b.title||'','pt-BR')).map(e=>this._libraryRow(e)).join('')}</div>`).join('');
+    const tree = this._buildExamTree(exams);
+    const body = this._renderTree(tree);
     const selCount = this._selected.size;
     const toolbar = this._selectMode ? `
       <div class="hub-actions-bar">
+        <div class="hub-select-tools">
+          <button class="btn btn-sm btn-ghost" id="ch-sel-all" type="button">Selecionar tudo</button>
+          <button class="btn btn-sm btn-ghost" id="ch-desel-all" type="button">Desmarcar tudo</button>
+        </div>
         <span class="hub-stat" style="margin:0">${selCount} selecionado(s)</span>
         <span class="spacer"></span>
         <button class="btn btn-sm btn-danger" id="ch-delete" type="button" ${selCount?'':'disabled'}>${Icons.trash} Excluir</button>
@@ -4480,8 +4558,28 @@ class ContentHubView {
     panel.querySelector('#ch-import')?.addEventListener('click', ()=> ImportController.openModal());
     panel.querySelector('#ch-select')?.addEventListener('click', ()=>{ this._selectMode = true; this._selected.clear(); this._renderExames(); });
     panel.querySelector('#ch-cancel-sel')?.addEventListener('click', ()=>{ this._selectMode = false; this._selected.clear(); this._renderExames(); });
+    panel.querySelector('#ch-sel-all')?.addEventListener('click', ()=>{
+      exams.forEach(e=> this._selected.add(e.id));
+      this._renderExames();
+    });
+    panel.querySelector('#ch-desel-all')?.addEventListener('click', ()=>{
+      this._selected.clear();
+      this._renderExames();
+    });
     panel.querySelector('#ch-delete')?.addEventListener('click', ()=> this._deleteSelected());
+    panel.querySelectorAll('.lib-grp-cb').forEach(cb=>{
+      cb.addEventListener('click', e=> e.stopPropagation());
+      cb.addEventListener('change', ()=>{
+        const ids = (cb.dataset.grpIds||'').split(',').filter(Boolean);
+        ids.forEach(id=>{ if(cb.checked) this._selected.add(id); else this._selected.delete(id); });
+        this._renderExames();
+      });
+      const ids = (cb.dataset.grpIds||'').split(',').filter(Boolean);
+      const st = this._chkState(ids);
+      cb.indeterminate = st.some;
+    });
     panel.querySelectorAll('[data-exam-cb]').forEach(cb=>{
+      cb.addEventListener('click', e=> e.stopPropagation());
       cb.addEventListener('change', ()=>{
         const id = cb.dataset.examCb;
         if(cb.checked) this._selected.add(id); else this._selected.delete(id);
