@@ -437,6 +437,8 @@ a{color:var(--accent)}
 .ec-dev-list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
 .ec-dev-list li{font-size:12.5px;color:var(--text-2);padding:6px 0 6px 14px;position:relative;line-height:1.35}
 .ec-dev-list li::before{content:'•';position:absolute;left:0;color:var(--text-3)}
+.ec-meta-scroll{max-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.ec-meta-group strong{font-size:12px;color:var(--text-1)}
 .player-candidate{font-size:12px;color:var(--text-2);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .player-training-badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:12px;background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn);white-space:nowrap}
 
@@ -2207,6 +2209,8 @@ class DashboardView {
           <button class="btn btn-sm" type="button" data-preset="full" title="Todas as questões">Completo</button>
           <button class="btn btn-sm" type="button" data-preset="quick" title="15 questões sorteadas">Rápido</button>
           <button class="btn btn-sm" type="button" data-preset="errors" title="Só questões erradas">Só erros</button>
+          <button class="btn btn-sm" type="button" data-preset="sprint" title="10 questões · 15 min">Sprint</button>
+          <button class="btn btn-sm" type="button" data-preset="marathon" title="Todas · tempo estendido">Maratona</button>
         </div>
       </div>`;
 
@@ -3153,7 +3157,7 @@ class ExamConfigModal {
             Apenas questões erradas <input class="input ec-inline-input" id="ec-n-incorrect" type="number" min="0" value="0"> ou mais vezes
           </label>
           <div class="ec-mode-panel hidden" data-panel="incorrect"><span class="hint" id="ec-incorrect-hint"></span></div>
-          <label class="ec-radio-row ec-soon"><input type="radio" name="ec-mode" value="unseen"> Apenas questões nunca respondidas</label>
+          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="unseen"> Apenas questões nunca respondidas</label>
           <div class="ec-mode-panel hidden" data-panel="unseen"><span class="hint" id="ec-unseen-hint"></span></div>
         </fieldset>`;
   }
@@ -3163,16 +3167,50 @@ class ExamConfigModal {
     {id:'historico', label:'Histórico', desc:'Suas tentativas anteriores'},
     {id:'config', label:'Perfis', desc:'Salvar e restaurar'},
     {id:'importacao', label:'Importar', desc:'JSON, CSV e outros'},
-    {id:'em_desenvolvimento', label:'Em desenvolvimento', desc:'Recursos futuros'},
   ];
 
-  static DEV_FEATURES = [
-    'Filtros por categoria, tags e dificuldade',
-    'Estratégias adaptativas (CAT, sprint, maratona)',
-    'Exportar e importar configuração JSON',
-  ];
+  static _filterMetaForExam(examId){
+    const qmap = this._questionMap();
+    const ids = StorageManager.getExam(examId)?.questionIds || [];
+    const levels = new Set(), subs = new Set(), tags = new Set();
+    ids.forEach(id=>{
+      const q = qmap[id];
+      if(!q) return;
+      if(q.level) levels.add(q.level);
+      subs.add(q.submateria || q.category || 'Geral');
+      (q.tags || []).forEach(t => tags.add(t));
+    });
+    return {
+      levels: [...levels].sort(),
+      subs: [...subs].sort((a, b) => a.localeCompare(b, 'pt-BR')),
+      tags: [...tags].sort((a, b) => a.localeCompare(b, 'pt-BR')),
+    };
+  }
 
-  static _advancedPanelsHtml(sectionsHtml, defN, defTo){
+  static _metaFiltersFieldsetHtml(examId){
+    const { levels, subs, tags } = this._filterMetaForExam(examId);
+    const lvl = (v, label) => levels.includes(v)
+      ? `<label class="checkbox-row ec-meta-lvl"><input type="checkbox" value="${v}" checked> ${label}</label>`
+      : '';
+    const subHtml = subs.length
+      ? subs.map(s => `<label class="checkbox-row ec-meta-sub"><input type="checkbox" value="${Util.escapeHtml(s)}" checked> ${Util.escapeHtml(s)}</label>`).join('')
+      : '<span class="hint">Nenhuma categoria nesta prova.</span>';
+    const tagHtml = tags.length
+      ? tags.slice(0, 16).map(t => `<label class="checkbox-row ec-meta-tag"><input type="checkbox" value="${Util.escapeHtml(t)}" checked> ${Util.escapeHtml(t)}</label>`).join('')
+      : '';
+    return `
+      <fieldset class="ec-fieldset" id="ec-meta-filters">
+        <legend class="ec-legend">Filtrar por metadados</legend>
+        <p class="hint" style="margin-bottom:8px">Desmarque para excluir do simulado.</p>
+        <div class="ec-meta-group"><strong>Dificuldade</strong>
+          ${lvl('facil', 'Fácil')}${lvl('medio', 'Médio')}${lvl('dificil', 'Difícil')}
+        </div>
+        <div class="ec-meta-group" style="margin-top:8px"><strong>Categoria / domínio</strong><div class="ec-meta-scroll">${subHtml}</div></div>
+        ${tagHtml ? `<div class="ec-meta-group" style="margin-top:8px"><strong>Tags</strong><div class="ec-meta-scroll">${tagHtml}</div></div>` : ''}
+      </fieldset>`;
+  }
+
+  static _advancedPanelsHtml(sectionsHtml, defN, defTo, examId){
     const nav = this.ADV_TABS.map(t=>`
       <button type="button" class="ec-adv-nav-btn ${t.id==='selecao'?'active':''}" data-adv-tab="${t.id}" role="tab" aria-selected="${t.id==='selecao'?'true':'false'}">
         <span class="ec-adv-nav-label">${t.label}</span>
@@ -3182,23 +3220,22 @@ class ExamConfigModal {
       <div class="ec-adv-layout">
         <nav class="ec-adv-nav" role="tablist" aria-label="Opções avançadas">${nav}</nav>
         <div class="ec-adv-panels">
-        <div class="ec-adv-panel" data-adv-panel="selecao">${this._selectionFieldsetHtml(sectionsHtml, defN, defTo)}</div>
+        <div class="ec-adv-panel" data-adv-panel="selecao">${this._selectionFieldsetHtml(sectionsHtml, defN, defTo)}<div id="ec-meta-filters-wrap">${this._metaFiltersFieldsetHtml(examId)}</div></div>
         <div class="ec-adv-panel hidden" data-adv-panel="historico"><div id="ec-history-panel"></div></div>
         <div class="ec-adv-panel hidden" data-adv-panel="config">
-          <p class="hint" style="margin-bottom:10px">Salve suas preferências de simulado neste dispositivo.</p>
+          <p class="hint" style="margin-bottom:10px">Salve, exporte ou importe a configuração completa da sessão (JSON).</p>
           <div class="row" style="gap:8px;flex-wrap:wrap">
             <button type="button" class="btn btn-sm" id="ec-save-profile">Salvar perfil</button>
             <button type="button" class="btn btn-sm btn-ghost" id="ec-load-profile">Carregar perfil</button>
             <button type="button" class="btn btn-sm btn-ghost" id="ec-restore-defaults">Restaurar padrão</button>
+            <button type="button" class="btn btn-sm btn-ghost" id="ec-export-config">Exportar JSON</button>
+            <button type="button" class="btn btn-sm btn-ghost" id="ec-import-config-btn">Importar JSON</button>
+            <input type="file" id="ec-import-config" accept=".json,application/json" hidden>
           </div>
         </div>
         <div class="ec-adv-panel hidden" data-adv-panel="importacao">
           <p class="hint" style="margin-bottom:10px">Importe bancos em JSON, CSV ou outros formatos.</p>
           <button type="button" class="btn btn-sm btn-primary" id="ec-open-import">${Icons.upload} Abrir importação</button>
-        </div>
-        <div class="ec-adv-panel hidden" data-adv-panel="em_desenvolvimento">
-          <p class="hint" style="margin-bottom:10px">Recursos planejados que ainda não estão disponíveis. Cronômetro, quantidade e tipo de sessão já funcionam acima.</p>
-          <ul class="ec-dev-list">${this.DEV_FEATURES.map(f=>`<li>${f}</li>`).join('')}</ul>
         </div>
       </div>
       </div>`;
@@ -3231,6 +3268,15 @@ class ExamConfigModal {
               <p class="ec-seg-hint" id="ec-session-hint">Como na prova real — feedback só no final.</p>
               <input type="checkbox" id="ec-training" class="visually-hidden" hidden aria-hidden="true">
             </div>
+            <div class="field">
+              <label for="ec-strategy">Estratégia</label>
+              <select class="select" id="ec-strategy">
+                <option value="normal">Normal — configuração manual</option>
+                <option value="sprint">Sprint — 10 questões · 15 min</option>
+                <option value="marathon">Maratona — todas · tempo estendido</option>
+                <option value="cat">CAT adaptativo — Sessão inteligente (Home)</option>
+              </select>
+            </div>
             <details class="ec-candidate-details">
               <summary>Nome do candidato (opcional)</summary>
               <input class="input" id="ec-candidate" type="text" placeholder="Seu nome" value="${Util.escapeHtml(candidate)}" autocomplete="name">
@@ -3257,7 +3303,7 @@ class ExamConfigModal {
             </div>
           </div>
           <button type="button" class="ec-advanced-toggle" id="ec-adv-toggle" aria-expanded="false">⚙ Mais opções (questões, histórico, importar…)</button>
-          <div class="ec-advanced hidden" id="ec-advanced">${this._advancedPanelsHtml(sectionsHtml, defN, defTo)}</div>
+          <div class="ec-advanced hidden" id="ec-advanced">${this._advancedPanelsHtml(sectionsHtml, defN, defTo, defaultExamId)}</div>
         </div>
       </div>`;
   }
@@ -3281,6 +3327,34 @@ class ExamConfigModal {
     return ids;
   }
 
+  static _applyMetaFilters(ids, modalEl){
+    const qmap = this._questionMap();
+    let out = [...ids];
+    const lvlInputs = [...modalEl.querySelectorAll('.ec-meta-lvl input')];
+    if(lvlInputs.length){
+      const allowed = new Set(lvlInputs.filter(c => c.checked).map(c => c.value));
+      if(allowed.size && allowed.size < lvlInputs.length)
+        out = out.filter(id => allowed.has(qmap[id]?.level || 'medio'));
+    }
+    const subInputs = [...modalEl.querySelectorAll('.ec-meta-sub input')];
+    if(subInputs.length){
+      const allowed = new Set(subInputs.filter(c => c.checked).map(c => c.value));
+      if(allowed.size && allowed.size < subInputs.length)
+        out = out.filter(id => allowed.has(qmap[id]?.submateria || qmap[id]?.category || 'Geral'));
+    }
+    const tagInputs = [...modalEl.querySelectorAll('.ec-meta-tag input')];
+    if(tagInputs.length){
+      const allowed = new Set(tagInputs.filter(c => c.checked).map(c => c.value));
+      if(allowed.size && allowed.size < tagInputs.length)
+        out = out.filter(id => (qmap[id]?.tags || []).some(t => allowed.has(t)));
+    }
+    return out;
+  }
+
+  static _finalizePool(pool, modalEl){
+    return this._applyMetaFilters(this._applyExclusions(pool, modalEl), modalEl);
+  }
+
   static _peekQuestionIds(modalEl){
     const mode = modalEl.querySelector('[name="ec-mode"]:checked')?.value || 'full';
     const examId = modalEl.querySelector('#ec-exam-global')?.value;
@@ -3289,7 +3363,7 @@ class ExamConfigModal {
     const pool = exam.questionIds || [];
     switch(mode){
       case 'full': {
-        const questionIds = this._applyExclusions([...pool], modalEl);
+        const questionIds = this._finalizePool([...pool], modalEl);
         return {examId, exam, questionIds, mode, displayCount:questionIds.length};
       }
       case 'sections': {
@@ -3297,32 +3371,33 @@ class ExamConfigModal {
         const checked = [...modalEl.querySelectorAll('.ec-section-cb:checked')];
         const idSet = new Set();
         checked.forEach(cb=> cb.dataset.ids.split(',').filter(Boolean).forEach(id=>idSet.add(id)));
-        const questionIds = tree.orderedIds.filter(id=>idSet.has(id));
+        const questionIds = this._finalizePool(tree.orderedIds.filter(id=>idSet.has(id)), modalEl);
         return {examId, exam, questionIds, mode, displayCount:questionIds.length, sectionCount:checked.length};
       }
       case 'count': {
+        const filtered = this._finalizePool([...pool], modalEl);
         const n = parseInt(modalEl.querySelector('#ec-n-count')?.value, 10) || 0;
-        const displayCount = Math.min(Math.max(n, 0), pool.length) || pool.length;
-        return {examId, exam, questionIds:[...pool], mode, displayCount, sampleFromPool:true};
+        const displayCount = Math.min(Math.max(n, 0), filtered.length) || filtered.length;
+        return {examId, exam, questionIds:filtered, mode, displayCount, sampleFromPool:true};
       }
       case 'range': {
         const x = parseInt(modalEl.querySelector('#ec-range-from')?.value, 10) || 1;
         const y = parseInt(modalEl.querySelector('#ec-range-to')?.value, 10) || pool.length;
         const from = Math.max(1, Math.min(x, pool.length));
         const to = Math.max(from, Math.min(y, pool.length));
-        const questionIds = pool.slice(from - 1, to);
+        const questionIds = this._finalizePool(pool.slice(from - 1, to), modalEl);
         return {examId, exam, questionIds, mode, displayCount:questionIds.length, rangeFrom:from, rangeTo:to};
       }
       case 'incorrect': {
         const n = Math.max(0, parseInt(modalEl.querySelector('#ec-n-incorrect')?.value, 10) || 0);
-        const questionIds = this._applyExclusions(pool.filter(qid=>{
+        const questionIds = this._finalizePool(pool.filter(qid=>{
           const s = StorageManager.getStat(qid);
           return (s.seen - s.correct) >= n;
         }), modalEl);
         return {examId, exam, questionIds, mode, displayCount:questionIds.length, minErrors:n};
       }
       case 'unseen': {
-        const questionIds = this._applyExclusions(pool.filter(qid=>{
+        const questionIds = this._finalizePool(pool.filter(qid=>{
           const s = StorageManager.getStat(qid);
           return s.seen === 0;
         }), modalEl);
@@ -3636,6 +3711,8 @@ class ExamConfigModal {
     const syncExam = (examId)=>{
       modalEl.querySelector('#ec-exam-global').value = examId;
       modalEl.querySelector('#ec-sections').innerHTML = this._sectionsHtml(this._sectionTree(examId));
+      const wrap = modalEl.querySelector('#ec-meta-filters-wrap');
+      if(wrap) wrap.innerHTML = this._metaFiltersFieldsetHtml(examId);
       const total = StorageManager.getExam(examId)?.questionIds?.length || 0;
       const nCount = modalEl.querySelector('#ec-n-count');
       const rFrom = modalEl.querySelector('#ec-range-from');
@@ -3648,6 +3725,31 @@ class ExamConfigModal {
       this._syncBasicToMode(modalEl);
       this._updatePreview(modalEl);
     };
+
+    const applyStrategy = (str) => {
+      const strategy = str || modalEl.querySelector('#ec-strategy')?.value || 'normal';
+      const timeInput = modalEl.querySelector('#ec-time');
+      const total = StorageManager.getExam(modalEl.querySelector('#ec-exam-global').value)?.questionIds?.length || 0;
+      const nCount = modalEl.querySelector('#ec-n-count');
+      const basicQty = modalEl.querySelector('#ec-basic-qty');
+      if(strategy === 'sprint'){
+        modalEl.querySelector('[name="ec-mode"][value="count"]')?.click();
+        const n = Math.min(10, total || 10);
+        if(nCount) nCount.value = n;
+        if(basicQty) basicQty.value = n;
+        if(timeInput){ timeInput.value = 15; modalEl._timeEdited = true; }
+      } else if(strategy === 'marathon'){
+        modalEl.querySelector('[name="ec-mode"][value="full"]')?.click();
+        const ex = StorageManager.getExam(modalEl.querySelector('#ec-exam-global').value);
+        if(timeInput){ timeInput.value = Math.min(600, (ex?.timeMinutes || 60) * 2); modalEl._timeEdited = true; }
+        if(basicQty) basicQty.value = total;
+      } else if(strategy === 'cat'){
+        Toast.show('CAT adaptativo: use Sessão inteligente na Home.', 'info');
+      }
+      this._updatePreview(modalEl);
+    };
+
+    modalEl.querySelector('#ec-strategy')?.addEventListener('change', e => applyStrategy(e.target.value));
 
     modalEl.querySelectorAll('[data-session]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
@@ -3700,7 +3802,9 @@ class ExamConfigModal {
       try{
         const raw = localStorage.getItem('ef_exam_config_profile');
         if(!raw){ Toast.show('Nenhum perfil salvo.', 'warn'); return; }
-        this._applySnapshot(modalEl, JSON.parse(raw));
+        const snap = JSON.parse(raw);
+        if(snap.examId) syncExam(snap.examId);
+        this._applySnapshot(modalEl, snap);
         this._updatePreview(modalEl);
         Toast.show('Perfil carregado.', 'success');
       }catch(e){ Toast.show('Perfil inválido.', 'error'); }
@@ -3709,12 +3813,44 @@ class ExamConfigModal {
       modalEl.querySelector('[name="ec-mode"][value="full"]')?.click();
       this._setSessionType(modalEl, false);
       modalEl.querySelector('#ec-timer-on').checked = true;
+      modalEl.querySelector('#ec-strategy').value = 'normal';
       modalEl._timeEdited = false;
       modalEl._countEdited = false;
       modalEl._rangeEdited = false;
       const examId = modalEl.querySelector('#ec-exam-global').value;
       syncExam(examId);
       Toast.show('Padrões restaurados.', 'success');
+    });
+
+    modalEl.querySelector('#ec-export-config')?.addEventListener('click', ()=>{
+      try{
+        const snap = this._snapshotConfig(modalEl);
+        snap.exportedAt = new Date().toISOString();
+        const blob = new Blob([JSON.stringify(snap, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'velora-session-config.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        Toast.show('Configuração exportada.', 'success');
+      }catch(e){ Toast.show('Não foi possível exportar.', 'error'); }
+    });
+    modalEl.querySelector('#ec-import-config-btn')?.addEventListener('click', ()=> modalEl.querySelector('#ec-import-config')?.click());
+    modalEl.querySelector('#ec-import-config')?.addEventListener('change', e=>{
+      const file = e.target.files?.[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        try{
+          const snap = JSON.parse(reader.result);
+          if(snap.examId && snap.examId !== modalEl.querySelector('#ec-exam-global').value) syncExam(snap.examId);
+          this._applySnapshot(modalEl, snap);
+          this._updatePreview(modalEl);
+          Toast.show('Configuração importada.', 'success');
+        }catch(err){ Toast.show('JSON inválido.', 'error'); }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
     });
 
     modalEl.querySelectorAll('[name="ec-mode"]').forEach(r=>{
@@ -3752,6 +3888,9 @@ class ExamConfigModal {
     ['#ec-ex-mastered','#ec-ex-today','#ec-shuffle-q','#ec-shuffle-alt'].forEach(sel=>{
       modalEl.querySelector(sel)?.addEventListener('change', ()=> this._updatePreview(modalEl));
     });
+    modalEl.querySelector('#ec-meta-filters-wrap')?.addEventListener('change', e=>{
+      if(e.target.matches('input[type=checkbox]')) this._updatePreview(modalEl);
+    });
 
     if(preset === 'quick'){
       modalEl.querySelector('[name="ec-mode"][value="count"]')?.click();
@@ -3767,6 +3906,12 @@ class ExamConfigModal {
       if(nInc) nInc.value = 1;
     } else if(preset === 'full'){
       modalEl.querySelector('[name="ec-mode"][value="full"]')?.click();
+    } else if(preset === 'sprint'){
+      modalEl.querySelector('#ec-strategy').value = 'sprint';
+      applyStrategy('sprint');
+    } else if(preset === 'marathon'){
+      modalEl.querySelector('#ec-strategy').value = 'marathon';
+      applyStrategy('marathon');
     }
 
     modalEl.querySelectorAll('.ec-inline-input').forEach(inp=>{
@@ -3801,6 +3946,11 @@ class ExamConfigModal {
 
     modalEl.querySelector('[data-cancel]')?.addEventListener('click', closeFn);
     modalEl.querySelector('[data-ok]')?.addEventListener('click', ()=>{
+      if(modalEl.querySelector('#ec-strategy')?.value === 'cat'){
+        closeFn();
+        PlayerController.startSmartReview();
+        return;
+      }
       const result = this._collectConfig(modalEl);
       if(!result.ok){ Toast.show(result.error, 'warn'); return; }
       try{ localStorage.setItem(this.CANDIDATE_KEY, result.config.candidateName || ''); }catch(e){}
@@ -3826,7 +3976,7 @@ class ExamConfigModal {
     switch(mode){
       case 'full':
         examId = modalEl.querySelector('#ec-exam-global').value;
-        questionIds = this._applyExclusions([...(StorageManager.getExam(examId)?.questionIds || [])], modalEl);
+        questionIds = this._finalizePool([...(StorageManager.getExam(examId)?.questionIds || [])], modalEl);
         break;
       case 'sections': {
         examId = modalEl.querySelector('#ec-exam-global').value;
@@ -3835,12 +3985,12 @@ class ExamConfigModal {
         if(!checked.length) return {ok:false, error:'Selecione ao menos uma seção.'};
         const idSet = new Set();
         checked.forEach(cb=> cb.dataset.ids.split(',').filter(Boolean).forEach(id=>idSet.add(id)));
-        questionIds = this._applyExclusions(tree.orderedIds.filter(id=>idSet.has(id)), modalEl);
+        questionIds = this._finalizePool(tree.orderedIds.filter(id=>idSet.has(id)), modalEl);
         break;
       }
       case 'count': {
         examId = modalEl.querySelector('#ec-exam-global').value;
-        const pool = this._applyExclusions(StorageManager.getExam(examId)?.questionIds || [], modalEl);
+        const pool = this._finalizePool(StorageManager.getExam(examId)?.questionIds || [], modalEl);
         const n = parseInt(modalEl.querySelector('#ec-n-count').value, 10);
         if(!n || n < 1) return {ok:false, error:'Informe uma quantidade válida (N ≥ 1).'};
         if(n > pool.length) return {ok:false, error:`Restam apenas ${pool.length} questão(ões) após filtros.`};
@@ -3854,7 +4004,7 @@ class ExamConfigModal {
         const y = parseInt(modalEl.querySelector('#ec-range-to').value, 10);
         if(!x || !y || x < 1 || y < x) return {ok:false, error:'Intervalo inválido. Use X ≤ Y, a partir de 1.'};
         if(y > pool.length) return {ok:false, error:`A prova tem apenas ${pool.length} questão(ões).`};
-        questionIds = this._applyExclusions(pool.slice(x - 1, y), modalEl);
+        questionIds = this._finalizePool(pool.slice(x - 1, y), modalEl);
         break;
       }
       case 'incorrect': {
@@ -3862,7 +4012,7 @@ class ExamConfigModal {
         const n = parseInt(modalEl.querySelector('#ec-n-incorrect').value, 10);
         if(n == null || n < 0 || isNaN(n)) return {ok:false, error:'Informe N ≥ 0.'};
         const pool = StorageManager.getExam(examId)?.questionIds || [];
-        questionIds = this._applyExclusions(pool.filter(qid=>{
+        questionIds = this._finalizePool(pool.filter(qid=>{
           const s = StorageManager.getStat(qid);
           return (s.seen - s.correct) >= n;
         }), modalEl);
@@ -3872,7 +4022,7 @@ class ExamConfigModal {
       case 'unseen': {
         examId = modalEl.querySelector('#ec-exam-global').value;
         const pool = StorageManager.getExam(examId)?.questionIds || [];
-        questionIds = this._applyExclusions(pool.filter(qid=>StorageManager.getStat(qid).seen===0), modalEl);
+        questionIds = this._finalizePool(pool.filter(qid=>StorageManager.getStat(qid).seen===0), modalEl);
         if(!questionIds.length) return {ok:false, error:'Nenhuma questão nunca respondida nesta prova.'};
         break;
       }
@@ -3882,16 +4032,19 @@ class ExamConfigModal {
 
     if(!questionIds.length) return {ok:false, error:'Nenhuma questão selecionada após filtros.'};
     if(shuffleQuestions && mode !== 'count') questionIds = Util.shuffle([...questionIds]);
+    const strategy = modalEl.querySelector('#ec-strategy')?.value || 'normal';
     const session = new SessionConfig({
       examId, candidateName, questionIds, trainingMode, timerOn, timeMinutes, configMode: mode,
       excludeMastered, excludeToday, unseenOnly: mode === 'unseen',
-      shuffleQuestions, shuffleAlternatives, preSubmitReview: !trainingMode
+      shuffleQuestions, shuffleAlternatives, preSubmitReview: !trainingMode,
+      strategy
     });
     return {ok:true, config: session.toPlayerConfig()};
   }
 
   static _snapshotConfig(modalEl){
-    return {
+    const snap = {
+      version: 1,
       examId: modalEl.querySelector('#ec-exam-global')?.value,
       mode: modalEl.querySelector('[name="ec-mode"]:checked')?.value,
       training: this._trainingMode(modalEl),
@@ -3903,7 +4056,29 @@ class ExamConfigModal {
       rangeTo: modalEl.querySelector('#ec-range-to')?.value,
       nIncorrect: modalEl.querySelector('#ec-n-incorrect')?.value,
       candidate: modalEl.querySelector('#ec-candidate')?.value,
+      strategy: modalEl.querySelector('#ec-strategy')?.value || 'normal',
+      shuffleQuestions: modalEl.querySelector('#ec-shuffle-q')?.checked !== false,
+      shuffleAlternatives: !!modalEl.querySelector('#ec-shuffle-alt')?.checked,
+      excludeMastered: !!modalEl.querySelector('#ec-ex-mastered')?.checked,
+      excludeToday: !!modalEl.querySelector('#ec-ex-today')?.checked,
+      metaLevels: [...modalEl.querySelectorAll('.ec-meta-lvl input')].map(c => ({ v: c.value, on: c.checked })),
+      metaSubs: [...modalEl.querySelectorAll('.ec-meta-sub input')].map(c => ({ v: c.value, on: c.checked })),
+      metaTags: [...modalEl.querySelectorAll('.ec-meta-tag input')].map(c => ({ v: c.value, on: c.checked })),
     };
+    return snap;
+  }
+
+  static _applyMetaSnapshot(modalEl, snap){
+    const apply = (sel, items) => {
+      if(!items?.length) return;
+      const map = Object.fromEntries(items.map(i => [i.v, i.on]));
+      modalEl.querySelectorAll(sel).forEach(c => {
+        if(map[c.value] != null) c.checked = !!map[c.value];
+      });
+    };
+    apply('.ec-meta-lvl input', snap.metaLevels);
+    apply('.ec-meta-sub input', snap.metaSubs);
+    apply('.ec-meta-tag input', snap.metaTags);
   }
 
   static _applySnapshot(modalEl, snap){
@@ -3919,6 +4094,12 @@ class ExamConfigModal {
     if(snap.rangeTo) modalEl.querySelector('#ec-range-to').value = snap.rangeTo;
     if(snap.nIncorrect != null) modalEl.querySelector('#ec-n-incorrect').value = snap.nIncorrect;
     if(snap.candidate != null) modalEl.querySelector('#ec-candidate').value = snap.candidate;
+    if(snap.strategy) modalEl.querySelector('#ec-strategy').value = snap.strategy;
+    if(snap.shuffleQuestions != null) modalEl.querySelector('#ec-shuffle-q').checked = !!snap.shuffleQuestions;
+    if(snap.shuffleAlternatives != null) modalEl.querySelector('#ec-shuffle-alt').checked = !!snap.shuffleAlternatives;
+    if(snap.excludeMastered != null) modalEl.querySelector('#ec-ex-mastered').checked = !!snap.excludeMastered;
+    if(snap.excludeToday != null) modalEl.querySelector('#ec-ex-today').checked = !!snap.excludeToday;
+    this._applyMetaSnapshot(modalEl, snap);
     this._syncBasicToMode(modalEl);
   }
 }
@@ -4867,6 +5048,7 @@ class SessionConfig {
     this.timeMinutes = data.timeMinutes ?? 60;
     this.configMode = data.configMode || 'full';
     this.preset = data.preset || null;
+    this.strategy = data.strategy || 'normal';
     this.excludeMastered = !!data.excludeMastered;
     this.excludeToday = !!data.excludeToday;
     this.unseenOnly = !!data.unseenOnly;
@@ -4884,6 +5066,7 @@ class SessionConfig {
       timeMinutes: this.timeMinutes,
       configMode: this.configMode,
       preset: this.preset,
+      strategy: this.strategy,
       shuffleQuestions: this.shuffleQuestions,
       shuffleAlternatives: this.shuffleAlternatives,
       preSubmitReview: this.preSubmitReview
