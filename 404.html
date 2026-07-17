@@ -370,8 +370,50 @@ a{color:var(--accent)}
 .ec-dist-pct{text-align:right;font-weight:700;color:var(--text-2);font-variant-numeric:tabular-nums}
 .ec-preview-empty{font-size:12px;color:var(--text-2);font-style:italic}
 @media (min-width:640px){
-  .ec-layout{grid-template-columns:minmax(240px,300px) 1fr;align-items:start}
+  .ec-layout{grid-template-columns:minmax(280px,320px) 1fr;align-items:start}
+  .ec-preview{position:sticky;top:0;max-height:calc(70vh - 20px);overflow-y:auto}
 }
+.modal-ec .modal-body{max-height:min(72vh,calc(100dvh - 150px));overflow-y:auto;-webkit-overflow-scrolling:touch}
+.modal-ec .modal-footer{position:sticky;bottom:0;background:var(--bg-elevated);border-top:1px solid var(--border);z-index:2;box-shadow:0 -8px 24px rgba(0,0,0,.25)}
+@media (max-width:639px){
+  .ec-layout{display:flex;flex-direction:column}
+  .ec-preview{order:-1}
+  .ec-dist-more{margin-top:6px;font-size:11px;color:var(--text-2)}
+  .ec-dist-bars.is-collapsed .ec-dist-row:nth-child(n+5){display:none}
+}
+.ec-basic-block{display:flex;flex-direction:column;gap:14px}
+.ec-segment{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-0)}
+.ec-seg-btn{
+  min-height:44px;padding:10px 12px;border:none;border-radius:calc(var(--radius-md) - 4px);background:transparent;
+  color:var(--text-1);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;
+}
+.ec-seg-btn.active{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.ec-seg-hint{font-size:11px;color:var(--text-2);margin:6px 0 0;line-height:1.4}
+.ec-radio-row.ec-soon{opacity:.55;cursor:not-allowed}
+.field-label{display:block;font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:6px}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.ec-candidate-details{border:1px solid var(--border-soft);border-radius:var(--radius-sm);padding:8px 10px;background:var(--bg-0)}
+.ec-candidate-details summary{cursor:pointer;font-size:12.5px;color:var(--text-2);font-weight:500;min-height:32px;display:flex;align-items:center}
+.ec-candidate-details[open] summary{margin-bottom:8px}
+.ec-qty-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ec-qty-row .input{width:72px;text-align:center;min-height:44px}
+.ec-advanced-toggle{
+  width:100%;min-height:44px;margin-top:4px;padding:10px 14px;border:1px dashed var(--border);border-radius:var(--radius-md);
+  background:var(--bg-0);color:var(--text-1);font-size:13px;font-weight:600;cursor:pointer;text-align:left;
+}
+.ec-advanced-toggle[aria-expanded="true"]{border-style:solid;border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.ec-advanced{margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft)}
+.ec-advanced.hidden{display:none}
+.ec-adv-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.ec-adv-tab{
+  flex:0 0 auto;min-height:40px;padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:var(--bg-1);
+  color:var(--text-1);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;
+}
+.ec-adv-tab.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.ec-adv-panel.hidden{display:none}
+.ec-stub-list{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.ec-stub-list li{font-size:12.5px;color:var(--text-2);padding:8px 10px;border:1px solid var(--border-soft);border-radius:var(--radius-sm);background:var(--bg-0);opacity:.65}
+.ec-stub-list li em{font-style:normal;color:var(--text-3);font-size:11px;margin-left:6px}
 .player-candidate{font-size:12px;color:var(--text-2);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .player-training-badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:12px;background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn);white-space:nowrap}
 
@@ -985,12 +1027,12 @@ class Loading {
 }
 
 class Modal {
-  static open({title, bodyHtml, footerHtml='', wide=false, onMount=null}){
+  static open({title, bodyHtml, footerHtml='', wide=false, modalClass='', onMount=null}){
     const region = document.getElementById('modal-region');
     const backdrop = document.createElement('div');
     backdrop.className = 'modal-backdrop';
     backdrop.innerHTML = `
-      <div class="modal ${wide?'wide':''}">
+      <div class="modal ${wide?'wide':''} ${modalClass||''}">
         <div class="modal-header">
           <h3>${Util.escapeHtml(title)}</h3>
           <button class="btn btn-icon btn-ghost" data-close aria-label="Fechar">${Icons.close}</button>
@@ -2641,16 +2683,116 @@ class ExamConfigModal {
     Modal.open({
       title: 'Configurar simulado',
       wide: true,
+      modalClass: 'modal-ec',
       bodyHtml: this._bodyHtml(exams, defaultExamId, lastCandidate, settings),
       footerHtml: `
         <button class="btn" data-cancel type="button">Cancelar</button>
-        <button class="btn btn-primary" data-ok type="button">OK</button>`,
+        <button class="btn btn-primary" data-ok type="button">Iniciar Simulado</button>`,
       onMount: (modalEl, closeFn)=> this._bind(modalEl, closeFn, exams)
     });
   }
 
   static _examOptions(exams, selectedId){
     return exams.map(e=>`<option value="${e.id}" ${e.id===selectedId?'selected':''}>${Util.escapeHtml(e.title||'(sem título)')} (${e.questionIds.length})</option>`).join('');
+  }
+
+  static _selectionFieldsetHtml(sectionsHtml, defN, defTo){
+    return `
+        <fieldset class="ec-fieldset">
+          <legend class="ec-legend">Quais questões incluir?</legend>
+          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="full" checked> Todas as questões</label>
+          <div class="ec-mode-panel" data-panel="full"></div>
+          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="sections"> Questões das seções selecionadas</label>
+          <div class="ec-mode-panel hidden" data-panel="sections">
+            <div class="ec-section-toolbar">
+              <button type="button" class="btn btn-sm" data-select-all>Selecionar tudo</button>
+              <button type="button" class="btn btn-sm btn-ghost" data-deselect-all>Desmarcar tudo</button>
+            </div>
+            <div class="ec-section-tree" id="ec-sections">${sectionsHtml}</div>
+          </div>
+          <label class="ec-radio-row">
+            <input type="radio" name="ec-mode" value="count">
+            Sortear <input class="input ec-inline-input" id="ec-n-count" type="number" min="1" value="${defN}"> questões
+          </label>
+          <div class="ec-mode-panel hidden" data-panel="count"><span class="hint" id="ec-count-hint"></span></div>
+          <label class="ec-radio-row">
+            <input type="radio" name="ec-mode" value="range">
+            Faixa de <input class="input ec-inline-input" id="ec-range-from" type="number" min="1" value="1"> até <input class="input ec-inline-input" id="ec-range-to" type="number" min="1" value="${defTo}">
+          </label>
+          <div class="ec-mode-panel hidden" data-panel="range"><span class="hint" id="ec-range-hint"></span></div>
+          <label class="ec-radio-row">
+            <input type="radio" name="ec-mode" value="incorrect">
+            Apenas questões erradas <input class="input ec-inline-input" id="ec-n-incorrect" type="number" min="0" value="0"> ou mais vezes
+          </label>
+          <div class="ec-mode-panel hidden" data-panel="incorrect"><span class="hint" id="ec-incorrect-hint"></span></div>
+          <label class="ec-radio-row ec-soon"><input type="radio" name="ec-mode" value="unseen" disabled> Apenas questões nunca respondidas <em>(Em breve)</em></label>
+        </fieldset>`;
+  }
+
+  static _advancedPanelsHtml(sectionsHtml, defN, defTo){
+    const tabs = [
+      {id:'selecao', label:'Seleção'},
+      {id:'filtros', label:'Filtros'},
+      {id:'estrategia', label:'Estratégia'},
+      {id:'tempo', label:'Tempo'},
+      {id:'aleatoriedade', label:'Aleatoriedade'},
+      {id:'exclusao', label:'Exclusão'},
+      {id:'feedback', label:'Feedback'},
+      {id:'finalizacao', label:'Finalização'},
+      {id:'inteligencia', label:'Inteligência'},
+      {id:'historico', label:'Histórico'},
+      {id:'config', label:'Config'},
+      {id:'importacao', label:'Importação'},
+    ];
+    return `
+      <div class="ec-adv-tabs" role="tablist">${tabs.map(t=>`<button type="button" class="ec-adv-tab ${t.id==='selecao'?'active':''}" data-adv-tab="${t.id}">${t.label}</button>`).join('')}</div>
+      <div class="ec-adv-panels">
+        <div class="ec-adv-panel" data-adv-panel="selecao">${this._selectionFieldsetHtml(sectionsHtml, defN, defTo)}</div>
+        <div class="ec-adv-panel hidden" data-adv-panel="filtros">
+          <p class="hint" style="margin-bottom:10px">Refine o pool por metadados da questão.</p>
+          <ul class="ec-stub-list"><li>Categoria, domínio, tags, dificuldade <em>Em breve</em></li></ul>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="estrategia">
+          <div class="field"><label>Estratégia</label>
+            <select class="select" id="ec-strategy" disabled><option>Oficial (padrão)</option></select>
+          </div>
+          <ul class="ec-stub-list"><li>Adaptativo (CAT), Sprint, Maratona, Pontos fracos <em>Em breve</em></li></ul>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="tempo">
+          <p class="hint">Use os controles de tempo limite e cronômetro no modo básico.</p>
+          <ul class="ec-stub-list"><li>Pausar permitido, tempo extra, sem limite <em>Em breve</em></li></ul>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="aleatoriedade">
+          <label class="checkbox-row"><input type="checkbox" id="ec-shuffle-q" checked disabled> Embaralhar perguntas</label>
+          <ul class="ec-stub-list"><li>Embaralhar alternativas, ordem das seções <em>Em breve</em></li></ul>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="exclusao">
+          <ul class="ec-stub-list"><li>Ignorar acertadas, respondidas hoje, suspensas <em>Em breve</em></li></ul>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="feedback">
+          <p class="hint">No tipo <strong>Treino</strong>, feedback e explicações aparecem na hora.</p>
+          <ul class="ec-stub-list"><li>Estatísticas da questão, acertos da comunidade <em>Em breve</em></li></ul>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="finalizacao">
+          <ul class="ec-stub-list"><li>Revisão antes de enviar, confirmar envio <em>Em breve</em></li></ul>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="inteligencia">
+          <div id="ec-ai-panel"><p class="hint">Faça simulados para desbloquear estimativas.</p></div>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="historico"><div id="ec-history-panel"></div></div>
+        <div class="ec-adv-panel hidden" data-adv-panel="config">
+          <div class="row" style="gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn btn-sm" id="ec-save-profile">Salvar perfil</button>
+            <button type="button" class="btn btn-sm btn-ghost" id="ec-load-profile">Carregar perfil</button>
+            <button type="button" class="btn btn-sm btn-ghost" id="ec-restore-defaults">Restaurar padrão</button>
+          </div>
+          <ul class="ec-stub-list" style="margin-top:10px"><li>Exportar / importar configuração JSON <em>Em breve</em></li></ul>
+        </div>
+        <div class="ec-adv-panel hidden" data-adv-panel="importacao">
+          <p class="hint" style="margin-bottom:10px">Importe bancos em JSON, CSV ou outros formatos.</p>
+          <button type="button" class="btn btn-sm btn-primary" id="ec-open-import">${Icons.upload} Abrir importação</button>
+        </div>
+      </div>`;
   }
 
   static _bodyHtml(exams, defaultExamId, candidate, settings){
@@ -2666,49 +2808,41 @@ class ExamConfigModal {
       <div class="exam-config ec-layout">
         <aside class="ec-preview" id="ec-preview" aria-live="polite"></aside>
         <div class="ec-config">
-        <div class="field">
-          <label for="ec-candidate">Nome do candidato</label>
-          <input class="input" id="ec-candidate" type="text" placeholder="Seu nome" value="${Util.escapeHtml(candidate)}" autocomplete="name">
-        </div>
-        <div class="field">
-          <label for="ec-exam-global">Prova</label>
-          <select class="select" id="ec-exam-global">${opts}</select>
-        </div>
-        <fieldset class="ec-fieldset">
-          <legend class="ec-legend">Modo de seleção de questões</legend>
-          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="full" checked> Fazer o exame selecionado (todas as questões)</label>
-          <div class="ec-mode-panel" data-panel="full"></div>
-          <label class="ec-radio-row"><input type="radio" name="ec-mode" value="sections"> Fazer questões das seções selecionadas</label>
-          <div class="ec-mode-panel hidden" data-panel="sections">
-            <div class="ec-section-toolbar">
-              <button type="button" class="btn btn-sm" data-select-all>Selecionar tudo</button>
-              <button type="button" class="btn btn-sm btn-ghost" data-deselect-all>Desmarcar tudo</button>
+          <div class="ec-basic-block">
+            <div class="field">
+              <label for="ec-exam-global">Prova</label>
+              <select class="select" id="ec-exam-global">${opts}</select>
             </div>
-            <div class="ec-section-tree" id="ec-sections">${sectionsHtml}</div>
+            <div class="field">
+              <span class="field-label" id="ec-session-label">Tipo de sessão</span>
+              <div class="ec-segment" role="group" aria-labelledby="ec-session-label">
+                <button type="button" class="ec-seg-btn active" data-session="simulado" title="Como na prova real">Simulado</button>
+                <button type="button" class="ec-seg-btn" data-session="treino" title="Veja respostas e explicações na hora">Treino</button>
+              </div>
+              <p class="ec-seg-hint" id="ec-session-hint">Como na prova real — feedback só no final.</p>
+              <input type="checkbox" id="ec-training" class="visually-hidden" hidden aria-hidden="true">
+            </div>
+            <details class="ec-candidate-details">
+              <summary>Nome do candidato (opcional)</summary>
+              <input class="input" id="ec-candidate" type="text" placeholder="Seu nome" value="${Util.escapeHtml(candidate)}" autocomplete="name">
+            </details>
+            <div class="field">
+              <label for="ec-basic-qty">Quantidade de questões</label>
+              <div class="ec-qty-row">
+                <button type="button" class="btn btn-sm" id="ec-qty-all">Todas (${total})</button>
+                <input class="input" id="ec-basic-qty" type="number" min="1" max="${total}" value="${total}" aria-label="Quantidade">
+                <span class="hint">de ${total}</span>
+              </div>
+            </div>
+            <div class="ec-options" style="margin-top:0;padding-top:0;border-top:none">
+              <div class="ec-timer-row">
+                <label class="checkbox-row"><input type="checkbox" id="ec-timer-on" checked> Cronômetro ativo</label>
+                <div class="field ec-timer-min"><label for="ec-time">Tempo limite (min)</label><input class="input" id="ec-time" type="number" min="1" max="600" value="${examTime}"></div>
+              </div>
+            </div>
           </div>
-          <label class="ec-radio-row">
-            <input type="radio" name="ec-mode" value="count">
-            Sortear <input class="input ec-inline-input" id="ec-n-count" type="number" min="1" value="${defN}"> questões do exame inteiro
-          </label>
-          <div class="ec-mode-panel hidden" data-panel="count"><span class="hint" id="ec-count-hint"></span></div>
-          <label class="ec-radio-row">
-            <input type="radio" name="ec-mode" value="range">
-            Sortear questões de <input class="input ec-inline-input" id="ec-range-from" type="number" min="1" value="1"> até <input class="input ec-inline-input" id="ec-range-to" type="number" min="1" value="${defTo}">
-          </label>
-          <div class="ec-mode-panel hidden" data-panel="range"><span class="hint" id="ec-range-hint"></span></div>
-          <label class="ec-radio-row">
-            <input type="radio" name="ec-mode" value="incorrect">
-            Questões erradas <input class="input ec-inline-input" id="ec-n-incorrect" type="number" min="0" value="0"> ou mais vezes
-          </label>
-          <div class="ec-mode-panel hidden" data-panel="incorrect"><span class="hint" id="ec-incorrect-hint"></span></div>
-        </fieldset>
-        <div class="ec-options">
-          <label class="checkbox-row"><input type="checkbox" id="ec-training"> Modo treino</label>
-          <div class="ec-timer-row">
-            <label class="checkbox-row"><input type="checkbox" id="ec-timer-on" checked> Cronômetro ativo</label>
-            <div class="field ec-timer-min"><label for="ec-time">Tempo limite (min)</label><input class="input" id="ec-time" type="number" min="1" max="600" value="${examTime}"></div>
-          </div>
-        </div>
+          <button type="button" class="ec-advanced-toggle" id="ec-adv-toggle" aria-expanded="false">⚙ Configuração avançada</button>
+          <div class="ec-advanced hidden" id="ec-advanced">${this._advancedPanelsHtml(sectionsHtml, defN, defTo)}</div>
         </div>
       </div>`;
   }
@@ -2772,42 +2906,102 @@ class ExamConfigModal {
     return 'Difícil';
   }
 
-  static _modeLabel(mode, trainingMode, modalEl){
-    if(trainingMode) return 'Treino';
-    switch(mode){
-      case 'full': return 'Simulado';
-      case 'sections': return 'Por seções';
-      case 'count': {
-        const n = parseInt(modalEl.querySelector('#ec-n-count')?.value, 10) || 0;
-        return n ? `Sortear ${n}` : 'Sorteio';
-      }
-      case 'range': {
-        const x = modalEl.querySelector('#ec-range-from')?.value || '1';
-        const y = modalEl.querySelector('#ec-range-to')?.value || '?';
-        return `Intervalo ${x}–${y}`;
-      }
-      case 'incorrect': {
-        const n = modalEl.querySelector('#ec-n-incorrect')?.value ?? '0';
-        return `Erradas ≥ ${n}`;
-      }
-      default: return 'Simulado';
-    }
+  static _sessionTypeLabel(trainingMode){
+    return trainingMode ? 'Treino' : 'Simulado';
   }
 
-  static _origemLabel(state){
+  static _selectionLabel(state, modalEl){
     switch(state.mode){
       case 'full': return 'Todas';
       case 'sections':
         if(!state.sectionCount) return 'Nenhuma seção';
         if(state.sectionCount === 1) return '1 seção';
         return `${state.sectionCount} seções`;
-      case 'count': return 'Exame inteiro (sorteio)';
+      case 'count': {
+        const n = state.displayCount || parseInt(modalEl.querySelector('#ec-n-count')?.value, 10) || 0;
+        return n ? `${n} sorteadas` : 'Sorteio';
+      }
       case 'range':
-        return state.rangeFrom && state.rangeTo ? `Posições ${state.rangeFrom}–${state.rangeTo}` : 'Intervalo fixo';
+        return state.rangeFrom && state.rangeTo ? `Posições ${state.rangeFrom}–${state.rangeTo}` : 'Intervalo';
       case 'incorrect':
-        return state.minErrors != null ? `Com ${state.minErrors}+ erro(s)` : 'Histórico de erros';
+        return state.minErrors != null ? `Erradas ≥ ${state.minErrors}` : 'Com erros';
       default: return 'Todas';
     }
+  }
+
+  static _trainingMode(modalEl){
+    return !!modalEl.querySelector('#ec-training')?.checked;
+  }
+
+  static _setSessionType(modalEl, treino){
+    const cb = modalEl.querySelector('#ec-training');
+    if(cb) cb.checked = !!treino;
+    modalEl.querySelectorAll('[data-session]').forEach(btn=>{
+      const on = (btn.dataset.session === 'treino') === !!treino;
+      btn.classList.toggle('active', on);
+    });
+    const hint = modalEl.querySelector('#ec-session-hint');
+    if(hint) hint.textContent = treino
+      ? 'Veja respostas e explicações na hora.'
+      : 'Como na prova real — feedback só no final.';
+  }
+
+  static _syncBasicToMode(modalEl){
+    const examId = modalEl.querySelector('#ec-exam-global')?.value;
+    const total = StorageManager.getExam(examId)?.questionIds?.length || 0;
+    const qtyEl = modalEl.querySelector('#ec-basic-qty');
+    if(!qtyEl || !total) return;
+    qtyEl.max = total;
+    let qty = parseInt(qtyEl.value, 10) || total;
+    if(qty > total) qty = total;
+    if(qty < 1) qty = 1;
+    qtyEl.value = qty;
+    const allBtn = modalEl.querySelector('#ec-qty-all');
+    if(allBtn) allBtn.textContent = `Todas (${total})`;
+    const full = modalEl.querySelector('[name="ec-mode"][value="full"]');
+    const count = modalEl.querySelector('[name="ec-mode"][value="count"]');
+    const nCount = modalEl.querySelector('#ec-n-count');
+    if(qty >= total){
+      if(full) full.checked = true;
+    } else {
+      if(count) count.checked = true;
+      if(nCount) nCount.value = qty;
+    }
+  }
+
+  static _examHistoryHtml(examId){
+    const hist = StorageManager.getHistory().filter(h=>h.examId===examId);
+    if(!hist.length) return '<p class="hint">Nenhuma tentativa anterior nesta prova.</p>';
+    const scores = hist.map(h=>h.percentage);
+    const last = hist[hist.length-1];
+    const best = Math.max(...scores);
+    const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+    const avgMin = Math.round(hist.reduce((s,h)=>s+(h.timeSpentSeconds||0),0)/hist.length/60);
+    return `<dl class="ec-preview-dl">
+      <dt>Última nota</dt><dd>${last.percentage}%</dd>
+      <dt>Melhor nota</dt><dd>${best}%</dd>
+      <dt>Média</dt><dd>${avg}%</dd>
+      <dt>Tempo médio</dt><dd>${avgMin} min</dd>
+      <dt>Tentativas</dt><dd>${hist.length}</dd>
+    </dl>`;
+  }
+
+  static _intelPanelHtml(examId, questionCount){
+    const hist = StorageManager.getHistory().filter(h=>h.examId===examId);
+    const pass = StorageManager.getExam(examId)?.passScore ?? 70;
+    let approval = null;
+    if(hist.length){
+      const recent = hist.slice(-5);
+      const avg = recent.reduce((s,h)=>s+h.percentage,0)/recent.length;
+      approval = Math.min(99, Math.max(5, Math.round(avg + (avg >= pass ? 8 : -12))));
+    }
+    const weak = typeof AITutor !== 'undefined' ? AITutor.pickWeak(5).length : 0;
+    return `<dl class="ec-preview-dl">
+      <dt>Aprovação estimada</dt><dd>${approval != null ? approval+'%' : '—'}</dd>
+      <dt>Pontos fracos</dt><dd>${weak ? weak+' questões' : '—'}</dd>
+      <dt>Nota mínima</dt><dd>${pass}%</dd>
+    </dl>
+    <p class="hint">${approval != null ? 'Estimativa com base nas últimas tentativas.' : 'Complete simulados para estimativas da IA.'}</p>`;
   }
 
   static _estimateMinutes(examId, questionCount){
@@ -2857,8 +3051,12 @@ class ExamConfigModal {
   static _renderPreview(modalEl){
     const el = modalEl.querySelector('#ec-preview');
     if(!el) return;
+    if(!modalEl._basicSynced){
+      this._syncBasicToMode(modalEl);
+      modalEl._basicSynced = true;
+    }
     const state = this._peekQuestionIds(modalEl);
-    const trainingMode = !!modalEl.querySelector('#ec-training')?.checked;
+    const trainingMode = this._trainingMode(modalEl);
     const timerOn = !!modalEl.querySelector('#ec-timer-on')?.checked;
     const timeMinutes = Math.max(1, parseInt(modalEl.querySelector('#ec-time')?.value, 10) || 60);
     const count = state.displayCount || 0;
@@ -2869,20 +3067,26 @@ class ExamConfigModal {
     }
     const provaName = exam.materia || exam.title || '—';
     const diff = this._difficultyLabel(state.questionIds);
-    const modo = this._modeLabel(state.mode, trainingMode, modalEl);
-    const origem = this._origemLabel(state);
+    const tipo = this._sessionTypeLabel(trainingMode);
+    const selecao = this._selectionLabel(state, modalEl);
+    const passScore = exam.passScore ?? 70;
     const tempoLimite = timerOn ? `${timeMinutes} min` : 'Sem limite';
     const est = this._estimateMinutes(state.examId, count);
     const estHint = est.fromHistory
       ? (est.scope==='exam' ? 'Baseado no seu histórico nesta prova' : 'Baseado no seu histórico geral')
       : 'Estimativa padrão (~1,2 min/questão)';
     const dist = this._distribution(state.questionIds, count);
-    const bars = dist.length ? dist.map(r=>`
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width:639px)').matches;
+    const showAllDist = !!modalEl._showAllDist;
+    const distLimit = isMobile && !showAllDist ? 4 : dist.length;
+    const bars = dist.length ? dist.slice(0, distLimit).map(r=>`
       <div class="ec-dist-row">
         <span class="ec-dist-name" title="${Util.escapeHtml(r.name)}">${Util.escapeHtml(r.name)}</span>
         <div class="ec-dist-track"><div class="ec-dist-fill" style="width:${r.pct}%"></div></div>
         <span class="ec-dist-pct">${r.pct}%</span>
       </div>`).join('') : `<p class="ec-preview-empty">Sem domínios mapeados.</p>`;
+    const moreDist = isMobile && dist.length > 4 && !showAllDist
+      ? `<button type="button" class="btn btn-ghost btn-sm ec-dist-more" id="ec-dist-more">Ver mais (${dist.length - 4})</button>` : '';
     el.innerHTML = `
       <div class="ec-preview-title">Resumo do simulado</div>
       <dl class="ec-preview-dl">
@@ -2890,15 +3094,24 @@ class ExamConfigModal {
         <dt>Questões</dt><dd>${count}</dd>
         <dt>Tempo limite</dt><dd>${Util.escapeHtml(tempoLimite)}</dd>
         <dt>Dificuldade</dt><dd>${Util.escapeHtml(diff)}</dd>
-        <dt>Modo</dt><dd>${Util.escapeHtml(modo)}</dd>
-        <dt>Origem</dt><dd>${Util.escapeHtml(origem)}</dd>
+        <dt>Nota mínima</dt><dd>${passScore}%</dd>
+        <dt>Tipo</dt><dd>${Util.escapeHtml(tipo)}</dd>
+        <dt>Seleção</dt><dd>${Util.escapeHtml(selecao)}</dd>
       </dl>
       <div class="ec-estimate">
         Tempo estimado: ${est.minutes} minuto${est.minutes===1?'':'s'}
         <span class="ec-estimate-sub">${Util.escapeHtml(estHint)}</span>
       </div>
       <div class="ec-dist-title">Composição do exame</div>
-      <div class="ec-dist-bars">${bars}</div>`;
+      <div class="ec-dist-bars ${isMobile && !showAllDist ? 'is-collapsed':''}">${bars}</div>${moreDist}`;
+    el.querySelector('#ec-dist-more')?.addEventListener('click', ()=>{
+      modalEl._showAllDist = true;
+      this._renderPreview(modalEl);
+    });
+    const histPanel = modalEl.querySelector('#ec-history-panel');
+    if(histPanel) histPanel.innerHTML = this._examHistoryHtml(state.examId);
+    const aiPanel = modalEl.querySelector('#ec-ai-panel');
+    if(aiPanel) aiPanel.innerHTML = this._intelPanelHtml(state.examId, count);
   }
 
   static _updatePreview(modalEl){
@@ -2975,6 +3188,8 @@ class ExamConfigModal {
   }
 
   static _bind(modalEl, closeFn){
+    this._setSessionType(modalEl, false);
+
     const syncExam = (examId)=>{
       modalEl.querySelector('#ec-exam-global').value = examId;
       modalEl.querySelector('#ec-sections').innerHTML = this._sectionsHtml(this._sectionTree(examId));
@@ -2982,10 +3197,78 @@ class ExamConfigModal {
       const nCount = modalEl.querySelector('#ec-n-count');
       const rFrom = modalEl.querySelector('#ec-range-from');
       const rTo = modalEl.querySelector('#ec-range-to');
+      const basicQty = modalEl.querySelector('#ec-basic-qty');
+      if(basicQty){ basicQty.max = total; basicQty.value = total; modalEl._countEdited = false; }
       if(nCount && !modalEl._countEdited) nCount.value = Math.min(15, total || 15);
       if(rFrom && !modalEl._rangeEdited){ rFrom.value = 1; rTo.value = Math.min(15, total || 15); }
+      modalEl._showAllDist = false;
+      this._syncBasicToMode(modalEl);
       this._updatePreview(modalEl);
     };
+
+    modalEl.querySelectorAll('[data-session]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        this._setSessionType(modalEl, btn.dataset.session === 'treino');
+        this._updatePreview(modalEl);
+      });
+    });
+
+    modalEl.querySelector('#ec-basic-qty')?.addEventListener('input', ()=>{
+      modalEl._countEdited = true;
+      this._syncBasicToMode(modalEl);
+      this._updatePreview(modalEl);
+    });
+    modalEl.querySelector('#ec-qty-all')?.addEventListener('click', ()=>{
+      const total = StorageManager.getExam(modalEl.querySelector('#ec-exam-global').value)?.questionIds?.length || 0;
+      const basicQty = modalEl.querySelector('#ec-basic-qty');
+      if(basicQty){ basicQty.value = total; modalEl._countEdited = false; }
+      this._syncBasicToMode(modalEl);
+      this._updatePreview(modalEl);
+    });
+
+    modalEl.querySelector('#ec-adv-toggle')?.addEventListener('click', ()=>{
+      const adv = modalEl.querySelector('#ec-advanced');
+      const btn = modalEl.querySelector('#ec-adv-toggle');
+      const open = adv?.classList.toggle('hidden') === false;
+      if(btn){ btn.setAttribute('aria-expanded', open ? 'true' : 'false'); btn.textContent = open ? '⚙ Ocultar configuração avançada' : '⚙ Configuração avançada'; }
+    });
+
+    modalEl.querySelectorAll('[data-adv-tab]').forEach(tab=>{
+      tab.addEventListener('click', ()=>{
+        modalEl.querySelectorAll('[data-adv-tab]').forEach(t=>t.classList.toggle('active', t===tab));
+        modalEl.querySelectorAll('[data-adv-panel]').forEach(p=>p.classList.add('hidden'));
+        modalEl.querySelector(`[data-adv-panel="${tab.dataset.advTab}"]`)?.classList.remove('hidden');
+      });
+    });
+
+    modalEl.querySelector('#ec-open-import')?.addEventListener('click', ()=> ImportController.openModal());
+    modalEl.querySelector('#ec-save-profile')?.addEventListener('click', ()=>{
+      try{
+        const profile = this._snapshotConfig(modalEl);
+        localStorage.setItem('ef_exam_config_profile', JSON.stringify(profile));
+        Toast.show('Perfil salvo.', 'success');
+      }catch(e){ Toast.show('Não foi possível salvar.', 'error'); }
+    });
+    modalEl.querySelector('#ec-load-profile')?.addEventListener('click', ()=>{
+      try{
+        const raw = localStorage.getItem('ef_exam_config_profile');
+        if(!raw){ Toast.show('Nenhum perfil salvo.', 'warn'); return; }
+        this._applySnapshot(modalEl, JSON.parse(raw));
+        this._updatePreview(modalEl);
+        Toast.show('Perfil carregado.', 'success');
+      }catch(e){ Toast.show('Perfil inválido.', 'error'); }
+    });
+    modalEl.querySelector('#ec-restore-defaults')?.addEventListener('click', ()=>{
+      modalEl.querySelector('[name="ec-mode"][value="full"]')?.click();
+      this._setSessionType(modalEl, false);
+      modalEl.querySelector('#ec-timer-on').checked = true;
+      modalEl._timeEdited = false;
+      modalEl._countEdited = false;
+      modalEl._rangeEdited = false;
+      const examId = modalEl.querySelector('#ec-exam-global').value;
+      syncExam(examId);
+      Toast.show('Padrões restaurados.', 'success');
+    });
 
     modalEl.querySelectorAll('[name="ec-mode"]').forEach(r=>{
       r.addEventListener('change', ()=>{
@@ -2995,16 +3278,30 @@ class ExamConfigModal {
         });
         const panel = modalEl.querySelector(`[data-panel="${r.value}"]`);
         if(panel && r.value !== 'full') panel.classList.remove('hidden');
+        if(r.value === 'full' || r.value === 'count'){
+          const total = StorageManager.getExam(modalEl.querySelector('#ec-exam-global').value)?.questionIds?.length || 0;
+          const basicQty = modalEl.querySelector('#ec-basic-qty');
+          if(basicQty){
+            if(r.value === 'full'){ basicQty.value = total; modalEl._countEdited = false; }
+            else if(r.value === 'count'){ basicQty.value = parseInt(modalEl.querySelector('#ec-n-count')?.value,10)||total; modalEl._countEdited = true; }
+          }
+        }
         this._updatePreview(modalEl);
       });
     });
 
     modalEl.querySelector('#ec-exam-global')?.addEventListener('change', e=> syncExam(e.target.value));
-    modalEl.querySelector('#ec-n-count')?.addEventListener('input', ()=>{ modalEl._countEdited = true; this._updatePreview(modalEl); });
+    modalEl.querySelector('#ec-n-count')?.addEventListener('input', ()=>{
+      modalEl._countEdited = true;
+      const n = parseInt(modalEl.querySelector('#ec-n-count')?.value, 10);
+      const basicQty = modalEl.querySelector('#ec-basic-qty');
+      if(basicQty && n) basicQty.value = n;
+      modalEl.querySelector('[name="ec-mode"][value="count"]')?.click();
+      this._updatePreview(modalEl);
+    });
     modalEl.querySelector('#ec-range-from')?.addEventListener('input', ()=>{ modalEl._rangeEdited = true; this._updatePreview(modalEl); });
     modalEl.querySelector('#ec-range-to')?.addEventListener('input', ()=>{ modalEl._rangeEdited = true; this._updatePreview(modalEl); });
     modalEl.querySelector('#ec-n-incorrect')?.addEventListener('input', ()=> this._updatePreview(modalEl));
-    modalEl.querySelector('#ec-training')?.addEventListener('change', ()=> this._updatePreview(modalEl));
 
     modalEl.querySelectorAll('.ec-inline-input').forEach(inp=>{
       inp.addEventListener('click', e=> e.stopPropagation());
@@ -3051,7 +3348,7 @@ class ExamConfigModal {
   static _collectConfig(modalEl){
     const candidateName = modalEl.querySelector('#ec-candidate')?.value.trim() || '';
     const mode = modalEl.querySelector('[name="ec-mode"]:checked')?.value || 'full';
-    const trainingMode = !!modalEl.querySelector('#ec-training')?.checked;
+    const trainingMode = this._trainingMode(modalEl);
     const timerOn = !!modalEl.querySelector('#ec-timer-on')?.checked;
     const timeMinutes = Math.max(1, parseInt(modalEl.querySelector('#ec-time')?.value, 10) || 60);
     let examId, questionIds;
@@ -3103,11 +3400,43 @@ class ExamConfigModal {
         break;
       }
       default:
-        return {ok:false, error:'Modo de seleção inválido.'};
+        return {ok:false, error:'Seleção de questões inválida.'};
     }
 
     if(!questionIds.length) return {ok:false, error:'Nenhuma questão selecionada.'};
-    return {ok:true, config:{examId, candidateName, questionIds, trainingMode, timerOn, timeMinutes, configMode:mode}};
+    return {ok:true, config:{examId, candidateName, questionIds, trainingMode:this._trainingMode(modalEl), timerOn, timeMinutes, configMode:mode}};
+  }
+
+  static _snapshotConfig(modalEl){
+    return {
+      examId: modalEl.querySelector('#ec-exam-global')?.value,
+      mode: modalEl.querySelector('[name="ec-mode"]:checked')?.value,
+      training: this._trainingMode(modalEl),
+      timerOn: !!modalEl.querySelector('#ec-timer-on')?.checked,
+      timeMinutes: modalEl.querySelector('#ec-time')?.value,
+      basicQty: modalEl.querySelector('#ec-basic-qty')?.value,
+      nCount: modalEl.querySelector('#ec-n-count')?.value,
+      rangeFrom: modalEl.querySelector('#ec-range-from')?.value,
+      rangeTo: modalEl.querySelector('#ec-range-to')?.value,
+      nIncorrect: modalEl.querySelector('#ec-n-incorrect')?.value,
+      candidate: modalEl.querySelector('#ec-candidate')?.value,
+    };
+  }
+
+  static _applySnapshot(modalEl, snap){
+    if(!snap) return;
+    if(snap.examId) modalEl.querySelector('#ec-exam-global').value = snap.examId;
+    if(snap.mode) modalEl.querySelector(`[name="ec-mode"][value="${snap.mode}"]`)?.click();
+    this._setSessionType(modalEl, !!snap.training);
+    if(snap.timerOn != null) modalEl.querySelector('#ec-timer-on').checked = !!snap.timerOn;
+    if(snap.timeMinutes) modalEl.querySelector('#ec-time').value = snap.timeMinutes;
+    if(snap.basicQty) modalEl.querySelector('#ec-basic-qty').value = snap.basicQty;
+    if(snap.nCount) modalEl.querySelector('#ec-n-count').value = snap.nCount;
+    if(snap.rangeFrom) modalEl.querySelector('#ec-range-from').value = snap.rangeFrom;
+    if(snap.rangeTo) modalEl.querySelector('#ec-range-to').value = snap.rangeTo;
+    if(snap.nIncorrect != null) modalEl.querySelector('#ec-n-incorrect').value = snap.nIncorrect;
+    if(snap.candidate != null) modalEl.querySelector('#ec-candidate').value = snap.candidate;
+    this._syncBasicToMode(modalEl);
   }
 }
 
