@@ -4,13 +4,15 @@ Velora é um **Knowledge Operating System**, não um app de simulados.
 
 ## Documentos obrigatórios (ler antes de implementar)
 
-1. **[Manifesto de Arquitetura](docs/MANIFESTO-ARQUITETURA.md)** — requisitos arquiteturais, UX, IA e dados
-2. **[Modelo de Conhecimento](docs/KNOWLEDGE-MODEL.md)** — schema Knowledge Node + plano de migração
-3. **[Modelo de Repaginação UI](docs/UI-REDESIGN-MODEL.md)** — shell offline-first, breakpoints, componentes
-4. **[Arquitetura PWA](docs/PWA-ARCHITECTURE.md)** — Service Worker, cache, installability, roadmap
-5. **[Prompt IA PWA](docs/PWA-AI-PROMPT.md)** — prompt para implementação com artigo de referência
-6. **[Design System](branding/design-system/design-system.md)** — tokens visuais, componentes, breakpoints
-7. **Regras Cursor** — `.cursor/rules/velora-*.mdc` (aplicadas automaticamente)
+1. **[Privacy Knowledge OS](docs/PRIVACY-KNOWLEDGE-OS.md)** — spec canônica certificações de privacidade, taxonomia, roadmap Fases 1–6
+2. **[Manifesto de Arquitetura](docs/MANIFESTO-ARQUITETURA.md)** — requisitos arquiteturais, UX, IA e dados
+3. **[Modelo de Conhecimento](docs/KNOWLEDGE-MODEL.md)** — schema Knowledge Node v1 + v2 (Privacy Certification Node)
+4. **[Trilhas DPO Global](docs/DPO-GLOBAL-TRACKS.md)** — inventário do banco `dpo-global-bank.js`
+5. **[Modelo de Repaginação UI](docs/UI-REDESIGN-MODEL.md)** — shell offline-first, breakpoints, componentes
+6. **[Arquitetura PWA](docs/PWA-ARCHITECTURE.md)** — Service Worker, cache, installability, roadmap
+7. **[Prompt IA PWA](docs/PWA-AI-PROMPT.md)** — prompt para implementação com artigo de referência
+8. **[Design System](branding/design-system/design-system.md)** — tokens visuais, componentes, breakpoints
+9. **Regras Cursor** — `.cursor/rules/velora-*.mdc` (aplicadas automaticamente)
 
 ## Stack atual
 

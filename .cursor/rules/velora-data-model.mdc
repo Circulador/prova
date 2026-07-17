@@ -22,4 +22,5 @@ Conteúdo conectado hierarquicamente (tema → subtema → conceito → questõe
 - Evitar cópias de enunciado/resposta em múltiplos stores
 
 Referência: `docs/MANIFESTO-ARQUITETURA.md` § Conhecimento Conectado, Knowledge Node, Grafo  
-Implementação: `docs/KNOWLEDGE-MODEL.md` (schema v1.0.0 + migração em 6 fases)
+Implementação: `docs/KNOWLEDGE-MODEL.md` (schema v1.0.0 + v2.0.0 Privacy Node + migração em 6 fases)  
+Privacy OS: `docs/PRIVACY-KNOWLEDGE-OS.md`

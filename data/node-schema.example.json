@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "kn_lgpd_consent_whatsapp_001",
+  "kind": "concept",
+  "title": "Consentimento LGPD — compartilhamento em grupos",
+  "slug": "lgpd-consentimento-grupos-whatsapp",
+  "metadata": {
+    "certification": {
+      "code": "EXIN-LGPD",
+      "org": "EXIN",
+      "examObjective": "Identificar bases legais e requisitos de consentimento"
+    },
+    "country": "BR",
+    "region": "brazil",
+    "continent": "americas",
+    "knowledgeArea": "legal-bases-lgpd",
+    "difficulty": "medio",
+    "estimatedMinutes": 2,
+    "bloomLevel": "apply",
+    "primaryLaw": {
+      "id": "lgpd",
+      "name": "LGPD",
+      "article": "Art. 7º, I",
+      "jurisdiction": "BR"
+    },
+    "secondaryLaw": {
+      "id": "lgpd",
+      "name": "LGPD",
+      "article": "Art. 8º",
+      "jurisdiction": "BR"
+    },
+    "tags": ["consentimento", "whatsapp", "grupo-familiar", "dados-pessoais"],
+    "examObjective": "Distinguir consentimento válido de hipóteses de tratamento sem consentimento",
+    "officialReference": "Lei 13.709/2018, Arts. 7º–9º; Guia ANPD — Consentimento",
+    "revisionHistory": [
+      { "version": "1.0.0", "date": "2026-07-01", "author": "Velora", "note": "Nó piloto schema v2" }
+    ],
+    "language": "pt-BR",
+    "legacy": {
+      "questionId": "q_abc123"
+    }
+  },
+  "learningViews": {
+    "technical": {
+      "viewId": "lv_technical",
+      "locale": "pt-BR",
+      "body": "O consentimento (Art. 7º, I) exige manifestação livre, informada e inequívoca. Compartilhar dados de terceiros em grupo de WhatsApp sem autorização do titular viola finalidade, necessidade e base legal. Art. 8º exige que o titular saiba para que finalidade consente."
+    },
+    "simple": {
+      "viewId": "lv_simple",
+      "locale": "pt-BR",
+      "body": "Você não pode colocar o telefone ou CPF de outra pessoa num grupo só porque 'é da família'. A pessoa precisa concordar de forma clara, sabendo para quê o dado será usado."
+    },
+    "analogy": {
+      "viewId": "lv_analogy",
+      "locale": "pt-BR",
+      "body": "É como emprestar a chave do apartamento de um amigo: você não pode dar cópia para o vizinho só porque 'todo mundo do prédio é de confiança'. Só quem é dono da chave (titular do dado) pode autorizar."
+    },
+    "story": {
+      "viewId": "lv_story",
+      "locale": "pt-BR",
+      "body": "João criou um grupo de WhatsApp do condomínio para avisar entregas. Sem pedir, postou foto do CPF de Maria para 'facilitar'. Maria reclamou na assembleia. O síndico consultou o DPO: trata-se de dado pessoal compartilhado sem base legal — consentimento específico ou outra hipótese do Art. 7º seria necessária."
+    },
+    "feynman": {
+      "viewId": "lv_feynman",
+      "locale": "pt-BR",
+      "body": "Dado pessoal é informação sobre uma pessoa. Só essa pessoa (ou a lei em casos especiais) decide se outros podem usar ou mostrar. Grupo de WhatsApp não cancela essa regra."
+    },
+    "mnemonic": {
+      "viewId": "lv_mnemonic",
+      "locale": "pt-BR",
+      "body": "LIVRE + INFORMADO + INEQUÍVOCO = LII (3 I's do consentimento LGPD)"
+    },
+    "visual": {
+      "viewId": "lv_visual",
+      "locale": "pt-BR",
+      "suggestions": [
+        "Ícone: cadeado sobre balão de chat",
+        "Diagrama: titular → seta 'autoriza' → controlador → seta 'compartilha' → destinatário",
+        "Cor associada: verde = consentido, vermelho = sem base legal"
+      ]
+    }
+  },
+  "localeBundles": {
+    "pt-BR": { "nodeId": "kn_lgpd_consent_whatsapp_001", "language": "pt-BR", "linked": true },
+    "en": {
+      "nodeId": "kn_lgpd_consent_whatsapp_001",
+      "language": "en",
+      "linked": true,
+      "glossary": [
+        { "term": "consent", "translation": "consentimento", "pronunciation": "/kənˈsɛnt/" },
+        { "term": "data subject", "translation": "titular", "pronunciation": "/ˈdeɪtə ˈsʌbdʒɪkt/" }
+      ],
+      "flashcards": [
+        { "front": "freely given, informed, unambiguous", "back": "livre, informado, inequívoco (LGPD Art. 8)" }
+      ],
+      "examExpressions": [
+        "lawful basis for processing",
+        "data subject rights",
+        "purpose limitation"
+      ]
+    },
+    "es": { "nodeId": "kn_lgpd_consent_whatsapp_001", "language": "es", "linked": true, "stub": true },
+    "fr": { "nodeId": "kn_lgpd_consent_whatsapp_001", "language": "fr", "linked": true, "stub": true },
+    "it": { "nodeId": "kn_lgpd_consent_whatsapp_001", "language": "it", "linked": true, "stub": true },
+    "de": { "nodeId": "kn_lgpd_consent_whatsapp_001", "language": "de", "linked": true, "stub": true },
+    "ja": { "nodeId": "kn_lgpd_consent_whatsapp_001", "language": "ja", "linked": true, "stub": true }
+  },
+  "views": {
+    "question": {
+      "viewId": "qv_default",
+      "type": "single",
+      "stem": "Grupo de WhatsApp do condomínio compartilha fotos de CPF de moradores para 'verificar entregas'. Pela LGPD, isso é:",
+      "stemEn": "A condominium WhatsApp group shares resident CPF photos to 'verify deliveries.' Under LGPD, this is:",
+      "options": [
+        { "id": "opt_a", "text": "Provável divulgação ilícita — exige base legal e minimização", "textEn": "Likely unlawful disclosure — need legal basis and minimization", "correct": true },
+        { "id": "opt_b", "text": "Sempre permitido em grupos", "textEn": "Always allowed in groups", "correct": false },
+        { "id": "opt_c", "text": "Isento por ser condomínio", "textEn": "Exempt because it's a condominium", "correct": false },
+        { "id": "opt_d", "text": "Só problema se vazar na internet", "textEn": "Only a problem if leaked online", "correct": false }
+      ]
+    },
+    "explanation": {
+      "viewId": "ev_default",
+      "body": "CPF é dado pessoal. Compartilhar em grupo amplo sem base legal ou consentimento específico viola LGPD.",
+      "bodyEn": "CPF is personal data. Sharing in a broad group without legal basis or specific consent violates LGPD."
+    },
+    "flashcards": [
+      {
+        "viewId": "fc_consent_001",
+        "front": "3 requisitos do consentimento LGPD",
+        "back": "Livre, informado, inequívoco (Art. 8º)",
+        "derivedFrom": "mnemonic"
+      }
+    ]
+  },
+  "progress": {
+    "seen": 0,
+    "correct": 0,
+    "streak": 0,
+    "fsrs": {
+      "due": null,
+      "stability": 0,
+      "difficulty": 0,
+      "reps": 0,
+      "lapses": 0,
+      "state": "new"
+    }
+  },
+  "ai": {
+    "passProbabilityContribution": null,
+    "predictedForgetDate": null,
+    "gapAnalysis": [],
+    "confidence": null
+  },
+  "sync": {
+    "source": "seed",
+    "adapter": "dpo-global-bank",
+    "externalId": "EXIN-LGPD/LGPD no dia a dia/q001"
+  },
+  "createdAt": "2026-07-01T00:00:00.000Z",
+  "updatedAt": "2026-07-17T00:00:00.000Z"
+}

@@ -518,8 +518,217 @@ Depois **Fase 2** (dual-write) em PR separado.
 
 ---
 
+---
+
+## 14. Schema v2.0 — Privacy Certification Node
+
+> **Status:** especificação · complementa v1.0.0 para certificações de privacidade  
+> **Spec canônica:** [PRIVACY-KNOWLEDGE-OS.md](PRIVACY-KNOWLEDGE-OS.md)  
+> **Exemplo JSON:** [`data/node-schema.example.json`](../data/node-schema.example.json)  
+> **Taxonomia:** [`data/knowledge-taxonomy.json`](../data/knowledge-taxonomy.json)
+
+### 14.1 Evolução v1 → v2
+
+| v1.0.0 | v2.0.0 |
+|--------|--------|
+| `views.explanation` única | `learningViews.*` (7 camadas) |
+| `metadata.tags` simples | `QuestionMetadata` completo |
+| Idioma opcional | `LocaleBundle[]` multilíngue |
+| Certificação via tags | `CertificationRef` + `LawRef` |
+| Questão = entidade | Questão = `views.question` do nó |
+
+`schemaVersion` do nó passa a `"2.0.0"` para conteúdo de privacidade; nós legados permanecem `"1.0.0"` até migração.
+
+### 14.2 `LearningViews`
+
+Camadas pedagógicas do mesmo conceito — **não duplicar** em `Question.explanation`.
+
+```typescript
+/** Camadas de aprendizagem — Privacy Knowledge OS */
+interface LearningViews {
+  technical?: LearningViewText;
+  simple?: LearningViewText;
+  feynman?: LearningViewText;
+  analogy?: LearningViewText;
+  story?: LearningViewText;
+  mnemonic?: LearningViewText;
+  visual?: LearningViewVisual;
+}
+
+interface LearningViewText {
+  viewId: string;
+  locale: string;              // "pt-BR", "en", …
+  body: string;
+}
+
+interface LearningViewVisual {
+  viewId: string;
+  locale: string;
+  suggestions: string[];       // descrições de associação visual / diagrama
+}
+```
+
+Mapeamento legado (pass-through no seeder):
+
+| Campo legado em `raw` (bank) | Destino v2 |
+|------------------------------|------------|
+| `explanation` / `explanationPt` | `learningViews.technical` ou `views.explanation` |
+| `story` | `learningViews.story` |
+| `analogy` | `learningViews.analogy` |
+| `feynman` | `learningViews.feynman` |
+| `mnemonic` | `learningViews.mnemonic` |
+| `visualAssociation` | `learningViews.visual.suggestions` |
+
+### 14.3 `QuestionMetadata`
+
+Metadados completos por nó/visualização — armazenados em `KnowledgeNode.metadata` (v2) ou `Question.nodeMeta` (pass-through legado).
+
+```typescript
+interface QuestionMetadata {
+  certification?: CertificationRef;
+  country?: string;            // ISO 3166-1 alpha-2
+  region?: string;             // ex.: "brazil", "europe"
+  continent?: string;          // ex.: "americas", "asia"
+  knowledgeArea?: string;      // id da taxonomia
+  difficulty?: "facil" | "medio" | "dificil";
+  estimatedMinutes?: number;
+  bloomLevel?: BloomLevel;
+  primaryLaw?: LawRef;
+  secondaryLaw?: LawRef;
+  tags?: string[];
+  examObjective?: string;
+  officialReference?: string;
+  revisionHistory?: RevisionEntry[];
+  language?: string;           // locale principal da view
+}
+
+type BloomLevel =
+  | "remember"    // L1
+  | "understand"  // L2
+  | "apply"       // L3
+  | "analyze"     // L4
+  | "evaluate"    // L5
+  | "create";     // L6
+
+interface RevisionEntry {
+  version: string;
+  date: string;                // ISO 8601
+  author?: string;
+  note?: string;
+}
+```
+
+### 14.4 `CertificationRef`
+
+```typescript
+interface CertificationRef {
+  code: string;                // ex.: "IAPP-CIPP-E", "EXIN-LGPD"
+  org?: string;                // "IAPP", "EXIN", "ANPD"…
+  name?: string;
+  examObjective?: string;
+  stub?: boolean;              // certificação em desenvolvimento
+}
+```
+
+### 14.5 `LawRef`
+
+```typescript
+interface LawRef {
+  id: string;                  // ex.: "lgpd", "gdpr"
+  name: string;                // nome completo
+  article?: string;            // ex.: "Art. 7º, I"
+  jurisdiction?: string;       // "BR", "EU", "US-CA"…
+}
+```
+
+### 14.6 `LocaleBundle`
+
+Idiomas linkados pelo **mesmo `nodeId`** — conteúdo não duplicado semanticamente.
+
+```typescript
+interface LocaleBundle {
+  nodeId: string;              // id canônico compartilhado
+  language: string;            // "pt-BR" | "en" | "es" | "fr" | "it" | "de" | "ja"
+  linked: boolean;
+  stub?: boolean;
+
+  /** Integração EN (e outros) */
+  glossary?: GlossaryEntry[];
+  flashcards?: { front: string; back: string }[];
+  examExpressions?: string[];
+}
+
+interface GlossaryEntry {
+  term: string;
+  translation: string;
+  pronunciation?: string;
+}
+```
+
+### 14.7 `KnowledgeNode` v2 (extensão)
+
+```typescript
+interface KnowledgeNodeV2 extends KnowledgeNode {
+  schemaVersion: "2.0.0";
+  metadata: NodeMetadata & QuestionMetadata;
+  learningViews?: LearningViews;
+  localeBundles?: Record<string, LocaleBundle>;
+  /** views.question permanece compatível com Player */
+  views: NodeViews;
+}
+```
+
+### 14.8 Migração Question/Exam → nó v2
+
+| Fase | Ação | Store |
+|------|------|-------|
+| **2a** | `Question.nodeMeta` pass-through no seeder | `ef_questions` |
+| **2b** | `KnowledgeNormalizer` mapeia `nodeMeta` → `metadata` + `learningViews` | `ef_knowledge_nodes_v1` |
+| **3** | Player exibe abas `learningViews` | UI |
+| **4** | Filtros simulador usam `primaryLaw`, `bloomLevel` | `SessionConfig` |
+| **5** | Taxonomia JSON → links `parent` persistidos | `ef_knowledge_links_v1` |
+| **6** | Export nativo v2; deprecar campos legados | — |
+
+Pontes legado durante migração:
+
+```javascript
+// Question legado (fase 2a)
+{
+  id: "q_…",
+  text: "…",
+  nodeMeta: {
+    primaryLaw: { id: "lgpd", name: "LGPD", article: "Art. 7º" },
+    bloomLevel: "apply",
+    learningViews: { story: { body: "João…" } }  // opcional no bank
+  }
+}
+
+// KnowledgeNormalizer (fase 2b)
+static fromLegacyQuestion(q) {
+  const node = KnowledgeNormalizer.fromLegacyQuestion_v1(q);
+  if (q.nodeMeta) {
+    Object.assign(node.metadata, pickMeta(q.nodeMeta));
+    node.learningViews = q.nodeMeta.learningViews || buildLearningViews(q.nodeMeta);
+    node.schemaVersion = "2.0.0";
+  }
+  return node;
+}
+```
+
+### 14.9 Checklist v2
+
+1. Novo conteúdo de privacidade segue [`node-schema.example.json`](../data/node-schema.example.json)?
+2. Certificação mapeada em [`knowledge-taxonomy.json`](../data/knowledge-taxonomy.json)?
+3. Mesmo conceito em 2 certs → **um nó**, múltiplos `CertificationRef`?
+4. Mesmo conceito em 2 idiomas → **um `nodeId`**, `LocaleBundle`?
+5. Pass-through no seeder antes de UI?
+
+---
+
 ## Referências
 
+- [Privacy Knowledge OS](PRIVACY-KNOWLEDGE-OS.md)
 - [Manifesto de Arquitetura](MANIFESTO-ARQUITETURA.md)
+- [DPO Global Tracks](DPO-GLOBAL-TRACKS.md)
 - [AGENTS.md](../AGENTS.md)
 - Código legado: `Question`, `Exam`, `StorageManager` em `index.html`

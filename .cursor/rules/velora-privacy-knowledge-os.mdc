@@ -1,0 +1,39 @@
+---
+description: Velora Privacy Knowledge OS — certificações, schema v2, taxonomia (obrigatório)
+alwaysApply: true
+---
+
+# Privacy Knowledge OS
+
+Velora é **Knowledge OS para Certificações de Privacidade** — não banco de questões.
+
+## Princípio central
+
+Questões são **uma view** de um **Knowledge Node**. Nunca duplicar conceito semântico.
+
+## Leitura obrigatória
+
+1. `docs/PRIVACY-KNOWLEDGE-OS.md` — spec canônica e roadmap Fases 1–6
+2. `docs/KNOWLEDGE-MODEL.md` § Schema v2.0
+3. `data/knowledge-taxonomy.json` — taxonomia continente → país → lei/cert
+4. `data/node-schema.example.json` — nó completo de referência
+
+## Schema v2 (resumo)
+
+- `LearningViews`: technical, simple, feynman, analogy, story, mnemonic, visual
+- `QuestionMetadata`: cert, country, region, bloomLevel, primaryLaw, examObjective…
+- `LocaleBundle`: PT, EN, ES, FR, IT, DE, JA linkados por `nodeId`
+- Pass-through: `GlobalDPOSeeder._normalizeQuestion` → `Question.nodeMeta`
+
+## Regras de implementação
+
+- **Offline-first**, **mobile-first**, **3 cliques** — manifesto inegociável
+- Conteúdo **original**; alinhar a syllabi públicos, não copiar itens oficiais
+- IA **invisível** (✨ contextual), nunca menu "IA"
+- Migração **incremental**: dual-write/read antes de quebrar legado
+- Novos campos no banco → pass-through em seeder, normalizer depois
+- Docs em **português**; código e IDs em inglês quando convencional
+
+## Gate
+
+Nova feature de privacidade/certificação: mapear para taxonomia + nó v2 antes de codar UI.

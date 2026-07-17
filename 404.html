@@ -729,6 +729,8 @@ a{color:var(--accent)}
 }
 body.player-open .tabbar{display:none}
 body.player-open .main{padding-bottom:0!important}
+body.player-paused .player-question-area{opacity:.55;pointer-events:none}
+body.player-paused #p-pause.active{background:var(--warn-soft);border-color:var(--warn)}
 
 /* Tabbar — mobile-first: bottom nav (phone + tablet) */
 .hub-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;border-bottom:none;padding-bottom:0}
@@ -970,6 +972,7 @@ body[data-network="offline"] .network-pill.is-offline::before{
 <div id="loading-overlay"><div class="spinner"></div><div id="loading-msg" style="font-size:13px;color:var(--text-1)">Carregando…</div></div>
 <div id="modal-region"></div>
 
+<script src="data/dpo-global-bank.js"></script>
 <script>
 'use strict';
 /* =========================================================================
@@ -1176,6 +1179,7 @@ class StorageManager {
     const defaults = {
       darkMode:true, font:'sans', fontSize:1, sound:true,
       defaultTimer:60, randomOrder:false, randomAlternatives:false, language:'pt-BR',
+      bilingualMode:'dual',
       showAnswerAfterSelect:true, allowRevealAnswer:true, allowFinishAnytime:true
     };
     // mescla os padrões com o que já estiver salvo, garantindo que chaves novas existam
@@ -1397,12 +1401,18 @@ class Question {
     this.matchPairs = data.matchPairs || []; // [{left,right}]
     this.sequenceItems = data.sequenceItems || []; // [{text}] in correct order
     this.explanation = data.explanation || '';
+    this.stemEn = data.stemEn || '';
+    this.stemPt = data.stemPt || data.text || '';
+    this.explanationEn = data.explanationEn || data.explanation || '';
+    this.explanationPt = data.explanationPt || data.explanation || '';
     this.level = data.level || 'medio'; // facil, medio, dificil
     this.category = data.category || '';
     this.materia = data.materia || data.subject || data.discipline || '';
     this.submateria = data.submateria || data.subtopic || '';
     this.tags = data.tags || [];
     this.comments = data.comments || '';
+    /** Schema v2 pass-through — metadata de privacidade / learning views (Privacy Knowledge OS) */
+    this.nodeMeta = data.nodeMeta || null;
   }
 
   static optionLetter(i){ return String.fromCharCode(65+i); }
@@ -1449,6 +1459,10 @@ class Exam {
     this.materia = data.materia || '';
     this.serie = data.serie || '';
     this.code = data.code || '';
+    this.region = data.region || '';
+    this.trackId = data.trackId || data.region || '';
+    this.org = data.org || '';
+    this.stub = !!data.stub;
     this.language = data.language || 'pt-BR';
     this.timeMinutes = data.timeMinutes ?? 60;
     this.passScore = data.passScore ?? 70;
@@ -1458,6 +1472,320 @@ class Exam {
     this.questionIds = data.questionIds || [];
     this.createdAt = data.createdAt || new Date().toISOString();
     this.updatedAt = data.updatedAt || new Date().toISOString();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Knowledge Node — Fase 1 (projeção read-only, sem persistência)
+   Spec: docs/KNOWLEDGE-MODEL.md §8 Fase 1
+   Entrega: KnowledgeNormalizer + KnowledgeRepository (memória apenas).
+   Zero mudança de UX; dual-write/read é Fase 2+.
+--------------------------------------------------------------------- */
+class KnowledgeNormalizer {
+  static truncate(str, max){
+    const s = String(str || '').trim();
+    return s.length <= max ? s : s.slice(0, max - 1) + '…';
+  }
+
+  /** Deriva texto verso do flashcard — mesma lógica de FSRS.backText */
+  static flashcardBackText(q){
+    let ans = '';
+    if(['single','boolean','image'].includes(q.type)){
+      ans = (q.options || []).find(o => o.correct)?.text || '';
+    } else if(q.type === 'multi'){
+      ans = (q.options || []).filter(o => o.correct).map(o => o.text).join(', ');
+    } else if(q.type === 'short'){
+      ans = (q.correctShort || []).join(' / ');
+    } else if(q.type === 'matching'){
+      ans = (q.matchPairs || []).map(p => p.left + ' → ' + p.right).join('\n');
+    } else if(q.type === 'sequence'){
+      ans = (q.sequenceItems || []).map(s => s.text).join(' → ');
+    }
+    return 'Resposta: ' + (ans || 'Não cadastrada.') + (q.explanation ? '\n\nExplicação: ' + q.explanation : '');
+  }
+
+  static autoFlashcard(q){
+    return [{
+      viewId: 'fc_auto',
+      front: q.text,
+      back: this.flashcardBackText(q),
+      derivedFrom: 'question'
+    }];
+  }
+
+  static fromLegacyQuestion(q){
+    const now = new Date().toISOString();
+    const stat = StorageManager.getStat(q.id);
+    const views = {
+      question: {
+        viewId: 'qv_default',
+        type: q.type,
+        stem: q.text,
+        image: q.image,
+        options: q.options,
+        correctShort: q.correctShort,
+        matchPairs: q.matchPairs,
+        sequenceItems: q.sequenceItems
+      },
+      flashcards: this.autoFlashcard(q)
+    };
+    if(q.explanation){
+      views.explanation = { viewId: 'ev_default', body: q.explanation };
+    }
+    return {
+      id: q.id,
+      schemaVersion: '1.0.0',
+      kind: 'concept',
+      title: this.truncate(q.text, 80),
+      metadata: {
+        difficulty: q.level,
+        tags: q.tags,
+        category: q.category,
+        materia: q.materia,
+        submateria: q.submateria,
+        legacy: { questionId: q.id }
+      },
+      views,
+      progress: {
+        seen: stat.seen || 0,
+        correct: stat.correct || 0,
+        streak: stat.streak || 0,
+        lastAttemptAt: stat.last || null
+      },
+      createdAt: now,
+      updatedAt: now
+    };
+  }
+
+  static fromLegacyExam(exam){
+    const now = new Date().toISOString();
+    return {
+      id: exam.id,
+      schemaVersion: '1.0.0',
+      kind: 'collection',
+      title: exam.title || '',
+      metadata: {
+        legacy: { examIds: [exam.id] },
+        tags: exam.tags,
+        category: exam.category,
+        trilha: exam.trilha,
+        materia: exam.materia,
+        code: exam.code
+      },
+      collection: {
+        collectionType: 'exam',
+        questionSelection: (exam.questionIds || []).map(id => ({ nodeId: id })),
+        rules: {
+          timeMinutes: exam.timeMinutes,
+          passScore: exam.passScore
+        }
+      },
+      createdAt: exam.createdAt || now,
+      updatedAt: exam.updatedAt || now
+    };
+  }
+}
+
+class KnowledgeRepository {
+  static _nodes = [];
+  static _links = [];
+  static _built = false;
+
+  static _debugEnabled(){
+    try{ return localStorage.getItem('ef_knowledge_debug') === '1'; }catch(e){ return false; }
+  }
+
+  static buildGraphFromLegacy(){
+    const nodes = [];
+    const links = [];
+    const index = new Map();
+    const addNode = (node) => {
+      if(!index.has(node.id)){ index.set(node.id, node); nodes.push(node); }
+      return node;
+    };
+
+    StorageManager.getQuestions().forEach(raw => {
+      const q = raw instanceof Question ? raw : new Question(raw);
+      addNode(KnowledgeNormalizer.fromLegacyQuestion(q));
+    });
+
+    StorageManager.getExams().forEach(raw => {
+      const exam = raw instanceof Exam ? raw : new Exam(raw);
+      addNode(KnowledgeNormalizer.fromLegacyExam(exam));
+      (exam.questionIds || []).forEach(qid => {
+        links.push({
+          id: Util.uid('kl'),
+          from: exam.id,
+          to: qid,
+          type: 'includes'
+        });
+      });
+    });
+
+    this._appendExinStructure(nodes, links, index);
+
+    this._nodes = nodes;
+    this._links = links;
+    this._built = true;
+    return { nodes, links };
+  }
+
+  /** Preview in-memory: trilha regional → certificação → tópico → conceitos */
+  static _appendExinStructure(nodes, links, index){
+    const dpoExams = StorageManager.getExams().filter(e =>
+      (e.questionIds || []).length && (e.region || e.trackId || /^(EXIN-|IAPP-|PECB-|ISACA-|ISO-|CNIL-|TUV-|UK-)/.test(e.code || ''))
+    );
+    if(!dpoExams.length) return;
+
+    const byTrack = {};
+    dpoExams.forEach(e=>{
+      const key = e.trackId || e.region || 'global';
+      byTrack[key] = byTrack[key] || [];
+      byTrack[key].push(e);
+    });
+
+    Object.entries(byTrack).forEach(([trackKey, exinExams])=>{
+    const trilhaId = 'track-' + trackKey;
+    const trackMeta = (typeof GlobalDPOSeeder !== 'undefined' && GlobalDPOSeeder.TRACKS)
+      ? GlobalDPOSeeder.TRACKS.find(t=>t.id===trackKey || t.region===trackKey) : null;
+    const trilhaLabel = trackMeta ? `${trackMeta.name} — DPO` : (exinExams[0]?.trilha || 'DPO Global');
+
+    const now = new Date().toISOString();
+    const addNode = (node) => {
+      if(!index.has(node.id)){ index.set(node.id, node); nodes.push(node); }
+    };
+    const addLink = (from, to, type) => {
+      links.push({ id: Util.uid('kl'), from, to, type });
+    };
+
+    addNode({
+      id: trilhaId,
+      schemaVersion: '1.0.0',
+      kind: 'track',
+      title: trilhaLabel,
+      metadata: { tags: [trilhaLabel] },
+      views: {},
+      createdAt: now,
+      updatedAt: now
+    });
+
+    exinExams.forEach(exam => {
+      const certId = 'cert-' + (exam.code || exam.id).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      addNode({
+        id: certId,
+        schemaVersion: '1.0.0',
+        kind: 'certification',
+        title: exam.title || exam.materia || exam.code,
+        metadata: { code: exam.code, materia: exam.materia, legacy: { examIds: [exam.id] } },
+        views: {},
+        createdAt: now,
+        updatedAt: now
+      });
+      addLink(certId, trilhaId, 'parent');
+
+      const qmap = new Map(StorageManager.getQuestions().map(q => [q.id, q]));
+      const topics = new Map();
+      (exam.questionIds || []).forEach(qid => {
+        const q = qmap.get(qid);
+        if(!q) return;
+        const sub = q.submateria || q.category || 'Geral';
+        const topicId = 'topic-' + certId + '-' + sub.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 48);
+        if(!topics.has(topicId)){
+          topics.set(topicId, sub);
+          addNode({
+            id: topicId,
+            schemaVersion: '1.0.0',
+            kind: 'topic',
+            title: sub,
+            metadata: { materia: q.materia, submateria: sub },
+            views: {},
+            createdAt: now,
+            updatedAt: now
+          });
+          addLink(topicId, certId, 'parent');
+        }
+        if(index.has(qid)){
+          addLink(qid, topicId, 'parent');
+        }
+      });
+    });
+    });
+  }
+
+  static _ensureGraph(){
+    if(!this._built) this.buildGraphFromLegacy();
+  }
+
+  static projectQuestions(){
+    this._ensureGraph();
+    return this._nodes
+      .filter(n => n.kind === 'concept' && n.views?.question)
+      .map(n => {
+        const qv = n.views.question;
+        const meta = n.metadata || {};
+        return new Question({
+          id: n.id,
+          type: qv.type,
+          text: qv.stem,
+          image: qv.image,
+          options: qv.options,
+          correctShort: qv.correctShort,
+          matchPairs: qv.matchPairs,
+          sequenceItems: qv.sequenceItems,
+          explanation: n.views.explanation?.body || '',
+          level: meta.difficulty || 'medio',
+          category: meta.category || '',
+          materia: meta.materia || '',
+          submateria: meta.submateria || '',
+          tags: meta.tags || []
+        });
+      });
+  }
+
+  static projectExams(){
+    this._ensureGraph();
+    return this._nodes
+      .filter(n => n.kind === 'collection' && n.collection)
+      .map(n => {
+        const meta = n.metadata || {};
+        return new Exam({
+          id: n.id,
+          title: n.title,
+          description: meta.description || '',
+          category: meta.category || '',
+          trilha: meta.trilha || '',
+          materia: meta.materia || '',
+          code: meta.code || '',
+          timeMinutes: n.collection.rules?.timeMinutes ?? 60,
+          passScore: n.collection.rules?.passScore ?? 70,
+          tags: meta.tags || [],
+          questionIds: (n.collection.questionSelection || []).map(s => s.nodeId),
+          createdAt: n.createdAt,
+          updatedAt: n.updatedAt
+        });
+      });
+  }
+
+  /** Validação Fase 1 — silenciosa se contagens batem; log único se divergir ou ef_knowledge_debug=1 */
+  static validatePhase1(){
+    const legacyQ = StorageManager.getQuestions().length;
+    const legacyE = StorageManager.getExams().length;
+    const { nodes, links } = this.buildGraphFromLegacy();
+    const concepts = nodes.filter(n => n.kind === 'concept').length;
+    const collections = nodes.filter(n => n.kind === 'collection').length;
+    const projectedQ = this.projectQuestions().length;
+    const projectedE = this.projectExams().length;
+    const match = concepts === legacyQ && collections === legacyE &&
+      projectedQ === legacyQ && projectedE === legacyE;
+    if(match && !this._debugEnabled()) return { match, nodes: nodes.length, links: links.length };
+    console.debug('[Knowledge Phase 1]', {
+      nodes: nodes.length, links: links.length,
+      concepts, collections,
+      legacyQuestions: legacyQ, projectedQuestions: projectedQ,
+      legacyExams: legacyE, projectedExams: projectedE,
+      match
+    });
+    return { match, nodes: nodes.length, links: links.length };
   }
 }
 
@@ -1822,15 +2150,38 @@ class DashboardView {
     const r=18,c=2*Math.PI*r,off=c-(pct/100)*c;
     return `<div class="home-progress-ring" title="${pct}%"><svg viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="${r}"/><circle class="ring-fg" cx="22" cy="22" r="${r}" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}"/></svg><span class="pct">${pct}%</span></div>`;
   }
+  static _groupCertsByTrack(exams){
+    const groups = {};
+    exams.forEach(e=>{
+      const key = e.trackId || e.region || 'global';
+      const track = (typeof GlobalDPOSeeder !== 'undefined' && GlobalDPOSeeder.TRACKS)
+        ? GlobalDPOSeeder.TRACKS.find(t=>t.id===key || t.region===key) : null;
+      const label = track ? track.name : (e.trilha || 'Outros');
+      groups[label] = groups[label] || [];
+      groups[label].push(e);
+    });
+    return Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0],'pt-BR'));
+  }
+  static _homeProgressSummary(){
+    const {history, avg, passed, attempts} = ProgressAnalytics.summary();
+    if(!attempts) return '';
+    return `<div class="home-progress-summary">
+      <span><strong>${attempts}</strong> simulados</span>
+      <span><strong>${passed}</strong> aprovados</span>
+      <span>Média <strong>${avg}%</strong></span>
+    </div>`;
+  }
   render(el){
     el.classList.add('view-home');
     const session = StorageManager.getSession();
     const sessionExam = session ? StorageManager.getExam(session.examId) : null;
-    const certs = StorageManager.getExams().filter(e=>e.code?.startsWith('EXIN-')&&e.questionIds?.length).sort((a,b)=>(a.code||'').localeCompare(b.code||''));
-    const trilha = certs[0]?.trilha || certs[0]?.serie || 'Trilha DPO — EXIN';
+    const allCerts = StorageManager.getExams().filter(e=>e.questionIds?.length && (e.region || e.code))
+      .sort((a,b)=>(a.code||'').localeCompare(b.code||'','pt-BR'));
+    const grouped = DashboardView._groupCertsByTrack(allCerts);
     const answered = session?.answers ? Object.keys(session.answers).filter(k=>session.answers[k]!==undefined&&session.answers[k]!==null).length : 0;
     const totalQ = sessionExam?.questionIds?.length || 0;
     const name = DashboardView._studentName() || 'Estudante';
+    const progressSummary = DashboardView._homeProgressSummary();
 
     const resumeBlock = sessionExam ? `
       <div class="home-hero">
@@ -1842,34 +2193,51 @@ class DashboardView {
         <button class="btn btn-primary" id="home-resume" type="button" aria-label="Continuar">${Icons.play}</button>
       </div>` : '';
 
-    const listItems = certs.map(e=>{
-      const best = DashboardView._examBestPct(e.id);
-      const ring = best != null ? DashboardView._progressRing(best) : `<span class="home-list-play">${Icons.play}</span>`;
-      return `
-      <li class="home-list-item">
-        <button class="home-list-btn" type="button" data-quick-exam="${e.id}">
-          <span class="home-list-text">
-            <span class="home-list-title">${Util.escapeHtml(e.materia)} — ${Util.escapeHtml(e.title)}</span>
-            <span class="home-list-meta">${e.questionIds?.length || 0} questões · ${e.timeMinutes || 60} min${best != null ? ' · melhor: '+best+'%' : ''}</span>
-          </span>
-          ${ring}
-        </button>
-      </li>`;
+    const actionBar = `
+      <div class="home-actions">
+        <button class="btn btn-primary" id="home-smart" type="button">Sessão inteligente</button>
+        <div class="home-presets" role="group" aria-label="Presets de simulado">
+          <button class="btn btn-sm" type="button" data-preset="full" title="Todas as questões">Completo</button>
+          <button class="btn btn-sm" type="button" data-preset="quick" title="15 questões sorteadas">Rápido</button>
+          <button class="btn btn-sm" type="button" data-preset="errors" title="Só questões erradas">Só erros</button>
+        </div>
+      </div>`;
+
+    const listSections = grouped.map(([trackName, certs])=>{
+      const items = certs.map(e=>{
+        const best = DashboardView._examBestPct(e.id);
+        const ring = best != null ? DashboardView._progressRing(best) : `<span class="home-list-play">${Icons.play}</span>`;
+        return `
+        <li class="home-list-item">
+          <button class="home-list-btn" type="button" data-quick-exam="${e.id}">
+            <span class="home-list-text">
+              <span class="home-list-title">${Util.escapeHtml(e.materia)} — ${Util.escapeHtml(e.title)}</span>
+              <span class="home-list-meta">${e.questionIds?.length || 0} questões · ${e.timeMinutes || 60} min${best != null ? ' · melhor: '+best+'%' : ''}${e.stub ? ' · stub' : ''}</span>
+            </span>
+            ${ring}
+          </button>
+        </li>`;
+      }).join('');
+      return `<div class="home-track"><h2 class="home-track-title">${Util.escapeHtml(trackName)}</h2><ul class="home-list">${items}</ul></div>`;
     }).join('');
 
     el.innerHTML = `
-      <p class="home-kicker">${Util.escapeHtml(trilha)}</p>
+      <p class="home-kicker">Trilhas DPO Global</p>
       <h1 class="home-greet">${DashboardView._greeting()}, ${Util.escapeHtml(name)}<span class="home-greet-name">Pronto para evoluir hoje?</span></h1>
-      ${certs.length ? `<p class="home-greet-name" style="margin:-12px 0 20px">${Util.escapeHtml(ExinDPOSeeder.TRILHA_DESC||'')}</p>` : ''}
+      ${allCerts.length ? `<p class="home-greet-name" style="margin:-12px 0 12px">${Util.escapeHtml(GlobalDPOSeeder.TRILHA_DESC||'')}</p>` : ''}
+      ${progressSummary}
       ${resumeBlock}
-      ${certs.length ? `<ul class="home-list">${listItems}</ul>` : DashboardView._empty('Nenhuma certificação', 'O banco EXIN DPO será carregado automaticamente.')}
+      ${allCerts.length ? actionBar : ''}
+      ${allCerts.length ? listSections : DashboardView._empty('Nenhuma certificação', 'Recarregue a página para carregar o banco DPO global.')}
       <div class="home-foot">
         <button class="btn btn-ghost btn-sm" id="home-progress" type="button">Ver progresso</button>
       </div>`;
 
     el.querySelector('#home-resume')?.addEventListener('click', ()=> PlayerController.start(session.examId, session));
     el.querySelector('#home-progress')?.addEventListener('click', ()=> App.instance.router.go('progress'));
+    el.querySelector('#home-smart')?.addEventListener('click', ()=> PlayerController.startSmartReview());
     el.querySelectorAll('[data-quick-exam]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.open(b.dataset.quickExam)));
+    el.querySelectorAll('[data-preset]').forEach(b=> b.addEventListener('click', ()=> ExamConfigModal.openWithPreset(b.dataset.preset)));
   }
   onLeave(){
     const el = document.getElementById('view-home');
@@ -2542,6 +2910,7 @@ class SettingsView {
         <div class="form-grid">
           <div class="field"><label>Fonte</label><select class="select" id="s-font"><option value="sans" ${s.font==='sans'?'selected':''}>Normal</option><option value="mono" ${s.font==='mono'?'selected':''}>Mono</option></select></div>
           <div class="field"><label>Tamanho</label><select class="select" id="s-fontsize"><option value="0.9" ${s.fontSize==0.9?'selected':''}>P</option><option value="1" ${s.fontSize==1?'selected':''}>M</option><option value="1.15" ${s.fontSize==1.15?'selected':''}>G</option></select></div>
+          <div class="field"><label>Idioma das questões</label><select class="select" id="s-bilingual"><option value="dual" ${(s.bilingualMode||'dual')==='dual'?'selected':''}>EN + PT (dual)</option><option value="en" ${s.bilingualMode==='en'?'selected':''}>English</option><option value="pt" ${s.bilingualMode==='pt'?'selected':''}>Português</option></select></div>
         </div>
       </div>
       <div class="card card-compact" style="margin-bottom:10px">
@@ -2567,6 +2936,7 @@ class SettingsView {
         randomOrder: s.randomOrder,
         randomAlternatives: s.randomAlternatives,
         language: s.language,
+        bilingualMode: el.querySelector('#s-bilingual')?.value || 'dual',
         showAnswerAfterSelect: el.querySelector('#s-feedback').checked,
         allowRevealAnswer: el.querySelector('#s-reveal').checked,
         allowFinishAnytime: el.querySelector('#s-finish-anytime').checked
@@ -2712,6 +3082,17 @@ class ExamConfigModal {
   static CANDIDATE_KEY = 'ef_last_candidate';
 
   static open(preselectedExamId=null){
+    this._openInternal(preselectedExamId, null);
+  }
+
+  static openWithPreset(preset){
+    const exams = StorageManager.getExams().filter(e=>e.questionIds?.length);
+    const examId = exams[0]?.id;
+    if(!examId){ Toast.show('Nenhum simulado disponível.', 'warn'); return; }
+    this._openInternal(examId, preset);
+  }
+
+  static _openInternal(preselectedExamId=null, preset=null){
     const exams = StorageManager.getExams().filter(e=>e.questionIds?.length);
     if(!exams.length){ Toast.show('Nenhum simulado disponível.', 'warn'); return; }
     const settings = StorageManager.getSettings();
@@ -2728,7 +3109,7 @@ class ExamConfigModal {
       footerHtml: `
         <button class="btn" data-cancel type="button">Cancelar</button>
         <button class="btn btn-primary" data-ok type="button">Iniciar Simulado</button>`,
-      onMount: (modalEl, closeFn)=> this._bind(modalEl, closeFn, exams)
+      onMount: (modalEl, closeFn)=> this._bind(modalEl, closeFn, exams, preset)
     });
   }
 
@@ -2765,7 +3146,8 @@ class ExamConfigModal {
             Apenas questões erradas <input class="input ec-inline-input" id="ec-n-incorrect" type="number" min="0" value="0"> ou mais vezes
           </label>
           <div class="ec-mode-panel hidden" data-panel="incorrect"><span class="hint" id="ec-incorrect-hint"></span></div>
-          <label class="ec-radio-row ec-soon"><input type="radio" name="ec-mode" value="unseen" disabled> Apenas questões nunca respondidas <em>(Em breve)</em></label>
+          <label class="ec-radio-row ec-soon"><input type="radio" name="ec-mode" value="unseen"> Apenas questões nunca respondidas</label>
+          <div class="ec-mode-panel hidden" data-panel="unseen"><span class="hint" id="ec-unseen-hint"></span></div>
         </fieldset>`;
   }
 
@@ -2780,12 +3162,6 @@ class ExamConfigModal {
   static DEV_FEATURES = [
     'Filtros por categoria, tags e dificuldade',
     'Estratégias adaptativas (CAT, sprint, maratona)',
-    'Opções avançadas de tempo (pausar, tempo extra)',
-    'Embaralhar alternativas e ordem das seções',
-    'Excluir questões já acertadas ou respondidas hoje',
-    'Feedback avançado durante a sessão',
-    'Revisão antes de enviar o simulado',
-    'Questões nunca respondidas',
     'Exportar e importar configuração JSON',
   ];
 
@@ -2865,12 +3241,37 @@ class ExamConfigModal {
                 <label class="checkbox-row"><input type="checkbox" id="ec-timer-on" checked> Cronômetro ativo</label>
                 <div class="field ec-timer-min"><label for="ec-time">Tempo limite (min)</label><input class="input" id="ec-time" type="number" min="1" max="600" value="${examTime}"></div>
               </div>
+              <div class="ec-filter-row" style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+                <label class="checkbox-row"><input type="checkbox" id="ec-shuffle-q" checked> Embaralhar questões</label>
+                <label class="checkbox-row"><input type="checkbox" id="ec-shuffle-alt"> Embaralhar alternativas</label>
+                <label class="checkbox-row"><input type="checkbox" id="ec-ex-mastered"> Excluir dominadas (≥3 acertos seguidos)</label>
+                <label class="checkbox-row"><input type="checkbox" id="ec-ex-today"> Excluir respondidas hoje</label>
+              </div>
             </div>
           </div>
           <button type="button" class="ec-advanced-toggle" id="ec-adv-toggle" aria-expanded="false">⚙ Mais opções (questões, histórico, importar…)</button>
           <div class="ec-advanced hidden" id="ec-advanced">${this._advancedPanelsHtml(sectionsHtml, defN, defTo)}</div>
         </div>
       </div>`;
+  }
+
+  static _isMastered(qid){
+    const s = StorageManager.getStat(qid);
+    return (s.streak >= 3) || (s.seen >= 3 && s.correct >= s.seen * 0.85);
+  }
+  static _seenToday(qid){
+    const s = StorageManager.getStat(qid);
+    if(!s.last) return false;
+    const d = new Date(s.last), t = new Date();
+    return d.toDateString() === t.toDateString();
+  }
+  static _applyExclusions(pool, modalEl){
+    let ids = [...pool];
+    if(modalEl.querySelector('#ec-ex-mastered')?.checked)
+      ids = ids.filter(id=>!this._isMastered(id));
+    if(modalEl.querySelector('#ec-ex-today')?.checked)
+      ids = ids.filter(id=>!this._seenToday(id));
+    return ids;
   }
 
   static _peekQuestionIds(modalEl){
@@ -2880,8 +3281,10 @@ class ExamConfigModal {
     if(!exam) return {examId, exam:null, questionIds:[], mode, displayCount:0};
     const pool = exam.questionIds || [];
     switch(mode){
-      case 'full':
-        return {examId, exam, questionIds:[...pool], mode, displayCount:pool.length};
+      case 'full': {
+        const questionIds = this._applyExclusions([...pool], modalEl);
+        return {examId, exam, questionIds, mode, displayCount:questionIds.length};
+      }
       case 'sections': {
         const tree = this._sectionTree(examId);
         const checked = [...modalEl.querySelectorAll('.ec-section-cb:checked')];
@@ -2905,11 +3308,18 @@ class ExamConfigModal {
       }
       case 'incorrect': {
         const n = Math.max(0, parseInt(modalEl.querySelector('#ec-n-incorrect')?.value, 10) || 0);
-        const questionIds = pool.filter(qid=>{
+        const questionIds = this._applyExclusions(pool.filter(qid=>{
           const s = StorageManager.getStat(qid);
           return (s.seen - s.correct) >= n;
-        });
+        }), modalEl);
         return {examId, exam, questionIds, mode, displayCount:questionIds.length, minErrors:n};
+      }
+      case 'unseen': {
+        const questionIds = this._applyExclusions(pool.filter(qid=>{
+          const s = StorageManager.getStat(qid);
+          return s.seen === 0;
+        }), modalEl);
+        return {examId, exam, questionIds, mode, displayCount:questionIds.length};
       }
       default:
         return {examId, exam, questionIds:[...pool], mode, displayCount:pool.length};
@@ -2951,6 +3361,7 @@ class ExamConfigModal {
         return state.rangeFrom && state.rangeTo ? `Posições ${state.rangeFrom}–${state.rangeTo}` : 'Intervalo';
       case 'incorrect':
         return state.minErrors != null ? `Erradas ≥ ${state.minErrors}` : 'Com erros';
+      case 'unseen': return 'Nunca respondidas';
       default: return 'Todas';
     }
   }
@@ -3199,6 +3610,11 @@ class ExamConfigModal {
       }).length;
       incorrectHint.textContent = `${match} questão(ões) com ${n}+ erro(s) nesta prova.`;
     }
+    const unseenHint = modalEl.querySelector('#ec-unseen-hint');
+    if(unseenHint && exam){
+      const match = (exam.questionIds||[]).filter(qid=>StorageManager.getStat(qid).seen===0).length;
+      unseenHint.textContent = `${match} questão(ões) nunca respondidas nesta prova.`;
+    }
     const timeInput = modalEl.querySelector('#ec-time');
     const examSel = modalEl.querySelector('#ec-exam-global');
     if(timeInput && examSel && mode==='full' && !modalEl._timeEdited){
@@ -3207,7 +3623,7 @@ class ExamConfigModal {
     }
   }
 
-  static _bind(modalEl, closeFn){
+  static _bind(modalEl, closeFn, exams, preset=null){
     this._setSessionType(modalEl, false);
 
     const syncExam = (examId)=>{
@@ -3326,6 +3742,25 @@ class ExamConfigModal {
     modalEl.querySelector('#ec-range-from')?.addEventListener('input', ()=>{ modalEl._rangeEdited = true; this._updatePreview(modalEl); });
     modalEl.querySelector('#ec-range-to')?.addEventListener('input', ()=>{ modalEl._rangeEdited = true; this._updatePreview(modalEl); });
     modalEl.querySelector('#ec-n-incorrect')?.addEventListener('input', ()=> this._updatePreview(modalEl));
+    ['#ec-ex-mastered','#ec-ex-today','#ec-shuffle-q','#ec-shuffle-alt'].forEach(sel=>{
+      modalEl.querySelector(sel)?.addEventListener('change', ()=> this._updatePreview(modalEl));
+    });
+
+    if(preset === 'quick'){
+      modalEl.querySelector('[name="ec-mode"][value="count"]')?.click();
+      const total = StorageManager.getExam(modalEl.querySelector('#ec-exam-global').value)?.questionIds?.length || 15;
+      const n = Math.min(15, total);
+      const nCount = modalEl.querySelector('#ec-n-count');
+      const basicQty = modalEl.querySelector('#ec-basic-qty');
+      if(nCount) nCount.value = n;
+      if(basicQty) basicQty.value = n;
+    } else if(preset === 'errors'){
+      modalEl.querySelector('[name="ec-mode"][value="incorrect"]')?.click();
+      const nInc = modalEl.querySelector('#ec-n-incorrect');
+      if(nInc) nInc.value = 1;
+    } else if(preset === 'full'){
+      modalEl.querySelector('[name="ec-mode"][value="full"]')?.click();
+    }
 
     modalEl.querySelectorAll('.ec-inline-input').forEach(inp=>{
       inp.addEventListener('click', e=> e.stopPropagation());
@@ -3375,12 +3810,16 @@ class ExamConfigModal {
     const trainingMode = this._trainingMode(modalEl);
     const timerOn = !!modalEl.querySelector('#ec-timer-on')?.checked;
     const timeMinutes = Math.max(1, parseInt(modalEl.querySelector('#ec-time')?.value, 10) || 60);
+    const shuffleQuestions = modalEl.querySelector('#ec-shuffle-q')?.checked !== false;
+    const shuffleAlternatives = !!modalEl.querySelector('#ec-shuffle-alt')?.checked;
+    const excludeMastered = !!modalEl.querySelector('#ec-ex-mastered')?.checked;
+    const excludeToday = !!modalEl.querySelector('#ec-ex-today')?.checked;
     let examId, questionIds;
 
     switch(mode){
       case 'full':
         examId = modalEl.querySelector('#ec-exam-global').value;
-        questionIds = [...(StorageManager.getExam(examId)?.questionIds || [])];
+        questionIds = this._applyExclusions([...(StorageManager.getExam(examId)?.questionIds || [])], modalEl);
         break;
       case 'sections': {
         examId = modalEl.querySelector('#ec-exam-global').value;
@@ -3389,15 +3828,15 @@ class ExamConfigModal {
         if(!checked.length) return {ok:false, error:'Selecione ao menos uma seção.'};
         const idSet = new Set();
         checked.forEach(cb=> cb.dataset.ids.split(',').filter(Boolean).forEach(id=>idSet.add(id)));
-        questionIds = tree.orderedIds.filter(id=>idSet.has(id));
+        questionIds = this._applyExclusions(tree.orderedIds.filter(id=>idSet.has(id)), modalEl);
         break;
       }
       case 'count': {
         examId = modalEl.querySelector('#ec-exam-global').value;
-        const pool = StorageManager.getExam(examId)?.questionIds || [];
+        const pool = this._applyExclusions(StorageManager.getExam(examId)?.questionIds || [], modalEl);
         const n = parseInt(modalEl.querySelector('#ec-n-count').value, 10);
         if(!n || n < 1) return {ok:false, error:'Informe uma quantidade válida (N ≥ 1).'};
-        if(n > pool.length) return {ok:false, error:`A prova tem apenas ${pool.length} questão(ões).`};
+        if(n > pool.length) return {ok:false, error:`Restam apenas ${pool.length} questão(ões) após filtros.`};
         questionIds = Util.shuffle([...pool]).slice(0, n);
         break;
       }
@@ -3408,7 +3847,7 @@ class ExamConfigModal {
         const y = parseInt(modalEl.querySelector('#ec-range-to').value, 10);
         if(!x || !y || x < 1 || y < x) return {ok:false, error:'Intervalo inválido. Use X ≤ Y, a partir de 1.'};
         if(y > pool.length) return {ok:false, error:`A prova tem apenas ${pool.length} questão(ões).`};
-        questionIds = pool.slice(x - 1, y);
+        questionIds = this._applyExclusions(pool.slice(x - 1, y), modalEl);
         break;
       }
       case 'incorrect': {
@@ -3416,19 +3855,32 @@ class ExamConfigModal {
         const n = parseInt(modalEl.querySelector('#ec-n-incorrect').value, 10);
         if(n == null || n < 0 || isNaN(n)) return {ok:false, error:'Informe N ≥ 0.'};
         const pool = StorageManager.getExam(examId)?.questionIds || [];
-        questionIds = pool.filter(qid=>{
+        questionIds = this._applyExclusions(pool.filter(qid=>{
           const s = StorageManager.getStat(qid);
           return (s.seen - s.correct) >= n;
-        });
-        if(!questionIds.length) return {ok:false, error:`Nenhuma questão com ${n}+ erro(s) nesta prova.`};
+        }), modalEl);
+        if(!questionIds.length) return {ok:false, error:`Nenhuma questão com ${n}+ erro(s) após filtros.`};
+        break;
+      }
+      case 'unseen': {
+        examId = modalEl.querySelector('#ec-exam-global').value;
+        const pool = StorageManager.getExam(examId)?.questionIds || [];
+        questionIds = this._applyExclusions(pool.filter(qid=>StorageManager.getStat(qid).seen===0), modalEl);
+        if(!questionIds.length) return {ok:false, error:'Nenhuma questão nunca respondida nesta prova.'};
         break;
       }
       default:
         return {ok:false, error:'Seleção de questões inválida.'};
     }
 
-    if(!questionIds.length) return {ok:false, error:'Nenhuma questão selecionada.'};
-    return {ok:true, config:{examId, candidateName, questionIds, trainingMode:this._trainingMode(modalEl), timerOn, timeMinutes, configMode:mode}};
+    if(!questionIds.length) return {ok:false, error:'Nenhuma questão selecionada após filtros.'};
+    if(shuffleQuestions && mode !== 'count') questionIds = Util.shuffle([...questionIds]);
+    const session = new SessionConfig({
+      examId, candidateName, questionIds, trainingMode, timerOn, timeMinutes, configMode: mode,
+      excludeMastered, excludeToday, unseenOnly: mode === 'unseen',
+      shuffleQuestions, shuffleAlternatives, preSubmitReview: !trainingMode
+    });
+    return {ok:true, config: session.toPlayerConfig()};
   }
 
   static _snapshotConfig(modalEl){
@@ -3516,8 +3968,22 @@ class PlayerController {
       const ordered = resumeSession.order.map(id=>resumeMap.get(id)).filter(Boolean);
       if(ordered.length) questions = ordered;
     } else if(!config.questionIds || config.questionIds.length === baseExam.questionIds.length){
-      if(settings.randomOrder) questions = Util.shuffle(questions);
-      if(settings.randomAlternatives){
+      const doShuffleQ = config.shuffleQuestions !== false && (settings.randomOrder !== false);
+      const doShuffleAlt = config.shuffleAlternatives || settings.randomAlternatives;
+      if(doShuffleQ) questions = Util.shuffle(questions);
+      if(doShuffleAlt){
+        questions = questions.map(q=>{
+          if(['single','multi','image'].includes(q.type)){
+            const clone = new Question(q);
+            clone.options = Util.shuffle(q.options);
+            return clone;
+          }
+          return q;
+        });
+      }
+    } else if(config.shuffleQuestions){
+      questions = Util.shuffle(questions);
+      if(config.shuffleAlternatives){
         questions = questions.map(q=>{
           if(['single','multi','image'].includes(q.type)){
             const clone = new Question(q);
@@ -3548,7 +4014,10 @@ class PlayerController {
       timerOn,
       showAnswerAfterSelect: trainingMode ? true : !!settings.showAnswerAfterSelect,
       allowRevealAnswer: trainingMode ? true : (settings.allowRevealAnswer !== false),
-      allowFinishAnytime: settings.allowFinishAnytime !== false
+      allowFinishAnytime: settings.allowFinishAnytime !== false,
+      preSubmitReview: config.preSubmitReview !== false && !trainingMode,
+      paused: false,
+      settings: StorageManager.getSettings()
     };
 
     this._mountShell();
@@ -3612,6 +4081,7 @@ class PlayerController {
           <button class="btn btn-sm" id="p-reveal-q" type="button" title="Mostrar resposta da questão atual">${Icons.eye} Revelar questão</button>
           <button class="btn btn-sm" id="p-reveal-all" type="button" title="Revelar respostas em todas as questões">Modo revisão</button>
         </div>` : ''}
+        <button class="btn btn-sm" id="p-pause" type="button" title="Pausar cronômetro">Pausar</button>
         <div class="timer-pill" id="p-timer">--:--</div>
       </div>
       <div class="player-body">
@@ -3626,6 +4096,7 @@ class PlayerController {
         </div>
         <div class="grp">
           <button class="btn" id="p-mark" type="button">${Icons.star} Marcar</button>
+          <button class="btn" id="p-explain" type="button" title="Ver explicação">Explicar</button>
           <button class="btn btn-primary" id="p-next">Próxima →</button>
           <button class="btn btn-danger" id="p-finish">Finalizar</button>
         </div>
@@ -3645,6 +4116,8 @@ class PlayerController {
     });
     root.querySelector('#p-reveal-q')?.addEventListener('click', ()=> this._toggleRevealCurrent());
     root.querySelector('#p-reveal-all')?.addEventListener('click', ()=> this._toggleRevealAll());
+    root.querySelector('#p-pause')?.addEventListener('click', ()=> this._togglePause());
+    root.querySelector('#p-explain')?.addEventListener('click', ()=> this._showExplain());
 
     // Navegação por teclado (acessibilidade / eficiência no desktop)
     this._keyHandler = (e)=>{
@@ -3722,6 +4195,31 @@ class PlayerController {
     }
   }
 
+  static _togglePause(){
+    if(!this.state?.timer) return;
+    this.state.paused = !this.state.paused;
+    if(this.state.paused) this.state.timer.pause();
+    else this.state.timer.resume();
+    const btn = document.getElementById('p-pause');
+    if(btn){
+      btn.textContent = this.state.paused ? 'Retomar' : 'Pausar';
+      btn.classList.toggle('active', this.state.paused);
+    }
+    document.body.classList.toggle('player-paused', this.state.paused);
+  }
+
+  static _showExplain(){
+    const q = this.state.questions[this.state.currentIndex];
+    const expl = QuestionDisplay.explanation(q, this.state.settings);
+    if(!expl){ Toast.show('Esta questão não tem explicação cadastrada.', 'warn'); return; }
+    Modal.open({
+      title: 'Explicação',
+      bodyHtml: `<div class="fb-explain" style="font-size:14px;line-height:1.55;white-space:pre-wrap">${Util.escapeHtml(expl)}</div>`,
+      footerHtml: `<button class="btn btn-primary" data-close type="button">Entendi</button>`,
+      onMount: (el, close)=> el.querySelector('[data-close]')?.addEventListener('click', close)
+    });
+  }
+
   static _toggleRevealCurrent(){
     if(this.state.revealPersistent) return;
     const q = this.state.questions[this.state.currentIndex];
@@ -3769,7 +4267,7 @@ class PlayerController {
       return `<div class="feedback-box correct">
         <div class="fb-head" style="color:var(--accent)">Resposta correta revelada</div>
         <div class="fb-line">Resposta correta: <strong>${Util.escapeHtml(correctAns)}</strong></div>
-        ${q.explanation?`<div class="fb-explain">${Util.escapeHtml(q.explanation)}</div>`:''}
+        ${q.explanation?`<div class="fb-explain">${Util.escapeHtml(QuestionDisplay.explanation(q, this.state?.settings))}</div>`:''}
       </div>`;
     }
     const correct = q.isCorrect(userAnswer);
@@ -3778,7 +4276,7 @@ class PlayerController {
       <div class="fb-head">${correct?'Correto':'Incorreto'}</div>
       <div class="fb-line">Sua resposta: <strong>${Util.escapeHtml(yourAns)}</strong></div>
       ${!correct?`<div class="fb-line">Resposta correta: <strong>${Util.escapeHtml(correctAns)}</strong></div>`:''}
-      ${q.explanation?`<div class="fb-explain">${Util.escapeHtml(q.explanation)}</div>`:''}
+      ${q.explanation?`<div class="fb-explain">${Util.escapeHtml(QuestionDisplay.explanation(q, this.state?.settings))}</div>`:''}
     </div>`;
   }
   static _fmtAnswer(q, ans){
@@ -3860,6 +4358,8 @@ class PlayerController {
     const q = questions[currentIndex];
     const area = document.getElementById('p-question');
     const userAnswer = answers[q.id];
+    const settings = this.state.settings || StorageManager.getSettings();
+    const stemHtml = Util.escapeHtml(QuestionDisplay.stem(q, settings)).replace(/\n/g, '<br>');
     document.getElementById('p-progress').style.width = `${Math.round(((currentIndex+1)/questions.length)*100)}%`;
 
     // determina se devemos mostrar a correção (após seleção) ou revelar a resposta
@@ -3880,7 +4380,7 @@ class PlayerController {
           else if(isSel){ cls += ' opt-wrong'; tag = '<span class="opt-tag no">Sua resposta</span>'; }
         }
         return `<div class="${cls}" data-select-single="${o.id}" role="radio" tabindex="0" aria-checked="${isSel}">
-          <div class="marker"></div><span class="letter">${Question.optionLetter(i)}.</span><span>${Util.escapeHtml(o.text)}</span>${tag}
+          <div class="marker"></div><span class="letter">${Question.optionLetter(i)}.</span><span>${Util.escapeHtml(QuestionDisplay.optionLabel(o, settings))}</span>${tag}
         </div>`;
       }).join('');
     } else if(q.type==='multi'){
@@ -3894,7 +4394,7 @@ class PlayerController {
           else if(selected){ cls += ' opt-wrong'; tag = '<span class="opt-tag no">Sua resposta</span>'; }
         }
         return `<div class="${cls}" data-select-multi="${o.id}" role="checkbox" tabindex="0" aria-checked="${selected}">
-          <div class="marker">${selected?'✓':''}</div><span class="letter">${Question.optionLetter(i)}.</span><span>${Util.escapeHtml(o.text)}</span>${tag}
+          <div class="marker">${selected?'✓':''}</div><span class="letter">${Question.optionLetter(i)}.</span><span>${Util.escapeHtml(QuestionDisplay.optionLabel(o, settings))}</span>${tag}
         </div>`;
       }).join('');
     } else if(q.type==='short'){
@@ -3921,7 +4421,7 @@ class PlayerController {
     area.innerHTML = `
       <div class="q-index">Questão ${currentIndex+1} de ${questions.length} · ${QUESTION_TYPES[q.type]?.label||q.type}</div>
       ${q.image ? `<img class="q-image" src="${q.image}">` : ''}
-      <div class="q-text">${Util.escapeHtml(q.text)}</div>
+      <div class="q-text">${stemHtml}</div>
       <div id="q-options" ${q.type==='multi'?'role="group"':(['single','boolean','image'].includes(q.type)?'role="radiogroup"':'')} aria-label="Alternativas">${bodyHtml}</div>
       ${showFeedback ? this._feedbackBox(q, userAnswer, answered) : ''}
     `;
@@ -4044,6 +4544,13 @@ class PlayerController {
       return a !== undefined && a !== null && (!Array.isArray(a) ? String(a).length>0 : a.length>0);
     }).length;
     const unanswered = total - answeredCount;
+
+    if(this.state.preSubmitReview && !this.state.trainingMode){
+      const reviewed = await this._preSubmitReview(answeredCount, total, unanswered);
+      if(!reviewed) return;
+      return;
+    }
+
     let msg;
     if(unanswered>0){
       msg = `Você respondeu ${answeredCount} de ${total} questão(ões) (${unanswered} em branco). ` +
@@ -4053,6 +4560,42 @@ class PlayerController {
     }
     const ok = await Modal.confirm({title:'Finalizar exame', message:msg, confirmLabel:'Finalizar e ver score'});
     if(ok) this.finish(false);
+  }
+
+  static _preSubmitReview(answeredCount, total, unanswered){
+    return new Promise(resolve=>{
+      const marked = this.state.questions.filter(q=>this.state.marked.has(q.id)).length;
+      const rows = this.state.questions.map((q,i)=>{
+        const a = this.state.answers[q.id];
+        const done = a !== undefined && a !== null && (!Array.isArray(a) ? String(a).length>0 : a.length>0);
+        const mark = this.state.marked.has(q.id) ? ' ★' : '';
+        return `<button type="button" class="btn btn-ghost btn-sm" data-goto-review="${i}" style="margin:2px">${i+1}${done?' ✓':' —'}${mark}</button>`;
+      }).join('');
+      Modal.open({
+        title: 'Revisar antes de enviar',
+        wide: true,
+        bodyHtml: `
+          <p style="margin-bottom:12px;font-size:13px;color:var(--text-1)">
+            ${answeredCount} de ${total} respondidas${unanswered ? ` · ${unanswered} em branco` : ''}${marked ? ` · ${marked} marcadas` : ''}.
+            Toque em um número para revisar. Quando estiver pronto, envie o simulado.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">${rows}</div>`,
+        footerHtml: `
+          <button class="btn btn-ghost" data-back type="button">Voltar ao simulado</button>
+          <button class="btn btn-primary" data-submit type="button">Enviar simulado</button>`,
+        onMount: (el, close)=>{
+          el.querySelector('[data-back]')?.addEventListener('click', ()=>{ close(); resolve(false); });
+          el.querySelector('[data-submit]')?.addEventListener('click', ()=>{ close(); this.finish(false); resolve(true); });
+          el.querySelectorAll('[data-goto-review]').forEach(b=> b.addEventListener('click', ()=>{
+            this.state.currentIndex = Number(b.dataset.gotoReview);
+            close();
+            this._renderQuestion();
+            this._renderNav();
+            resolve(false);
+          }));
+        }
+      });
+    });
   }
 
   static finish(auto=false){
@@ -4247,35 +4790,128 @@ class ReviewView {
 }
 
 /* =========================================================================
-   TRILHA DPO — EXIN (ISFS, PDPF, PDPP)
+   DPO GLOBAL — tracks by region (loaded from data/dpo-global-bank.js)
    ========================================================================= */
 class BankHelpers {
-  static mkOpts(list, correctIdx){
-    return list.map((text,i)=>({id:Util.uid('opt'), text, correct:i===correctIdx}));
+  static mkOpts(list, correctIdx, listPt=null){
+    const pt = listPt || list;
+    return list.map((text,i)=>({
+      id:Util.uid('opt'),
+      text: pt[i] || text,
+      textEn: text,
+      textPt: pt[i] || text,
+      correct:i===correctIdx
+    }));
+  }
+  static qBilingual(stemEn, stemPt, optsEn, optsPt, correctIdx, explEn, explPt, submateria, level='medio'){
+    return {
+      type:'single',
+      text: stemPt || stemEn,
+      stemEn, stemPt,
+      options: this.mkOpts(optsEn, correctIdx, optsPt),
+      explanation: explPt || explEn,
+      explanationEn: explEn,
+      explanationPt: explPt,
+      submateria, level
+    };
   }
   static q(text, options, correctIdx, explanation, submateria, level='medio'){
     return {type:'single', text, options, explanation, submateria, level};
   }
 }
 
+class QuestionDisplay {
+  static mode(settings){
+    return settings?.bilingualMode || 'dual';
+  }
+  static stem(q, settings){
+    const en = q.stemEn || q.text || '';
+    const pt = q.stemPt || q.text || en;
+    const m = this.mode(settings);
+    if(m === 'en') return en;
+    if(m === 'pt') return pt;
+    return en && pt && en !== pt ? en + '\n\n— ' + pt : (pt || en);
+  }
+  static optionLabel(opt, settings){
+    const en = opt.textEn || opt.text || '';
+    const pt = opt.textPt || opt.text || en;
+    const m = this.mode(settings);
+    if(m === 'en') return en;
+    if(m === 'pt') return pt;
+    return en && pt && en !== pt ? en + ' / ' + pt : (pt || en);
+  }
+  static explanation(q, settings){
+    const en = q.explanationEn || q.explanation || '';
+    const pt = q.explanationPt || q.explanation || en;
+    const m = this.mode(settings);
+    if(m === 'en') return en;
+    if(m === 'pt') return pt;
+    return pt && en && en !== pt ? en + '\n\n— ' + pt : (pt || en);
+  }
+}
+
+class SessionConfig {
+  constructor(data={}){
+    this.examId = data.examId || '';
+    this.candidateName = data.candidateName || '';
+    this.questionIds = data.questionIds || [];
+    this.trainingMode = !!data.trainingMode;
+    this.timerOn = data.timerOn !== false;
+    this.timeMinutes = data.timeMinutes ?? 60;
+    this.configMode = data.configMode || 'full';
+    this.preset = data.preset || null;
+    this.excludeMastered = !!data.excludeMastered;
+    this.excludeToday = !!data.excludeToday;
+    this.unseenOnly = !!data.unseenOnly;
+    this.shuffleQuestions = data.shuffleQuestions !== false;
+    this.shuffleAlternatives = !!data.shuffleAlternatives;
+    this.preSubmitReview = data.preSubmitReview !== false;
+  }
+  toPlayerConfig(){
+    return {
+      examId: this.examId,
+      candidateName: this.candidateName,
+      questionIds: this.questionIds,
+      trainingMode: this.trainingMode,
+      timerOn: this.timerOn,
+      timeMinutes: this.timeMinutes,
+      configMode: this.configMode,
+      preset: this.preset,
+      shuffleQuestions: this.shuffleQuestions,
+      shuffleAlternatives: this.shuffleAlternatives,
+      preSubmitReview: this.preSubmitReview
+    };
+  }
+}
+
 class DataCleanup {
-  static FLAG = 'ef_cleanup_exin_dpo_v1';
+  static FLAG = 'ef_cleanup_global_dpo_v2';
   static run(){
     if(localStorage.getItem(this.FLAG)) return;
     const em2Exam = e => /^(EM2-)/.test(e.code||'') || e.serie==='2º Ano EM' || (e.tags||[]).includes('2º Ano EM');
     const cyber = /ciber|cyber|CYBER-/i;
-    const legacyExam = e => /^(CYBER-|HIST-RF-50)/.test(e.code||'') || cyber.test([e.category,e.title,e.code,...(e.tags||[])].join(' ')) || em2Exam(e);
+    const legacyExam = e => {
+      if(/^(CYBER-|HIST-RF-50)/.test(e.code||'')) return true;
+      if(cyber.test([e.category,e.title,e.code,...(e.tags||[])].join(' '))) return true;
+      if(em2Exam(e)) return true;
+      if((e.trilha||'').includes('Trilha DPO — EXIN') && !e.region) return true;
+      if(/^EXIN-/.test(e.code||'') && !e.region) return true;
+      return false;
+    };
     const em2Q = q => (q.tags||[]).includes('2º Ano EM') || /^EM2-/.test(q.category||'');
-    const qs = StorageManager.getQuestions().filter(q=>{
-      if(em2Q(q)) return false;
+    const legacyQ = q => {
+      if(em2Q(q)) return true;
       const blob = [q.category,q.materia,q.submateria,...(q.tags||[]),q.text].join(' ');
-      return !cyber.test(blob);
-    });
+      if(cyber.test(blob)) return true;
+      if((q.tags||[]).includes('Trilha DPO — EXIN') && !q.stemEn) return true;
+      return false;
+    };
+    const qs = StorageManager.getQuestions().filter(q=>!legacyQ(q));
     StorageManager.saveQuestions(qs);
     const kept = new Set(qs.map(q=>q.id));
     const exams = StorageManager.getExams().filter(e=>!legacyExam(e)).map(e=>({...e, questionIds:(e.questionIds||[]).filter(id=>kept.has(id))}));
     StorageManager.saveExams(exams);
-    ['ef_demo_seeded_v1','ef_french_rev_seeded_v2','ef_cleanup_em2_v1','ef_cleanup_em2_v2','ef_em2_seeded_v1'].forEach(k=>localStorage.removeItem(k));
+    ['ef_demo_seeded_v1','ef_french_rev_seeded_v2','ef_cleanup_em2_v1','ef_cleanup_em2_v2','ef_em2_seeded_v1','ef_exin_dpo_seeded_v1','ef_cleanup_exin_dpo_v1','ef_global_dpo_seeded_v2'].forEach(k=>localStorage.removeItem(k));
     localStorage.setItem(this.FLAG,'1');
   }
 }
@@ -4310,258 +4946,138 @@ class BankHierarchy {
   static count(qs){ return qs.length; }
 }
 
-class ExinDPOSeeder {
-  static FLAG_KEY = 'ef_exin_dpo_seeded_v1';
-  static TRILHA = "Trilha DPO — EXIN";
-  static TRILHA_DESC = "Trilha de Encarregado de Dados EXIN — LGPD e GDPR. Três certificações independentes: ISFS, PDPF e PDPP.";
-  static CERT_DATA = [
-    {
-      materia: "ISFS",
-      title: "Information Security Foundation (ISFS)",
-      description: "Fundamentos de segurança da informação com base na ISO/IEC 27001.",
-      code: "EXIN-ISFS",
-      timeMinutes: 60,
-      submaterias: {
-        "Conceitos de SI": [
-          BankHelpers.q("O que significa a sigla CIA na segurança da informação?", BankHelpers.mkOpts(["Confidencialidade, Integridade e Disponibilidade", "Controle, Identificação e Auditoria", "Criptografia, Internet e Acesso", "Compliance, Investigação e Análise"], 0), 0, "CIA é o triângulo clássico da segurança da informação.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Qual é o objetivo principal da disponibilidade?", BankHelpers.mkOpts(["Garantir acesso autorizado quando necessário", "Impedir qualquer cópia de dados", "Eliminar todos os riscos", "Criptografar todos os sistemas"], 0), 0, "Disponibilidade assegura que ativos estejam acessíveis quando requeridos.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Integridade da informação garante que:", BankHelpers.mkOpts(["Dados não sejam alterados indevidamente", "Dados sejam sempre públicos", "Backups nunca falhem", "Senhas sejam compartilhadas"], 0), 0, "Integridade protege contra alteração não autorizada.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Confidencialidade relaciona-se a:", BankHelpers.mkOpts(["Restringir acesso a quem está autorizado", "Publicar dados abertamente", "Aumentar velocidade de rede", "Desligar servidores"], 0), 0, "Somente pessoas autorizadas devem acessar informações sensíveis.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Um ativo de informação pode ser:", BankHelpers.mkOpts(["Dado, sistema, pessoa ou processo", "Apenas hardware", "Somente papel", "Exclusivamente software livre"], 0), 0, "Ativos incluem tangíveis e intangíveis relevantes para a organização.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Avaliação de risco envolve:", BankHelpers.mkOpts(["Identificar ameaças, vulnerabilidades e impacto", "Ignorar controles existentes", "Copiar políticas de outra empresa", "Eliminar auditorias"], 0), 0, "Risco combina probabilidade e impacto de eventos.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Controle de segurança é:", BankHelpers.mkOpts(["Medida para tratar riscos", "Sinônimo de ameaça", "Tipo de vírus", "Backup automático apenas"], 0), 0, "Controles reduzem, transferem ou aceitam riscos.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Autenticação verifica:", BankHelpers.mkOpts(["Identidade de quem acessa", "Horário de expediente", "Tamanho do arquivo", "Velocidade da rede"], 0), 0, "Autenticação responde 'quem é você?'.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Autorização define:", BankHelpers.mkOpts(["O que o usuário autenticado pode fazer", "A senha mínima", "O fabricante do firewall", "A cor do datacenter"], 0), 0, "Autorização responde 'o que pode acessar?'.", "Conceitos de SI", "medio"),
-          BankHelpers.q("Segurança da informação é responsabilidade:", BankHelpers.mkOpts(["De toda a organização", "Somente da TI", "Apenas do CEO", "Exclusiva de auditores externos"], 0), 0, "Cultura de segurança envolve todos os níveis.", "Conceitos de SI", "medio"),
-        ],
-        "ISO/IEC 27001": [
-          BankHelpers.q("A ISO/IEC 27001 especifica requisitos para:", BankHelpers.mkOpts(["Sistema de Gestão de Segurança da Informação (SGSI)", "Contabilidade financeira", "Marketing digital", "Gestão ambiental"], 0), 0, "27001 é a norma certificável de SGSI.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("O ciclo PDCA aplicado ao SGSI significa:", BankHelpers.mkOpts(["Plan-Do-Check-Act", "Protect-Detect-Correct-Audit", "Policy-Data-Control-Access", "Plan-Deploy-Copy-Archive"], 0), 0, "PDCA promove melhoria contínua.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("A Declaração de Aplicabilidade (SoA) documenta:", BankHelpers.mkOpts(["Controles selecionados e justificativas", "Salários da equipe", "Lista de clientes", "Contratos de marketing"], 0), 0, "SoA mostra quais controles do Anexo A se aplicam.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("O Anexo A da ISO 27001 contém:", BankHelpers.mkOpts(["Controles de segurança recomendados", "Requisitos legais da LGPD", "Tabelas de preços", "Normas contábeis"], 0), 0, "Anexo A lista controles organizacionais e técnicos.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("Auditoria interna do SGSI tem objetivo de:", BankHelpers.mkOpts(["Verificar conformidade e eficácia", "Substituir certificação externa", "Eliminar documentação", "Publicar dados pessoais"], 0), 0, "Auditorias internas precedem e complementam certificação.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("Escopo do SGSI deve considerar:", BankHelpers.mkOpts(["Limites organizacionais e requisitos", "Apenas um servidor", "Somente e-mail", "Exclusivamente nuvem pública"], 0), 0, "Escopo define onde o SGSI se aplica.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("Melhoria contínua no SGSI é apoiada por:", BankHelpers.mkOpts(["Análise crítica pela direção e ações corretivas", "Ignorar não conformidades", "Eliminar registros", "Desativar logs"], 0), 0, "Top management review e CAPA são essenciais.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("Controle de acesso lógico inclui:", BankHelpers.mkOpts(["Gestão de identidades e privilégios", "Cor das paredes", "Tipo de café", "Marca de notebooks"], 0), 0, "IAM e least privilege são práticas centrais.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("Gestão de incidentes de segurança exige:", BankHelpers.mkOpts(["Procedimentos de detecção, resposta e lições aprendidas", "Ocultar todos os incidentes", "Desligar logs permanentemente", "Compartilhar senhas"], 0), 0, "Resposta estruturada reduz impacto.", "ISO/IEC 27001", "medio"),
-          BankHelpers.q("Fornecedores devem ser avaliados quanto a:", BankHelpers.mkOpts(["Riscos de segurança da informação", "Cor da logomarca", "Número de funcionários apenas", "Localização geográfica exclusiva"], 0), 0, "Cadeia de suprimentos é vetor comum de risco.", "ISO/IEC 27001", "medio"),
-        ],
-        "Ameaças e vulnerabilidades": [
-          BankHelpers.q("Phishing é um tipo de:", BankHelpers.mkOpts(["Engenharia social", "Backup", "Criptografia assimétrica", "Política de senhas"], 0), 0, "Phishing engana usuários para revelar credenciais.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("Malware inclui:", BankHelpers.mkOpts(["Vírus, worms, ransomware e trojans", "Apenas antivírus", "Firewalls", "Certificados SSL"], 0), 0, "Software malicioso compromete confidencialidade e integridade.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("Vulnerabilidade zero-day é:", BankHelpers.mkOpts(["Falha desconhecida sem patch disponível", "Senha fraca conhecida", "Backup diário", "Política de mesa limpa"], 0), 0, "Zero-day não tem correção pública imediata.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("Ataque de negação de serviço (DoS) visa:", BankHelpers.mkOpts(["Indisponibilizar serviço ou recurso", "Criptografar dados", "Aumentar integridade", "Melhorar performance"], 0), 0, "DoS afeta disponibilidade.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("Engenharia social explora:", BankHelpers.mkOpts(["Comportamento humano", "Apenas falhas de hardware", "Leis tributárias", "Normas ISO de qualidade"], 0), 0, "Manipulação psicológica contorna controles técnicos.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("Senha forte deve incluir:", BankHelpers.mkOpts(["Complexidade, comprimento e unicidade", "Nome da empresa repetido", "Data de nascimento", "Mesma senha em todos os sistemas"], 0), 0, "Boas práticas reduzem risco de comprometimento.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("MFA (autenticação multifator) adiciona:", BankHelpers.mkOpts(["Camadas extras além da senha", "Apenas biometria obrigatória", "Eliminação de logs", "Acesso root universal"], 0), 0, "MFA combina fatores como senha + token.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("Patch management trata de:", BankHelpers.mkOpts(["Aplicar atualizações de segurança", "Criar vírus", "Desativar antivírus", "Publicar dados"], 0), 0, "Correções fecham vulnerabilidades conhecidas.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("Insider threat refere-se a:", BankHelpers.mkOpts(["Risco originado por pessoas internas", "Ataques apenas externos", "Falhas de energia", "Enchentes"], 0), 0, "Colaboradores mal-intencionados ou descuidados são ameaça.", "Ameaças e vulnerabilidades", "medio"),
-          BankHelpers.q("Segmentação de rede ajuda a:", BankHelpers.mkOpts(["Limitar propagação de ataques", "Aumentar superfície de ataque", "Eliminar firewalls", "Compartilhar credenciais"], 0), 0, "Zonas isoladas contêm incidentes.", "Ameaças e vulnerabilidades", "medio"),
-        ],
-        "Controles organizacionais": [
-          BankHelpers.q("Política de segurança da informação deve ser:", BankHelpers.mkOpts(["Aprovada pela alta direção e comunicada", "Secreta e oral apenas", "Opcional para TI", "Substituída por e-mails informais"], 0), 0, "Comprometimento da liderança é requisito do SGSI.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Classificação da informação permite:", BankHelpers.mkOpts(["Tratar dados conforme sensibilidade", "Publicar tudo igualmente", "Eliminar backups", "Ignorar rótulos"], 0), 0, "Níveis como público, interno, confidencial.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Treinamento de conscientização em SI visa:", BankHelpers.mkOpts(["Reduzir erros humanos e phishing", "Substituir controles técnicos", "Eliminar políticas", "Desativar MFA"], 0), 0, "Usuários são linha de defesa.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Controle de acesso físico protege:", BankHelpers.mkOpts(["Instalações e equipamentos", "Apenas dados na nuvem", "Redes sociais", "E-mails marketing"], 0), 0, "Badges, catracas e CCTV são exemplos.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Gestão de mudanças em TI reduz:", BankHelpers.mkOpts(["Riscos de alterações não autorizadas", "Necessidade de testes", "Documentação", "Aprovações"], 0), 0, "Mudanças controladas evitam indisponibilidade.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Backup e restore garantem:", BankHelpers.mkOpts(["Recuperação após perda ou ransomware", "Eliminação de logs", "Acesso público", "Cópia única sem teste"], 0), 0, "Testes de restauração validam backups.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Criptografia em repouso protege:", BankHelpers.mkOpts(["Dados armazenados em discos ou mídia", "Apenas tráfego HTTP", "Senhas em texto claro", "Políticas impressas"], 0), 0, "Dados cifrados resistem a acesso físico indevido.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Logs e monitoramento servem para:", BankHelpers.mkOpts(["Detectar atividades anômalas", "Aumentar anonimato de atacantes", "Eliminar auditoria", "Ocultar incidentes"], 0), 0, "SIEM correlaciona eventos.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Acordo de confidencialidade (NDA) protege:", BankHelpers.mkOpts(["Informações trocadas com terceiros", "Dados já públicos", "Opiniões pessoais", "Notícias abertas"], 0), 0, "NDA reforça confidencialidade contratual.", "Controles organizacionais", "medio"),
-          BankHelpers.q("Continuidade de negócios (BC) foca em:", BankHelpers.mkOpts(["Manter operações críticas após incidentes", "Aumentar riscos", "Eliminar planos de crise", "Ignorar RTO/RPO"], 0), 0, "BC e DR complementam disponibilidade.", "Controles organizacionais", "medio"),
-        ],
-        "Governança e conformidade": [
-          BankHelpers.q("Governança de TI alinha:", BankHelpers.mkOpts(["Tecnologia aos objetivos e riscos do negócio", "Apenas compras de software", "Marketing e vendas", "Folha de pagamento"], 0), 0, "Governança define direção e controle.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Due diligence em M&A inclui avaliar:", BankHelpers.mkOpts(["Riscos de segurança e privacidade do alvo", "Apenas cor da marca", "Cardápio da cantina", "Estacionamento"], 0), 0, "Aquisições podem trazer passivos de dados.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Conformidade regulatória significa:", BankHelpers.mkOpts(["Atender leis e normas aplicáveis", "Ignorar legislação", "Copiar dados sem base legal", "Eliminar registros legais"], 0), 0, "Compliance reduz sanções e danos reputacionais.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Registro de tratamento de dados apoia:", BankHelpers.mkOpts(["Accountability e transparência", "Ocultação total", "Venda de dados", "Eliminação de titulares"], 0), 0, "Documentação demonstra conformidade.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Pen test (teste de intrusão) simula:", BankHelpers.mkOpts(["Atacante para identificar falhas", "Backup diário", "Treinamento de RH", "Auditoria financeira"], 0), 0, "Testes éticos validam defesas.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Segregação de funções (SoD) evita:", BankHelpers.mkOpts(["Concentração de privilégios incompatíveis", "Trabalho em equipe", "Auditoria externa", "Documentação"], 0), 0, "Quem aprova não deve executar sem controle.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Indicadores de segurança (KPI/KRI) medem:", BankHelpers.mkOpts(["Eficácia do programa de SI", "Apenas lucro", "Número de funcionários", "Cor do logo"], 0), 0, "Métricas orientam decisões.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Gestão de vulnerabilidades inclui:", BankHelpers.mkOpts(["Identificar, priorizar e corrigir falhas", "Ignorar scans", "Publicar exploits", "Desativar patches"], 0), 0, "Ciclo contínuo reduz exposição.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Certificação ISO 27001 é obtida após:", BankHelpers.mkOpts(["Auditoria de certificação bem-sucedida", "Compra de software", "E-mail interno", "Reunião única"], 0), 0, "Organismo certificador valida conformidade.", "Governança e conformidade", "medio"),
-          BankHelpers.q("Cultura de segurança madura apresenta:", BankHelpers.mkOpts(["Comportamento proativo e reporte de incidentes", "Medo de punição silenciosa", "Ocultação de erros", "Senhas compartilhadas"], 0), 0, "Confiança para reportar acelera resposta.", "Governança e conformidade", "medio"),
-        ],
-      }
-    },
-    {
-      materia: "PDPF",
-      title: "Privacy and Data Protection Foundation (PDPF)",
-      description: "Conceitos essenciais de privacidade, LGPD e GDPR.",
-      code: "EXIN-PDPF",
-      timeMinutes: 60,
-      submaterias: {
-        "Fundamentos de privacidade": [
-          BankHelpers.q("Privacidade de dados relaciona-se principalmente a:", BankHelpers.mkOpts(["Direitos dos titulares sobre informações pessoais", "Velocidade de internet", "Hardware de servidores", "Marketing de produtos"], 0), 0, "Privacidade protege autodeterminação informativa.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Dado pessoal na LGPD é:", BankHelpers.mkOpts(["Informação relacionada a pessoa natural identificada ou identificável", "Apenas CPF impresso", "Somente dado anonimizado", "Qualquer dado agregado estatístico"], 0), 0, "Art. 5º LGPD define dado pessoal.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Dado anonimizado:", BankHelpers.mkOpts(["Não identifica titular, considerando meios técnicos", "Sempre é dado pessoal", "Exige consentimento renovado diário", "Proíbe qualquer uso"], 0), 0, "Anonimização irreversível sai do escopo.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Encarregado de Dados (DPO) atua como:", BankHelpers.mkOpts(["Canal de comunicação entre controlador, titulares e ANPD", "Substituto do CEO", "Auditor financeiro", "Gerente de vendas"], 0), 0, "DPO facilita conformidade e diálogo.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Princípio da finalidade exige:", BankHelpers.mkOpts(["Tratar dados para propósitos legítimos informados", "Usar dados para qualquer fim", "Alterar finalidade sem aviso", "Vender bases livremente"], 0), 0, "Finalidade limita e orienta tratamento.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Princípio da necessidade significa:", BankHelpers.mkOpts(["Coletar apenas o mínimo adequado", "Coletar todos os dados possíveis", "Armazenar indefinidamente", "Ignorar retenção"], 0), 0, "Proporcionalidade na coleta.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Consentimento válido deve ser:", BankHelpers.mkOpts(["Livre, informado e inequívoco", "Tácito e genérico", "Obtido por coação", "Silencioso por padrão"], 0), 0, "Consentimento é base legal específica.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Interesse legítimo exige:", BankHelpers.mkOpts(["Balanceamento com direitos do titular", "Ignorar titulares", "Proibir LIA", "Eliminar opt-out"], 0), 0, "Legitimate interest assessment é boa prática.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Privacy by design implica:", BankHelpers.mkOpts(["Integrar privacidade desde a concepção", "Adicionar privacidade só após lançamento", "Ignorar DPIA", "Coletar tudo primeiro"], 0), 0, "Proativo, não reativo.", "Fundamentos de privacidade", "medio"),
-          BankHelpers.q("Privacy by default exige:", BankHelpers.mkOpts(["Configurações mais protetivas por padrão", "Máxima coleta por padrão", "Compartilhamento amplo inicial", "Retenção infinita"], 0), 0, "Minimização desde o default.", "Fundamentos de privacidade", "medio"),
-        ],
-        "LGPD — bases e direitos": [
-          BankHelpers.q("A LGPD (Lei 13.709/2018) regula:", BankHelpers.mkOpts(["Tratamento de dados pessoais", "Apenas dados públicos", "Somente setor financeiro", "Exclusivamente saúde"], 0), 0, "Marco legal brasileiro de proteção de dados.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("Titular de dados tem direito de:", BankHelpers.mkOpts(["Acesso, correção, eliminação e portabilidade", "Ignorar políticas", "Acessar dados de terceiros livremente", "Eliminar logs de auditoria"], 0), 0, "Capítulo III LGPD lista direitos.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("ANPD é:", BankHelpers.mkOpts(["Autoridade Nacional de Proteção de Dados", "Agência de aviação", "Banco central", "Instituto de metrologia"], 0), 0, "Fiscaliza e orienta a LGPD no Brasil.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("Controlador de dados:", BankHelpers.mkOpts(["Define finalidades e meios do tratamento", "Apenas armazena por ordem", "Nunca decide bases legais", "Sempre é o DPO"], 0), 0, "Controlador determina o 'porquê' e 'como'.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("Operador de dados:", BankHelpers.mkOpts(["Trata em nome do controlador", "Sempre define finalidade", "Substitui ANPD", "Ignora contratos"], 0), 0, "Operador segue instruções do controlador.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("Base legal 'execução de contrato' permite:", BankHelpers.mkOpts(["Tratar dados necessários ao contrato", "Qualquer marketing", "Venda de bases", "Dados de terceiros sem aviso"], 0), 0, "Dados indispensáveis à relação contratual.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("Eliminação de dados deve ocorrer quando:", BankHelpers.mkOpts(["Não mais necessários ou titular solicita", "Sempre após 1 dia", "Nunca", "Apenas por marketing"], 0), 0, "Retenção limitada e direito ao apagamento.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("Portabilidade permite ao titular:", BankHelpers.mkOpts(["Receber dados em formato estruturado", "Copiar dados de outros titulares", "Eliminar backups legais", "Ignorar segurança"], 0), 0, "Facilita mudança de fornecedor.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("Oposição ao tratamento pode ser exercida quando:", BankHelpers.mkOpts(["Base legal não torna oposição inviável", "Sempre proibida", "Apenas por empresas públicas", "Somente via judicial"], 0), 0, "Titular pode se opor em certas bases.", "LGPD — bases e direitos", "medio"),
-          BankHelpers.q("Sanções da LGPD podem incluir:", BankHelpers.mkOpts(["Multa, publicização e bloqueio de dados", "Apenas advertência verbal", "Promoção de produtos", "Isenção total"], 0), 0, "Art. 52 prevê sanções administrativas.", "LGPD — bases e direitos", "medio"),
-        ],
-        "GDPR — visão geral": [
-          BankHelpers.q("O GDPR aplica-se a:", BankHelpers.mkOpts(["Tratamento de dados de pessoas na UE", "Apenas empresas americanas", "Somente governo brasileiro", "Exclusivamente e-commerce BR"], 0), 0, "Regulamento europeu extra-territorial em casos definidos.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("Multa máxima GDPR pode chegar a:", BankHelpers.mkOpts(["€20 milhões ou 4% do faturamento global", "€100 fixos", "Sem multas", "Apenas advertência"], 0), 0, "Sanções proporcionais e dissuasórias.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("DPO no GDPR é obrigatório quando:", BankHelpers.mkOpts(["Há monitoramento sistemático em larga escala ou dados sensíveis em larga escala", "Qualquer microempresa", "Nunca", "Apenas setor público BR"], 0), 0, "Art. 37 define obrigatoriedade.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("Privacy Impact Assessment (PIA/DPIA) é exigida quando:", BankHelpers.mkOpts(["Tratamento provavelmente alto risco", "Sempre para e-mail", "Nunca", "Apenas marketing B2B"], 0), 0, "Avalia impacto antes do tratamento.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("Transferência internacional GDPR exige:", BankHelpers.mkOpts(["Garantias adequadas ou mecanismos válidos", "Envio livre sem análise", "Ignorar titulares", "Apenas e-mail criptografado"], 0), 0, "Capítulo V regula transferências.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("Cláusulas contratuais padrão (SCCs) servem para:", BankHelpers.mkOpts(["Legitimar transferências internacionais", "Eliminar DPO", "Publicar dados", "Ignorar LGPD"], 0), 0, "Mecanismo reconhecido pela UE.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("Direito ao esquecimento relaciona-se a:", BankHelpers.mkOpts(["Apagamento de dados pessoais", "Esquecer senhas", "Eliminar empresas", "Apagar logs de segurança obrigatórios"], 0), 0, "Art. 17 GDPR — erasure.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("Accountability no GDPR significa:", BankHelpers.mkOpts(["Demonstrar conformidade", "Ocultar tratamentos", "Eliminar registros", "Ignorar auditorias"], 0), 0, "Responsabilização proativa.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("Representante na UE é necessário quando:", BankHelpers.mkOpts(["Controlador fora da UE oferece serviços na UE", "Empresa só atua no Brasil", "Sempre", "Nunca para startups"], 0), 0, "Ponto de contato para autoridades.", "GDPR — visão geral", "medio"),
-          BankHelpers.q("Notificação de violação GDPR em geral deve ocorrer em:", BankHelpers.mkOpts(["72 horas à autoridade", "1 ano", "Nunca", "Apenas se solicitado por cliente"], 0), 0, "Prazo salvo exceções documentadas.", "GDPR — visão geral", "medio"),
-        ],
-        "Tratamento e segurança": [
-          BankHelpers.q("Minimização de dados exige:", BankHelpers.mkOpts(["Coletar só o necessário", "Coletar o máximo possível", "Retenção infinita", "Compartilhar com parceiros"], 0), 0, "Princípio GDPR e LGPD.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Pseudonimização:", BankHelpers.mkOpts(["Substitui identificadores por pseudônimos", "Anonimiza irreversivelmente sempre", "Elimina criptografia", "Publica dados abertos"], 0), 0, "Reduz risco mantendo utilidade.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Registro de operações de tratamento documenta:", BankHelpers.mkOpts(["Finalidades, categorias, bases e retenção", "Apenas senhas", "Salários", "Receitas"], 0), 0, "ROPA / registro de tratamentos.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Contrato com operador deve incluir:", BankHelpers.mkOpts(["Instruções, confidencialidade e segurança", "Marketing conjunto", "Venda de leads", "Acesso root compartilhado"], 0), 0, "Art. 39 LGPD e Art. 28 GDPR.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Incidente com dados pessoais envolve:", BankHelpers.mkOpts(["Acesso, vazamento ou perda não autorizada", "Backup bem-sucedido", "Patch aplicado", "Treinamento interno"], 0), 0, "Personal data breach.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Comunicação a titulares após incidente deve ser:", BankHelpers.mkOpts(["Clara, em prazo adequado, com medidas tomadas", "Oculta", "Apenas interna", "Opcional sempre"], 0), 0, "Transparência reduz danos.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Criptografia como medida de segurança ajuda:", BankHelpers.mkOpts(["Confidencialidade e integridade", "Marketing", "SEO", "Eliminar DPO"], 0), 0, "Controle técnico recomendado.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Retenção de dados deve seguir:", BankHelpers.mkOpts(["Política definida e prazos legais", "Armazenamento eterno", "Exclusão aleatória", "Ignorar contratos"], 0), 0, "Storage limitation.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Treinamento de privacidade para equipes reduz:", BankHelpers.mkOpts(["Erros e violações acidentais", "Necessidade de políticas", "Papel do DPO", "Logs"], 0), 0, "Humanos são vetor comum.", "Tratamento e segurança", "medio"),
-          BankHelpers.q("Privacy notice / aviso de privacidade informa:", BankHelpers.mkOpts(["Finalidades, bases, direitos e contato DPO", "Apenas slogan", "Senhas", "Código fonte"], 0), 0, "Transparência ao titular.", "Tratamento e segurança", "medio"),
-        ],
-        "Papéis e responsabilidades": [
-          BankHelpers.q("Joint controllers (co-controladores) devem:", BankHelpers.mkOpts(["Definir responsabilidades por contrato", "Ignorar titulares", "Compartilhar sem base", "Eliminar registros"], 0), 0, "Art. 41 LGPD / Art. 26 GDPR.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("Suboperador exige:", BankHelpers.mkOpts(["Autorização do controlador e garantias", "Livre contratação sem aviso", "Acesso total a dados", "Eliminação de cláusulas"], 0), 0, "Cadeia de processamento.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("DPO deve reportar-se a:", BankHelpers.mkOpts(["Alta administração", "Apenas marketing", "Titulares diretamente", "Fornecedores"], 0), 0, "Independência funcional.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("Conflito de interesses do DPO ocorre se:", BankHelpers.mkOpts(["DPO também aprova tratamentos que monitora", "DPO treina equipe", "DPO responde titulares", "DPO mantém ROPA"], 0), 0, "Independência é requisito.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("Comitê de privacidade apoia:", BankHelpers.mkOpts(["Governança e decisões transversais", "Substituir ANPD", "Eliminar DPIA", "Venda de dados"], 0), 0, "Fórum multidisciplinar.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("Data Protection Impact Assessment avalia:", BankHelpers.mkOpts(["Riscos à privacidade de titulares", "Apenas custos financeiros", "Cor do site", "Velocidade do app"], 0), 0, "DPIA/RIPD documenta mitigação.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("Legitimate Interest Assessment documenta:", BankHelpers.mkOpts(["Teste de balanceamento", "Consentimento tácito", "Eliminação de direitos", "Marketing spam"], 0), 0, "LIA suporta base de interesse legítimo.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("Privacy governance inclui:", BankHelpers.mkOpts(["Políticas, papéis, métricas e cultura", "Apenas antivírus", "Somente firewall", "Exclusivamente jurídico"], 0), 0, "Programa holístico.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("Due diligence de privacidade em terceiros verifica:", BankHelpers.mkOpts(["Conformidade e riscos do fornecedor", "Apenas preço", "Logo", "Estacionamento"], 0), 0, "Vendor risk management.", "Papéis e responsabilidades", "medio"),
-          BankHelpers.q("Accountability demonstra-se com:", BankHelpers.mkOpts(["Registros, políticas, treinamentos e auditorias", "Ocultação", "Eliminação de logs legais", "Boca fechada"], 0), 0, "Evidências de conformidade.", "Papéis e responsabilidades", "medio"),
-        ],
-      }
-    },
-    {
-      materia: "PDPP",
-      title: "Privacy and Data Protection Practitioner (PDPP)",
-      description: "Aplicação prática da LGPD/GDPR, casos reais, riscos e avaliações.",
-      code: "EXIN-PDPP",
-      timeMinutes: 90,
-      submaterias: {
-        "DPIA e gestão de riscos": [
-          BankHelpers.q("DPIA deve ser revisada quando:", BankHelpers.mkOpts(["Mudam finalidade, escopo ou tecnologia", "Nunca", "Apenas anualmente fixo", "Somente após multa"], 0), 0, "Reavaliação contínua de riscos.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("RIPD (Relatório de Impacto) na LGPD é exigido quando:", BankHelpers.mkOpts(["Tratamento pode gerar alto risco", "Sempre para cookies", "Nunca", "Apenas B2B"], 0), 0, "Art. 38 LGPD.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("Consulta prévia à ANPD ocorre quando:", BankHelpers.mkOpts(["RIPD indica risco residual alto", "Qualquer cookie", "Backup diário", "Treinamento interno"], 0), 0, "Autoridade pode orientar mitigação.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("Mitigação de risco inclui:", BankHelpers.mkOpts(["Controles técnicos e organizacionais", "Ignorar titulares", "Publicar dados", "Eliminar DPO"], 0), 0, "Reduzir probabilidade ou impacto.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("Risco residual é:", BankHelpers.mkOpts(["Risco que permanece após controles", "Risco zero garantido", "Apenas risco financeiro", "Risco ignorado"], 0), 0, "Aceitação documentada pode ser necessária.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("Matriz de risco combina:", BankHelpers.mkOpts(["Probabilidade e impacto", "Cor e tamanho", "Marketing e vendas", "Hardware e software apenas"], 0), 0, "Priorização de tratamentos.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("Tratamento de dados sensíveis exige:", BankHelpers.mkOpts(["Cuidado reforçado e bases específicas", "Mesmas regras de dados comuns sempre", "Proibição absoluta", "Ignorar consentimento"], 0), 0, "Art. 11 LGPD / Art. 9 GDPR.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("Dados de crianças requerem:", BankHelpers.mkOpts(["Consentimento do responsável e melhor interesse", "Coleta livre", "Venda permitida", "Ignorar idade"], 0), 0, "Proteção reforçada.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("Decisões automatizadas com efeito legal exigem:", BankHelpers.mkOpts(["Direito de revisão humana e informação", "Proibição total sempre", "Ocultar lógica", "Eliminar oposição"], 0), 0, "Transparência algorítmica.", "DPIA e gestão de riscos", "medio"),
-          BankHelpers.q("Privacy risk register centraliza:", BankHelpers.mkOpts(["Riscos, owners e planos de ação", "Apenas senhas", "Receitas", "Logos"], 0), 0, "Governança operacional.", "DPIA e gestão de riscos", "medio"),
-        ],
-        "Operação do DPO": [
-          BankHelpers.q("DPO deve facilitar:", BankHelpers.mkOpts(["Exercício de direitos dos titulares", "Ocultação de tratamentos", "Venda de bases", "Eliminação de registros legais"], 0), 0, "Canal de confiança.", "Operação do DPO", "medio"),
-          BankHelpers.q("Registro de tratamentos (ROPA) deve ser:", BankHelpers.mkOpts(["Atualizado e refletir realidade", "Estático por 10 anos", "Secreto para ANPD", "Opcional"], 0), 0, "Accountability.", "Operação do DPO", "medio"),
-          BankHelpers.q("Resposta a solicitação de titular deve ser:", BankHelpers.mkOpts(["Dentro de prazos legais", "Ignorada", "Apenas verbal", "Sem identificação"], 0), 0, "LGPD: 15 dias prorrogáveis; GDPR: 1 mês.", "Operação do DPO", "medio"),
-          BankHelpers.q("DPO não é responsável por:", BankHelpers.mkOpts(["Decisões finais de negócio do controlador", "Orientar conformidade", "Treinar equipes", "Interface com ANPD"], 0), 0, "DPO assessora; controlador responde.", "Operação do DPO", "medio"),
-          BankHelpers.q("Conflito entre marketing e privacidade resolve-se com:", BankHelpers.mkOpts(["Base legal, LIA e opt-in quando aplicável", "Coleta máxima", "Ignorar opt-out", "Compra de listas"], 0), 0, "Balanceamento documentado.", "Operação do DPO", "medio"),
-          BankHelpers.q("Auditoria de privacidade verifica:", BankHelpers.mkOpts(["Conformidade prática vs políticas", "Apenas cor do site", "Lucro trimestral", "Número de funcionários"], 0), 0, "Gap analysis.", "Operação do DPO", "medio"),
-          BankHelpers.q("Plano de resposta a incidentes inclui:", BankHelpers.mkOpts(["Detecção, contenção, notificação e lições", "Ocultação", "Eliminação de logs", "Silêncio total"], 0), 0, "Playbook testado.", "Operação do DPO", "medio"),
-          BankHelpers.q("Treinamento role-based para privacidade significa:", BankHelpers.mkOpts(["Conteúdo adaptado à função", "Mesmo treino para todos sem foco", "Apenas e-mail anual", "Nenhum registro"], 0), 0, "RH vs TI vs marketing.", "Operação do DPO", "medio"),
-          BankHelpers.q("KPIs de privacidade podem incluir:", BankHelpers.mkOpts(["Prazo médio DSAR, incidentes, treinamentos", "Apenas faturamento", "Cor da UI", "Número de likes"], 0), 0, "Medir programa.", "Operação do DPO", "medio"),
-          BankHelpers.q("Relatório à direção sobre privacidade deve:", BankHelpers.mkOpts(["Resumir riscos, incidentes e investimentos", "Ocultar problemas", "Substituir DPO", "Eliminar DPIA"], 0), 0, "Governança executiva.", "Operação do DPO", "medio"),
-        ],
-        "Casos práticos LGPD/GDPR": [
-          BankHelpers.q("Vazamento por e-mail errado exige:", BankHelpers.mkOpts(["Avaliar notificação ANPD/titulares", "Ignorar", "Publicar lista", "Eliminar backups legais"], 0), 0, "Incident response.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("Marketing sem opt-in válido viola:", BankHelpers.mkOpts(["Princípios de finalidade e consentimento", "Apenas ISO 27001", "Normas contábeis", "Direito penal sempre"], 0), 0, "Comunicações precisam de base legal.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("Funcionário acessa dados sem necessidade:", BankHelpers.mkOpts(["Incidente de acesso não autorizado", "Prática normal", "Direito do titular", "Backup"], 0), 0, "Need-to-know e logs.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("Transferência para EUA pós-Schrems II exige:", BankHelpers.mkOpts(["Avaliar SCCs e medidas suplementares", "Transferência livre", "Ignorar GDPR", "Apenas criptografia sem análise"], 0), 0, "Jurisprudência europeia.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("App coleta localização contínua deve:", BankHelpers.mkOpts(["Informar, base legal clara e minimização", "Ocultar na política", "Retenção infinita", "Vender dados"], 0), 0, "Dados sensíveis de comportamento.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("Eliminação solicitada com obrigação legal de retenção:", BankHelpers.mkOpts(["Retenção limitada ao exigido por lei", "Apagar tudo imediatamente", "Ignorar titular", "Publicar dados"], 0), 0, "Conflito de obrigações.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("Cookies não essenciais requerem:", BankHelpers.mkOpts(["Consentimento prévio informado", "Carregamento automático", "Ocultar banner", "Retenção eterna"], 0), 0, "ePrivacy / boas práticas GDPR.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("Fornecedor subcontrata sem aviso:", BankHelpers.mkOpts(["Violação contratual e risco", "Prática aceita", "Benefício automático", "Elimina DPO"], 0), 0, "Cadeia de responsabilidade.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("Biometria para ponto exige:", BankHelpers.mkOpts(["Base legal, segurança reforçada e alternativa", "Coleta livre", "Compartilhamento público", "Retenção infinita"], 0), 0, "Dado sensível.", "Casos práticos LGPD/GDPR", "medio"),
-          BankHelpers.q("Pesquisa com dados pseudonimizados ainda requer:", BankHelpers.mkOpts(["Avaliar riscos e bases legais", "Nenhuma regra", "Publicação aberta", "Eliminação de ética"], 0), 0, "Pseudonimização ≠ anonimização.", "Casos práticos LGPD/GDPR", "medio"),
-        ],
-        "Contratos e terceiros": [
-          BankHelpers.q("DPA (Data Processing Agreement) deve definir:", BankHelpers.mkOpts(["Objeto, duração, instruções e subcontratação", "Apenas preço", "Marketing", "Logo"], 0), 0, "Art. 39 LGPD.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("Auditoria de fornecedor cloud inclui:", BankHelpers.mkOpts(["Certificações, localização e subprocessadores", "Apenas uptime", "Cor do dashboard", "Número de VMs"], 0), 0, "Due diligence técnica.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("Suboperador só pode ser contratado com:", BankHelpers.mkOpts(["Autorização e garantias equivalentes", "Livre escolha sem aviso", "Acesso root ao controlador", "Eliminação de logs"], 0), 0, "Responsabilidade em cadeia.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("Exit plan de fornecedor prevê:", BankHelpers.mkOpts(["Devolução ou eliminação segura de dados", "Retenção eterna pelo vendor", "Venda de base", "Ignorar titulares"], 0), 0, "Continuidade e portabilidade.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("Cláusula de confidencialidade protege:", BankHelpers.mkOpts(["Dados pessoais e segredos de negócio", "Apenas marketing", "Opiniões públicas", "Notícias"], 0), 0, "NDA reforça contrato.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("Transferência internacional via BCRs exige:", BankHelpers.mkOpts(["Regras vinculantes aprovadas", "E-mail informal", "Ignorar ANPD", "Apenas HTTPS"], 0), 0, "Binding Corporate Rules.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("SLA de privacidade pode incluir:", BankHelpers.mkOpts(["Prazos DSAR, notificação de incidentes", "Apenas latência", "Cor do app", "Número de likes"], 0), 0, "Métricas contratuais.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("Due diligence reduz:", BankHelpers.mkOpts(["Riscos de terceiros não conformes", "Necessidade de contratos", "Papel do DPO", "Treinamentos"], 0), 0, "Vendor management.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("Indenização em contrato de processamento:", BankHelpers.mkOpts(["Aloca riscos financeiros", "Elimina LGPD", "Substitui DPIA", "Remove DPO"], 0), 0, "Cláusula de liability.", "Contratos e terceiros", "medio"),
-          BankHelpers.q("Revisão anual de contratos verifica:", BankHelpers.mkOpts(["Mudanças regulatórias e operacionais", "Apenas inflação", "Logo", "Estacionamento"], 0), 0, "Contratos vivos.", "Contratos e terceiros", "medio"),
-        ],
-        "Monitoramento e melhoria": [
-          BankHelpers.q("Programa de privacidade maduro inclui:", BankHelpers.mkOpts(["Políticas, DPIA, treinamento, auditoria e métricas", "Apenas banner de cookies", "Somente antivírus", "Nenhum registro"], 0), 0, "Ciclo PDCA de privacidade.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Revisão pós-incidente documenta:", BankHelpers.mkOpts(["Causa raiz e ações preventivas", "Culpa individual apenas", "Ocultação", "Eliminação de logs"], 0), 0, "Lessons learned.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Privacy maturity model avalia:", BankHelpers.mkOpts(["Nível de capacidade organizacional", "Apenas faturamento", "Número de servidores", "Cor do site"], 0), 0, "Roadmap de evolução.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Integração LGPD + ISO 27001 beneficia:", BankHelpers.mkOpts(["Segurança e privacidade alinhadas", "Elimina DPO", "Remove DPIA", "Ignora titulares"], 0), 0, "Controles complementares.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Automated compliance tools auxiliam:", BankHelpers.mkOpts(["ROPA, DSAR e monitoramento", "Substituir DPO totalmente", "Eliminar políticas", "Vender dados"], 0), 0, "GRC tech.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Comunicação transparente após incidente inclui:", BankHelpers.mkOpts(["Natureza, dados afetados e medidas", "Ocultação total", "Apenas interno", "Dados de terceiros"], 0), 0, "Confiança do titular.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Benchmarking de privacidade compara:", BankHelpers.mkOpts(["Práticas com mercado e reguladores", "Apenas concorrentes ilegais", "Preços", "Logos"], 0), 0, "Melhoria contínua.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Certificação EXIN PDPP valida:", BankHelpers.mkOpts(["Competência prática do profissional", "ISO 27001 da empresa", "LGPD automática", "Eliminação de riscos"], 0), 0, "Certificação individual.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Trilha DPO EXIN completa reúne:", BankHelpers.mkOpts(["ISFS + PDPF + PDPP", "Apenas ISFS", "Somente GDPR", "Nenhum exame"], 0), 0, "Três exames independentes.", "Monitoramento e melhoria", "medio"),
-          BankHelpers.q("Encarregado deve equilibrar:", BankHelpers.mkOpts(["Negócio, compliance e direitos dos titulares", "Apenas marketing", "Somente TI", "Ignorar ANPD"], 0), 0, "Papel estratégico do DPO.", "Monitoramento e melhoria", "medio"),
-        ],
-      }
-    },
+class GlobalDPOSeeder {
+  static FLAG_KEY = 'ef_global_dpo_seeded_v2';
+  static get BANK(){ return typeof DPO_GLOBAL_BANK !== 'undefined' ? DPO_GLOBAL_BANK : null; }
+  static get TRACKS(){ return this.BANK?.tracks || []; }
+  static TRILHA_DESC = "Trilha global de Encarregado de Dados — certificações por continente, ludic e bilingue EN/PT.";
+  /** Campos v2 repassados do bank → Question.nodeMeta (Privacy Knowledge OS) */
+  static NODE_META_SCALAR_KEYS = [
+    'primaryLaw', 'secondaryLaw', 'bloomLevel', 'estimatedMinutes', 'cognitiveLevel',
+    'examObjective', 'officialReference', 'knowledgeArea', 'country', 'continent',
+    'story', 'analogy', 'feynman', 'mnemonic', 'visualAssociation', 'learningViews',
+    'revisionHistory', 'language'
   ];
+
+  static _buildNodeMeta(raw, cert, submateria){
+    const meta = {};
+    this.NODE_META_SCALAR_KEYS.forEach(k=>{
+      if(raw[k] != null && raw[k] !== '') meta[k] = raw[k];
+    });
+    meta.certification = meta.certification || {
+      code: cert.code,
+      org: cert.org || '',
+      name: cert.title || cert.materia,
+      stub: !!cert.stub
+    };
+    meta.region = meta.region || cert.region || cert.trackId || 'global';
+    meta.knowledgeArea = meta.knowledgeArea || submateria;
+    meta.difficulty = meta.difficulty || raw.level || 'medio';
+    if(!meta.learningViews && (raw.story || raw.analogy || raw.feynman || raw.mnemonic || raw.visualAssociation)){
+      meta.learningViews = Object.assign({}, meta.learningViews || {});
+      const textView = (body)=>({ viewId: Util.uid('lv'), locale: meta.language || 'pt-BR', body });
+      if(raw.story) meta.learningViews.story = typeof raw.story === 'string' ? textView(raw.story) : raw.story;
+      if(raw.analogy) meta.learningViews.analogy = typeof raw.analogy === 'string' ? textView(raw.analogy) : raw.analogy;
+      if(raw.feynman) meta.learningViews.feynman = typeof raw.feynman === 'string' ? textView(raw.feynman) : raw.feynman;
+      if(raw.mnemonic) meta.learningViews.mnemonic = typeof raw.mnemonic === 'string' ? textView(raw.mnemonic) : raw.mnemonic;
+      if(raw.visualAssociation){
+        meta.learningViews.visual = {
+          viewId: Util.uid('lv'),
+          locale: meta.language || 'pt-BR',
+          suggestions: Array.isArray(raw.visualAssociation) ? raw.visualAssociation : [raw.visualAssociation]
+        };
+      }
+    }
+    return Object.keys(meta).length ? meta : null;
+  }
+
+  static trilhaLabel(cert){
+    const track = this.TRACKS.find(t=>t.id===cert.trackId || t.region===cert.region);
+    return track ? `${track.name} — DPO` : 'Global — DPO';
+  }
+
+  static _normalizeOpts(raw){
+    if(raw.options?.length) return raw.options.map(o=>({
+      id: Util.uid('opt'),
+      text: o.text || o.textPt || o.textEn || '',
+      textEn: o.textEn || (raw.optionsEn && raw.optionsEn.find(x=>x.text===o.text)?.text) || o.text,
+      textPt: o.textPt || o.text,
+      correct: !!o.correct
+    }));
+    const en = raw.optionsEn || [];
+    const pt = raw.optionsPt || en;
+    const correctIdx = en.findIndex(o=>o.correct);
+    return BankHelpers.mkOpts(en.map(o=>o.text), correctIdx >= 0 ? correctIdx : 0, pt.map(o=>o.text));
+  }
+
+  static _normalizeQuestion(raw, cert, submateria){
+    const stemEn = raw.stemEn || raw.text || '';
+    const stemPt = raw.stemPt || raw.text || stemEn;
+    const baseTags = [this.trilhaLabel(cert), cert.materia, cert.code, submateria, cert.region || 'global'];
+    const extraTags = Array.isArray(raw.tags) ? raw.tags : [];
+    const nodeMeta = this._buildNodeMeta(raw, cert, submateria);
+    return {
+      type: raw.type || 'single',
+      text: stemPt || stemEn,
+      stemEn, stemPt,
+      options: this._normalizeOpts(raw),
+      explanation: raw.explanationPt || raw.explanation || raw.explanationEn || '',
+      explanationEn: raw.explanationEn || raw.explanation || '',
+      explanationPt: raw.explanationPt || raw.explanation || '',
+      level: raw.level || 'medio',
+      materia: cert.materia,
+      submateria,
+      category: submateria,
+      tags: [...new Set([...baseTags, ...extraTags])],
+      nodeMeta
+    };
+  }
+
   static seed(){
     if(localStorage.getItem(this.FLAG_KEY)) return;
+    const bank = this.BANK;
+    if(!bank?.certifications?.length){
+      console.warn('[GlobalDPOSeeder] DPO_GLOBAL_BANK not loaded');
+      return;
+    }
     DataCleanup.run();
-    this.CERT_DATA.forEach(cert=>{
+    bank.certifications.forEach(cert=>{
+      const domains = cert.domains || cert.submaterias || {};
       const qs = [];
-      Object.entries(cert.submaterias).forEach(([submateria, items])=>{
-        items.forEach(d=>{
-          const raw = typeof d === 'object' && d.text ? d : d;
-          qs.push(new Question({
-            ...raw,
-            options: raw.options || [],
-            materia: cert.materia,
-            submateria,
-            category: submateria,
-            tags: [this.TRILHA, cert.materia, cert.code, submateria]
-          }));
+      Object.entries(domains).forEach(([submateria, items])=>{
+        (items || []).forEach(raw=>{
+          qs.push(new Question(this._normalizeQuestion(raw, cert, submateria)));
         });
       });
       qs.forEach(q => StorageManager.upsertQuestion(q));
+      const trilha = this.trilhaLabel(cert);
       const exam = new Exam({
         title: cert.title,
-        description: cert.description,
-        category: this.TRILHA,
-        trilha: this.TRILHA,
+        description: cert.description || '',
+        category: trilha,
+        trilha,
+        region: cert.region || 'global',
+        trackId: cert.trackId || cert.region || 'global',
         materia: cert.materia,
-        serie: this.TRILHA,
+        serie: trilha,
         code: cert.code,
-        language: 'pt-BR',
-        timeMinutes: cert.timeMinutes,
+        org: cert.org || '',
+        language: 'dual',
+        timeMinutes: cert.timeMinutes || 60,
         passScore: 70,
         author: 'Velora',
-        version: '1.0',
-        tags: [this.TRILHA, cert.materia, 'certificação', 'EXIN'],
-        questionIds: qs.map(q => q.id)
+        version: bank.version || '2.0',
+        tags: [trilha, cert.materia, 'certificação', cert.org || '', cert.region || 'global'],
+        questionIds: qs.map(q => q.id),
+        stub: !!cert.stub
       });
       StorageManager.upsertExam(exam);
     });
     localStorage.setItem(this.FLAG_KEY, '1');
   }
+
+  /** Dev helper: localStorage.removeItem('ef_global_dpo_seeded_v2') then reload */
+  static resetFlag(){ localStorage.removeItem(this.FLAG_KEY); }
 }
 /* =========================================================================
    HUB NAVIGATION + FSRS (OnePage — máx. 3 cliques)
@@ -4740,7 +5256,7 @@ class ContentHubView {
         <button class="btn btn-sm btn-ghost" id="ch-select" type="button">Selecionar</button>
       </div>`;
     const footer = this._selectMode ? '' : `<div class="hub-footer"><button class="btn btn-ghost btn-sm" id="ch-smart" type="button">Revisão inteligente</button></div>`;
-    panel.innerHTML = `${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma certificação','O banco EXIN DPO será carregado automaticamente.')}</div>${footer}`;
+    panel.innerHTML = `${toolbar}<div id="ch-list">${studyExams.length || this._selectMode ? body : DashboardView._empty('Nenhuma certificação','Recarregue a página para carregar o banco DPO global.')}</div>${footer}`;
     panel.querySelector('#ch-new')?.addEventListener('click', ()=> App.instance.router.go('builder', {}));
     panel.querySelector('#ch-import')?.addEventListener('click', ()=> ImportController.openModal());
     panel.querySelector('#ch-select')?.addEventListener('click', ()=>{ this._selectMode = true; this._selected.clear(); this._renderCertificacoes(); });
@@ -4808,7 +5324,7 @@ class App {
   constructor(){
     App.instance = this;
     DataCleanup.run();
-    ExinDPOSeeder.seed();
+    GlobalDPOSeeder.seed();
     this.router = new Router(this);
     this._registerRoutes();
     this._buildTabbar();

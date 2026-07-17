@@ -1,0 +1,239 @@
+{
+  "schemaVersion": "2.0.0",
+  "description": "Taxonomia hierárquica Velora Privacy Knowledge OS — estrutura only, sem conteúdo de questões",
+  "continents": [
+    {
+      "id": "global",
+      "name": "Global / Transversal",
+      "knowledgeAreas": [
+        { "id": "gdpr", "name": "GDPR" },
+        { "id": "iso-27701", "name": "ISO/IEC 27701 (PIMS)" },
+        { "id": "iso-27001-privacy", "name": "ISO/IEC 27001 — privacidade" },
+        { "id": "nist-privacy", "name": "NIST Privacy Framework" },
+        { "id": "oecd", "name": "OECD Privacy Principles" },
+        { "id": "apec-cbpr", "name": "APEC / CBPR" },
+        { "id": "cross-border", "name": "Transferências transfronteiriças" },
+        { "id": "ai-governance", "name": "Governança de IA" },
+        { "id": "ai-act-eu", "name": "AI Act (UE)" },
+        { "id": "data-governance", "name": "Data Governance" },
+        { "id": "data-ethics", "name": "Data Ethics" }
+      ],
+      "certifications": [
+        { "code": "EXIN-ISFS", "org": "EXIN", "name": "Information Security Foundation" },
+        { "code": "EXIN-PDPF", "org": "EXIN", "name": "Privacy and Data Protection Foundation" },
+        { "code": "EXIN-PDPP", "org": "EXIN", "name": "Privacy and Data Protection Practitioner" },
+        { "code": "EXIN-CDPO", "org": "EXIN", "name": "Certified Data Protection Officer" },
+        { "code": "IAPP-CIPP-E", "org": "IAPP", "name": "Certified Information Privacy Professional / Europe" },
+        { "code": "IAPP-CIPM", "org": "IAPP", "name": "Certified Information Privacy Manager" },
+        { "code": "IAPP-CIPT", "org": "IAPP", "name": "Certified Information Privacy Technologist" },
+        { "code": "IAPP-AIGP", "org": "IAPP", "name": "Artificial Intelligence Governance Professional", "stub": true },
+        { "code": "PECB-CDPO", "org": "PECB", "name": "Certified Data Protection Officer" },
+        { "code": "ISACA-CDPSE", "org": "ISACA", "name": "Certified Data Privacy Solutions Engineer" },
+        { "code": "ISO-27701", "org": "ISO", "name": "ISO/IEC 27701 Lead Implementer" }
+      ]
+    },
+    {
+      "id": "europe",
+      "name": "Europa",
+      "countries": [
+        {
+          "id": "eu",
+          "name": "União Europeia",
+          "laws": [
+            { "id": "gdpr", "name": "GDPR (Reg. UE 2016/679)" },
+            { "id": "eprivacy", "name": "ePrivacy Directive" },
+            { "id": "ai-act", "name": "AI Act" }
+          ],
+          "certifications": [
+            { "code": "IAPP-CIPP-E", "org": "IAPP" },
+            { "code": "IAPP-CDPO-FR", "org": "IAPP", "country": "FR" },
+            { "code": "CNIL-DPO", "org": "CNIL", "country": "FR" },
+            { "code": "TUV-DPO-DE", "org": "TÜV", "country": "DE" }
+          ],
+          "knowledgeAreas": [
+            { "id": "legal-bases", "name": "Bases legais e consentimento" },
+            { "id": "data-subject-rights", "name": "Direitos do titular" },
+            { "id": "dpia", "name": "DPIA / AIPD" },
+            { "id": "dpo-role", "name": "Papel do DPO" },
+            { "id": "transfers", "name": "Transferências internacionais" }
+          ]
+        },
+        {
+          "id": "uk",
+          "name": "Reino Unido",
+          "laws": [
+            { "id": "uk-gdpr", "name": "UK GDPR" },
+            { "id": "dpa-2018", "name": "Data Protection Act 2018" }
+          ],
+          "certifications": [
+            { "code": "UK-GDPR", "org": "ICO" }
+          ],
+          "knowledgeAreas": [
+            { "id": "uk-framework", "name": "Framework pós-Brexit" },
+            { "id": "ico-guidance", "name": "Orientações ICO" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "americas",
+      "name": "Américas",
+      "countries": [
+        {
+          "id": "us",
+          "name": "Estados Unidos",
+          "laws": [
+            { "id": "hipaa", "name": "HIPAA" },
+            { "id": "glba", "name": "GLBA" },
+            { "id": "coppa", "name": "COPPA" },
+            { "id": "ferpa", "name": "FERPA" },
+            { "id": "ccpa", "name": "CCPA" },
+            { "id": "cpra", "name": "CPRA (California)" }
+          ],
+          "certifications": [
+            { "code": "IAPP-CIPP-US", "org": "IAPP" }
+          ],
+          "knowledgeAreas": [
+            { "id": "sectoral", "name": "Privacidade setorial" },
+            { "id": "state-laws", "name": "Leis estaduais" },
+            { "id": "enforcement", "name": "Enforcement e AGs" }
+          ]
+        },
+        {
+          "id": "ca",
+          "name": "Canadá",
+          "laws": [
+            { "id": "pipeda", "name": "PIPEDA" },
+            { "id": "quebec-law-25", "name": "Lei 25 (Quebec)" }
+          ],
+          "certifications": [
+            { "code": "IAPP-CIPP-C", "org": "IAPP", "stub": true }
+          ],
+          "knowledgeAreas": [
+            { "id": "consent-model", "name": "Modelo de consentimento" },
+            { "id": "breach-notification", "name": "Notificação de incidentes" }
+          ]
+        },
+        {
+          "id": "br",
+          "name": "Brasil",
+          "laws": [
+            { "id": "lgpd", "name": "LGPD (Lei 13.709/2018)" },
+            { "id": "anpd", "name": "Regulamentação ANPD" }
+          ],
+          "certifications": [
+            { "code": "IAPP-CDPO-BR", "org": "IAPP" },
+            { "code": "EXIN-LGPD", "org": "EXIN" },
+            { "code": "ENAP-DPO", "org": "ENAP", "stub": true }
+          ],
+          "knowledgeAreas": [
+            { "id": "legal-bases-lgpd", "name": "Bases legais LGPD" },
+            { "id": "anpd-compliance", "name": "Conformidade ANPD" },
+            { "id": "dpo-lgpd", "name": "Encarregado (DPO)" }
+          ]
+        },
+        {
+          "id": "latam",
+          "name": "América Latina (multi-país)",
+          "countries": [
+            { "id": "cl", "name": "Chile", "law": "Lei de Proteção de Dados" },
+            { "id": "ar", "name": "Argentina", "law": "PDPA" },
+            { "id": "uy", "name": "Uruguai", "law": "Lei 18.331" },
+            { "id": "mx", "name": "México", "law": "LFPDPPP" },
+            { "id": "co", "name": "Colômbia", "law": "Lei 1581" },
+            { "id": "pe", "name": "Peru", "law": "Lei 29733" }
+          ],
+          "knowledgeAreas": [
+            { "id": "regional-harmonization", "name": "Harmonização regional" },
+            { "id": "cross-border-latam", "name": "Transferências LatAm" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asia",
+      "name": "Ásia-Pacífico",
+      "countries": [
+        {
+          "id": "jp",
+          "name": "Japão",
+          "laws": [{ "id": "appi", "name": "APPI" }],
+          "knowledgeAreas": [{ "id": "appi-compliance", "name": "Conformidade APPI" }]
+        },
+        {
+          "id": "sg",
+          "name": "Singapura",
+          "laws": [{ "id": "pdpa-sg", "name": "PDPA" }],
+          "knowledgeAreas": [{ "id": "pdpa-sg-compliance", "name": "Conformidade PDPA SG" }]
+        },
+        {
+          "id": "in",
+          "name": "Índia",
+          "laws": [{ "id": "dpdp", "name": "Digital Personal Data Protection Act" }],
+          "knowledgeAreas": [{ "id": "dpdp-compliance", "name": "Conformidade DPDP" }]
+        },
+        {
+          "id": "cn",
+          "name": "China",
+          "laws": [{ "id": "pipl", "name": "PIPL" }],
+          "knowledgeAreas": [{ "id": "pipl-compliance", "name": "Conformidade PIPL" }]
+        },
+        {
+          "id": "kr",
+          "name": "Coreia do Sul",
+          "laws": [{ "id": "pipa-kr", "name": "PIPA" }],
+          "knowledgeAreas": [{ "id": "pipa-kr-compliance", "name": "Conformidade PIPA KR" }]
+        }
+      ],
+      "certifications": [
+        { "code": "IAPP-CIPP-A", "org": "IAPP", "name": "CIPP Asia", "stub": true }
+      ]
+    },
+    {
+      "id": "oceania",
+      "name": "Oceania",
+      "countries": [
+        {
+          "id": "au",
+          "name": "Austrália",
+          "laws": [{ "id": "privacy-act-au", "name": "Privacy Act 1988" }],
+          "knowledgeAreas": [{ "id": "app-guidelines", "name": "APP Guidelines" }]
+        },
+        {
+          "id": "nz",
+          "name": "Nova Zelândia",
+          "laws": [{ "id": "privacy-act-nz", "name": "Privacy Act 2020" }],
+          "knowledgeAreas": [{ "id": "nz-ipp", "name": "Information Privacy Principles" }]
+        }
+      ]
+    },
+    {
+      "id": "africa",
+      "name": "África",
+      "countries": [
+        {
+          "id": "za",
+          "name": "África do Sul",
+          "laws": [{ "id": "popia", "name": "POPIA" }],
+          "certifications": [],
+          "knowledgeAreas": [
+            { "id": "popia-compliance", "name": "Conformidade POPIA" },
+            { "id": "information-officer", "name": "Information Officer" }
+          ]
+        }
+      ]
+    }
+  ],
+  "crossCuttingKnowledgeAreas": [
+    { "id": "privacy-by-design", "name": "Privacy by Design" },
+    { "id": "privacy-impact", "name": "Avaliação de impacto" },
+    { "id": "breach-response", "name": "Resposta a incidentes" },
+    { "id": "vendor-management", "name": "Gestão de terceiros" },
+    { "id": "records-of-processing", "name": "Registro de operações (ROPA)" },
+    { "id": "consent-management", "name": "Gestão de consentimento" },
+    { "id": "children-data", "name": "Dados de crianças" },
+    { "id": "employment-privacy", "name": "Privacidade trabalhista" },
+    { "id": "marketing-privacy", "name": "Privacidade em marketing" },
+    { "id": "biometrics", "name": "Biometria e reconhecimento" }
+  ]
+}
