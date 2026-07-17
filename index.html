@@ -2985,13 +2985,10 @@ class PlayerController {
 
   static _renderNav(){
     const nav = document.getElementById('p-nav');
+    const meta = document.getElementById('p-nav-meta');
     const {questions, answers, marked, currentIndex} = this.state;
-    const legend = `<div class="nav-legend" aria-hidden="true">
-      <span class="lg"><span class="dot current"></span>Atual</span>
-      <span class="lg"><span class="dot answered"></span>Respondida</span>
-      <span class="lg"><span class="dot marked"></span>Marcada</span>
-    </div>`;
-    nav.innerHTML = legend + questions.map((q,i)=>{
+    if(meta) meta.textContent = `Questão ${currentIndex+1} de ${questions.length} — deslize para ver todas`;
+    nav.innerHTML = questions.map((q,i)=>{
       const classes = ['qnum'];
       if(i===currentIndex) classes.push('current');
       if(answers[q.id]!==undefined) classes.push('answered');
