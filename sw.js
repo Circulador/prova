@@ -1,7 +1,7 @@
 'use strict';
 
 /** Velora PWA — shell v2 (2026). Bump SHELL_CACHE ao alterar precache. */
-const SHELL_CACHE = 'velora-shell-v10';
+const SHELL_CACHE = 'velora-shell-v12';
 const RUNTIME_CACHE = 'velora-runtime-v8';
 
 const PRECACHE = [

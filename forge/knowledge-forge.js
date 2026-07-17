@@ -551,7 +551,8 @@ ForgeRegistry.register('flashcards', {
         stemPt: it.front, explanationPt: it.explanation || it.back,
         level: it.difficulty || intent.difficulty,
         category: it.category || intent.category,
-        tags: [...(it.tags||[]), 'forge', intent.topic],
+        tags: [...(it.tags||[]), 'forge', intent.topic, 'knowledge-node'],
+        nodeMeta: { topic: intent.topic, source: 'forge', knowledgeNode: true, type: 'flashcard' },
         options:[{id:Util.uid('o'), text: it.back, correct:true},{id:Util.uid('o'), text:'—', correct:false}]
       });
       StorageManager.upsertQuestion(q);
@@ -572,7 +573,8 @@ ForgeRegistry.register('quiz', {
         stemPt: it.stem, explanationPt: it.explanation||'',
         level: it.level || intent.difficulty,
         category: it.category || intent.category,
-        tags: [...(it.tags||[]), 'forge', intent.topic],
+        tags: [...(it.tags||[]), 'forge', intent.topic, 'knowledge-node'],
+        nodeMeta: { topic: intent.topic, source: 'forge', knowledgeNode: true, type: 'quiz' },
         options: (it.options||[]).map(o=>({id:Util.uid('o'), text:o.text, correct:!!o.correct}))
       });
       StorageManager.upsertQuestion(q);
