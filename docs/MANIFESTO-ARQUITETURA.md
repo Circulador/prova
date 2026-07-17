@@ -308,4 +308,5 @@ Este manifesto é aplicado automaticamente via `.cursor/rules/`:
 | IA invisível | `velora-ai-invisible.mdc` |
 | Gate de implementação | `velora-implementation-gate.mdc` |
 
-**Schema e migração:** [`docs/KNOWLEDGE-MODEL.md`](KNOWLEDGE-MODEL.md)
+**Schema e migração:** [`docs/KNOWLEDGE-MODEL.md`](KNOWLEDGE-MODEL.md)  
+**Repaginação UI:** [`docs/UI-REDESIGN-MODEL.md`](UI-REDESIGN-MODEL.md)

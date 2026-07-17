@@ -2,7 +2,7 @@
 
 Identidade visual oficial extraída do conceito **Velora — Estude. Evolua. Conquiste.**
 
-> **Arquitetura e produto:** requisitos obrigatórios em [`docs/MANIFESTO-ARQUITETURA.md`](../../docs/MANIFESTO-ARQUITETURA.md) (Knowledge OS, Mobile First, 3 cliques, One Page First). Este documento cobre **apenas** tokens visuais e componentes.
+> **Arquitetura e produto:** requisitos obrigatórios em [`docs/MANIFESTO-ARQUITETURA.md`](../../docs/MANIFESTO-ARQUITETURA.md) (Knowledge OS, Mobile First, 3 cliques, One Page First). **Layout e shell:** [`docs/UI-REDESIGN-MODEL.md`](../../docs/UI-REDESIGN-MODEL.md). Este documento cobre **apenas** tokens visuais e componentes.
 
 Unifica princípios de **Material Design 3**, **Apple Human Interface Guidelines** e **Fluent UI**.
 

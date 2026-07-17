@@ -1449,6 +1449,310 @@ class Exam {
 }
 
 /* ---------------------------------------------------------------------
+   Knowledge Node — Fase 1 (projeção read-only, sem persistência)
+   Spec: docs/KNOWLEDGE-MODEL.md §8 Fase 1
+   Entrega: KnowledgeNormalizer + KnowledgeRepository (memória apenas).
+   Zero mudança de UX; dual-write/read é Fase 2+.
+--------------------------------------------------------------------- */
+class KnowledgeNormalizer {
+  static truncate(str, max){
+    const s = String(str || '').trim();
+    return s.length <= max ? s : s.slice(0, max - 1) + '…';
+  }
+
+  /** Deriva texto verso do flashcard — mesma lógica de FSRS.backText */
+  static flashcardBackText(q){
+    let ans = '';
+    if(['single','boolean','image'].includes(q.type)){
+      ans = (q.options || []).find(o => o.correct)?.text || '';
+    } else if(q.type === 'multi'){
+      ans = (q.options || []).filter(o => o.correct).map(o => o.text).join(', ');
+    } else if(q.type === 'short'){
+      ans = (q.correctShort || []).join(' / ');
+    } else if(q.type === 'matching'){
+      ans = (q.matchPairs || []).map(p => p.left + ' → ' + p.right).join('\n');
+    } else if(q.type === 'sequence'){
+      ans = (q.sequenceItems || []).map(s => s.text).join(' → ');
+    }
+    return 'Resposta: ' + (ans || 'Não cadastrada.') + (q.explanation ? '\n\nExplicação: ' + q.explanation : '');
+  }
+
+  static autoFlashcard(q){
+    return [{
+      viewId: 'fc_auto',
+      front: q.text,
+      back: this.flashcardBackText(q),
+      derivedFrom: 'question'
+    }];
+  }
+
+  static fromLegacyQuestion(q){
+    const now = new Date().toISOString();
+    const stat = StorageManager.getStat(q.id);
+    const views = {
+      question: {
+        viewId: 'qv_default',
+        type: q.type,
+        stem: q.text,
+        image: q.image,
+        options: q.options,
+        correctShort: q.correctShort,
+        matchPairs: q.matchPairs,
+        sequenceItems: q.sequenceItems
+      },
+      flashcards: this.autoFlashcard(q)
+    };
+    if(q.explanation){
+      views.explanation = { viewId: 'ev_default', body: q.explanation };
+    }
+    return {
+      id: q.id,
+      schemaVersion: '1.0.0',
+      kind: 'concept',
+      title: this.truncate(q.text, 80),
+      metadata: {
+        difficulty: q.level,
+        tags: q.tags,
+        category: q.category,
+        materia: q.materia,
+        submateria: q.submateria,
+        legacy: { questionId: q.id }
+      },
+      views,
+      progress: {
+        seen: stat.seen || 0,
+        correct: stat.correct || 0,
+        streak: stat.streak || 0,
+        lastAttemptAt: stat.last || null
+      },
+      createdAt: now,
+      updatedAt: now
+    };
+  }
+
+  static fromLegacyExam(exam){
+    const now = new Date().toISOString();
+    return {
+      id: exam.id,
+      schemaVersion: '1.0.0',
+      kind: 'collection',
+      title: exam.title || '',
+      metadata: {
+        legacy: { examIds: [exam.id] },
+        tags: exam.tags,
+        category: exam.category,
+        trilha: exam.trilha,
+        materia: exam.materia,
+        code: exam.code
+      },
+      collection: {
+        collectionType: 'exam',
+        questionSelection: (exam.questionIds || []).map(id => ({ nodeId: id })),
+        rules: {
+          timeMinutes: exam.timeMinutes,
+          passScore: exam.passScore
+        }
+      },
+      createdAt: exam.createdAt || now,
+      updatedAt: exam.updatedAt || now
+    };
+  }
+}
+
+class KnowledgeRepository {
+  static _nodes = [];
+  static _links = [];
+  static _built = false;
+
+  static _debugEnabled(){
+    try{ return localStorage.getItem('ef_knowledge_debug') === '1'; }catch(e){ return false; }
+  }
+
+  static buildGraphFromLegacy(){
+    const nodes = [];
+    const links = [];
+    const index = new Map();
+    const addNode = (node) => {
+      if(!index.has(node.id)){ index.set(node.id, node); nodes.push(node); }
+      return node;
+    };
+
+    StorageManager.getQuestions().forEach(raw => {
+      const q = raw instanceof Question ? raw : new Question(raw);
+      addNode(KnowledgeNormalizer.fromLegacyQuestion(q));
+    });
+
+    StorageManager.getExams().forEach(raw => {
+      const exam = raw instanceof Exam ? raw : new Exam(raw);
+      addNode(KnowledgeNormalizer.fromLegacyExam(exam));
+      (exam.questionIds || []).forEach(qid => {
+        links.push({
+          id: Util.uid('kl'),
+          from: exam.id,
+          to: qid,
+          type: 'includes'
+        });
+      });
+    });
+
+    this._appendExinStructure(nodes, links, index);
+
+    this._nodes = nodes;
+    this._links = links;
+    this._built = true;
+    return { nodes, links };
+  }
+
+  /** Preview in-memory: trilha EXIN → certificação → tópico → conceitos */
+  static _appendExinStructure(nodes, links, index){
+    const trilhaId = 'track-exin-dpo';
+    const trilhaLabel = (typeof ExinDPOSeeder !== 'undefined' && ExinDPOSeeder.TRILHA)
+      ? ExinDPOSeeder.TRILHA : 'Trilha DPO — EXIN';
+
+    const exinExams = StorageManager.getExams().filter(e =>
+      (e.code || '').startsWith('EXIN-') && (e.questionIds || []).length
+    );
+    if(!exinExams.length) return;
+
+    const now = new Date().toISOString();
+    const addNode = (node) => {
+      if(!index.has(node.id)){ index.set(node.id, node); nodes.push(node); }
+    };
+    const addLink = (from, to, type) => {
+      links.push({ id: Util.uid('kl'), from, to, type });
+    };
+
+    addNode({
+      id: trilhaId,
+      schemaVersion: '1.0.0',
+      kind: 'track',
+      title: trilhaLabel,
+      metadata: { tags: [trilhaLabel] },
+      views: {},
+      createdAt: now,
+      updatedAt: now
+    });
+
+    exinExams.forEach(exam => {
+      const certId = 'cert-' + (exam.code || exam.id).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      addNode({
+        id: certId,
+        schemaVersion: '1.0.0',
+        kind: 'certification',
+        title: exam.title || exam.materia || exam.code,
+        metadata: { code: exam.code, materia: exam.materia, legacy: { examIds: [exam.id] } },
+        views: {},
+        createdAt: now,
+        updatedAt: now
+      });
+      addLink(certId, trilhaId, 'parent');
+
+      const qmap = new Map(StorageManager.getQuestions().map(q => [q.id, q]));
+      const topics = new Map();
+      (exam.questionIds || []).forEach(qid => {
+        const q = qmap.get(qid);
+        if(!q) return;
+        const sub = q.submateria || q.category || 'Geral';
+        const topicId = 'topic-' + certId + '-' + sub.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 48);
+        if(!topics.has(topicId)){
+          topics.set(topicId, sub);
+          addNode({
+            id: topicId,
+            schemaVersion: '1.0.0',
+            kind: 'topic',
+            title: sub,
+            metadata: { materia: q.materia, submateria: sub },
+            views: {},
+            createdAt: now,
+            updatedAt: now
+          });
+          addLink(topicId, certId, 'parent');
+        }
+        if(index.has(qid)){
+          addLink(qid, topicId, 'parent');
+        }
+      });
+    });
+  }
+
+  static _ensureGraph(){
+    if(!this._built) this.buildGraphFromLegacy();
+  }
+
+  static projectQuestions(){
+    this._ensureGraph();
+    return this._nodes
+      .filter(n => n.kind === 'concept' && n.views?.question)
+      .map(n => {
+        const qv = n.views.question;
+        const meta = n.metadata || {};
+        return new Question({
+          id: n.id,
+          type: qv.type,
+          text: qv.stem,
+          image: qv.image,
+          options: qv.options,
+          correctShort: qv.correctShort,
+          matchPairs: qv.matchPairs,
+          sequenceItems: qv.sequenceItems,
+          explanation: n.views.explanation?.body || '',
+          level: meta.difficulty || 'medio',
+          category: meta.category || '',
+          materia: meta.materia || '',
+          submateria: meta.submateria || '',
+          tags: meta.tags || []
+        });
+      });
+  }
+
+  static projectExams(){
+    this._ensureGraph();
+    return this._nodes
+      .filter(n => n.kind === 'collection' && n.collection)
+      .map(n => {
+        const meta = n.metadata || {};
+        return new Exam({
+          id: n.id,
+          title: n.title,
+          description: meta.description || '',
+          category: meta.category || '',
+          trilha: meta.trilha || '',
+          materia: meta.materia || '',
+          code: meta.code || '',
+          timeMinutes: n.collection.rules?.timeMinutes ?? 60,
+          passScore: n.collection.rules?.passScore ?? 70,
+          tags: meta.tags || [],
+          questionIds: (n.collection.questionSelection || []).map(s => s.nodeId),
+          createdAt: n.createdAt,
+          updatedAt: n.updatedAt
+        });
+      });
+  }
+
+  /** Validação Fase 1 — silenciosa se contagens batem; log único se divergir ou ef_knowledge_debug=1 */
+  static validatePhase1(){
+    const legacyQ = StorageManager.getQuestions().length;
+    const legacyE = StorageManager.getExams().length;
+    const { nodes, links } = this.buildGraphFromLegacy();
+    const concepts = nodes.filter(n => n.kind === 'concept').length;
+    const collections = nodes.filter(n => n.kind === 'collection').length;
+    const projectedQ = this.projectQuestions().length;
+    const projectedE = this.projectExams().length;
+    const match = concepts === legacyQ && collections === legacyE &&
+      projectedQ === legacyQ && projectedE === legacyE;
+    if(match && !this._debugEnabled()) return { match, nodes: nodes.length, links: links.length };
+    console.debug('[Knowledge Phase 1]', {
+      nodes: nodes.length, links: links.length,
+      concepts, collections,
+      legacyQuestions: legacyQ, projectedQuestions: projectedQ,
+      legacyExams: legacyE, projectedExams: projectedE,
+      match
+    });
+    return { match, nodes: nodes.length, links: links.length };
+  }
+}
+
+/* ---------------------------------------------------------------------
    Importers (arquitetura plugável)
 --------------------------------------------------------------------- */
 class BaseImporter {
@@ -4796,6 +5100,7 @@ class App {
     App.instance = this;
     DataCleanup.run();
     ExinDPOSeeder.seed();
+    KnowledgeRepository.validatePhase1();
     this.router = new Router(this);
     this._registerRoutes();
     this._buildTabbar();
@@ -4925,7 +5230,8 @@ Object.assign(window, {
   App, Router, DashboardView, ContentHubView, ProgressHubView,
   BuilderView, QuestionBankView, HistoryView, ProfileView, SettingsView, ResultView, ReviewView,
   QuestionEditorController, PlayerController, ImportController, ExportController, ExamConfigModal,
-  StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam
+  StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam,
+  KnowledgeNormalizer, KnowledgeRepository
 });
 
 document.addEventListener('DOMContentLoaded', ()=>{
