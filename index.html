@@ -32,8 +32,8 @@
   --bad-soft:rgba(248,81,73,.12);
   --warn:#e3b341;
   --warn-soft:rgba(227,179,65,.12);
-  --purple:#a371f7;
   --radius-sm:6px;
+  --touch:44px;
   --radius-md:10px;
   --radius-lg:14px;
   --shadow-1:0 1px 2px rgba(0,0,0,.4);
@@ -85,11 +85,10 @@ a{color:var(--accent)}
   padding:14px 8px;gap:4px;
 }
 .rail-logo{
-  width:36px;height:36px;border-radius:10px;
-  background:linear-gradient(135deg,var(--accent),var(--purple));
+  width:36px;height:36px;border-radius:var(--radius-sm);
+  background:var(--accent);
   display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:15px;color:#fff;margin-bottom:18px;
-  box-shadow:var(--shadow-1);
+  font-weight:700;font-size:14px;color:#fff;margin-bottom:18px;
 }
 .rail-btn{
   width:100%;min-height:52px;border-radius:var(--radius-md);
@@ -164,14 +163,11 @@ a{color:var(--accent)}
 @media (max-width:700px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}}
 
 .card{
-  background:var(--bg-1);border:1px solid var(--border);border-radius:var(--radius-lg);
-  padding:18px 20px;transition:border-color .15s ease,transform .15s ease;
+  background:var(--bg-1);border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:16px 18px;transition:border-color .15s ease;
 }
-.card.glass{
-  background:linear-gradient(180deg,var(--bg-2),var(--bg-1));
-  backdrop-filter:blur(6px);
-}
-.card:hover{border-color:#3a4552}
+.card.glass{background:var(--bg-2)}
+.card:hover{border-color:var(--text-2)}
 .stat-card{display:flex;flex-direction:column;gap:6px}
 .stat-card .label{font-size:12px;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .stat-card .value{font-size:28px;font-weight:700;letter-spacing:-.5px}
@@ -318,7 +314,7 @@ a{color:var(--accent)}
   padding:0 22px;border-bottom:1px solid var(--border);background:var(--bg-1);
 }
 .player-progress-wrap{flex:1;height:6px;background:var(--bg-3);border-radius:4px;overflow:hidden}
-.player-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));transition:width .25s ease;border-radius:4px}
+.player-progress-bar{height:100%;background:var(--accent);transition:width .25s ease;border-radius:4px}
 .timer-pill{
   font-family:var(--mono);font-size:14px;font-weight:700;padding:6px 12px;border-radius:20px;
   background:var(--bg-3);border:1px solid var(--border);transition:.25s;
@@ -381,8 +377,11 @@ a{color:var(--accent)}
 .feedback-box.incorrect .fb-head{color:var(--bad)}
 .feedback-box .fb-line{font-size:13px;color:var(--text-1);margin-bottom:3px}
 .feedback-box .fb-explain{font-size:12.5px;color:var(--text-1);margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);line-height:1.6}
-#p-reveal.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-#p-reveal.persistent{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.player-reveal-grp{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.player-reveal-grp .btn-sm{padding:6px 10px;font-size:12px;white-space:nowrap;min-height:36px}
+#p-reveal-q.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+#p-reveal-all.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+#p-reveal-q svg,#p-reveal-all svg{width:14px;height:14px;flex-shrink:0}
 
 /* --- legenda do grid de navegação --- */
 .nav-legend{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 14px;padding:2px 2px 10px;margin-bottom:4px;border-bottom:1px dashed var(--border);font-size:11px;color:var(--text-2)}
@@ -395,15 +394,15 @@ a{color:var(--accent)}
 
 /* --- XP / gamificação --- */
 .xp-wrap{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-1)}
-.xp-badge{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12px;padding:3px 9px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff}
-.xp-bar{flex:1;min-width:90px;height:8px;border-radius:6px;background:var(--bg-3);overflow:hidden}
-.xp-bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--good),var(--accent));transition:width .4s ease}
+.xp-badge{display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:12px;padding:3px 9px;border-radius:20px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--border)}
+.xp-bar{flex:1;min-width:90px;height:6px;border-radius:4px;background:var(--bg-3);overflow:hidden}
+.xp-bar>span{display:block;height:100%;background:var(--accent);transition:width .4s ease;border-radius:4px}
 .streak-pill{display:inline-flex;align-items:center;gap:4px;font-weight:700;font-size:12px;padding:3px 9px;border-radius:20px;background:var(--warn-soft);color:var(--warn)}
 .achv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 .achv{border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;background:var(--bg-1);text-align:center;transition:.15s}
 .achv.locked{opacity:.45;filter:grayscale(.7)}
-.achv .ic{font-size:26px;margin-bottom:6px}
-.achv .nm{font-weight:700;font-size:12.5px;margin-bottom:3px}
+.achv .ic{font-size:13px;font-weight:700;width:36px;height:36px;margin:0 auto 8px;border-radius:var(--radius-sm);background:var(--bg-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-1)}
+.achv .nm{font-weight:600;font-size:12.5px;margin-bottom:3px}
 .achv .ds{font-size:11px;color:var(--text-2);line-height:1.4}
 /* --- IA: barras de lacunas (gap analysis) --- */
 .gap-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
@@ -416,7 +415,7 @@ a{color:var(--accent)}
   background:var(--bg-elevated);border:1px solid var(--accent);border-radius:16px;padding:18px 26px;
   box-shadow:var(--shadow-3);text-align:center;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
 .reward-pop.show{opacity:1;transform:translateX(-50%) scale(1)}
-.reward-pop .rp-ic{font-size:38px;margin-bottom:6px}
+.reward-pop .rp-ic{font-size:15px;font-weight:700;width:44px;height:44px;margin:0 auto 8px;border-radius:var(--radius-sm);background:var(--accent-soft);color:var(--accent);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
 .reward-pop .rp-tt{font-weight:800;font-size:15px}
 .reward-pop .rp-sb{font-size:12.5px;color:var(--text-1);margin-top:3px}
 /* coach marks / onboarding */
@@ -453,11 +452,14 @@ a{color:var(--accent)}
   .player-top{padding:0 10px;gap:8px}
   .player-body{flex-direction:column}
   .player-nav-list{
-    width:100%;max-height:96px;border-right:none;border-bottom:1px solid var(--border);
-    grid-template-columns:repeat(auto-fill,minmax(44px,1fr));padding:10px;gap:8px;
+    width:100%;max-height:none;height:auto;flex-shrink:0;border-right:none;border-bottom:1px solid var(--border);
+    display:flex;flex-wrap:nowrap;align-items:center;gap:8px;padding:10px 12px;
+    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;
+    scrollbar-width:thin;
   }
-  .player-nav-list .qnum{width:44px;height:44px;font-size:13px}
+  .player-nav-list .qnum{width:44px;height:44px;font-size:13px;flex-shrink:0;scroll-snap-align:center}
   .player-nav-list.collapsed{display:none}
+  .player-reveal-grp .btn-sm{padding:6px 8px;font-size:11px}
   .nav-legend{display:none}
   .q-option .marker{width:24px;height:24px}
   .btn{min-height:44px}
@@ -495,220 +497,169 @@ a{color:var(--accent)}
 .kbd{font-family:var(--mono);background:var(--bg-3);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:11px}
 </style>
 
-<style id="ef-redesign-flashcards-css">
-/* =========================================================
-   EXAMFORGE REDESIGN + FLASHCARDS
-   Visual premium, sidebar fixa, ajustes por último, aba Flashcards
-   ========================================================= */
-:root{
-  --ef-canvas:#070b12;
-  --ef-surface:rgba(17,24,39,.78);
-  --ef-surface-2:rgba(28,39,58,.74);
-  --ef-line:rgba(148,163,184,.18);
-  --ef-line-strong:rgba(79,140,255,.38);
-  --ef-text:#edf5ff;
-  --ef-muted:#9fb0c6;
-  --ef-brand:#4f8cff;
-  --ef-brand-2:#29d3b2;
-  --ef-brand-3:#a371f7;
-  --ef-danger:#ff5f6d;
-  --ef-warning:#ffd166;
-  --ef-success:#4ade80;
-  --ef-radius-xl:22px;
-  --ef-radius-lg:18px;
-  --ef-shadow:0 18px 60px rgba(0,0,0,.42);
-  --ef-shadow-soft:0 10px 30px rgba(0,0,0,.22);
-}
-body{
-  background:
-    radial-gradient(circle at 12% 8%,rgba(79,140,255,.20),transparent 28%),
-    radial-gradient(circle at 88% 14%,rgba(41,211,178,.12),transparent 24%),
-    radial-gradient(circle at 56% 94%,rgba(163,113,247,.14),transparent 30%),
-    var(--ef-canvas)!important;
-  color:var(--ef-text)!important;
-}
-body.light{
-  --ef-canvas:#f3f7fb;
-  --ef-surface:rgba(255,255,255,.86);
-  --ef-surface-2:rgba(246,249,253,.92);
-  --ef-line:rgba(30,41,59,.12);
-  --ef-text:#132033;
-  --ef-muted:#617083;
-  background:linear-gradient(135deg,#f7fbff,#eef6fa 58%,#f4f0ff)!important;
-}
-.card,.list-row,.modal,.toast,.coach-card{
-  background:linear-gradient(180deg,var(--ef-surface),rgba(11,18,32,.78))!important;
-  border:1px solid var(--ef-line)!important;
-  border-radius:var(--ef-radius-lg)!important;
-  box-shadow:var(--ef-shadow-soft)!important;
-  backdrop-filter:blur(16px) saturate(130%);
-}
-.card.glass,.task-main{
-  background:linear-gradient(135deg,rgba(79,140,255,.18),rgba(41,211,178,.08) 48%,rgba(163,113,247,.12))!important;
-  border-color:var(--ef-line-strong)!important;
-}
-.card:hover,.list-row:hover{transform:translateY(-1px);border-color:rgba(79,140,255,.42)!important;}
-.topbar{
-  height:58px!important;
-  background:rgba(8,13,23,.82)!important;
-  border-bottom:1px solid var(--ef-line)!important;
-  backdrop-filter:blur(18px) saturate(140%);
-}
-body.light .topbar{background:rgba(255,255,255,.86)!important;}
-.topbar h1{font-size:16px!important;font-weight:760!important;letter-spacing:-.2px;}
-.view{padding:28px 34px 70px!important;}
-.btn{
-  border-radius:13px!important;
-  border-color:var(--ef-line)!important;
-  background:rgba(148,163,184,.08)!important;
-  min-height:38px;
-}
-.btn:hover{background:rgba(79,140,255,.12)!important;border-color:rgba(79,140,255,.45)!important;}
-.btn-primary{background:linear-gradient(135deg,var(--ef-brand),var(--ef-brand-3))!important;border-color:transparent!important;box-shadow:0 10px 28px rgba(79,140,255,.24)!important;}
-.btn-danger{background:rgba(255,95,109,.12)!important;border-color:rgba(255,95,109,.35)!important;color:var(--ef-danger)!important;}
-.input,.select,.textarea{
-  min-height:44px!important;
-  border-radius:14px!important;
-  background:rgba(2,6,23,.28)!important;
-  border:1px solid var(--ef-line)!important;
-}
-.input:focus,.select:focus,.textarea:focus{border-color:var(--ef-brand)!important;box-shadow:0 0 0 4px rgba(79,140,255,.15)!important;}
-.rail{
-  background:linear-gradient(180deg,rgba(8,13,23,.96),rgba(10,16,29,.92))!important;
-  border-right:1px solid var(--ef-line)!important;
-  box-shadow:16px 0 50px rgba(0,0,0,.20);
-}
-body.light .rail{background:rgba(255,255,255,.86)!important;}
-.rail-logo{
-  background:linear-gradient(135deg,var(--ef-brand),var(--ef-brand-2))!important;
-  box-shadow:0 12px 30px rgba(79,140,255,.28)!important;
-}
-.rail-btn{
-  border:1px solid transparent!important;
-  transition:background .16s ease,border-color .16s ease,transform .16s ease!important;
-}
-body.rail-expanded .rail-btn{margin-bottom:2px;}
-.rail-btn:hover{background:rgba(79,140,255,.10)!important;border-color:rgba(79,140,255,.22)!important;transform:translateX(2px);}
-.rail-btn.active{background:linear-gradient(135deg,rgba(79,140,255,.20),rgba(41,211,178,.10))!important;color:var(--ef-text)!important;border-color:rgba(79,140,255,.36)!important;}
-.rail-btn.active::before{background:linear-gradient(180deg,var(--ef-brand),var(--ef-brand-2))!important;height:28px!important;}
-.rail-toggle .rail-label::after{content:'';}
-.section-title{color:var(--ef-muted)!important;font-size:12px!important;letter-spacing:.9px!important;}
-.stat-card .value{font-size:30px!important;font-weight:820!important;}
-.badge,.xp-badge,.streak-pill{border-radius:999px!important;}
-.empty-state{background:linear-gradient(180deg,rgba(79,140,255,.08),rgba(148,163,184,.04))!important;border-radius:24px!important;}
-/* Flashcards */
-.flash-hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:18px;}
-.flash-main-title{font-size:22px;font-weight:840;letter-spacing:-.4px;margin-bottom:6px;}
-.flash-sub{font-size:13px;color:var(--ef-muted);line-height:1.55;}
-.flash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.flash-kpi{padding:14px;border-radius:16px;border:1px solid var(--ef-line);background:rgba(148,163,184,.07);}
-.flash-kpi strong{display:block;font-size:22px;line-height:1;}.flash-kpi span{font-size:11.5px;color:var(--ef-muted);}
-.flash-stage{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px;align-items:stretch;}
-.flash-card{min-height:360px;display:flex;flex-direction:column;justify-content:space-between;padding:28px!important;position:relative;overflow:hidden;}
-.flash-card::before{content:'';position:absolute;inset:auto -80px -90px auto;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(79,140,255,.20),transparent 68%);pointer-events:none;}
-.flash-label-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.flash-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:760;border:1px solid var(--ef-line);background:rgba(148,163,184,.08);}
-.flash-front{font-size:22px;font-weight:760;line-height:1.45;letter-spacing:-.25px;white-space:pre-wrap;}
-.flash-back{font-size:15px;color:var(--ef-muted);line-height:1.65;white-space:pre-wrap;border-top:1px dashed var(--ef-line);padding-top:18px;margin-top:18px;}
-.flash-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
-.flash-actions .btn{flex:1;justify-content:center;}
-.flash-side{display:grid;gap:12px;}
-.flash-queue{max-height:420px;overflow:auto;padding-right:4px;}
-.flash-mini{padding:10px;border:1px solid var(--ef-line);background:rgba(148,163,184,.06);border-radius:14px;margin-bottom:8px;font-size:12px;color:var(--ef-muted);}
-.flash-mini strong{display:block;color:var(--ef-text);font-size:12.5px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.flash-progress{height:9px;border-radius:999px;background:rgba(148,163,184,.16);overflow:hidden;}
-.flash-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--ef-brand),var(--ef-brand-2));border-radius:inherit;transition:width .25s ease;}
-@media(max-width:980px){.flash-hero,.flash-stage{grid-template-columns:1fr}.flash-kpis{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:640px){.view{padding:18px 14px 70px!important}.flash-kpis{grid-template-columns:1fr}.flash-front{font-size:18px}.flash-card{min-height:320px;padding:20px!important}}
-</style>
-
-
 <style id="ef-onepage-css">
-/* OnePage — viewport fixo, sem barras de rolagem visíveis */
+/* OnePage shell */
 #app{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;height:100dvh;width:100%;overflow:hidden}
 .rail{display:none!important}
-.main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;width:100%;overflow:hidden;padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;width:100%;overflow:hidden;padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
 #views{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-.topbar{padding:0 14px;height:48px;flex-shrink:0}
-.topbar h1{font-size:14px}
-.topbar .crumb{display:none}
-.view{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:16px 16px 20px;animation:fadeIn .2s ease;-webkit-overflow-scrolling:touch}
-.view-home{padding:20px 16px 12px;max-width:480px;margin:0 auto;width:100%;display:flex;flex-direction:column;justify-content:center}
 
-/* Menu fixo inferior (mobile) */
+/* Topbar */
+.topbar{padding:0 16px;height:48px;flex-shrink:0;background:var(--bg-1)}
+.topbar h1{font-size:15px;font-weight:600;letter-spacing:-.01em}
+.topbar .crumb{display:none}
+.topbar .btn-icon{min-width:var(--touch);min-height:var(--touch)}
+
+.view{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:16px;animation:fadeIn .2s ease;-webkit-overflow-scrolling:touch}
+.view-home{padding:24px 16px 16px;max-width:440px;margin:0 auto;width:100%;display:flex;flex-direction:column;justify-content:center}
+
+/* Tabbar — mobile bottom */
 .tabbar{
   position:fixed;bottom:0;left:0;right:0;z-index:80;
   display:flex;align-items:stretch;
-  height:calc(58px + env(safe-area-inset-bottom,0px));
-  padding-bottom:env(safe-area-inset-bottom,0px);
+  height:calc(56px + env(safe-area-inset-bottom,0px));
+  padding:0 4px env(safe-area-inset-bottom,0px);
   background:var(--bg-1);border-top:1px solid var(--border);
-  box-shadow:0 -4px 24px rgba(0,0,0,.25);
 }
 .tabbar-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
   border:none;background:transparent;color:var(--text-2);
-  font-size:10px;font-weight:650;letter-spacing:.2px;padding:6px 2px;min-width:0;
-  transition:color .15s ease;
+  font-size:10px;font-weight:500;letter-spacing:.01em;padding:6px 4px;min-width:0;min-height:var(--touch);
+  transition:color .12s ease,background .12s ease;border-radius:var(--radius-sm);
+  position:relative;
 }
-.tabbar-btn svg{width:21px;height:21px;flex-shrink:0}
-.tabbar-btn.active{color:var(--accent)}
-.tabbar-btn:active{opacity:.7}
+.tabbar-btn svg{width:20px;height:20px;flex-shrink:0}
+.tabbar-btn span{font-size:10px;line-height:1.1}
+.tabbar-btn.active{color:var(--accent);font-weight:600}
+.tabbar-btn.active::after{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:20px;height:2px;background:var(--accent);border-radius:1px;
+}
 body.player-open .tabbar{display:none}
 body.player-open .main{padding-bottom:0!important}
 
-/* Home minimalista */
-.home-minimal{display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 8px 16px;gap:16px}
-.home-greet{font-size:20px;font-weight:750;letter-spacing:-.3px;margin:0}
-.home-hint{font-size:12.5px;color:var(--text-2);margin:0;max-width:280px;line-height:1.45}
-.home-cta{width:100%;max-width:300px;min-height:52px;justify-content:center;font-size:15px;font-weight:650;border-radius:14px}
+/* Home */
+.home-minimal{display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 12px 20px;gap:12px}
+.home-greet{font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0;color:var(--text-0)}
+.home-hint{font-size:13px;color:var(--text-2);margin:0;max-width:300px;line-height:1.5}
+.home-cta{width:100%;max-width:320px;min-height:var(--touch);justify-content:center;font-size:14px;font-weight:600;border-radius:var(--radius-sm)}
 
-/* Hubs internos */
-.hub-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:nowrap;overflow-x:auto;border-bottom:1px solid var(--border);padding-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.hub-tab{flex-shrink:0;padding:7px 12px;border-radius:999px;border:1px solid var(--border);background:var(--bg-2);color:var(--text-1);font-size:12.5px;font-weight:600}
-.hub-tab.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+/* Hubs & lists */
+.hub-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0}
+.hub-tab{flex-shrink:0;padding:10px 14px;border:none;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:var(--text-2);font-size:13px;font-weight:500;min-height:var(--touch)}
+.hub-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:transparent}
 .hub-menu{position:relative;display:inline-block}
 .hub-menu>summary{list-style:none;cursor:pointer}
 .hub-menu>summary::-webkit-details-marker{display:none}
-.hub-menu-panel{position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:var(--shadow-2);z-index:50;display:flex;flex-direction:column;gap:4px}
-.hub-menu-panel .btn{width:100%;justify-content:flex-start}
-.hub-footer{margin-top:12px;text-align:center}
-.hub-footer .btn{font-size:12px;color:var(--text-2)}
+.hub-menu-panel{position:absolute;top:calc(100% + 4px);right:0;min-width:180px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:6px;box-shadow:var(--shadow-2);z-index:50;display:flex;flex-direction:column;gap:2px}
+.hub-menu-panel .btn{width:100%;justify-content:flex-start;min-height:var(--touch)}
+.hub-footer{margin-top:16px;text-align:center}
+.hub-footer .btn{font-size:13px;color:var(--text-2);min-height:var(--touch)}
 .list-row-compact .btn-icon{display:none}
-.list-row-compact{padding:10px 12px;margin-bottom:6px}
-.list-row-compact .desc{font-size:11.5px}
-.bank-tree{display:flex;flex-direction:column;gap:8px}
-.bank-prova,.bank-materia,.bank-sub{border:1px solid var(--border);border-radius:10px;background:var(--surface)}
-.bank-prova>summary,.bank-materia>summary,.bank-sub>summary{cursor:pointer;padding:10px 12px;font-weight:600;font-size:13px;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.list-row-compact{padding:12px 14px;margin-bottom:6px;min-height:var(--touch)}
+.list-row-compact .title{font-size:14px}
+.list-row-compact .desc{font-size:12px;margin-top:1px}
+.list-row-compact .btn{min-height:36px;min-width:36px}
+.card-compact{padding:16px}
+
+/* Bank tree */
+.bank-tree{display:flex;flex-direction:column;gap:6px}
+.bank-prova,.bank-materia,.bank-sub{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-1)}
+.bank-prova>summary,.bank-materia>summary,.bank-sub>summary{cursor:pointer;padding:12px 14px;font-weight:600;font-size:13px;list-style:none;display:flex;align-items:center;gap:8px;min-height:var(--touch)}
 .bank-prova>summary::-webkit-details-marker,.bank-materia>summary::-webkit-details-marker,.bank-sub>summary::-webkit-details-marker{display:none}
-.bank-prova>summary::before{content:'📋';margin-right:6px}
-.bank-materia>summary::before{content:'📚';margin-right:6px}
-.bank-sub>summary::before{content:'📝';margin-right:6px}
-.bank-materia{margin:6px 8px 8px}
-.bank-sub{margin:4px 8px 8px}
-.bank-sub .list-row-compact{margin:0 8px 6px;border-radius:8px;background:var(--bg)}
-.bank-count{font-size:11px;color:var(--text-2);font-weight:500}
-.study-group{margin-bottom:16px}
-.study-group-title{font-size:12px;font-weight:650;color:var(--text-2);text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px 4px}
-.hub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.bank-prova>summary::before,.bank-materia>summary::before,.bank-sub>summary::before{
+  content:'';width:16px;height:16px;flex-shrink:0;
+  background:currentColor;opacity:.45;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E") center/contain no-repeat;
+  transition:transform .15s ease;
+}
+.bank-prova[open]>summary::before,.bank-materia[open]>summary::before,.bank-sub[open]>summary::before{transform:rotate(90deg)}
+.bank-materia{margin:4px 8px 6px}
+.bank-sub{margin:4px 8px 6px}
+.bank-sub .list-row-compact{margin:0 8px 6px;border-radius:var(--radius-sm);background:var(--bg-0)}
+.bank-count{font-size:11px;color:var(--text-2);font-weight:500;margin-left:auto}
+.study-group{margin-bottom:20px}
+.study-group-title{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px 2px}
+.hub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .hub-stat{font-size:13px;color:var(--text-2);margin-bottom:12px}
 .progress-mini{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px}
 .progress-mini .xp-bar{flex:1;height:6px}
-.anki-compact .anki-front{font-size:18px;line-height:1.45;margin:12px 0}
-.anki-compact .anki-back{font-size:13px;color:var(--text-1);border-top:1px dashed var(--border);padding-top:12px;margin-top:12px;white-space:pre-wrap}
+
+/* Anki cards */
+.anki-compact .anki-card{display:flex;flex-direction:column;gap:0}
+.anki-compact .anki-front{font-size:17px;line-height:1.5;font-weight:500;margin:4px 0 8px}
+.anki-compact .anki-back{font-size:13px;color:var(--text-1);border-top:1px solid var(--border);padding-top:14px;margin-top:14px;white-space:pre-wrap;line-height:1.55}
+.anki-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:16px;padding-top:12px;border-top:1px solid var(--border-soft);flex-wrap:wrap}
+.anki-meta-count{font-size:12px;color:var(--text-2);font-variant-numeric:tabular-nums}
+.anki-ratings{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;margin-top:8px}
+.anki-rate{
+  min-height:var(--touch);padding:8px 4px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg-2);color:var(--text-0);
+  font-size:12px;font-weight:600;transition:background .12s,border-color .12s;
+}
+.anki-rate:hover{border-color:var(--text-2)}
+.anki-rate-again{color:var(--bad);border-color:var(--bad-soft);background:var(--bad-soft)}
+.anki-rate-again:hover{background:var(--bad);color:#fff;border-color:var(--bad)}
+.anki-rate-hard{color:var(--warn);border-color:var(--warn-soft);background:var(--warn-soft)}
+.anki-rate-hard:hover{background:var(--warn);color:#1b1f24;border-color:var(--warn)}
+.anki-rate-good{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
+.anki-rate-good:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.anki-rate-easy{color:var(--good);border-color:var(--good-soft);background:var(--good-soft)}
+.anki-rate-easy:hover{background:var(--good);color:#fff;border-color:var(--good)}
+
+/* Exam config modal polish */
+.exam-config .ec-fieldset{background:var(--bg-0);border-color:var(--border)}
+.modal-header h3{font-size:15px;font-weight:600}
+.modal-footer .btn,.modal-header .btn{min-height:var(--touch)}
+
+/* Achievements — text badges */
+.achv .ic{font-size:13px;font-weight:700;width:36px;height:36px;margin:0 auto 8px;border-radius:var(--radius-sm);background:var(--bg-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-1);letter-spacing:-.02em}
+.achv.locked .ic{color:var(--text-2);opacity:.6}
+
+/* Progress charts */
+.view-progress{max-width:680px;margin:0 auto;width:100%}
+.progress-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.progress-stat{text-align:center;padding:12px 8px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-1)}
+.progress-stat strong{display:block;font-size:20px;font-weight:600;line-height:1.2;color:var(--text-0)}
+.progress-stat span{font-size:11px;color:var(--text-2);margin-top:2px;display:block}
+.progress-charts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.chart-card{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-1);padding:12px 10px;text-align:center}
+.chart-card h4{font-size:10px;font-weight:600;color:var(--text-2);margin:0 0 8px;text-transform:uppercase;letter-spacing:.05em}
+.chart-svg{display:block;margin:0 auto;max-width:100%}
+.chart-legend{font-size:10px;color:var(--text-2);margin-top:6px;line-height:1.4}
+.chart-empty{font-size:12px;color:var(--text-2);padding:20px 8px}
+.progress-history-title{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px 2px}
+
+/* Touch targets & compact controls */
+.btn{min-height:36px}
+.btn-sm{min-height:32px}
+@media(max-width:768px){
+  .btn,.hub-tab,.list-row-compact{min-height:var(--touch)}
+  .btn-sm{min-height:36px;padding:6px 12px}
+}
+@media(max-width:640px){
+  .progress-charts{grid-template-columns:1fr 1fr;gap:8px}
+  .progress-charts .chart-card:last-child{grid-column:1/-1;max-width:240px;margin:0 auto;width:100%}
+  .anki-ratings{grid-template-columns:repeat(2,1fr)}
+}
 
 @media(min-width:769px){
   #app{flex-direction:row}
   .tabbar{
-    position:fixed;top:0;left:0;bottom:0;right:auto;width:76px;flex-direction:column;
-    height:100dvh;padding:14px 6px calc(14px + env(safe-area-inset-bottom,0px));border-top:none;border-right:1px solid var(--border);
-    box-shadow:none;
+    position:fixed;top:0;left:0;bottom:0;right:auto;width:72px;flex-direction:column;
+    height:100dvh;padding:12px 6px calc(12px + env(safe-area-inset-bottom,0px));
+    border-top:none;border-right:1px solid var(--border);
   }
-  .tabbar-btn{flex:0;min-height:58px;width:100%;border-radius:10px}
+  .tabbar-btn{flex:0;min-height:52px;width:100%;border-radius:var(--radius-sm)}
   .tabbar-btn.active{background:var(--accent-soft)}
-  .main{margin-left:76px;padding-bottom:0;overflow:hidden}
-  .view{padding:24px 28px 32px}
-  .view-home{max-width:520px}
+  .tabbar-btn.active::after{top:auto;bottom:0;left:50%;transform:translateX(-50%);width:24px;height:2px}
+  .main{margin-left:72px;padding-bottom:0;overflow:hidden}
+  .view{padding:24px 32px 28px}
+  .view-home{max-width:480px}
   .list-row-compact .btn-icon{display:inline-flex}
+  .topbar{height:52px;padding:0 24px}
+  .topbar h1{font-size:16px}
 }
 </style>
 
@@ -721,7 +672,7 @@ body.player-open .main{padding-bottom:0!important}
       <h1 id="topbar-title">Início</h1>
       <span class="crumb" id="topbar-crumb"></span>
       <div class="topbar-spacer"></div>
-      <button class="btn btn-ghost btn-icon" id="topbar-settings-btn" aria-label="Ajustes">⚙</button>
+      <button class="btn btn-ghost btn-icon" id="topbar-settings-btn" aria-label="Ajustes"></button>
     </div>
     <div id="views"></div>
   </div>
@@ -838,7 +789,7 @@ class Modal {
       <div class="modal ${wide?'wide':''}">
         <div class="modal-header">
           <h3>${Util.escapeHtml(title)}</h3>
-          <button class="btn btn-icon btn-ghost" data-close>✕</button>
+          <button class="btn btn-icon btn-ghost" data-close aria-label="Fechar">${Icons.close}</button>
         </div>
         <div class="modal-body">${bodyHtml}</div>
         ${footerHtml ? `<div class="modal-footer">${footerHtml}</div>` : ''}
@@ -983,13 +934,13 @@ class RewardPop {
    Gamification engine (XP, níveis, streak, conquistas)
 --------------------------------------------------------------------- */
 const ACHIEVEMENTS = [
-  {id:'first_exam', ic:'🎯', nm:'Primeiros Passos', ds:'Conclua seu primeiro simulado.'},
-  {id:'perfect', ic:'💯', nm:'Nota Máxima', ds:'Acerte 100% em um simulado.'},
-  {id:'streak10', ic:'🔥', nm:'Em Chamas', ds:'Acerte 10 questões seguidas.'},
-  {id:'exams5', ic:'📚', nm:'Estudioso', ds:'Conclua 5 simulados.'},
-  {id:'correct100', ic:'🧠', nm:'Centurião', ds:'Acumule 100 acertos no total.'},
-  {id:'level5', ic:'⭐', nm:'Veterano', ds:'Alcance o nível 5.'},
-  {id:'night_owl', ic:'🦉', nm:'Coruja', ds:'Estude após a meia-noite.'},
+  {id:'first_exam', ic:'P1', nm:'Primeiros Passos', ds:'Conclua seu primeiro simulado.'},
+  {id:'perfect', ic:'100', nm:'Nota Máxima', ds:'Acerte 100% em um simulado.'},
+  {id:'streak10', ic:'10', nm:'Em Chamas', ds:'Acerte 10 questões seguidas.'},
+  {id:'exams5', ic:'5', nm:'Estudioso', ds:'Conclua 5 simulados.'},
+  {id:'correct100', ic:'100+', nm:'Centurião', ds:'Acumule 100 acertos no total.'},
+  {id:'level5', ic:'Lv5', nm:'Veterano', ds:'Alcance o nível 5.'},
+  {id:'night_owl', ic:'00h', nm:'Coruja', ds:'Estude após a meia-noite.'},
 ];
 class Gamification {
   static XP_PER_CORRECT = 10;
@@ -1133,11 +1084,11 @@ class AITutor {
 const QUESTION_TYPES = {
   single: {label:'Múltipla escolha', icon:'◉'},
   multi: {label:'Múltiplas respostas', icon:'☑'},
-  boolean: {label:'Verdadeiro/Falso', icon:'✓✕'},
+  boolean: {label:'Verdadeiro/Falso', icon:'V/F'},
   short: {label:'Resposta curta', icon:'✎'},
   matching: {label:'Relacionar colunas', icon:'⇄'},
   sequence: {label:'Sequência', icon:'≡'},
-  image: {label:'Imagem', icon:'🖼'}
+  image: {label:'Imagem', icon:'Img'}
 };
 
 class Question {
@@ -1497,7 +1448,7 @@ class Router {
   }
   register(name, view){ this.routes[name] = view; }
   go(name, params={}){
-    const tabMap = {flashcards:{route:'study',tab:'cards'}, study:{route:'study',tab:'simulado'}, profile:{route:'content',tab:'progresso'}, history:{route:'content',tab:'progresso'}, bank:{route:'content',tab:'questoes'}, progress:{route:'content',tab:'progresso'}, dashboard:{route:'home'}};
+    const tabMap = {flashcards:{route:'study',tab:'cards'}, study:{route:'study',tab:'simulado'}, profile:{route:'progress'}, history:{route:'progress'}, bank:{route:'content',tab:'questoes'}, progress:{route:'progress'}, dashboard:{route:'home'}};
     if(tabMap[name]){ const m=tabMap[name]; if(m.tab) params={...params,tab:m.tab}; name=m.route||name; }
     if(this.current && this.routes[this.current]?.onLeave) this.routes[this.current].onLeave();
     document.querySelectorAll('#views .view').forEach(v=>v.classList.add('hidden'));
@@ -1515,11 +1466,11 @@ class Router {
     document.getElementById('topbar-title').textContent = view.title || name;
     document.getElementById('topbar-crumb').textContent = view.crumb ? `/ ${view.crumb}` : '';
     this._updateRail(name);
-    if(['home','study','content'].includes(name)) try{ location.hash = name + (params.tab ? '/'+params.tab : ''); }catch(_){}
+    if(['home','study','content','progress'].includes(name)) try{ location.hash = name + (params.tab ? '/'+params.tab : ''); }catch(_){}
     view.render(el, params);
   }
   _updateRail(name){
-    const active = (name === 'progress' || name === 'builder') ? 'content' : name;
+    const active = name === 'builder' ? 'content' : name;
     document.querySelectorAll('.tabbar-btn').forEach(b=>{
       b.classList.toggle('active', b.dataset.route === active);
     });
@@ -1543,6 +1494,9 @@ const Icons = {
   study:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 7h8M8 11h6"/></svg>`,
   content:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
   progress:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 5 5-9"/></svg>`,
+  close:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>`,
+  more:`<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>`,
+  eye:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
 };
 
 /* ---------- Dashboard ---------- */
@@ -1560,7 +1514,7 @@ class DashboardView {
       <div class="home-minimal">
         <h2 class="home-greet">${sessionExam ? 'Continuar de onde parou' : 'O que fazer agora?'}</h2>
         <button class="btn btn-primary home-cta" id="home-primary" type="button">
-          ${sessionExam ? '▶ Continuar simulado' : next ? '▶ Iniciar simulado' : '▶ Ir para Estudar'}
+          ${Icons.play}<span>${sessionExam ? 'Continuar simulado' : next ? 'Iniciar simulado' : 'Ir para Estudar'}</span>
         </button>
         ${sessionExam ? `<p class="home-hint">${Util.escapeHtml(sessionExam.title)}</p>` : next ? `<p class="home-hint">${Util.escapeHtml(next.materia||next.title)} · ${next.questionIds?.length||0} questões</p>` : ''}
       </div>`;
@@ -1585,7 +1539,7 @@ class DashboardView {
         <div class="title">${Util.escapeHtml(title)}</div>
         <div class="desc">${Util.escapeHtml(meta)}</div>
       </div>
-      <button class="btn btn-sm btn-primary" data-play-exam="${e.id}" title="Iniciar">▶</button>
+      <button class="btn btn-sm btn-primary" data-play-exam="${e.id}" title="Iniciar" aria-label="Iniciar">${Icons.play}</button>
       ${compact ? '' : `<button class="btn btn-icon btn-ghost btn-sm" data-edit-exam="${e.id}" title="Editar">${Icons.edit}</button>`}
     </div>`;
   }
@@ -2045,7 +1999,12 @@ class HistoryView {
       ${compact && history.length > 8 ? `<button class="btn btn-ghost btn-sm" id="h-more" style="margin-top:10px">Ver tudo (${history.length})</button>` : ''}`;
     el.querySelector('#h-clear')?.addEventListener('click', async ()=>{
       const ok = await Modal.confirm({title:'Limpar histórico', message:'Apagar todas as tentativas?', confirmLabel:'Limpar', danger:true});
-      if(ok){ StorageManager.clearHistory(); Toast.show('Histórico limpo.', 'success'); this.render(el, compact); }
+      if(ok){
+        StorageManager.clearHistory();
+        Toast.show('Histórico limpo.', 'success');
+        if(App.instance?.router?.current==='progress') App.instance.router.go('progress');
+        else this.render(el, compact);
+      }
     });
     el.querySelector('#h-more')?.addEventListener('click', ()=> this.render(el, false));
     el.querySelectorAll('[data-review]').forEach(b=>b.addEventListener('click', ()=>{
@@ -2062,6 +2021,142 @@ class HistoryView {
       <span class="badge" style="background:${color}22;color:${color}">${h.percentage}%</span>
       <button class="btn btn-sm btn-ghost" data-review="${i}">Ver</button>
     </div>`;
+  }
+}
+
+/* ---------- Progress analytics & charts ---------- */
+class ProgressAnalytics {
+  static summary(){
+    const history = StorageManager.getHistory();
+    const g = StorageManager.getGame();
+    const p = Gamification.progress();
+    const avg = history.length ? Math.round(history.reduce((s,h)=>s+(h.percentage||0),0)/history.length) : 0;
+    const passed = history.filter(h=>h.passed).length;
+    return {history, g, p, avg, passed, attempts: history.length};
+  }
+  static resultBuckets(history){
+    const buckets = {aprovado:0, media:0, baixo:0};
+    history.forEach(h=>{
+      const pct = h.percentage||0;
+      if(pct>=70) buckets.aprovado++;
+      else if(pct>=50) buckets.media++;
+      else buckets.baixo++;
+    });
+    return buckets;
+  }
+  static accuracyByMateria(){
+    const map = {};
+    StorageManager.getQuestions().forEach(q=>{
+      const m = q.materia || 'Outros';
+      const s = StorageManager.getStat(q.id);
+      if(s.seen===0) return;
+      map[m] = map[m] || {seen:0, correct:0};
+      map[m].seen += s.seen;
+      map[m].correct += s.correct;
+    });
+    let rows = Object.entries(map).map(([materia,v])=>({materia, acc: Math.round(v.correct/v.seen*100)}));
+    if(!rows.length){
+      const exams = Object.fromEntries(StorageManager.getExams().map(e=>[e.id,e]));
+      StorageManager.getHistory().forEach(h=>{
+        const m = exams[h.examId]?.materia || h.examTitle?.split('—')[0]?.trim() || 'Outros';
+        map[m] = map[m] || {sum:0, n:0};
+        map[m].sum += h.percentage||0;
+        map[m].n++;
+      });
+      rows = Object.entries(map).map(([materia,v])=>({materia, acc: Math.round(v.sum/v.n)}));
+    }
+    return rows.sort((a,b)=>a.materia.localeCompare(b.materia,'pt-BR')).slice(0,6);
+  }
+}
+
+class ChartHelpers {
+  static pie(segments, size=110){
+    const total = segments.reduce((s,x)=>s+x.value,0);
+    if(!total) return `<div class="chart-empty">Sem dados ainda</div>`;
+    const cx=size/2, cy=size/2, r=size*0.38;
+    let angle = -Math.PI/2;
+    const slices = segments.filter(s=>s.value>0).map(s=>{
+      const slice = (s.value/total)*Math.PI*2;
+      const x1 = cx + r*Math.cos(angle);
+      const y1 = cy + r*Math.sin(angle);
+      angle += slice;
+      const x2 = cx + r*Math.cos(angle);
+      const y2 = cy + r*Math.sin(angle);
+      const large = slice > Math.PI ? 1 : 0;
+      const d = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z`;
+      return `<path d="${d}" fill="${s.color}"/>`;
+    }).join('');
+    const legend = segments.filter(s=>s.value>0).map(s=>`<span style="color:${s.color}">●</span> ${s.label} ${s.value}`).join(' · ');
+    return `<svg class="chart-svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${slices}</svg><div class="chart-legend">${legend}</div>`;
+  }
+  static radar(labels, values, size=120){
+    if(!labels.length) return `<div class="chart-empty">Faça simulados para ver matérias</div>`;
+    const cx=size/2, cy=size/2, maxR=size*0.36, n=labels.length;
+    const pt = (i,v)=>{ const a = -Math.PI/2 + (Math.PI*2*i/n); const r = maxR*(Math.max(0,Math.min(100,v))/100); return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; };
+    const rings = [25,50,75,100].map(p=>{
+      const pts = labels.map((_,i)=>pt(i,p).join(',')).join(' ');
+      return `<polygon points="${pts}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
+    }).join('');
+    const axes = labels.map((_,i)=>{ const [x,y]=pt(i,100); return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border-soft)" stroke-width="1"/>`; }).join('');
+    const dataPts = labels.map((_,i)=>pt(i,values[i]||0).join(',')).join(' ');
+    const dots = labels.map((_,i)=>{ const [x,y]=pt(i,values[i]||0); return `<circle cx="${x}" cy="${y}" r="2.5" fill="var(--accent)"/>`; }).join('');
+    const lbls = labels.map((lb,i)=>{ const [x,y]=pt(i,118); return `<text x="${x}" y="${y}" text-anchor="middle" font-size="7" fill="var(--text-2)">${Util.escapeHtml(lb.slice(0,8))}</text>`; }).join('');
+    return `<svg class="chart-svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${rings}${axes}<polygon points="${dataPts}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>${dots}${lbls}</svg>`;
+  }
+  static gauge(value, size=120){
+    const pct = Math.max(0, Math.min(100, value||0));
+    const cx=size/2, cy=size*0.58, r=size*0.38;
+    const start = Math.PI, end = 0;
+    const needleAngle = Math.PI + (pct/100)*Math.PI;
+    const nx = cx + r*0.82*Math.cos(needleAngle);
+    const ny = cy + r*0.82*Math.sin(needleAngle);
+    const color = pct>=70?'var(--good)':pct>=50?'var(--warn)':'var(--bad)';
+    const arc = (a1,a2,col)=>{ const x1=cx+r*Math.cos(a1), y1=cy+r*Math.sin(a1), x2=cx+r*Math.cos(a2), y2=cy+r*Math.sin(a2); return `<path d="M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round"/>`; };
+    return `<svg class="chart-svg" width="${size}" height="${size*0.72}" viewBox="0 0 ${size} ${size*0.72}">
+      ${arc(start, start+Math.PI*0.5, 'var(--bad)')}
+      ${arc(start+Math.PI*0.5, start+Math.PI*0.7, 'var(--warn)')}
+      ${arc(start+Math.PI*0.7, end, 'var(--good)')}
+      <line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="${cx}" cy="${cy}" r="4" fill="var(--text-0)"/>
+      <text x="${cx}" y="${cy+16}" text-anchor="middle" font-size="16" font-weight="700" fill="${color}">${pct}%</text>
+    </svg><div class="chart-legend">Média geral</div>`;
+  }
+}
+
+class ProgressHubView {
+  constructor(){ this.history = new HistoryView(); }
+  get title(){ return 'Progresso'; }
+  get crumb(){ return ''; }
+  render(el){
+    el.classList.add('view-progress');
+    const {history, g, p, avg, passed, attempts} = ProgressAnalytics.summary();
+    const buckets = ProgressAnalytics.resultBuckets(history);
+    const materias = ProgressAnalytics.accuracyByMateria();
+    const pie = ChartHelpers.pie([
+      {label:'≥70%', value:buckets.aprovado, color:'var(--good)'},
+      {label:'50–69%', value:buckets.media, color:'var(--warn)'},
+      {label:'<50%', value:buckets.baixo, color:'var(--bad)'}
+    ]);
+    const radar = ChartHelpers.radar(materias.map(m=>m.materia), materias.map(m=>m.acc));
+    const gauge = ChartHelpers.gauge(avg);
+    el.innerHTML = `
+      <div class="progress-summary">
+        <div class="progress-stat"><strong>${attempts}</strong><span>Simulados</span></div>
+        <div class="progress-stat"><strong>${passed}</strong><span>Aprovados</span></div>
+        <div class="progress-stat"><strong>Nv ${p.level}</strong><span>${g.xp} XP</span></div>
+      </div>
+      <div class="progress-charts">
+        <div class="chart-card"><h4>Resultados</h4>${pie}</div>
+        <div class="chart-card"><h4>Por matéria</h4>${radar}</div>
+        <div class="chart-card"><h4>Desempenho</h4>${gauge}</div>
+      </div>
+      <div class="progress-history-title">Histórico</div>
+      <div id="prog-hist"></div>`;
+    this.history.render(el.querySelector('#prog-hist'), false);
+  }
+  onLeave(){
+    const el = document.getElementById('view-progress');
+    if(el) el.classList.remove('view-progress');
   }
 }
 
@@ -2086,12 +2181,12 @@ class SettingsView {
       <div class="card card-compact" style="margin-bottom:10px">
         <div class="field"><label>Tempo padrão (min)</label><input class="input" type="number" id="s-timer" value="${s.defaultTimer}"></div>
         <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-feedback" ${s.showAnswerAfterSelect?'checked':''}> Feedback após responder</label>
-        <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-reveal" ${s.allowRevealAnswer?'checked':''}> Botão 👁️ (clique / duplo clique)</label>
+        <label class="checkbox-row" style="margin:8px 0"><input type="checkbox" id="s-reveal" ${s.allowRevealAnswer?'checked':''}> Permitir revelar resposta manualmente</label>
         <label class="checkbox-row"><input type="checkbox" id="s-finish-anytime" ${s.allowFinishAnytime?'checked':''}> Finalizar a qualquer momento</label>
       </div>
       <div class="row" style="gap:8px;flex-wrap:wrap">
         <button class="btn btn-primary" id="s-save">Salvar</button>
-        <button class="btn" id="s-install">📲 Instalar app</button>
+        <button class="btn" id="s-install">Instalar app</button>
       </div>`;
     el.querySelector('#s-back').onclick = ()=> App.instance.router.go('home');
     el.querySelector('#s-dark').onclick = e=> e.currentTarget.classList.toggle('on');
@@ -2130,8 +2225,8 @@ class ProfileView {
     el.innerHTML = `
       <div class="card glass" style="margin-bottom:16px">
         <div class="row between" style="margin-bottom:10px;flex-wrap:wrap;gap:8px">
-          <span class="xp-badge" style="font-size:14px;padding:5px 12px">⭐ Nível ${p.level}</span>
-          <span class="streak-pill">🔥 Melhor sequência: ${g.bestStreak}</span>
+          <span class="xp-badge" style="font-size:14px;padding:5px 12px">Nível ${p.level}</span>
+          <span class="streak-pill">Sequência: ${g.bestStreak}</span>
         </div>
         <div class="xp-wrap"><div class="xp-bar"><span style="width:${p.pct}%"></span></div><span>${p.pct}%</span></div>
         <div style="font-size:12px;color:var(--text-2);margin-top:6px">${g.xp} XP · faltam ${p.toNext} XP para o nível ${p.level+1}</div>
@@ -2149,7 +2244,7 @@ class ProfileView {
         ${ACHIEVEMENTS.map(a=>{
           const has = g.achievements.includes(a.id);
           return `<div class="achv ${has?'':'locked'}">
-            <div class="ic">${has?a.ic:'🔒'}</div>
+            <div class="ic">${has?a.ic:'—'}</div>
             <div class="nm">${Util.escapeHtml(a.nm)}</div>
             <div class="ds">${Util.escapeHtml(a.ds)}</div>
           </div>`;
@@ -2592,8 +2687,8 @@ class PlayerController {
       exam, questions,
       answers: resumeSession?.answers || {},
       marked: new Set(resumeSession?.marked || []),
-      revealed: new Set(),
-      revealPersistent: false,
+      revealed: new Set(resumeSession?.revealed || []),
+      revealPersistent: !!resumeSession?.revealPersistent,
       currentIndex: resumeSession?.currentIndex || 0,
       startedAt: Date.now() - elapsedBefore*1000,
       timer: null,
@@ -2643,6 +2738,8 @@ class PlayerController {
         order: this.state.questions.map(q=>q.id),
         answers: this.state.answers,
         marked: [...this.state.marked],
+        revealed: [...this.state.revealed],
+        revealPersistent: !!this.state.revealPersistent,
         currentIndex: this.state.currentIndex,
         elapsedSeconds: Math.round((Date.now()-this.state.startedAt)/1000),
         candidateName: this.state.candidateName || '',
@@ -2658,11 +2755,14 @@ class PlayerController {
     const train = this.state.trainingMode ? `<span class="player-training-badge">Treino</span>` : '';
     root.innerHTML = `
       <div class="player-top">
-        <button class="btn btn-icon btn-ghost" id="p-exit" title="Sair">✕</button>
+        <button class="btn btn-icon btn-ghost" id="p-exit" title="Sair" aria-label="Sair">${Icons.close}</button>
         <button class="btn btn-icon btn-ghost" id="p-toggle-nav" title="Mostrar/ocultar questões">☰</button>
         ${cand}${train}
         <div class="player-progress-wrap"><div class="player-progress-bar" id="p-progress" style="width:0%"></div></div>
-        ${this.state.allowRevealAnswer ? `<button class="btn btn-icon btn-ghost" id="p-reveal" type="button" title="Clique: revelar esta questão · Duplo clique: modo persistente (todas)" aria-label="Revelar resposta">👁️</button>` : ''}
+        ${this.state.allowRevealAnswer ? `<div class="player-reveal-grp" id="p-reveal-grp">
+          <button class="btn btn-sm" id="p-reveal-q" type="button" title="Mostrar resposta da questão atual">${Icons.eye} Revelar questão</button>
+          <button class="btn btn-sm" id="p-reveal-all" type="button" title="Revelar respostas em todas as questões">Modo revisão</button>
+        </div>` : ''}
         <div class="timer-pill" id="p-timer">--:--</div>
       </div>
       <div class="player-body">
@@ -2694,17 +2794,8 @@ class PlayerController {
     root.querySelector('#p-toggle-nav').addEventListener('click', ()=>{
       root.querySelector('#p-nav').classList.toggle('collapsed');
     });
-    let skipRevealClick = false;
-    const revealBtn = root.querySelector('#p-reveal');
-    revealBtn?.addEventListener('dblclick', (e)=>{
-      e.preventDefault();
-      skipRevealClick = true;
-      this._toggleRevealPersistent();
-    });
-    revealBtn?.addEventListener('click', ()=>{
-      if(skipRevealClick){ skipRevealClick = false; return; }
-      this._toggleRevealSimple();
-    });
+    root.querySelector('#p-reveal-q')?.addEventListener('click', ()=> this._toggleRevealCurrent());
+    root.querySelector('#p-reveal-all')?.addEventListener('click', ()=> this._toggleRevealAll());
 
     // Navegação por teclado (acessibilidade / eficiência no desktop)
     this._keyHandler = (e)=>{
@@ -2774,7 +2865,7 @@ class PlayerController {
       this.state.streak++;
       Gamification.noteStreak(this.state.streak);
       if(this.state.streak>0 && this.state.streak%5===0){
-        RewardPop.show('🔥', `${this.state.streak} seguidas!`, 'Continue assim!', 1400);
+        RewardPop.show(String(this.state.streak), `${this.state.streak} seguidas!`, 'Continue assim!', 1400);
         this._announce(`Sequência de ${this.state.streak} acertos.`);
       }
     } else {
@@ -2782,31 +2873,44 @@ class PlayerController {
     }
   }
 
-  static _toggleRevealSimple(){
+  static _toggleRevealCurrent(){
     if(this.state.revealPersistent) return;
     const q = this.state.questions[this.state.currentIndex];
     this.state.revealed.has(q.id) ? this.state.revealed.delete(q.id) : this.state.revealed.add(q.id);
-    this._updateRevealButton();
+    this._updateRevealControls();
     this._renderQuestion();
+    this._persistSession();
   }
 
-  static _toggleRevealPersistent(){
+  static _toggleRevealAll(){
     this.state.revealPersistent = !this.state.revealPersistent;
     if(!this.state.revealPersistent) this.state.revealed.clear();
-    this._updateRevealButton();
+    this._updateRevealControls();
     this._renderQuestion();
+    this._persistSession();
   }
 
-  static _updateRevealButton(){
-    const btn = document.getElementById('p-reveal');
-    if(!btn || !this.state) return;
+  static _updateRevealControls(){
+    const btnQ = document.getElementById('p-reveal-q');
+    const btnAll = document.getElementById('p-reveal-all');
+    if(!this.state || (!btnQ && !btnAll)) return;
     const q = this.state.questions[this.state.currentIndex];
-    btn.classList.toggle('persistent', this.state.revealPersistent);
-    btn.classList.toggle('active', this.state.revealPersistent || this.state.revealed.has(q.id));
-    btn.title = this.state.revealPersistent
-      ? 'Modo persistente ativo — respostas visíveis em todas as questões (duplo clique para desligar)'
-      : 'Clique: revelar esta questão · Duplo clique: modo persistente (todas as questões)';
-    btn.setAttribute('aria-pressed', String(this.state.revealPersistent || this.state.revealed.has(q.id)));
+    const curRevealed = this.state.revealPersistent || this.state.revealed.has(q.id);
+    if(btnQ){
+      btnQ.classList.toggle('active', curRevealed);
+      btnQ.setAttribute('aria-pressed', String(curRevealed));
+      btnQ.disabled = this.state.revealPersistent;
+      btnQ.title = this.state.revealPersistent
+        ? 'Modo revisão ativo — todas as respostas visíveis'
+        : (this.state.revealed.has(q.id) ? 'Ocultar resposta desta questão' : 'Mostrar resposta da questão atual');
+    }
+    if(btnAll){
+      btnAll.classList.toggle('active', this.state.revealPersistent);
+      btnAll.setAttribute('aria-pressed', String(this.state.revealPersistent));
+      btnAll.title = this.state.revealPersistent
+        ? 'Desativar modo revisão (ocultar respostas reveladas)'
+        : 'Revelar respostas em todas as questões';
+    }
   }
 
   static _feedbackBox(q, userAnswer, answered){
@@ -2814,18 +2918,18 @@ class PlayerController {
     // Reveladа sem ter respondido: caixa neutra mostrando só a resposta correta
     if(!answered){
       return `<div class="feedback-box correct">
-        <div class="fb-head" style="color:var(--accent)">👁️ Resposta correta revelada</div>
+        <div class="fb-head" style="color:var(--accent)">Resposta correta revelada</div>
         <div class="fb-line">Resposta correta: <strong>${Util.escapeHtml(correctAns)}</strong></div>
-        ${q.explanation?`<div class="fb-explain">💡 ${Util.escapeHtml(q.explanation)}</div>`:''}
+        ${q.explanation?`<div class="fb-explain">${Util.escapeHtml(q.explanation)}</div>`:''}
       </div>`;
     }
     const correct = q.isCorrect(userAnswer);
     const yourAns = this._fmtAnswer(q, userAnswer) || '(sem resposta)';
     return `<div class="feedback-box ${correct?'correct':'incorrect'}">
-      <div class="fb-head">${correct?'✓ Você acertou':'✕ Você errou'}</div>
+      <div class="fb-head">${correct?'Correto':'Incorreto'}</div>
       <div class="fb-line">Sua resposta: <strong>${Util.escapeHtml(yourAns)}</strong></div>
       ${!correct?`<div class="fb-line">Resposta correta: <strong>${Util.escapeHtml(correctAns)}</strong></div>`:''}
-      ${q.explanation?`<div class="fb-explain">💡 ${Util.escapeHtml(q.explanation)}</div>`:''}
+      ${q.explanation?`<div class="fb-explain">${Util.escapeHtml(q.explanation)}</div>`:''}
     </div>`;
   }
   static _fmtAnswer(q, ans){
@@ -2902,6 +3006,7 @@ class PlayerController {
       this.state.currentIndex = Number(b.dataset.goto);
       this._renderQuestion(); this._renderNav();
     }));
+    nav.querySelector(`[data-goto="${currentIndex}"]`)?.scrollIntoView({inline:'nearest', block:'nearest', behavior:'smooth'});
   }
 
   static _renderQuestion(){
@@ -3021,7 +3126,7 @@ class PlayerController {
       }
     }
     this._updateMarkButton();
-    this._updateRevealButton();
+    this._updateRevealControls();
   }
 
   static _bindSequenceDrag(area, q){
@@ -3065,7 +3170,7 @@ class PlayerController {
     // marco de "metade do caminho"
     if(total>=6 && this.state.lastMilestone<1 && reached>=Math.ceil(total/2)){
       this.state.lastMilestone = 1;
-      RewardPop.show('🚀', 'Metade concluída!', 'Você está indo muito bem!', 1500);
+      RewardPop.show('50%', 'Metade concluída!', 'Você está indo muito bem!', 1500);
       this._announce('Você chegou à metade do exame.');
     }
   }
@@ -3182,7 +3287,7 @@ class ResultView {
       </div>
       <div class="row" style="gap:10px;margin-top:10px">
         <button class="btn btn-primary" id="r-review">Revisar respostas</button>
-        <button class="btn" id="r-smart">🧠 Revisão inteligente</button>
+        <button class="btn" id="r-smart">Revisão inteligente</button>
         <button class="btn" id="r-retry-wrong">Refazer apenas erradas</button>
         <button class="btn" id="r-retry-marked">Refazer apenas marcadas</button>
         <button class="btn btn-ghost" id="r-dashboard">Voltar ao Início</button>
@@ -3199,7 +3304,7 @@ class ResultView {
     if(!gaps.length) return '';
     const weak = gaps.slice(0,4);
     return `<div class="card glass" style="margin:8px 0 4px;border-color:var(--warn)">
-      <div style="font-weight:700;font-size:13.5px;margin-bottom:8px">🧠 Análise de lacunas — foque aqui</div>
+      <div style="font-weight:600;font-size:13.5px;margin-bottom:8px">Análise de lacunas</div>
       ${weak.map(g=>`<div class="gap-row">
         <span class="gap-cat">${Util.escapeHtml(g.cat)}</span>
         <div class="gap-bar"><span style="width:${g.acc}%;background:${g.acc>=70?'var(--good)':g.acc>=50?'var(--warn)':'var(--bad)'}"></span></div>
@@ -3213,7 +3318,7 @@ class ResultView {
     const leveled = gameResult?.leveledUp;
     return `<div class="card glass" style="margin:8px 0 4px">
       <div class="row between" style="margin-bottom:8px">
-        <span class="xp-badge">⭐ Nível ${p.level}</span>
+        <span class="xp-badge">Nível ${p.level}</span>
         <span style="font-size:12.5px;color:var(--good);font-weight:700">+${gained} XP</span>
       </div>
       <div class="xp-wrap"><div class="xp-bar"><span style="width:${p.pct}%"></span></div><span>${p.pct}%</span></div>
@@ -3267,7 +3372,7 @@ class ReviewView {
       </div>
       <div class="review-answer ${d.correct?'correct':'incorrect'}">Sua resposta: ${Util.escapeHtml(userAnswerText||'(sem resposta)')}</div>
       ${!d.correct ? `<div class="review-answer correct">Resposta correta: ${Util.escapeHtml(correctAnswerText)}</div>` : ''}
-      ${q.explanation ? `<div class="review-explain">💡 ${Util.escapeHtml(q.explanation)}</div>` : ''}
+      ${q.explanation ? `<div class="review-explain">${Util.escapeHtml(q.explanation)}</div>` : ''}
     </div>`;
   }
   _formatAnswer(q, ans){
@@ -4167,7 +4272,7 @@ class AnkiCompactView {
     const work=el.querySelector('#ak-work');
     if(!this.queue.length){ work.innerHTML=DashboardView._empty('Nenhum card','Crie questões em Conteúdo ou importe um arquivo.'); return; }
     const q=this.queue[Math.min(this.index,this.queue.length-1)]; const pct=Math.round(this.done/Math.max(1,this.queue.length)*100);
-    work.innerHTML=`<div class="card anki-card card-compact"><div class="anki-front">${Util.escapeHtml(q.text||'Sem enunciado')}</div>${this.revealed?`<div class="anki-back">${Util.escapeHtml(FSRS.backText(q))}</div>`:''}<div class="row between" style="margin-top:12px;flex-wrap:wrap;gap:6px"><span style="font-size:11px;color:var(--text-2)">${this.index+1}/${this.queue.length}</span><div class="row" style="gap:6px">${!this.revealed?'<button class="btn btn-sm btn-primary" id="ak-show">Ver</button>':`<button class="btn btn-sm btn-danger" id="ak-again">✗</button><button class="btn btn-sm btn-primary" id="ak-good">✓</button>`}</div></div></div>`;
+    work.innerHTML=`<div class="card anki-card card-compact"><div class="anki-front">${Util.escapeHtml(q.text||'Sem enunciado')}</div>${this.revealed?`<div class="anki-back">${Util.escapeHtml(FSRS.backText(q))}</div>`:''}<div class="anki-meta"><span class="anki-meta-count">${this.index+1} / ${this.queue.length}</span>${!this.revealed?'<button class="btn btn-primary" id="ak-show">Mostrar resposta</button>':`<div class="anki-ratings"><button class="anki-rate anki-rate-again" id="ak-again" type="button">Again</button><button class="anki-rate anki-rate-hard" id="ak-hard" type="button">Hard</button><button class="anki-rate anki-rate-good" id="ak-good" type="button">Good</button><button class="anki-rate anki-rate-easy" id="ak-easy" type="button">Easy</button></div>`}</div></div>`;
     work.querySelector('#ak-show')?.addEventListener('click',()=>{this.revealed=true;this._drawWork(el);});
     ['again','hard','good','easy'].forEach(r=>{ work.querySelector('#ak-'+r)?.addEventListener('click',()=>{ FSRS.schedule(q,r); this.done++; this.index++; if(this.index>=this.queue.length){Toast.show('Sessão concluída.','success');this.queue=this.all.slice().sort((a,b)=>FSRS.priority(b)-FSRS.priority(a));this.index=0;this.done=0;} this.revealed=false;this._drawWork(el); }); });
   }
@@ -4203,23 +4308,22 @@ class StudyHubView {
 }
 
 class ContentHubView {
-  constructor(){ this.bank=new QuestionBankView(); this.history=new HistoryView(); }
+  constructor(){ this.bank=new QuestionBankView(); }
   get title(){ return 'Biblioteca'; }
   get crumb(){ return ''; }
-  render(el,params={}){ const tab=params.tab||'exames'; const tabs=[{id:'exames',label:'Exames'},{id:'questoes',label:'Questões'},{id:'progresso',label:'Progresso'}]; el.innerHTML=HubHelpers.tabs(tabs,tab)+'<div id="hub-panel"></div>'; HubHelpers.bindTabs(el,'content'); const panel=el.querySelector('#hub-panel'); if(tab==='questoes')this.bank.render(panel); else if(tab==='progresso')this._progresso(panel); else this._exames(panel); }
+  render(el,params={}){ const tab=params.tab||'exames'; const tabs=[{id:'exames',label:'Exames'},{id:'questoes',label:'Questões'}]; el.innerHTML=HubHelpers.tabs(tabs,tab)+'<div id="hub-panel"></div>'; HubHelpers.bindTabs(el,'content'); const panel=el.querySelector('#hub-panel'); if(tab==='questoes')this.bank.render(panel); else this._exames(panel); }
   _exames(panel){
     const exams=StorageManager.getExams();
     const groups = {};
     exams.forEach(e=>{ const key = e.serie || e.category || 'Outros'; groups[key]=groups[key]||[]; groups[key].push(e); });
     const sortedKeys = Object.keys(groups).sort((a,b)=>{ if(a.includes('2º')) return -1; if(b.includes('2º')) return 1; return a.localeCompare(b,'pt-BR'); });
     const body = sortedKeys.map(k=>`<div class="study-group"><div class="study-group-title">${Util.escapeHtml(k)}</div>${groups[k].sort((a,b)=>(a.materia||a.title||'').localeCompare(b.materia||b.title||'','pt-BR')).map(DashboardView._examRow).join('')}</div>`).join('');
-    panel.innerHTML=`<div class="hub-actions"><details class="hub-menu"><summary class="btn btn-sm btn-ghost" aria-label="Mais opções">⋯</summary><div class="hub-menu-panel"><button class="btn btn-sm" id="ch-new">${Icons.plus} Novo exame</button><button class="btn btn-sm" id="ch-import">${Icons.upload} Importar</button></div></details></div><div>${exams.length?body:DashboardView._empty('Nenhum exame','Use ⋯ para criar ou importar.')}</div>`;
+    panel.innerHTML=`<div class="hub-actions"><details class="hub-menu"><summary class="btn btn-sm btn-ghost btn-icon" aria-label="Mais opções">${Icons.more}</summary><div class="hub-menu-panel"><button class="btn btn-sm" id="ch-new">${Icons.plus} Novo exame</button><button class="btn btn-sm" id="ch-import">${Icons.upload} Importar</button></div></details></div><div>${exams.length?body:DashboardView._empty('Nenhum exame','Use o menu para criar ou importar.')}</div>`;
     panel.querySelector('#ch-new').onclick=()=>App.instance.router.go('builder',{});
     panel.querySelector('#ch-import').onclick=()=>ImportController.openModal();
     panel.querySelectorAll('[data-play-exam]').forEach(b=>b.addEventListener('click',()=>ExamConfigModal.open(b.dataset.playExam)));
     panel.querySelectorAll('[data-edit-exam]').forEach(b=>b.addEventListener('click',()=>App.instance.router.go('builder',{examId:b.dataset.editExam})));
   }
-  _progresso(panel){ const g=StorageManager.getGame(); const p=Gamification.progress(); const history=StorageManager.getHistory(); const avg=history.length?Math.round(history.reduce((s,h)=>s+(h.percentage||0),0)/history.length):0; panel.innerHTML=`<div class="progress-mini"><span>⭐ Nv ${p.level}</span><div class="xp-bar"><span style="width:${p.pct}%"></span></div><span>${avg}% média</span></div><div id="prog-hist"></div>`; this.history.render(panel.querySelector('#prog-hist'), true); }
 }
 
 function ludicAnalogy(q){ const text=(q?.text||'').toLowerCase(),cat=(q?.category||'').toLowerCase(),tags=(q?.tags||[]).join(' ').toLowerCase(); const base=text+' '+cat+' '+tags; if(/senha|password|mfa|autentica|login|credencial/.test(base))return 'Correlação lúdica: pense nisso como a chave da sua casa — MFA exige provar que é você.'; if(/phishing|email|link|anexo|malware/.test(base))return 'Correlação lúdica: mensagem suspeita — confira quem enviou antes de clicar.'; if(/rede|network|firewall|dns|ip|vpn/.test(base))return 'Correlação lúdica: IP é endereço, DNS agenda, firewall portaria, VPN túnel seguro.'; if(/cloud|azure|aws|storage/.test(base))return 'Correlação lúdica: armário compartilhado — quem tem a chave e o que pode alterar.'; if(/ingl[eê]s|english|vocab|grammar/.test(base))return 'Correlação lúdica: frases úteis numa viagem, não só palavras soltas.'; if(/certifica|exam|sc-|az-|defender|sentinel/.test(base))return 'Correlação lúdica: simulado do dia da prova — elimine alternativas improváveis.'; return 'Correlação lúdica: explique para alguém no café — comparação simples = entendimento.'; }
@@ -4244,7 +4348,7 @@ class App {
     setupLudicComments();
     setupAnkiKeyboard();
     const hash = parseAppHash();
-    const valid = ['home','study','content','builder','settings','result','review'];
+    const valid = ['home','study','content','progress','builder','settings','result','review'];
     const route = valid.includes(hash.route) ? hash.route : 'home';
     this.router.go(route, hash.tab ? {tab: hash.tab} : {});
     this._setupPWA();
@@ -4254,6 +4358,7 @@ class App {
     this.router.register('home', new DashboardView());
     this.router.register('study', new StudyHubView());
     this.router.register('content', new ContentHubView());
+    this.router.register('progress', new ProgressHubView());
     this.router.register('builder', new BuilderView());
     this.router.register('settings', new SettingsView());
     this.router.register('result', new ResultView());
@@ -4266,6 +4371,7 @@ class App {
       {route:'home', icon:Icons.dashboard, label:'Início'},
       {route:'study', icon:Icons.study, label:'Estudar'},
       {route:'content', icon:Icons.content, label:'Biblioteca'},
+      {route:'progress', icon:Icons.progress, label:'Progresso'},
     ];
     items.forEach(it=>{
       const btn = document.createElement('button');
@@ -4279,7 +4385,8 @@ class App {
     });
   }
   _bindTopbar(){
-    document.getElementById('topbar-settings-btn')?.addEventListener('click', ()=>this.router.go('settings'));
+    const btn = document.getElementById('topbar-settings-btn');
+    if(btn){ btn.innerHTML = Icons.settings; btn.addEventListener('click', ()=>this.router.go('settings')); }
   }
   applySettings(s){
     document.body.classList.toggle('light', !s.darkMode);
@@ -4356,10 +4463,10 @@ class App {
   _maybeOnboard(){
     if(StorageManager.isOnboarded()) return;
     const steps = [
-      {t:'Bem-vindo ao ExamForge 👋', p:'Simulador offline para o 2º ano do ensino médio. Poucos cliques, foco no estudo.'},
-      {t:'3 abas fixas 📱', p:'Início, Estudar e Biblioteca. Ajustes e instalação do app no ⚙.'},
-      {t:'Simulados por matéria 🎯', p:'50 questões por disciplina, organizadas por sub-matéria.'},
-      {t:'Configure antes de iniciar ⏱️', p:'Escolha seções, quantidade, timer e modo treino no diálogo de prova.'}
+      {t:'Bem-vindo ao ExamForge', p:'Simulador offline para o 2º ano do ensino médio. Poucos cliques, foco no estudo.'},
+      {t:'Navegação principal', p:'Início, Estudar, Biblioteca e Progresso nas abas fixas. Ajustes no ícone de engrenagem no topo.'},
+      {t:'Simulados por matéria', p:'50 questões por disciplina, organizadas por sub-matéria.'},
+      {t:'Configure antes de iniciar', p:'Escolha seções, quantidade, timer e modo treino no diálogo de prova.'}
     ];
     let i = 0;
     const backdrop = document.createElement('div');
@@ -4386,7 +4493,7 @@ class App {
 
 /* Enhancement layers usam window.* — em strict mode as classes não vinculam ao window automaticamente */
 Object.assign(window, {
-  App, Router, DashboardView, StudyHubView, ContentHubView,
+  App, Router, DashboardView, StudyHubView, ContentHubView, ProgressHubView,
   BuilderView, QuestionBankView, HistoryView, ProfileView, SettingsView, ResultView, ReviewView,
   QuestionEditorController, PlayerController, ImportController, ExportController, ExamConfigModal,
   StorageManager, Util, Toast, Modal, Loading, AITutor, Gamification, Question, Exam
