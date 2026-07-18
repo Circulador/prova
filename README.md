@@ -26,19 +26,21 @@ Stack: monolito HTML/CSS/JS · GitHub Pages · **offline-first** · **PWA** · m
 
 | Área | Funcionalidades |
 |------|-----------------|
-| **Início** | Estudar agora (~10 min) · Personalizar · Recentes · Continuar sessão · trilhas colapsadas · FAQ/Como usar |
-| **Biblioteca** | Trilhas · Questões · Flashcards (FSRS, olho, estrela) · criar sessão · importar |
-| **Progresso** | Mastery · lacunas · KPIs · seções colapsáveis · histórico configurável (5–Todas) |
+| **Início** | Continuar (GPS ou sessão pausada) · Personalizar · Recentes · ▶ trilhas instantâneo · FAQ/Como usar |
+| **Biblioteca** | Trilhas (▶ 1 toque · Layers progressivo) · Questões · Flashcards (FSRS) · importar · Forja |
+| **Evolução** | Domínio · retenção 90d · lacunas · competências · histórico configurável (5–Todas) |
 | **Player** | Aprendizado / Prova · Esta/Todas (revelar) · Marcar · Explicar · menu ⋯ |
-| **Ajustes** | Tema · idioma UI + questões · PWA · demo · limite de histórico |
+| **Ajustes** | Tema · idioma UI + questões · PWA · demo · limite de histórico · meta GPS |
 
-### Modos de estudo (mesma trilha, views do mesmo conhecimento)
+### Fluxo de sessão (sem fricção)
 
-| Modo | Uso |
-|------|-----|
-| **Aprendizado** | Feedback imediato, lacunas, ~10 min (padrão) |
-| **Flashcards** | FSRS do conteúdo selecionado |
-| **Prova completa** | Cronômetro, revisão pré-envio, simulado |
+| Ação | Comportamento |
+|------|----------------|
+| **Continuar** | Retoma sessão pausada ou rota GPS (~10 min) |
+| **▶ trilha** | Aprendizado · 10 questões · embaralhar (sem modal) |
+| **Personalizar** | Modal enxuto: Aprendizado ou Prova · quantidade · filtros |
+| **Layers** | Modo progressivo (Biblioteca) |
+| **Flashcards** | Aba Flashcards na Biblioteca |
 
 ---
 
@@ -47,7 +49,7 @@ Stack: monolito HTML/CSS/JS · GitHub Pages · **offline-first** · **PWA** · m
 Três objetivos simultâneos:
 
 1. **Avaliar domínio** — simulados, cronômetro, revisão, refazer erradas  
-2. **Reter por anos** — FSRS, mastery score, Estudar agora / lacunas  
+2. **Reter por anos** — FSRS, mastery score, GPS / lacunas  
 3. **Aplicar na prática** — cenários, casos, explicações (roadmap: grafo, Feynman)
 
 ---
@@ -65,25 +67,28 @@ Formatos in-app: **JSON, CSV, TXT, HTML**. Roadmap: PDF, DOCX, EPUB, APKG.
 Documentação completa in-app: **Início → FAQ** ou **Como usar**.
 
 1. Abra [circulador.github.io/prova](https://circulador.github.io/prova/) (mobile first).
-2. **Início → Estudar agora** — ~10 min, lacunas prioritárias (1 toque).
-3. **Personalizar** — trilha + **Aprendizado · Flashcards · Prova** + quantidade.
-4. **Biblioteca** — Trilhas (▶) · Questões (+) · Flashcards.
-5. **Progresso** — mastery, **Estudar lacunas**, histórico 5–Todas.
-6. **Ajustes** — idiomas, PWA, demo, limite de histórico.
+2. **Início → Continuar** — retoma sessão ou rota GPS personalizada.
+3. **▶ em uma trilha** — Aprendizado · 10 questões (1 toque).
+4. **Personalizar** — trilha + **Aprendizado · Prova** + quantidade + filtros.
+5. **Biblioteca** — Trilhas (▶ · Layers) · Questões · Flashcards.
+6. **Evolução** — domínio, retenção, **Estudar lacunas**, histórico 5–Todas.
+7. **Ajustes** — idiomas, PWA, demo, meta GPS.
 
 ### Reset após deploy
 
 ```javascript
-localStorage.removeItem('ef_global_dpo_seeded_v2');
-localStorage.removeItem('ef_cleanup_global_dpo_v2');
+localStorage.removeItem('ef_knowledge_os_seeded_v3');
+localStorage.removeItem('ef_cleanup_knowledge_os_v3');
 location.reload();
 ```
 
 Reset total:
 
 ```javascript
-['ef_questions','ef_exams','ef_qstats','ef_history','ef_session','ef_global_dpo_seeded_v2','ef_cleanup_global_dpo_v2']
-  .forEach(k => localStorage.removeItem(k));
+[
+  'ef_questions','ef_exams','ef_qstats','ef_history','ef_session',
+  'ef_knowledge_os_seeded_v3','ef_cleanup_knowledge_os_v3','ef_session_preset_v1'
+].forEach(k => localStorage.removeItem(k));
 location.reload();
 ```
 
@@ -95,6 +100,8 @@ Princípios: mobile-first · offline-first · regra dos 3 cliques · diff mínim
 
 ```bash
 python sync_dpo_global.py            # Sync index.html → 404.html
+python tools/browser_check.py        # Smoke test (headless)
+python tools/cdp_compile.py          # Verifica parse JS
 ```
 
 Roadmap Knowledge OS: [`docs/PRIVACY-KNOWLEDGE-OS.md`](docs/PRIVACY-KNOWLEDGE-OS.md)
@@ -104,13 +111,15 @@ Roadmap Knowledge OS: [`docs/PRIVACY-KNOWLEDGE-OS.md`](docs/PRIVACY-KNOWLEDGE-OS
 ## Estrutura
 
 ```
-index.html / 404.html     # App monolítico (~7k linhas)
+index.html / 404.html     # App monolítico (~8.7k linhas)
 data/dpo-global-bank.js   # Conteúdo seed de exemplo (deploy)
+gps/velora-gps.js         # Knowledge GPS v2
 sw.js                     # Service Worker
 manifest.webmanifest      # PWA
 docs/                     # Specs canônicas
 branding/                 # Logo, favicon, design tokens
 sync_dpo_global.py        # Sync index → 404
+tools/                    # browser_check, cdp_compile
 ```
 
 ---
